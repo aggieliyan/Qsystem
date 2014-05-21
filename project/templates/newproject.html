@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <title>Q系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="/static/css/datetimepicker.css" rel="stylesheet" media="screen">
+  <link href="/static/css/mycss.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container-fluid">
+	    <div class="row-fluid">
+		    <div class="span12">
+			     <ul class="breadcrumb">
+				     <li><a href="#" class="divider">项目管理</a><span class="divider">>></span></li>
+				     <li class="active">新建项目</li>
+             <li class="back">返回上一页</li>
+			     </ul>
+		    </div>
+	    </div>
+      <div class="title" style="margin-left:40px; margin-bottom:10px;">新建项目:
+      </div>
+      <div class="row-fluid">
+        <div>
+          <form class="navbar-form navbar-left" action="/create/" method="post">
+            {% csrf_token %}
+            <div class="span6">
+              <div id='short'>
+              <div>
+                <div class="title">
+                  <label class="item-title"><span class="must">*</span>优先级：</label>
+                </div>
+                <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字">
+                {{ form.priority.errors}}
+              </div>
+              <div>
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目名称：</label>
+              </div>
+                <input type="text" name="pname" class="form-control inputfield">
+              </div>
+              <div >
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目状态：</label>
+              </div>
+                <select name = "status" class="inputfield">
+                  <option select="selected">需求讨论中</option>
+                  <option>设计中</option>
+                  <option>设计完成</option>
+                  <option>开发中</option>
+                  <option>测试中</option>
+                  <option>暂停</option>
+                  <option>已上线</option>
+                </select>
+              </div>
+              <div>
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目负责人：</label>
+                </div>
+                <input name="leader" style="display:none;">
+                <select id="master"  class="inputfield"></select>
+              </div>
+              <div>
+                <div class="title">
+                    <label class="item-title">项目开始时间：</label>
+                </div>
+                <div class="inputfield input-append date form_datetime">
+                  <input name="startdate" class="dateinput" size="16" type="text" value="" readonly="">
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+              </div>
+              <div>
+                <div class="title">
+                    <label class="item-title">计划上线时间：</label>
+                </div>
+                <div class="inputfield input-append date form_datetime">
+                  <input name="plandate" class="dateinput" size="16" type="text" value="" readonly="">
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+              </div>             
+              </div>
+            </div>
+            <div  class="span6">
+              <div>
+                <div class="roles">
+                  <input name="relateduser" style="display:none;">
+                  <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro">添加</button>
+                    <div class="p-list">
+                    </div>
+                </div>
+                <div  class="roles">
+                  <label class="item-title" style="float:left;">开发人员：</label><button type="button" class="btn btn-success" name="dev">添加</button>
+                    <div class="p-list">
+                      </div>
+                    </div>
+                </div>
+                <div  class="roles">
+                  <label class="item-title" style="float:left;">测试人员：</label><button type="button" class="btn btn-success" name="tes">添加</button>
+                    <div id="testarea" class="p-list">
+                    </div>
+                </div>
+              </div>
+            </div> 
+            <div class="span2">
+              <span style="margin-left: 38px;">预估时间：
+              </span>
+            </div>
+            <div id="long" class="span8" style="margin-left:-22px;">
+              <div class="range">
+                <div><label>产品：</label><span class="days">0</span>天</div>
+                <span class="input-append date form_datetime">   
+                  <input name='psdate' class="dateinput" size="16" type="text" value="" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date form_datetime">   
+                  <input name='pedate' class="dateinput" size="16"  type="text" value="" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div>
+              <div class="range">
+                <div><label>开发：</label><span class="days">0</span>天</div>
+                <span class="input-append date form_datetime">   
+                  <input name='dsdate' class="dateinput" size="16" type="text" value="" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date form_datetime">   
+                  <input name='dedate' class="dateinput" size="16" type="text" value="" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div class="range">
+              <div class="range">
+                <div><label>测试：</label><span class="days">0</span>天</div>
+                <span class="input-append date form_datetime">   
+                  <input name='tsdate' class="dateinput" ="16" type="text" value="" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date form_datetime">   
+                  <input name='tedate' class="dateinput"size="16" type="text" value="" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div>
+            </div>
+            <div id='filepath' class="span12">
+              <div>
+                <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' placeholder="请输入文件路径">
+              </div>
+              <div>
+                <div><label class="item-title">开发计划：</label></div><input type="text" name='dppath' placeholder="请输入文件路径">
+              </div>
+              <div>
+                <div><label class="item-title">测试计划：</label></div><input type="text" name='tppath' placeholder="请输入文件路径">
+              </div>
+              <div>
+                <div><label class="item-title">测试用例：</label></div><input type="text" name='tcpath' placeholder="请输入文件路径">
+              </div>
+              <div>
+                <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" placeholder="请输入文件路径">
+              </div>
+            </div>
+            <div class="span12">
+              <div style="color:red;">
+              {% for field in form %}    
+                {{ field.errors }}          
+              {% endfor %}
+               </div>
+              <button id="submit" type="submit" class="btn btn-success" style="margin-left:43px; margin-top:50px;">提交</button>
+              <button type="button" class="btn btn-default" style="margin-left:30px;margin-top:50px;">取消</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+          
+    <!-- Model select -->
+<div class="modal fade" id="select" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">选择人员</h4>
+      </div>
+      <div class="modal-body"> 
+          <div><input type="text" id="skey"><button type="submit" class="btn btn-default" id="psearch">搜索</button></div>
+          <input style="display:none;" name="depart" value='1'>
+          <div  id="testerlist"style="border-style: solid;border-radius: 4px; border-width: 1px;border-color:#DDDDDD; height=30px">          
+           <table >
+           </table>         
+          </div> 
+        <div class="pagination" style="float:right">
+          <ul >
+            <li><a href="#">&laquo;</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">&raquo;</a></li>
+          </ul>
+        </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" id= "test" class="btn btn-primary" data-dismiss="modal">确定</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+    
+    <script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
+    <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/static/js/newproject.js"></script>
+    <script type="text/javascript">
+      $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        language:"zh-CN",
+        minView:2
+      });
+      </script>  
+  </body>
+</html>

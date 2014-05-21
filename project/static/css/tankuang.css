@@ -1,0 +1,39 @@
+/* CSS Document */
+
+body{
+	width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+body div{margin:0 auto;}
+ .icon-calendar {
+  background: url("http://stat1.ablesky.cn/stata/images/livecourse/lcourse.png") no-repeat scroll 0 -37px transparent;
+  margin-top: 0;
+}  
+.item-title {
+    display:inline;  
+    line-height:40px;
+    float:right;
+}
+.input-append.date .add-on i {
+  height: 20px;
+  width: 20px;
+}
+
+.input-append .add-on, .input-prepend .add-on {
+    background-color: #FFFFFF;
+}
+.mybtn-success{color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25);background-color:#339966;*background-color:#51a351;background-image:linear-gradient(to bottom,#62c462,#51a351);background-image:-webkit-gradient(linear,0 0,0 100%,from(#62c462),to(#51a351));background-image:-webkit-linear-gradient(top,#62c462,#51a351);background-image:-o-linear-gradient(top,#62c462,#51a351);background-image:linear-gradient(to bottom,#62c462,#51a351);background-repeat:repeat-x;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff51a351',GradientType=0);filter:progid:DXImageTransform.Microsoft.gradient(enabled=false)}.mybtn-success:hover,.mybtn-success:focus,.mybtn-success:active,.mybtn-success.active,.mybtn-success.disabled,.mybtn-success[disabled]{color:#fff;background-color:#51a351;*background-color:#499249}.mybtn-success:active,.mybtn-success.active{background-color:#408140 \9}
+.mymodal-header{
+	padding:3px 15px;
+	border-bottom:1px solid #eee;
+	background-color: #339966;
+}
+.mymodal-header .close{margin-top:2px}.mymodal-header h3{margin:0;line-height:30px}
+myinput{
+	display:inline-block;
+	margin-bottom:0;
+	width: auto;
+}
