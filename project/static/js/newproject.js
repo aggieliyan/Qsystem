@@ -1,11 +1,17 @@
 $(document).ready(function(){
 
-     function show_staff (person){
+    function show_staff (person){
+      if(person.length > 0){
         $("#testerlist div").remove();
         for(var i=0; i<person.length;i++){
           $("#testerlist table").append("<div class=\"table-list\"><input id='"+person[i].id+"' type=\"checkbox\"><span>"+person[i].realname+"</span></div>");
         }
-     }
+      }
+      else{
+        $("#testerlist div").remove();
+        $("#testerlist table").append("<div>暂无数据<div>");
+      } 
+    }
     
     //选择人员后点确定，在页面显示已选人员
     $("#test").click(function(){
@@ -28,7 +34,6 @@ $(document).ready(function(){
         }	
 
         pl = $("[title='1']").children("div").length;
-        console.log(pl);
         if(pl >= 8){
           w = (pl/5+1)*30;
           $("[title='1']").attr("style","height:"+w+"px;");
@@ -62,6 +67,7 @@ $(document).ready(function(){
         var person = eval('('+data+')')
         person = person.person
         show_staff(person);
+        //console.log(person.length);
         //$("#testerlist div").remove();
         //for(var i=0; i<person.length;i++){
         //  $("#testerlist table").append("<div class=\"table-list\"><input id='"+person[i].id+"' type=\"checkbox\"><span>"+person[i].realname+"</span></div>");

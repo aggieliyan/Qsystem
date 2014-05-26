@@ -79,6 +79,8 @@ def show_person(request):
 	person = models.user.objects.filter(department_id = key)
 	rs=[]
 	if len(person) == 0:
+		rrs = {"person":rs}
+		rs = json.dumps(rrs)
 		return HttpResponse(rs)
 	for item in person:
 		uid = item.id
@@ -100,6 +102,4 @@ def psearch(request):
 		rrs = {"person":rs}
 		rs = json.dumps(rrs)
 	return HttpResponse(rs)
-
-
 
