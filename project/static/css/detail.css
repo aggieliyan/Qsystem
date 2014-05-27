@@ -1,0 +1,76 @@
+#container {
+	width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+}
+body {
+	font-family: "Microsoft YaHei",arial,宋体;
+    padding: 0;
+    font-size: 14px;
+}
+a {
+	text-decoration: none;
+	color: #09f;
+}
+a:hover {
+    color: #FF3300;
+} 
+#bread {
+	height: 40px;
+	width: 100%;
+	background-color: #339966;
+	border-radius: 2px;
+	display: inline-block;
+	position: relative;
+}
+#bread p {
+	line-height: 5px;
+}
+#bread a {
+	text-decoration: none;
+	color: white;
+}
+#bread a:hover {
+	color: #333333;
+}
+#bread p {
+	padding: 5px;
+}
+.content #name div{
+	display: inline-block;
+	position: relative;
+}
+
+.list-name {
+	display: inline-block;
+	width: 13%;
+}
+.list-text {
+	display: inline-block;
+	width:87%;
+	float: right;
+}
+
+.line-name2 {
+	color: #555;
+	position: relative;
+	left: 40%;
+}
+
+.line-text2 {
+	position: relative;
+	left: 45%;
+}
+.line-name {
+	list-style: none;
+	text-align: right;
+	color: #555;
+
+}
+.line-text {
+	list-style: none;
+	text-align: left;
+}
+span {
+	display: inline-block;
+}
