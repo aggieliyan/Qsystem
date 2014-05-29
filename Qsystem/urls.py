@@ -1,8 +1,9 @@
 from django.conf.urls import patterns, include, url
-
+from project.views import detail
 from django.contrib import admin
 admin.autodiscover()
 import project
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -15,6 +16,5 @@ urlpatterns = patterns('',
     url(r'^showperson', project.views.show_person),
     url(r'^projectlist', project.views.project_list),
     url(r'^tongyongtou', project.views.tongyongtou),
-    url(r'^psearch', project.views.psearch),
-    url(r'^delay', project.views.delay),
+    ('^detail/(\d+)/$',detail),
 )
