@@ -14,7 +14,5 @@ urlpatterns = patterns('',
     url(r'^create/', project.views.create, name='create'),
     url(r'^showperson', project.views.show_person),
     url(r'^projectlist', project.views.project_list),
-    url(r'^tongyongtou', project.views.tongyongtou),
     url(r'^psearch', project.views.psearch),
-    url(r'^delay', project.views.delay),
 )
