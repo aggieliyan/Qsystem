@@ -62,7 +62,7 @@ def create(request):
 			relateduser = relateduser.replace(" ","").split(",")
 			print relateduser
 			if len(relateduser):
-				pid = models.project.objects.get(project=pname).id
+				pid = models.project.objects.filter(project=pname)[0].id
 				for uid in relateduser:
 					if uid:
 						project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
@@ -89,7 +89,9 @@ def show_person(request):
 	person = models.user.objects.filter(department_id = key)
 	rs=[]
 	if len(person) == 0:
-		return HttpResponse(rs, mimetype='application/javascript')
+		rrs = {"person":rs}
+		rs = json.dumps(rrs)
+		return HttpResponse(rs)
 	for item in person:
 		uid = item.id
 		realname = item.realname
@@ -97,6 +99,17 @@ def show_person(request):
 		rs.append(dic)
 	rrs = {"person":rs}
 	rs = json.dumps(rrs)
-	#return HttpResponse(rs, mimetype='application/javascript')
+	return HttpResponse(rs)
+
+def psearch(request):
+	key = request.GET['key']
+	prs = models.user.objects.filter(realname__contains=key)
+	rs = []
+	if len(prs) > 0:
+		for item in prs:
+			dic = {'id':item.id, 'realname':item.realname}
+			rs.append(dic)
+		rrs = {"person":rs}
+		rs = json.dumps(rrs)
 	return HttpResponse(rs)
 
