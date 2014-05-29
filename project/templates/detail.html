@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<head>
+	<title>项目详情</title>
+	<link rel=stylesheet type="text/css" href="/static/css/detail.css" />
+	<META http-equiv="content-type" content="text/html; charset=utf-8">
+</head>
+<body>
+	<div id="container">
+		<div>
+			<div id="head"></div>
+			<div id="bread">
+				<p><a href="">项目管理</a>&nbsp>>项目详情</p>
+			</div>
+			<div class="content">
+				<div id="name">
+					<div><h3>{{res.pro.project}}</h3></div>
+					<div><a href="">&nbsp&nbsp&nbsp编辑</a></div>
+				</div>
+				<div class="list-name">
+					<ul class="line-name">
+						<li><p>优先级:</p></li>
+						<li><p>项目状态:</p></li>
+						<li><p>项目负责人:</p></li>
+						<li><p>项目开始日期:</p></li>
+						<li><p>预估时间:</p></li>
+						<li><p><br/></p></li>
+						<li><p><br/></p></li>
+						<li><p>产品人员:</p></li>
+						<li><p>开发人员:</p></li>
+						<li><p>测试人员:</p></li>
+						<li><p>设计图:</p></li>
+						<li><p>开发计划:</p></li>
+						<li><p>测试计划:</p></li>
+						<li><p>测试用例:</p></li>
+						<li><p>测试报告:</p></li>
+					</ul>
+				</div>
+				<div class="list-text">
+					<ul class="line-text">
+						<li><p>{{res.pro.priority}}</p></li>
+						<li><p>{{res.pro.status_p}}</p></li>
+						<li><p>{{res.user.realname}}</p></li>
+						<li>
+							<span>{{res.pro.start_date|date:"Y-m-d"}}</span>
+							<span class="line-name2">计划上线时间:</span>
+							<span class="line-text2">{{res.pro.expect_launch_date|date:"Y-m-d"}}</span>
+						</li>
+						<li><p>产品: {{res.dt.ptime.days}}天    ({{res.pro.estimated_product_start_date|date:"Y-m-d"}}至{{res.pro.estimated_product_end_date|date:"Y-m-d"}})</p></li>
+						<li><p>开发: {{res.dt.dtime.days}}天    ({{res.pro.estimated_develop_start_date|date:"Y-m-d"}}至{{res.pro.estimated_develop_end_date|date:"Y-m-d"}})</p></li>
+						<li><p>测试: {{res.dt.ttime.days}}天    ({{res.pro.estimated_test_start_date|date:"Y-m-d"}}至{{res.pro.estimated_test_end_date|date:"Y-m-d"}})</p></li>
+						<li><p>赵希,萌丹</p></li>
+						<li><p>菅鹏,宋非文,谭振,李小龙</p></li>
+						<li><p>易璐璐,刘红蛟,李稳,孙敏</p></li>
+						<li><p>{{res.pro.blueprint_p}}</p></li>
+						<li><p>{{res.pro.develop_plan_p}}</p></li>
+						<li><p>{{res.pro.test_plan_p}}</p></li>
+						<li><p>{{res.pro.test_case_p}}</p></li>
+						<li><p>{{res.pro.test_report_p}}</p></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>

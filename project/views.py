@@ -7,7 +7,10 @@ from django.template import RequestContext
 import forms
 import models
 import json
-
+from django.db import connection
+import MySQLdb
+from django.contrib.sessions.models import Session
+import datetime
 # Create your views here.
 def new_project(request):
  
@@ -18,10 +21,17 @@ def project_list(request):
 
 def tongyongtou(request):
 	return render_to_response('tongyongtou.html', locals())
+    
+def detail(request, pid):
+    pro = models.project.objects.get(id=int(pid))
+    user = models.user.objects.get(id = pro.leader_p_id)
+    date =[pro.estimated_product_end_date, pro.estimated_product_start_date, pro.estimated_develop_end_date, pro.estimated_develop_start_date, pro.estimated_test_end_date, pro.estimated_test_start_date]
+ 
+    dt = {'ptime':pro.estimated_product_end_date - pro.estimated_product_start_date, 'dtime': pro.estimated_develop_end_date - pro.estimated_develop_start_date, 'ttime': pro.estimated_test_end_date - pro.estimated_test_start_date}
+    res = {'pro':pro, 'user':user, 'dt': dt}
 
-def delay(request):
-	return render_to_response('delay.html', locals())
-
+    return render_to_response('detail.html',{'res': res})
+                              
 def create(request):
 	if request.method == 'POST':
 		form = forms.ProjectForm(request.POST)
@@ -52,7 +62,7 @@ def create(request):
 			relateduser = relateduser.replace(" ","").split(",")
 			print relateduser
 			if len(relateduser):
-				pid = models.project.objects.filter(project=pname)[0].id
+				pid = models.project.objects.get(project=pname).id
 				for uid in relateduser:
 					if uid:
 						project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
@@ -79,9 +89,7 @@ def show_person(request):
 	person = models.user.objects.filter(department_id = key)
 	rs=[]
 	if len(person) == 0:
-		rrs = {"person":rs}
-		rs = json.dumps(rrs)
-		return HttpResponse(rs)
+		return HttpResponse(rs, mimetype='application/javascript')
 	for item in person:
 		uid = item.id
 		realname = item.realname
@@ -89,17 +97,6 @@ def show_person(request):
 		rs.append(dic)
 	rrs = {"person":rs}
 	rs = json.dumps(rrs)
-	return HttpResponse(rs)
-
-def psearch(request):
-	key = request.GET['key']
-	prs = models.user.objects.filter(realname__contains=key)
-	rs = []
-	if len(prs) > 0:
-		for item in prs:
-			dic = {'id':item.id, 'realname':item.realname}
-			rs.append(dic)
-		rrs = {"person":rs}
-		rs = json.dumps(rrs)
+	#return HttpResponse(rs, mimetype='application/javascript')
 	return HttpResponse(rs)
 
