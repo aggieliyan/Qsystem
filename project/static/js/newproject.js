@@ -68,7 +68,7 @@ $(document).ready(function(){
         allperson = eval('('+data+')');//全局变量
         allperson = allperson.person;
         var num = allperson.length;
-        var pagemaxnum = 1
+        pagemaxnum = 45//全局变量
         var pnum = num/pagemaxnum;
         var anum = Math.floor(pnum);
         anum < pnum ? pagenum = anum+1 : pagenum = anum
@@ -90,9 +90,13 @@ $(document).ready(function(){
     });
 
    //点页码
-  $(".pagination li").click(function(){
+  $(".pagination li").live('click',function(){
     var page = parseInt($(this).text());
-    console.log(allperson);
+    //console.log(allperson);
+    var start = (page-1)*pagemaxnum;
+    person = allperson.slice(start, start+pagemaxnum);
+    console.log(person);
+    show_staff(person);
   });
 
    //选择人员框里搜索
@@ -102,8 +106,8 @@ $(document).ready(function(){
         url = "/psearch"
         para = "key="+skey
         $.get(url, para, function(data){
-          var person = eval('('+data+')')
-          person = person.person
+          var person = eval('('+data+')');
+          person = person.person;
           show_staff(person);
         });    
       }
