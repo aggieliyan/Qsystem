@@ -12,7 +12,6 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^newproject/',include('project.urls')),
-    url(r'^create/', project.views.create, name='create'),
     url(r'^showperson', project.views.show_person),
     url(r'^projectlist', project.views.project_list),
     url(r'^psearch', project.views.psearch),

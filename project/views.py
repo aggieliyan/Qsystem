@@ -13,26 +13,7 @@ from django.contrib.sessions.models import Session
 import datetime
 # Create your views here.
 def new_project(request):
- 
-    return render_to_response('newproject.html', locals())
-
-def project_list(request):
-    return render_to_response('page.html', locals())
-
-def tongyongtou(request):
-	return render_to_response('tongyongtou.html', locals())
-    
-def detail(request, pid):
-    pro = models.project.objects.get(id=int(pid))
-    user = models.user.objects.get(id = pro.leader_p_id)
-    date =[pro.estimated_product_end_date, pro.estimated_product_start_date, pro.estimated_develop_end_date, pro.estimated_develop_start_date, pro.estimated_test_end_date, pro.estimated_test_start_date]
- 
-    dt = {'ptime':pro.estimated_product_end_date - pro.estimated_product_start_date, 'dtime': pro.estimated_develop_end_date - pro.estimated_develop_start_date, 'ttime': pro.estimated_test_end_date - pro.estimated_test_start_date}
-    res = {'pro':pro, 'user':user, 'dt': dt}
-
-    return render_to_response('detail.html',{'res': res})
-                              
-def create(request):
+	form = forms.ProjectForm()
 	if request.method == 'POST':
 		form = forms.ProjectForm(request.POST)
 		if form.is_valid():
@@ -70,10 +51,26 @@ def create(request):
 						print 'ok'
 			return redirect('/projectlist/')
 
-	else:
-	    form = forms.ProjectForm()
 	return render(request, 'newproject.html', {'form':form})
-	#return render_to_response('page.html', context_instance=RequestContext(request))
+ 
+    #return render_to_response('newproject.html', locals())
+
+def project_list(request):
+    return render_to_response('page.html', locals())
+
+def tongyongtou(request):
+	return render_to_response('tongyongtou.html', locals())
+    
+def detail(request, pid):
+    pro = models.project.objects.get(id=int(pid))
+    user = models.user.objects.get(id = pro.leader_p_id)
+    date =[pro.estimated_product_end_date, pro.estimated_product_start_date, pro.estimated_develop_end_date, pro.estimated_develop_start_date, pro.estimated_test_end_date, pro.estimated_test_start_date]
+ 
+    dt = {'ptime':pro.estimated_product_end_date - pro.estimated_product_start_date, 'dtime': pro.estimated_develop_end_date - pro.estimated_develop_start_date, 'ttime': pro.estimated_test_end_date - pro.estimated_test_start_date}
+    res = {'pro':pro, 'user':user, 'dt': dt}
+
+    return render_to_response('detail.html',{'res': res})
+                              
 
 def show_person(request):
 	roles = request.GET['role']
@@ -88,7 +85,8 @@ def show_person(request):
 		key = 0
 	person = models.user.objects.filter(department_id = key)
 	rs=[]
-	if len(person) == 0:
+	num = len(person) 
+	if num == 0:
 		rrs = {"person":rs}
 		rs = json.dumps(rrs)
 		return HttpResponse(rs)

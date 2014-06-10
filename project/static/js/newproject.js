@@ -42,6 +42,7 @@ $(document).ready(function(){
 
     });
 
+    //删除人员
     $(".role-item .close").live('click',function(){
         $(this).parent().remove();
     });
@@ -64,19 +65,38 @@ $(document).ready(function(){
       var url="/showperson";
       var para="role=" + roles;
       $.get(url, para, function(data, status){
-        var person = eval('('+data+')')
-        person = person.person
+        allperson = eval('('+data+')');//全局变量
+        allperson = allperson.person;
+        var num = allperson.length;
+        var pagemaxnum = 1
+        var pnum = num/pagemaxnum;
+        var anum = Math.floor(pnum);
+        anum < pnum ? pagenum = anum+1 : pagenum = anum
+        $(".pagination ul li").remove()
+        $(".pagination ul").append("<li><a href=\"#\">&laquo;</a></li><li><a href=\"#\">&raquo;</a></li>");
+        for(var i=0; i<pagenum; i++){
+          var page = i+1;
+          $(".pagination ul li:last").before("<li><a>"+page+"</a></li>");
+        }
+        if(pagenum>1){
+          person = allperson.slice(0,pagemaxnum);
+        }
+        else{
+          person = allperson;
+        }
         show_staff(person);
-        //console.log(person.length);
-        //$("#testerlist div").remove();
-        //for(var i=0; i<person.length;i++){
-        //  $("#testerlist table").append("<div class=\"table-list\"><input id='"+person[i].id+"' type=\"checkbox\"><span>"+person[i].realname+"</span></div>");
-       // }
+
       });
     });
 
+   //点页码
+  $(".pagination li").click(function(){
+    var page = parseInt($(this).text());
+    console.log(allperson);
+  });
+
    //选择人员框里搜索
-   $("#psearch").click(function(){
+  $("#psearch").click(function(){
       var skey = $("#skey").val();
       if(skey.length >0){
         url = "/psearch"
@@ -92,6 +112,7 @@ $(document).ready(function(){
 
     //选择项目负责人
     $("#master").focus(function(){
+      console.log("select master");
       p = $(".role-item");  
       $("#master").children("option").remove();
       var idlist =" ";
