@@ -22,6 +22,8 @@ class project(models.Model):
     project = models.CharField(u'项目名称',max_length=100)
     status_p = models.CharField(u'项目状态',max_length=20)
     leader_p = models.ForeignKey(user)
+    designer_p=models.ForeignKey(user, related_name='designer_p')
+    tester_p=models.ForeignKey(user, related_name='tester_p')
     start_date = models.DateField(blank=True,null=True)
     expect_launch_date=models.DateTimeField(blank=True,null=True)
     real_launch_date=models.DateField(blank=True,null=True)

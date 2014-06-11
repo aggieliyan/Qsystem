@@ -22,6 +22,10 @@ def new_project(request):
 			status = form.cleaned_data['status']
 			leader = form.cleaned_data['leader']
 			leader = models.user.objects.get(id=leader)
+			designer = form.cleaned_data['designer']
+			designer  = models.user.objects.get(id=designer )
+			tester = form.cleaned_data['tester']
+			tester  = models.user.objects.get(id=tester )
 			sdate = form.cleaned_data['startdate']
 			pdate = form.cleaned_data['plandate']
 			psdate = form.cleaned_data['psdate']
@@ -36,7 +40,7 @@ def new_project(request):
 			tcpath = form.cleaned_data['tcpath']
 			trpath = form.cleaned_data['trpath']
 			relateduser = form.cleaned_data['relateduser']
-			pro = models.project(priority=priority, project=pname, status_p=status, leader_p =leader, start_date=sdate, expect_launch_date=pdate, real_launch_date=tsdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
+			pro = models.project(priority=priority, project=pname, status_p=status, leader_p =leader, designer_p=designer,tester_p=tester, start_date=sdate, expect_launch_date=pdate, real_launch_date=tsdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
 			pro.save()
 
 			#存完项目，存相关产品测试开发人员信息

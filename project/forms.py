@@ -6,6 +6,8 @@ class ProjectForm(forms.Form):
 	pname = forms.CharField(required=True, error_messages={'required':u'项目名称不能为空'})
 	status = forms.CharField(required=True, error_messages={'required':u'项目状态不能为空'})
 	leader = forms.IntegerField(required=True, error_messages={'required':u'负责人不能为空'})
+	designer = forms.IntegerField(required=False)
+	tester = forms.IntegerField(required=False)
 	startdate = forms.DateField(required=False)
 	plandate=forms.DateField(required=False)
 	psdate = forms.DateField(required=False)

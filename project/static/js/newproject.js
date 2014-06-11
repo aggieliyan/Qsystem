@@ -126,14 +126,23 @@ $(document).ready(function(){
         //console.log(item.children('span').eq(0).text());
         idlist = idlist + item.attr("value") + ","
       } 
-      console.log(idlist);
       $("[name='relateduser']").attr("value",idlist);
     });
     
     $("#master").blur(function(){
+      console.log("hahahah");
       var p = $('#master option:selected').val();
       //console.log(typeof(p));
       $("[name='leader']").attr("value",p);
+
+      //把测试和产品排第一的作为相关负责人
+      var d = $(".p-list").eq(0).children().eq(0).attr("value");
+      var t = $(".p-list").eq(2).children().eq(0).attr("value");
+      console.log("-------");
+      console.log(d);
+      $("[name='designer']").attr("value",d);
+      $("[name='tester']").attr("value",t);
+
     });
 
     //计算天数
