@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-  <meta charset="utf-8">
-  <title>Q系统</title>
+{% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap -->
   <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <link href="/static/css/datetimepicker.css" rel="stylesheet" media="screen">
   <link href="/static/css/mycss.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
+  {% endblock %}
+  {% block content %}
     <div class="container-fluid">
 	    <div class="row-fluid">
 		    <div class="span12">
@@ -219,5 +217,5 @@
         minView:2
       });
       </script>  
-  </body>
-</html>
+  {% endblock %}
+
