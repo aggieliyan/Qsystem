@@ -52,18 +52,12 @@ def new_project(request):
 					if uid:
 						project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
 						project_user.save()
-						print 'ok'
 			return redirect('/projectlist/')
 
 	return render(request, 'newproject.html', {'form':form})
  
-    #return render_to_response('newproject.html', locals())
-
 def project_list(request):
     return render_to_response('page.html', locals())
-
-def tongyongtou(request):
-	return render_to_response('tongyongtou.html', locals())
     
 def detail(request, pid):
     pro = models.project.objects.get(id=int(pid))
