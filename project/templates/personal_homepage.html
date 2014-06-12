@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <title>设计变更</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap -->
+  <link href="/static/project/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="/static/project/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="/static/project/css/datetimepicker.css" rel="stylesheet" media="screen">
+  <link href="/static/project/css/tankuang.css" rel="stylesheet" media="screen">
+  <link href="/static/project/css/top.css" rel="stylesheet" media="screen">
+
+  </head>
+<body>
+
+    <script type="text/javascript" src="/static/project/jquery/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="/static/project/js/bootstrap.min.js"></script>
+  <!-- Button trigger modal -->
+
+    <div class="top">
+    <ul class="top_logo">
+      <li><a href=""> </a></li>
+    </ul>
+    <ul class="top_memu">
+      <li><a href="">个人主页</a></li>
+      <li><a href="">项目管理</a></li>
+      <li><a href="">资源管理</a></li>
+    </ul>
+    <ul class="top_bar">
+      <li><a href="javascript:void(0);">name</a></li>
+      <li><i> | </i></li>
+      <li><a href="javascript:void(0); "
+            onclick="window.location.href='http://passport.beta.ablesky.com/logout.do?action=Logout&ref='+ encodeURIComponent(window.location.href)">退出</a></li>
+    </ul>
+  </div>
+  <div class="notice">
+    <div class="notice_title">
+      <span>
+        <b>消息提醒<span style="color:#ffa03e">(4):</span></b>
+      </span>
+    </div>
+    <div class="notice_content">
+      <p style="font-size:12px"><a href="">项目进度提醒：播放页面正式进入开发阶段...</a></p>
+      <p><a href="">延期申请消息：XX项目申请延期X天</a></p>
+      <p><a href="">延期申请消息：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
+      <p><a href="">延期申请消息：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
+    </div>    
+    <div style="position:absolute;right:10px;bottom:0">
+      <a href="" style="color:#339666">查看历史记录</a>
+    </div>    
+  </div>  
+  <div style="padding:28px 0 15px">
+    <span><b>我参与的项目:</b></span>
+  </div>
+
+<div id="x-table2">
+    <div style="margin:3px 0px">
+      <div style=""class="tabbable">
+      <!-- Only required for left/right tabs -->
+          <ul class="nav nav-tabs" style="display:block;background-color:#339966"> 
+            <li class="active"><a href="#tab1" data-toggle="tab" style="color:#000">进行中的项目</a></li>
+            <li><a href="#tab2" data-toggle="tab" style="color:#000">已完结的项目</a></li>
+          </ul> 
+          <div class="tab-content" style="padding:0px">
+            <div class="tab-pane active" id="tab1">
+              
+              <table  id="customers">
+                <thead>
+                  {% if not result %}
+                      <p style="text-align:center;">暂无相关项目</p>
+                  {% else %}
+                  <tr>
+                    <th style="width:50px;">优先级</th>
+                    <th style="width:137px;">项目名称</th>
+                    <th style="width:76px">项目负责人</th>
+                    <th style="width:69px">产品负责人</th>
+                    <th style="width:70px">测试负责人</th>
+                    <th style="width:134px">项目成员</th>
+                    <th style="width:82px">项目开始时间</th>
+                    <th style="width:82px">计划上线时间</th>
+                    <th style="width:82px">实际上线时间</th>
+                    <th style="width:76px">项目状态</th>
+                    <th style="width:236px">操作</th>
+                  </tr>
+                <thead>
+                <tbody id="group_one">
+                  
+                      {% for res in result %}                                 
+                  <tr>               
+                    <td>{{res.priority}}</td>
+                    <td><a href="">{{res.project}}</a>
+                    <td>{{res.leader_p.realname}}</td>
+                    <td>{{res.designer_p.realname}}</td>
+                    <td>{{res.tester_p.realname}}</td>
+                    <td>                       
+                    
+                    {% for u in puser %}
+                    {% ifequal res.id u.project_id %}                                                        
+                    {{u.username.realname}}&nbsp;
+                    {% endifequal %}
+                    {% endfor %}                  
+
+                    </td>
+                    <td>{{res.start_date|date:"Y-m-d" }}</td>
+                    <td>{{res.expect_launch_date|date:"Y-m-d"}}</td>
+                    <td>{{res.real_launch_date|date:"Y-m-d"}}</td>
+                    <td>{{res.status_p}}</td>
+                    <td> 
+                           
+                      <a onclick="change_p({{res.id}})">设计变更</a><span>|</span>
+                      <a href="">编辑<span>|</span></a>
+                      <a onclick="delay_p({{res.id}})">延期<span>|</span></a>
+                      <a href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
+                      <a href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
+                    </td>                   
+                  </tr>
+                 
+                  {% endfor %}
+                  {% endif %}                 
+                </tbody>
+              </table>
+              <p></p>
+            </div> 
+            <div class="tab-pane" id="tab2">
+              <table id="customers">
+                <thead>
+                  {% if not result %}
+                      <p style="text-align:center;">暂无相关项目</p>
+                  {% else %}
+                <tr>
+                  <th style="width:50px;">优先级</th>
+                  <th style="width:137px;">项目名称</th>
+                  <th style="width:76px">项目负责人</th>
+                  <th style="width:69px">产品负责人</th>
+                  <th style="width:70px">测试负责人</th>
+                  <th style="width:134px">项目成员</th>
+                  <th style="width:82px">项目开始时间</th>
+                  <th style="width:82px">计划上线时间</th>
+                  <th style="width:82px">实际上线时间</th>
+                  <th style="width:82px">项目状态</th>
+                  <th style="width:236px">操作</th>
+                </tr>
+              </thead>
+
+              <tbody id="group_one">
+                {% for pres in result1 %}                                          
+                  <tr>                    
+                    <td>{{pres.priority}}</td>
+                    <td><a href="">{{pres.project}}</a>
+                    <td>{{pres.leader_p.realname}}</td>
+                    <td>{{pres.designer_p.realname}}</td>
+                    <td>{{pres.tester_p.realname}}</td>
+                    <td>                                                                
+                    
+                    {% for res2 in realname %}
+                    {% ifequal res.id res2.project_id %}                                                        
+                    {{res2.realname}}、
+                    {% endifequal %}
+                    {% endfor %}                  
+
+                    </td>
+                    <td>{{pres.start_date|date:"Y-m-d" }}</td>
+                    <td>{{pres.expect_launch_date|date:"Y-m-d"}}</td>
+                    <td>{{pres.real_launch_date|date:"Y-m-d"}}</td>
+                    <td>{{pres.status_p}}</td>     
+                  <td>
+                    <a href="">查看详情</a>
+                  </td>
+                  {% endfor %}
+                  {% endif %}
+                </tr>
+                
+              </tbody>
+              </table>
+              <p> </p>
+            </div>  
+        </div>
+      </div>
+    </div>
+  </div>
+<!--分页--> 
+  <div class="pagination pagination-right">
+    <ul>
+      <li class=""><a href="#" onclick="page.prePage();">&laquo;</a></li>
+      <li class=""><a href="#">1</a></li>
+      <li class=""><a href="#">2</a></li>
+      <li class=""><a href="#">3</a></li>
+      <li class=""><a href="#">4</a></li>
+      <li class=""><a href="#">5</a></li>
+      <li class=""><a href="#" onclick="page.nextPage();">&raquo;</a></li>
+    </ul>
+  </div>
+
+  <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="test" class="navbar-form navbar-center" action="/changedesign/" method='post'>
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">设计变更</h4>
+      </div>
+      <div class="modal-body">
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3">
+             <div class="title">
+                <label class="item-title">
+                变更内容：
+                </label>
+        </div>
+         <div class="title">
+                <label class="item-title">
+                设计图地址：
+                </label>
+        </div>
+    </div>
+    <div class="span9">
+     
+       <div> <input name="content" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" > 
+       </div>
+     <div> <input name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 10px;" > 
+     </div>
+     <input id="changeid" name="changeid" type="hidden">       
+    </div>
+  </div>
+</div>
+    </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button type="submit" class="btn mybtn-success" >确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+        </div>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+
+  
+
+  <!-- Modal delay-->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="test" class="navbar-form navbar-center" method='post' action="/delayproject/">
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">申请延期</h4>
+      </div>
+      <div class="modal-body">
+    
+    <div class="container-fluid">
+      <div class="row-fluid">
+      <div class="span4">
+           <div class="title">
+            <label class="item-title">
+            当前计划时间：
+            </label>
+            </div>
+             <div class="title">
+            <label class="item-title">
+            申请延期时间：
+            </label>
+            </div>
+             <div class="title">
+            <label class="item-title">
+            延期理由：
+            </label>
+            </div>
+
+      </div>
+      <div class="span8">
+       
+         <div> <input id="protime" name="time" type="text" disabled="disabled" class="form-control inputfield"  style="width:150px; background-color: #FFFFFF;" value=""> 
+         </div>
+            <div class="inputfield input-append date form_datetime">
+              <input name="delay_date" class="dateinput" size="16" type="text" value="" readonly="" style="vertical-align:middle; border-right:  medium none; width: 122px; background-color: #FFFFFF;">
+              <span class="add-on"><i class="icon-calendar"></i></span>
+            </div>
+        <div><textarea name="delay_reason" style="background-color: #FFFFFF; width: 80%; height: 100px;"></textarea>
+        </div>
+        <input id="delayid" name="delayid" type="hidden">
+      </div>
+      </div>
+    </div>
+    
+    </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button type="submit" class="btn mybtn-success" >确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+
+  <!-- Modal pause-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">确认延期</h4>
+      </div>
+      <div class="modal-body">
+           <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span1">
+    </div>
+    <div class="span11">
+           
+                <label style="float:left">
+                <span class="STYLE1">确定暂停已选中的项目吗？暂停后项目移至已完结项目中</span>                </label>
+        
+    </div>
+       
+    </div>
+  </div>
+</div>       
+    
+
+    </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button type="button" class="btn mybtn-success" data-dismiss="modal">确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  </div>
+
+ <!-- Modal delete-->
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="" method="post">
+        {% csrf_token %}
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">确认删除</h4>
+      </div>
+      <div class="modal-body">
+           <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span1">
+    </div>
+    <div class="span11">
+           
+                <label style="float:left">
+                <span class="STYLE1">确定删除选中内容吗？</span></label>
+        
+    </div>
+       
+    </div>
+  </div>
+</div>       
+    
+
+    </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button type="button" class="btn mybtn-success" data-dismiss="modal">确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+      <input type="hidden" name='id' id='delete_student_id'/>
+    </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  </div>
+
+
+
+    <script type="text/javascript" src="/static/project/jquery/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="/static/project/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/project/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
+    <script type="text/javascript" src="/static/project/js/bootstrap-datetimepicker.js"></script>
+     <script type="text/javascript" src="/static/project/js/home_page.js"></script>
+     <script type="text/javascript">
+     
+      function change_p(id){
+        $('#changeid').val(id);
+        $('#myModal').modal('show');
+      }
+
+      function delay_p(id){
+        $('#delayid').val(id);
+        $('#myModal1').modal('show');
+      }
+    </script>
+      
+</body>
+</html>

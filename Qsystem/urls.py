@@ -16,5 +16,12 @@ urlpatterns = patterns('',
     url(r'^projectlist', project.views.project_list),
     url(r'^psearch', project.views.psearch),
     url(r'^detail/(\d+)/$',detail),
+    #homepage部分urls
+    url(r'^personal_homepage/$', project.views.personal_homepage,name="homepage"),
+    url(r'^changedesign/', project.views.changedesign,name="design_change"),
+    url(r'^delayproject/$', project.views.delayproject,name="project_delay"),
+    url(r'^pauseproject-(?P<id>\d+)/$', project.views.pauseproject,name="project_pause"),
+    url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,name="project_delete"),
+    url(r'^projectid/', project.views.project,name="project"),
 
 )
