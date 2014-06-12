@@ -90,7 +90,7 @@
                       {% for res in result %}                                 
                   <tr>               
                     <td>{{res.priority}}</td>
-                    <td><a href="">{{res.project}}</a>
+                    <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
                     <td>{{res.leader_p.realname}}</td>
                     <td>{{res.designer_p.realname}}</td>
                     <td>{{res.tester_p.realname}}</td>
@@ -148,7 +148,7 @@
                 {% for pres in result1 %}                                          
                   <tr>                    
                     <td>{{pres.priority}}</td>
-                    <td><a href="">{{pres.project}}</a>
+                    <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a>
                     <td>{{pres.leader_p.realname}}</td>
                     <td>{{pres.designer_p.realname}}</td>
                     <td>{{pres.tester_p.realname}}</td>
@@ -166,7 +166,7 @@
                     <td>{{pres.real_launch_date|date:"Y-m-d"}}</td>
                     <td>{{pres.status_p}}</td>     
                   <td>
-                    <a href="">查看详情</a>
+                    <a href="{% url 'prodetail' pres.id %}">查看详情</a>
                   </td>
                   {% endfor %}
                   {% endif %}

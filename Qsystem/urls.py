@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^showperson', project.views.show_person),
     url(r'^projectlist', project.views.project_list),
     url(r'^psearch', project.views.psearch),
-    url(r'^detail/(\d+)/$',detail),
+    url(r'^detail/(\d+)/$',detail,name="prodetail"),
     #homepage
     url(r'^personal_homepage/$', project.views.personal_homepage,name="homepage"),
     url(r'^changedesign/', project.views.changedesign,name="design_change"),
