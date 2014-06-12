@@ -13,6 +13,7 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+from project.models import *
 
 # Create your views here.
 def new_project(request):
