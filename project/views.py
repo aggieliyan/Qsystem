@@ -16,7 +16,19 @@ from django.db.models import Q
 from project.models import *
 from models import public_message
 from models import project_user 
+<<<<<<< HEAD
 import math
+=======
+
+from django.shortcuts import render,redirect
+from django.shortcuts import render_to_response,RequestContext
+from django.http import HttpResponse
+import forms
+import models
+from django.views.decorators.csrf import csrf_exempt
+
+
+>>>>>>> origin/master
 # Create your views here.
 def new_project(request,pid = ''):
     form = forms.ProjectForm()
@@ -210,13 +222,6 @@ def changedesign(request):
             pub_message.save()           
     return HttpResponseRedirect(reverse("homepage"))
 
-#coding=utf-8
-from django.shortcuts import render,redirect
-from django.shortcuts import render_to_response,RequestContext
-from django.http import HttpResponse
-import forms
-import models
-from django.views.decorators.csrf import csrf_exempt
 
 def nopermit(request):
     department_list = models.department.objects.all()
