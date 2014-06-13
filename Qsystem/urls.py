@@ -22,5 +22,20 @@ urlpatterns = patterns('',
     url(r'^delayproject/$', project.views.delayproject,name="project_delay"),
     url(r'^pauseproject-(?P<id>\d+)/$', project.views.pauseproject,name="project_pause"),
     url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,name="project_delete"),
+    
+    #sourcemanage
+    url(r'^sourcemanage/$',views.show_user),
+    url(r'^show_user/$',views.show_user),
+    url(r'^nopermit/$',views.nopermit),
+    url(r'^show_user2/$',views.show_user2),
+    url(r'^Insert_user1/$',views.Insert_user1),
+    url(r'^Insert_user2/$',views.Insert_user2),
+    url(r'^Insert_user3/$',views.Insert_user3),
+    url(r'^delete_user1/$',views.delete_user1),
+    url(r'^delete_user2/$',views.delete_user2),
+    url(r'^delete_user3/$',views.delete_user3),
+    url(r'^delet_userlogic/$',views.delet_userlogic),
+    url(r'^delet_userlogic2/$',views.delet_userlogic2),
+    url(r'^delet_userlogic3/$',views.delet_userlogic3),
 
 )

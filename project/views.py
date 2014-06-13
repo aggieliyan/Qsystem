@@ -164,3 +164,245 @@ def changedesign(request):
             pub_message.save()           
     return HttpResponseRedirect(reverse("homepage"))
 
+#coding=utf-8
+from django.shortcuts import render,redirect
+from django.shortcuts import render_to_response,RequestContext
+from django.http import HttpResponse
+import forms
+import models
+from django.views.decorators.csrf import csrf_exempt
+
+def nopermit(request):
+    department_list = models.department.objects.all()
+    level_1_list=models.user.objects.filter(department_id='1',Position_level="1")
+    print level_1_list
+    level_2_list=models.user.objects.filter(department_id='1',Position_level="2")
+    print level_2_list
+    level_3_list=models.user.objects.filter(department_id='1',Position_level="3")
+    department=" sfsd"
+    return render_to_response('nopermit.html',locals())
+
+@csrf_exempt
+def show_user2(request):
+    department=request.POST['department']
+    department_id=1
+    key=0
+    if department=='产品设计部':
+        department_id=1
+    elif department=='测试部':
+        department_id=2
+    elif department=='客户端开发':
+        department_id=3
+    elif department=='网站开发':
+        department_id=4
+    elif department=='客服部':
+        department_id=5
+    else:
+        department_id=1
+    level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
+    level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
+    level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
+    department_list = models.department.objects.all()
+    return render_to_response('nopermit.html',locals())
+
+@csrf_exempt
+def show_user(request):
+    if request.method == 'POST':
+        department=request.POST['department']
+        if department=='产品设计部':
+           department_id=1
+        elif department=='测试部':
+             department_id=2
+        elif department=='客户端开发':
+             department_id=3
+        elif department=='网站开发':
+             department_id=4
+        elif department=='客服部':
+             department_id=5
+        else:
+             department_id=0
+    else:
+        department_id=2
+    level_list=models.user.objects.filter(department_id=department_id)
+    level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
+    level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
+    level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
+    department_list = models.department.objects.all()
+    return render_to_response('sourcemanage.html',locals())
+
+@csrf_exempt
+def Insert_user1(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_1']
+    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='1')
+    return redirect('/show_user/')
+
+@csrf_exempt
+def Insert_user2(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_2a']
+    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
+    return redirect('/show_user/')
+
+@csrf_exempt
+def Insert_user3(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_3a']
+    print realname
+    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
+    return redirect('/show_user/')
+
+#逻辑删除
+@csrf_exempt
+def delet_userlogic(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_1']
+    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+    return redirect('/show_user/')
+
+@csrf_exempt
+def delet_userlogic2(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_2']
+    print realname
+    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+    return redirect('/show_user/')
+
+@csrf_exempt
+def delet_userlogic3(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_3']
+    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+    return redirect('/show_user/')
+
+@csrf_exempt
+def delete_user1(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_1']
+    user=models.user.objects.get(department_id=department_id,realname=realname)
+    user.delete()
+    return redirect('/show_user/')
+
+@csrf_exempt
+def delete_user2(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_2']
+    user=models.user.objects.get(department_id=department_id,realname=realname)
+    user.delete()
+    return redirect('/show_user/')
+
+@csrf_exempt
+def delete_user3(request):
+    department=request.POST['department']
+    if department=='产品设计部':
+       department_id=1
+    elif department=='测试部':
+         department_id=2
+    elif department=='客户端开发':
+         department_id=3
+    elif department=='网站开发':
+         department_id=4
+    elif department=='客服部':
+         department_id=5
+    else:
+         department_id=0
+    realname=request.POST['level_3']
+    user=models.user.objects.get(department_id=department_id,realname=realname)
+    user.delete()
+    return redirect('/show_user/')

@@ -1,4 +1,4 @@
-# coding=utf-8
+﻿# coding=utf-8
 from django.db import models
 
 # Create your models here.
@@ -13,7 +13,7 @@ class user(models.Model):
     password= models.CharField(u'密码',max_length=40)
     create_time = models.DateField()
     department = models.ForeignKey(department)
-    Position_level = models.BooleanField(max_length=1,blank=True,default=0)
+    Position_level = models.CharField(default=0)
     isactived = models.BooleanField(max_length=1)
 
    
