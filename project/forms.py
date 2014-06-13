@@ -33,3 +33,9 @@ class delayprojectForm(forms.Form):
 	delay_date=forms.DateField(required=True,error_messages={'invalid':u'延期日期不能为空'})
 	delay_reason = forms.CharField(required=True,error_messages={'invalid':u'延期理由不能为空'})
 	delayid = forms.IntegerField(required=True)
+class ProjectSearchForm(forms.Form):
+	project=forms.CharField(required=False)
+	start_date_s=forms.DateField(required=False)
+	end_date_s=forms.DateField(required=False)
+	status_p=forms.CharField(required=False)
+	leader_p=forms.CharField(required=False)

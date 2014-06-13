@@ -1,4 +1,4 @@
-# coding=utf-8
+﻿# coding=utf-8
 from django.db import models
 
 # Create your models here.
@@ -6,16 +6,19 @@ from django.db import models
 class department(models.Model):
     department= models.CharField(u'部门',max_length=20)
     isactived = models.BooleanField(max_length=1)
-
+    def __unicode__(self):
+        return self.department
+    
 class user(models.Model):
     username= models.CharField(u'用户名',max_length=50)
     realname= models.CharField(u'真实姓名',max_length=50)
     password= models.CharField(u'密码',max_length=40)
     create_time = models.DateField()
     department = models.ForeignKey(department)
-    Position_level = models.BooleanField(max_length=1,blank=True,default=0)
+    Position_level = models.CharField(max_length=1,blank=True,default=0)
     isactived = models.BooleanField(max_length=1)
-
+    def __unicode__(self):
+        return self.realname
    
 class project(models.Model):
     priority = models.SmallIntegerField(u'优先级',max_length=8)

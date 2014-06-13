@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>资源管理无权限</title>
+<link rel="stylesheet" type="text/css" href="/static/css/nopermit.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+<div class="body">
+<form class="source" action="/show_user2/" method="POST">
+	<div class="choose">
+		<select name="department" id="department" class="section" onchange="javascript:document.forms[0].submit();" >
+		{% for i in department_list %}
+		    <option value="{{i}}">{{i}}</option>
+		    {% endfor %}
+		</select>
+		
+	</div>
+	</form>
+	<div class="people">
+	{% for user in level_1_list %}
+		<div class="s1">
+		
+		<input type="text" class="s11" placeholder="{{user}}" onfocus="this.blur()">
+		
+		</div>
+		{% endfor %}
+			{% for user2 in level_2_list %}
+		<div class="s2">		
+	
+	  <input type="text" class="s22" placeholder="{{user2}}" onfocus="this.blur()">
+	
+		 </div>
+			{% endfor %}
+		{% for user3 in level_3_list %}
+		<div class="s3">
+		
+		<input type="text" class="s33" placeholder="{{user3}}" onfocus="this.blur()">		
+		
+		</div>
+		{% endfor %}
+		 </div>
+		
+		
+	</div>
+    	
+	
+	
+
+	
+</div>
+
+
+<script type="text/javascript">
+    var s1 = document.getElementById("department");
+    for(i = 0;i<=s1.length;i++){
+         
+        if(s1.options[i].value == '{{department}}'){
+            s1.options[i].selected = true;
+        }
+    }
+</script>
+</body>
+</html>

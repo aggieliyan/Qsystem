@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+  {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,16 +13,26 @@
 		    <div class="span12">
 			     <ul class="breadcrumb">
 				     <li><a href="#" class="divider">项目管理</a><span class="divider">>></span></li>
-				     <li class="active">新建项目</li>
+				     {% if res.request %}
+				     	<li class="active">编辑项目</li>
+				     {% else %}
+				     	<li class="active">新建项目</li>
+				     {% endif %}
              <li class="back">返回上一页</li>
 			     </ul>
 		    </div>
-	    </div>
-      <div class="title" style="margin-left:40px; margin-bottom:10px;">新建项目:
+	    </div> 
+	   {% if res.request %}
+	   		<div class="title" style="margin-left:40px; margin-bottom:10px;">编辑项目:
       </div>
+	   {% else %}
+			<div class="title" style="margin-left:40px; margin-bottom:10px;">新建项目:
+      </div>
+	   {% endif %}
+     
       <div class="row-fluid">
         <div>
-          <form class="navbar-form navbar-left" action="" method="post">
+          <form class="navbar-form navbar-left" action="/newproject/{{res.pro.id}}" method="post">
             {% csrf_token %}
             <div class="span6">
               <div id='short'>
@@ -30,21 +40,22 @@
                 <div class="title">
                   <label class="item-title"><span class="must">*</span>优先级：</label>
                 </div>
-                <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字">
-                {{ form.priority.errors}}
+                <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字" value="{{res.pro.priority}}">
+                {{form.priority.errors}}
               </div>
               <div>
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目名称：</label>
               </div>
-                <input type="text" name="pname" class="form-control inputfield">
+                <input type="text" name="pname" class="form-control inputfield" value="{{res.pro.project}}">
               </div>
               <div >
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目状态：</label>
               </div>
-                <select name = "status" class="inputfield">
-                  <option select="selected">需求讨论中</option>
+                <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
+                  <option select = 'selected'>{{res.pro.status_p}}</option>
+                  <option>需求讨论中</option>
                   <option>设计中</option>
                   <option>设计完成</option>
                   <option>开发中</option>
@@ -57,17 +68,20 @@
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目负责人：</label>
                 </div>
-                <input name="leader" style="display:none;">
-                <input name="designer" style="display:none;">
-                <input name="tester" style="display:none;">
-                <select id="master"  class="inputfield"></select>
+                <input name="leader" style="display:none;" value="{{res.user.id}}">
+                <input name="designer" style="display:none;" value="{{res.pro.designer_p_id}}">
+                <input name="tester" style="display:none;" value="{{res.pro.tester_p_id}}">
+                <select id="master"  class="inputfield" >
+                	<option select='selected'>{{res.user.realname}}</option>
+                </select>
+                	
               </div>
               <div>
                 <div class="title">
                     <label class="item-title">项目开始时间：</label>
                 </div>
                 <div class="inputfield input-append date form_datetime">
-                  <input name="startdate" class="dateinput" size="16" type="text" value="" readonly="">
+                  <input name="startdate" class="dateinput" size="16" type="text" value="{{res.pro.start_date|date:"Y-m-d"}}" readonly="">
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </div>
               </div>
@@ -76,7 +90,7 @@
                     <label class="item-title">计划上线时间：</label>
                 </div>
                 <div class="inputfield input-append date form_datetime">
-                  <input name="plandate" class="dateinput" size="16" type="text" value="" readonly="">
+                  <input name="plandate" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly="">
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </div>
               </div>             
@@ -88,18 +102,34 @@
                   <input name="relateduser" style="display:none;">
                   <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro">添加</button>
                     <div class="p-list">
+						{% if res.reuser.pd.rel %}
+                       		{% for item in res.reuser.pd.rel %}
+                       			<div class="role-item" value="{{item.id}}" type="radio"><span>{{item.realname}}</span><span class="close">x</span></div>
+                       		{% endfor %}
+                        {% endif %}
                     </div>
                 </div>
                 <div  class="roles">
                   <label class="item-title" style="float:left;">开发人员：</label><button type="button" class="btn btn-success" name="dev">添加</button>
-                    <div class="p-list">
+                    <div id="roles-dev" class="p-list">
+                    	{% if res.reuser.dev.rel %}
+                       		{% for item in res.reuser.dev.rel %}
+                       			<div class="role-item" value="{{item.id}}" type="radio"><span>{{item.realname}}</span><span class="close">x</span></div>
+                       		{% endfor %}
+                        {% endif %}
                       </div>
                     </div>
                 </div>
                 <div  class="roles">
                   <label class="item-title" style="float:left;">测试人员：</label><button type="button" class="btn btn-success" name="tes">添加</button>
                     <div id="testarea" class="p-list">
+                       {% if res.reuser.qa.rel %}
+                       		{% for item in res.reuser.qa.rel %}
+                       			<div class="role-item" value="{{item.id}}" type="radio"><span>{{item.realname}}</span><span class="close">x</span></div>
+                       		{% endfor %}
+                       {% endif %}
                     </div>
+                    
                 </div>
               </div>
             </div> 
@@ -109,54 +139,54 @@
             </div>
             <div id="long" class="span8" style="margin-left:-22px;">
               <div class="range">
-                <div><label>产品：</label><span class="days">0</span>天</div>
+                <div><label>产品：</label><span class="days">{{res.dt.ptime}}</span>天</div>
                 <span class="input-append date form_datetime">   
-                  <input name='psdate' class="dateinput" size="16" type="text" value="" readonly>
+                  <input name='psdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_product_start_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span><span class="word">至</span>
                 <span class="input-append date form_datetime">   
-                  <input name='pedate' class="dateinput" size="16"  type="text" value="" readonly>
+                  <input name='pedate' class="dateinput" size="16"  type="text" value="{{res.pro.estimated_product_end_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span>
               </div>
               <div class="range">
-                <div><label>开发：</label><span class="days">0</span>天</div>
+                <div><label>开发：</label><span class="days">{{res.dt.dtime}}</span>天</div>
                 <span class="input-append date form_datetime">   
-                  <input name='dsdate' class="dateinput" size="16" type="text" value="" readonly>
+                  <input name='dsdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_start_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span><span class="word">至</span>
                 <span class="input-append date form_datetime">   
-                  <input name='dedate' class="dateinput" size="16" type="text" value="" readonly>
+                  <input name='dedate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_end_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span>
               </div class="range">
               <div class="range">
-                <div><label>测试：</label><span class="days">0</span>天</div>
+                <div><label>测试：</label><span class="days">{{res.dt.ttime}}</span>天</div>
                 <span class="input-append date form_datetime">   
-                  <input name='tsdate' class="dateinput" ="16" type="text" value="" readonly>
+                  <input name='tsdate' class="dateinput" ="16" type="text" value="{{res.pro.estimated_test_start_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span><span class="word">至</span>
                 <span class="input-append date form_datetime">   
-                  <input name='tedate' class="dateinput"size="16" type="text" value="" readonly>
+                  <input name='tedate' class="dateinput"size="16" type="text" value="{{res.pro.estimated_test_end_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span>
               </div>
             </div>
             <div id='filepath' class="span12">
               <div>
-                <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' placeholder="请输入文件路径">
+                <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}">
               </div>
               <div>
-                <div><label class="item-title">开发计划：</label></div><input type="text" name='dppath' placeholder="请输入文件路径">
+                <div><label class="item-title">开发计划：</label></div><input type="text" name='dppath' placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}">
               </div>
               <div>
-                <div><label class="item-title">测试计划：</label></div><input type="text" name='tppath' placeholder="请输入文件路径">
+                <div><label class="item-title">测试计划：</label></div><input type="text" name='tppath' placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}">
               </div>
               <div>
-                <div><label class="item-title">测试用例：</label></div><input type="text" name='tcpath' placeholder="请输入文件路径">
+                <div><label class="item-title">测试用例：</label></div><input type="text" name='tcpath' placeholder="请输入文件路径" value="{{res.pro.test_case_p}}">
               </div>
               <div>
-                <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" placeholder="请输入文件路径">
+                <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" placeholder="请输入文件路径" value="{{res.pro.test_report_p}}">
               </div>
             </div>
             <div class="span12">
@@ -190,6 +220,11 @@
           </div> 
         <div class="pagination" style="float:right">
           <ul >
+            <li><a href="#">&laquo;</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">&raquo;</a></li>
           </ul>
         </div>        
       </div>
@@ -215,7 +250,6 @@
         pickerPosition: "bottom-left",
         language:"zh-CN",
         minView:2
-      });
+      });     
       </script>  
-  {% endblock %}
-
+ {% endblock %}
