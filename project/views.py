@@ -37,9 +37,11 @@ def new_project(request,pid = ''):
             leader = form.cleaned_data['leader']
             leader = models.user.objects.get(id=leader)
             designer = form.cleaned_data['designer']
-            designer  = models.user.objects.get(id=designer )
+            if designer:
+                designer  = models.user.objects.get(id=designer )
             tester = form.cleaned_data['tester']
-            tester  = models.user.objects.get(id=tester )
+            if tester:
+                tester  = models.user.objects.get(id=tester )
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
@@ -65,7 +67,7 @@ def new_project(request,pid = ''):
             print relateduser
             if len(relateduser):
                 if (pid==''):
-                    pid = models.project.objects.filter(project=pname)[0].id
+                    pid = models.project.objects.filter(project=pname).order_by("-id")[0].id
                 print pid
                 for uid in relateduser:
                     if uid:
@@ -197,7 +199,7 @@ def detail(request, pid):
     elif ('/editproject' in request.path):
         res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
         return render_to_response('newproject.html',{'res': res})
-        	
+
 def show_person(request):
     roles = request.GET['role']
     key = 0
