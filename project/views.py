@@ -84,6 +84,27 @@ def new_project(request,pid = ''):
     
 
 def project_list(request):
+	
+   noticess=public_message.objects.filter(isactived='1',type_p='notice').order_by('-id')
+    count=len(noticess)
+    notices=noticess[:5]
+    a = 0
+    if count == 0:
+        a = 0
+    elif count == 1:
+        a = 0
+    elif count == 2:
+        a = 0
+    elif count == 3:
+        a = 0
+    elif count == 4:
+        a = 0
+    elif count == 5:
+        a = 0
+    else:
+        a = len(noticess)-5    	
+	
+	
     projectlist = None
     puser=None
     project_name=""
@@ -140,7 +161,7 @@ def project_list(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
 
-    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p}))
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
 
 def isNone(s):
     if s is None or len(s.strip()) == 0:
