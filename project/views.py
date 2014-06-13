@@ -78,7 +78,7 @@ def new_project(request,pid = ''):
 
 def project_list(request):
 	
-   noticess=public_message.objects.filter(isactived='1',type_p='notice').order_by('-id')
+    noticess=public_message.objects.filter(isactived='1',type_p='notice').order_by('-id')
     count=len(noticess)
     notices=noticess[:5]
     a = 0
@@ -197,35 +197,33 @@ def detail(request, pid):
     elif ('/editproject' in request.path):
         res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
         return render_to_response('newproject.html',{'res': res})
-    
-
-	
+        	
 def show_person(request):
-	roles = request.GET['role']
-	key = 0
-	if roles == "tes":
-		key = 1
-	elif roles == "dev":
-		key = 2
-	elif roles == "pro":
-		key = 3
-	else:
-		key = 0
-	person = models.user.objects.filter(department_id = key)
-	rs=[]
-	num = len(person)
+    roles = request.GET['role']
+    key = 0
+    if roles == "tes":
+        key = 1
+    elif roles == "dev":
+        key = 2
+    elif roles == "pro":
+        key = 3
+    else:
+        key = 0
+    person = models.user.objects.filter(department_id = key)
+    rs=[]
+    num = len(person) 
     if num == 0:
         rrs = {"person":rs}
         rs = json.dumps(rrs)
         return HttpResponse(rs)
-	for item in person:
-		uid = item.id
-		realname = item.realname
-		dic = {'id':int(uid), 'realname':realname}
-		rs.append(dic)
-	rrs = {"person":rs}
-	rs = json.dumps(rrs)
-	return HttpResponse(rs)
+    for item in person:
+        uid = item.id
+        realname = item.realname
+        dic = {'id':int(uid), 'realname':realname}
+        rs.append(dic)
+    rrs = {"person":rs}
+    rs = json.dumps(rrs)
+    return HttpResponse(rs)
     
 def psearch(request):
     key = request.GET['key']
