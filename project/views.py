@@ -27,6 +27,9 @@ import forms
 import models
 from django.views.decorators.csrf import csrf_exempt
 
+from models import project,user,project_user,project_delay,public_message
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+
 
 >>>>>>> origin/master
 # Create your views here.
@@ -81,7 +84,69 @@ def new_project(request,pid = ''):
     
 
 def project_list(request):
-    return render_to_response('page.html', locals())
+    projectlist = None
+    puser=None
+    project_name=""
+    start_date_s=""
+    end_date_s=""
+    status_p=""
+    leader_p=""
+    project_user_list=None
+    print request.method
+    puser=project_user.objects.all()
+    #projectlist = project.objects.all()
+    if request.method == 'POST':
+        search_form = ProjectSearchForm(request.POST)
+        if search_form.is_valid():
+            project_name = search_form.cleaned_data['project']
+            start_date_s = search_form.cleaned_data['start_date_s']
+            end_date_s = search_form.cleaned_data['end_date_s']
+            status_p = search_form.cleaned_data['status_p']
+            leader_p = search_form.cleaned_data['leader_p']
+           
+            print project_name,start_date_s,end_date_s,status_p,leader_p
+            projectlist = project.objects.filter()
+            
+            
+            print projectlist
+            if not isNone(project_name):
+                projectlist = projectlist.filter(project__contains=project_name.strip())
+            if not isNone(start_date_s):
+                projectlist = projectlist.filter(start_date__gte=start_date_s)
+            if not isNone(end_date_s):
+                projectlist = projectlist.filter(start_date__lte=end_date_s)
+            if not isNone(status_p):
+                projectlist = projectlist.filter(status_p=status_p.strip())
+            if not isNone(leader_p):
+                #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
+                project_user_list = project_user.objects.filter(username__realname__contains=leader_p.strip())
+                projectids = []
+                for p in project_user_list:
+                    projectids.append(p.project.id)
+                print projectids
+                projectlist = projectlist.filter(pk__in=projectids)
+
+    else:
+        projectlist = project.objects.all()
+        
+    paginator = Paginator(projectlist, 25)
+    page = request.GET.get('page')
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        projectobj = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        projectobj = paginator.page(paginator.num_pages)
+
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p}))
+
+def isNone(s):
+    if s is None or len(s.strip()) == 0:
+        return True
+    else:
+        return False
     
 def detail(request, pid):
     pro = models.project.objects.get(id=int(pid))
