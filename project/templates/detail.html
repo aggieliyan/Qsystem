@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<head>
-	<title>项目详情</title>
+  {% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
 	<link rel=stylesheet type="text/css" href="/static/css/detail.css" />
 	<META http-equiv="content-type" content="text/html; charset=utf-8">
-</head>
-<body>
+  {% endblock %}
+  {% block content %}
 	<div id="container">
 		<div>
 			<div id="head"></div>
@@ -14,7 +14,7 @@
 			<div class="content">
 				<div id="name">
 					<div><h3>{{res.pro.project}}</h3></div>
-					<div><a href="">&nbsp&nbsp&nbsp编辑</a></div>
+					<div><a href="/editproject/{{res.pro.id}}">&nbsp&nbsp&nbsp编辑</a></div>
 				</div>
 				<div class="list-name">
 					<ul class="line-name">
@@ -45,20 +45,59 @@
 							<span class="line-name2">计划上线时间:</span>
 							<span class="line-text2">{{res.pro.expect_launch_date|date:"Y-m-d"}}</span>
 						</li>
-						<li><p>产品: {{res.dt.ptime.days}}天    ({{res.pro.estimated_product_start_date|date:"Y-m-d"}}至{{res.pro.estimated_product_end_date|date:"Y-m-d"}})</p></li>
-						<li><p>开发: {{res.dt.dtime.days}}天    ({{res.pro.estimated_develop_start_date|date:"Y-m-d"}}至{{res.pro.estimated_develop_end_date|date:"Y-m-d"}})</p></li>
-						<li><p>测试: {{res.dt.ttime.days}}天    ({{res.pro.estimated_test_start_date|date:"Y-m-d"}}至{{res.pro.estimated_test_end_date|date:"Y-m-d"}})</p></li>
-						<li><p>赵希,萌丹</p></li>
-						<li><p>菅鹏,宋非文,谭振,李小龙</p></li>
-						<li><p>易璐璐,刘红蛟,李稳,孙敏</p></li>
-						<li><p>{{res.pro.blueprint_p}}</p></li>
-						<li><p>{{res.pro.develop_plan_p}}</p></li>
-						<li><p>{{res.pro.test_plan_p}}</p></li>
-						<li><p>{{res.pro.test_case_p}}</p></li>
-						<li><p>{{res.pro.test_report_p}}</p></li>
+						<li><p>产品: {{res.dt.ptime}}天    ({{res.pro.estimated_product_start_date|date:"Y-m-d"}}至{{res.pro.estimated_product_end_date|date:"Y-m-d"}})</p></li>
+						<li><p>开发: {{res.dt.dtime}}天    ({{res.pro.estimated_develop_start_date|date:"Y-m-d"}}至{{res.pro.estimated_develop_end_date|date:"Y-m-d"}})</p></li>
+						<li><p>测试: {{res.dt.ttime}}天    ({{res.pro.estimated_test_start_date|date:"Y-m-d"}}至{{res.pro.estimated_test_end_date|date:"Y-m-d"}})</p></li>
+						{% if res.reuser.pd.rel %}
+							<li><p>{% for item in res.reuser.pd.rel %}
+                       				{{item.realname}}&nbsp;&nbsp;
+                       			{% endfor %}</p></li>
+                       	{% else %}
+                       		<li><p>&nbsp;</p></li>
+                       	{% endif %}
+						{% if res.reuser.dev.rel %}
+							<li><p>{% for item in res.reuser.dev.rel %}
+                       				{{item.realname}}&nbsp;&nbsp;
+                       			{% endfor %}</p></li>
+                       	{% else %}
+                       		<li><p>&nbsp;</p></li>
+                       	{% endif %}
+						{% if res.reuser.qa.rel %}
+							<li><p>{% for item in res.reuser.qa.rel %}
+                       				{{item.realname}}&nbsp;&nbsp;
+                       			{% endfor %}</p></li>
+                       	{% else %}
+                       		<li><p>&nbsp;</p></li>
+                       	{% endif %}
+                       	{% if res.pro.blueprint_p %}
+							<li><p>{{res.pro.blueprint_p}}</p></li>
+						{% else %}
+                       		<li><p>&nbsp;</p></li>
+                       	{% endif %}
+                       	{% if res.pro.develop_plan_p %}
+							<li><p>{{res.pro.develop_plan_p}}</p></li>
+						{% else %}
+                       		<li><p>&nbsp;</p></li>
+                       	{% endif %}
+                       	{% if res.pro.test_plan_p %}
+							<li><p>{{res.pro.test_plan_p}}</p></li>
+						{% else %}
+                       		<li><p>&nbsp;</p></li>
+                       	{% endif %}
+                       	{% if res.pro.test_case_p %}
+							<li><p>{{res.pro.test_case_p}}</p></li>
+						{% else %}
+                       		<li><p>&nbsp;</p></li>
+                       	{% endif %}
+                       	{% if res.test_report_p %}
+							<li><p>{{res.pro.test_report_p}}</p></li>
+						{% else %}
+                       		<li><p>&nbsp;</p></li>
+                       	{% endif %}	
+						
 					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
-</body>
+{% endblock %}

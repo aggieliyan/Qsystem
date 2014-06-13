@@ -16,67 +16,99 @@ from django.db.models import Q
 from project.models import *
 from models import public_message
 from models import project_user 
-
-
+import math
 # Create your views here.
-def new_project(request):
-	form = forms.ProjectForm()
-	if request.method == 'POST':
-		form = forms.ProjectForm(request.POST)
-		if form.is_valid():
-			priority = form.cleaned_data['priority']
-			pname = form.cleaned_data['pname']
-			status = form.cleaned_data['status']
-			leader = form.cleaned_data['leader']
-			leader = models.user.objects.get(id=leader)
-			designer = form.cleaned_data['designer']
-			designer  = models.user.objects.get(id=designer )
-			tester = form.cleaned_data['tester']
-			tester  = models.user.objects.get(id=tester )
-			sdate = form.cleaned_data['startdate']
-			pdate = form.cleaned_data['plandate']
-			psdate = form.cleaned_data['psdate']
-			pedate = form.cleaned_data['pedate']
-			dsdate = form.cleaned_data['dsdate']
-			dedate = form.cleaned_data['dedate']
-			tsdate = form.cleaned_data['tsdate']
-			tedate = form.cleaned_data['tedate']
-			ppath = form.cleaned_data['ppath']
-			dppath = form.cleaned_data['dppath']
-			tppath = form.cleaned_data['tppath']
-			tcpath = form.cleaned_data['tcpath']
-			trpath = form.cleaned_data['trpath']
-			relateduser = form.cleaned_data['relateduser']
-			pro = models.project(priority=priority, project=pname, status_p=status, leader_p =leader, designer_p=designer,tester_p=tester, start_date=sdate, expect_launch_date=pdate, real_launch_date=tsdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
-			pro.save()
+def new_project(request,pid = ''):
+    form = forms.ProjectForm()
+    if request.method == 'POST':
+        form = forms.ProjectForm(request.POST)
+        if form.is_valid():
+            priority = form.cleaned_data['priority']
+            pname = form.cleaned_data['pname']
+            status = form.cleaned_data['status']
+            leader = form.cleaned_data['leader']
+            leader = models.user.objects.get(id=leader)
+            designer = form.cleaned_data['designer']
+            designer  = models.user.objects.get(id=designer )
+            tester = form.cleaned_data['tester']
+            tester  = models.user.objects.get(id=tester )
+            sdate = form.cleaned_data['startdate']
+            pdate = form.cleaned_data['plandate']
+            psdate = form.cleaned_data['psdate']
+            pedate = form.cleaned_data['pedate']
+            dsdate = form.cleaned_data['dsdate']
+            dedate = form.cleaned_data['dedate']
+            tsdate = form.cleaned_data['tsdate']
+            tedate = form.cleaned_data['tedate']
+            ppath = form.cleaned_data['ppath']
+            dppath = form.cleaned_data['dppath']
+            tppath = form.cleaned_data['tppath']
+            tcpath = form.cleaned_data['tcpath']
+            trpath = form.cleaned_data['trpath']
+            relateduser = form.cleaned_data['relateduser']
+            if (pid==''):
+                pro = models.project(priority=priority, project=pname, status_p=status, leader_p =leader, designer_p=designer,tester_p=tester, start_date=sdate, expect_launch_date=pdate, real_launch_date=tsdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
+            else:
+                pro = models.project(id=pid,priority=priority, project=pname, status_p=status, leader_p =leader, designer_p=designer,tester_p=tester, start_date=sdate, expect_launch_date=pdate, real_launch_date=tsdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
+            pro.save()
+            
+            #存完项目，存相关产品测试开发人员信息
+            relateduser = relateduser.replace(" ","").split(",")
+            print relateduser
+            if len(relateduser):
+                if (pid==''):
+                    pid = models.project.objects.filter(project=pname)[0].id
+                print pid
+                for uid in relateduser:
+                    if uid:
+                        project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
+                        project_user.save()
+            return redirect('/projectlist/')
 
-			#存完项目，存相关产品测试开发人员信息
-			relateduser = relateduser.replace(" ","").split(",")
-			print relateduser
-			if len(relateduser):
-				pid = models.project.objects.filter(project=pname)[0].id
-				for uid in relateduser:
-					if uid:
-						project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
-						project_user.save()
-			return redirect('/projectlist/')
+    return render(request, 'newproject.html', {'form':form})
+    
 
-	return render(request, 'newproject.html', {'form':form})
- 
 def project_list(request):
     return render_to_response('page.html', locals())
     
 def detail(request, pid):
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id = pro.leader_p_id)
-    date =[pro.estimated_product_end_date, pro.estimated_product_start_date, pro.estimated_develop_end_date, pro.estimated_develop_start_date, pro.estimated_test_end_date, pro.estimated_test_start_date]
- 
-    dt = {'ptime':pro.estimated_product_end_date - pro.estimated_product_start_date, 'dtime': pro.estimated_develop_end_date - pro.estimated_develop_start_date, 'ttime': pro.estimated_test_end_date - pro.estimated_test_start_date}
-    res = {'pro':pro, 'user':user, 'dt': dt}
+    qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
+    qa = {'rel': qas}
+    devs = models.user.objects.filter(project_user__project_id=pid, department_id=2)
+    dev= {'rel': devs}
+    pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
+    pd = {'rel': pds}
+    related_user = {'qa':qa, 'dev': dev, 'pd': pd}
+    dt_temp ={}
+    dt = {}
+    #处理时间为空,无法计算时间差   
+    if ((pro.estimated_product_end_date!=None) & (pro.estimated_product_start_date!=None)):
+        dt_temp['p']= pro.estimated_product_end_date - pro.estimated_product_start_date
+        dt['ptime']= int(dt_temp['p'].days+1)
+    else:
+        dt['ptime']= 0
+    if ((pro.estimated_develop_end_date!=None) & (pro.estimated_develop_start_date!=None)):
+        dt_temp['d']= pro.estimated_develop_end_date - pro.estimated_develop_start_date
+        dt['dtime']= int(dt_temp['d'].days+1)
+    else:
+        dt['dtime']= 0
+    if ((pro.estimated_test_end_date!=None) & (pro.estimated_test_start_date!=None)):
+        dt_temp['t']= pro.estimated_test_end_date - pro.estimated_test_start_date
+        dt['ttime']= int(dt_temp['t'].days+1)
+    else:
+        dt['ttime']= 0    
+    
+    if ('/detail/' in request.path) :
+        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user}
+        return render_to_response('detail.html',{'res': res})
+    elif ('/editproject' in request.path):
+        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
+        return render_to_response('newproject.html',{'res': res})
+    
 
-    return render_to_response('detail.html',{'res': res})
-                              
-
+	
 def show_person(request):
 	roles = request.GET['role']
 	key = 0
@@ -90,11 +122,11 @@ def show_person(request):
 		key = 0
 	person = models.user.objects.filter(department_id = key)
 	rs=[]
-	num = len(person) 
-	if num == 0:
-		rrs = {"person":rs}
-		rs = json.dumps(rrs)
-		return HttpResponse(rs)
+	num = len(person)
+    if num == 0:
+        rrs = {"person":rs}
+        rs = json.dumps(rrs)
+        return HttpResponse(rs)
 	for item in person:
 		uid = item.id
 		realname = item.realname
@@ -103,18 +135,18 @@ def show_person(request):
 	rrs = {"person":rs}
 	rs = json.dumps(rrs)
 	return HttpResponse(rs)
-
+    
 def psearch(request):
-	key = request.GET['key']
-	prs = models.user.objects.filter(realname__contains=key)
-	rs = []
-	if len(prs) > 0:
-		for item in prs:
-			dic = {'id':item.id, 'realname':item.realname}
-			rs.append(dic)
-		rrs = {"person":rs}
-		rs = json.dumps(rrs)
-	return HttpResponse(rs)
+    key = request.GET['key']
+    prs = models.user.objects.filter(realname__contains=key)
+    rs = []
+    if len(prs) > 0:
+        for item in prs:
+            dic = {'id':item.id, 'realname':item.realname}
+            rs.append(dic)
+        rrs = {"person":rs}
+        rs = json.dumps(rrs)
+    return HttpResponse(rs)
 
 #homepage部分views
 def personal_homepage(request):
@@ -380,7 +412,6 @@ def delete_user1(request):
     user=models.user.objects.get(department_id=department_id,realname=realname)
     user.delete()
     return redirect('/show_user/')
-
 @csrf_exempt
 def delete_user2(request):
     department=request.POST['department']
@@ -420,3 +451,4 @@ def delete_user3(request):
     user=models.user.objects.get(department_id=department_id,realname=realname)
     user.delete()
     return redirect('/show_user/')
+
