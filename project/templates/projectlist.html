@@ -30,25 +30,41 @@
             <li><a href="">退出</a></li>
         </ul>
     </div>
-    <div class="notice">
-        <div class="notice_title">
-            <span>
-                <b>项目公告：<span style="color:#ffa03e">(14):</span></b>
-            </span>
-        </div>
-        <div class="notice_content">
-            <p style="font-size:12px"></p>
-            <p><a href="">公告5：播放页面正式进入开发阶段</a></p>
-            <p><a href="">公告4：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
-            <p><a href="">公告3：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
-            <p><a href="">公告2：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
-            <p><a href="">公告1：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
+    
+    
+	
+	{% if notices %}
+	
+	<div class="notice">
+		<div class="notice_title">
+			<span>
+				<b>项目公告<span style="color:#ffa03e">({{count}}):</span></b>
+			</span>
+		</div>
+		<div class="notice_content">
+		
+		{% for item in notices %}
+      
+        <p><a href="">{{item.content}}</a></p>
+    
+        {% endfor %}
+			
+		</div>
+		
+		{% if count == 0 %}	
+		
+		{% else %}	
+		<div style="position:absolute;right:500px;bottom:0">
+			<a href="" style="color:#339666">未读公告<span style="color:#ffa03e">({{a}})>></span></a>
+		</div>	
+        {% endif %}	
+	</div>	
+	{% else %}
 
-        </div>
-        <div style="position:absolute;right:500px;bottom:0">
-            <a href="" style="color:#339666">未读公告<span style="color:#ffa03e">(10)>></span></a>
-        </div>
-    </div>
+    {% endif %}
+	
+	
+    
     <form action="/projectlist/" id="searchform" method="post">
         {% csrf_token %}
     <div class="block-option">
