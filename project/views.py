@@ -5,7 +5,7 @@ from django.template import Context
 from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import RequestContext
 import forms
-import models
+
 import json
 from django.db import connection
 import MySQLdb
@@ -14,6 +14,7 @@ import datetime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from project.models import *
+import models
 
 # Create your views here.
 def new_project(request):
