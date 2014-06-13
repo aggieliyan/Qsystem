@@ -35,22 +35,43 @@
             onclick="window.location.href='http://passport.beta.ablesky.com/logout.do?action=Logout&ref='+ encodeURIComponent(window.location.href)">退出</a></li>
     </ul>
   </div>
-  <div class="notice">
-    <div class="notice_title">
-      <span>
-        <b>消息提醒<span style="color:#ffa03e">(4):</span></b>
-      </span>
-    </div>
-    <div class="notice_content">
-      <p style="font-size:12px"><a href="">项目进度提醒：播放页面正式进入开发阶段...</a></p>
-      <p><a href="">延期申请消息：XX项目申请延期X天</a></p>
-      <p><a href="">延期申请消息：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
-      <p><a href="">延期申请消息：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
-    </div>    
-    <div style="position:absolute;right:10px;bottom:0">
-      <a href="" style="color:#339666">查看历史记录</a>
-    </div>    
-  </div>  
+  
+  
+  
+  {% if messages %}
+	<div class="notice">
+		<div class="notice_title">
+			<span>
+				<b>消息提醒<span style="color:#ffa03e">({{count}}):</span></b>
+			</span>
+		</div>
+		<!--<div class="notice_content">
+		
+			  <p style="font-size:12px"><a href="">项目进度提醒：播放页面正式进入开发阶段...</a></p>
+			<p><a href="">延期申请消息：XX项目申请延期X天</a></p>
+			<p><a href="">延期申请消息：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
+			<p><a href="">延期申请消息：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p> </div> -->
+			
+	 <div class="notice_content">		
+
+ 
+     {% for item in messages %}
+       
+        <p><a href="">{{item.content}}</a></p>
+    
+      {% endfor %}
+   		
+		 </div>								
+		<div style="position:absolute;right:10px;bottom:0">
+			<a href="" style="color:#339666">查看历史记录</a>
+		</div>		
+	</div>	
+  {% else %}
+    <p> </p>
+  {% endif %}
+  
+  
+  
   <div style="padding:28px 0 15px">
     <span><b>我参与的项目:</b></span>
   </div>
