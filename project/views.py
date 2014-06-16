@@ -248,7 +248,7 @@ def personal_homepage(request):
     
     #userid = request.session['id']
     userid='1'
-    messagess=public_message.objects.raw('select a.id,a.content,a.isactived,a.project_id,a.publication_date,a.publisher_id,a.type_p from manage_s_public_message as a,manage_s_project_user as  b WHERE  a.project_id=b.project_id and a.isactived=1 and b.username_id=%s ORDER BY a.id desc',[userid])
+    messagess=public_message.objects.raw('select a.id,a.content,a.isactived,a.project_id,a.publication_date,a.publisher_id,a.type_p from project_public_message as a,project_project_user as  b WHERE  a.project_id=b.project_id and a.isactived=1 and b.username_id=%s ORDER BY a.id desc',[userid])
     i=0
     for item in messagess:
       i=i+1 
