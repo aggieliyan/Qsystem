@@ -22,6 +22,63 @@ from django.views.decorators.csrf import csrf_exempt
 from models import project,user,project_user,project_delay,public_message,project_user_message
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
+#login
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
+from forms import RegisterForm,LoginForm
+
+def register(request):
+    template_var={}
+    form = RegisterForm()    
+    if request.method=="POST":
+        form=RegisterForm(request.POST.copy())
+        if form.is_valid():
+            new_user = form.save()
+            template_var["error"] = _(u"注册成功！")
+    template_var["form"]=form
+    return render_to_response("register.html",template_var,context_instance=RequestContext(request))
+    
+def login(request):
+    template_var={}
+    
+    if "username" in request.COOKIES and "password" in request.COOKIES:
+        username = request.COOKIES["username"]
+        password = request.COOKIES["password"]
+        _userset=user.objects.filter(username__exact = username,password__exact = password)
+        if _userset.count() >= 1:
+            _user = _userset[0]
+            request.session['username'] = _user.username
+            request.session['realname'] = _user.realname
+            return HttpResponseRedirect("/personal_homepage")
+    
+    form = LoginForm()
+    if request.method == 'POST':
+        form=LoginForm(request.POST.copy())
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            isautologin = form.cleaned_data["isautologin"]
+            _userset=user.objects.filter(username__exact = username,password__exact = password)
+            if _userset.count() >= 1:
+                _user = _userset[0]
+                if _user.isactived:
+                    request.session['username'] = _user.username
+                    request.session['realname'] = _user.realname
+                    request.session['id'] = _user.id
+                    
+                    response = HttpResponseRedirect("/personal_homepage")
+                    if isautologin:
+                        response.set_cookie("username", username, 3600)
+                        response.set_cookie("password", password, 3600)
+                    return response
+                else:
+                    template_var["error"] = _(u'用户未激活，请联系管理员')
+            else:
+                template_var["error"] = _(u'用户不存在，请先注册')
+    template_var["form"]=form
+    return render_to_response("login.html",template_var,context_instance=RequestContext(request))
+#login
+
 
 # Create your views here.
 def new_project(request,pid = ''):

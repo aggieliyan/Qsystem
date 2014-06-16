@@ -1,6 +1,70 @@
 # coding=utf-8
 from django import forms
 
+#login
+from django.utils.translation import ugettext_lazy as _
+from models import user
+from models import department
+
+class RegisterForm(forms.Form):
+    username=forms.CharField(label=_(u"用户名"),max_length=50)
+    realname=forms.CharField(label=_(u'真实姓名'),max_length=50)
+    password=forms.CharField(
+        label=_(u"密码"),
+        widget=forms.PasswordInput,
+        max_length=40
+    )
+    confirmpassword=forms.CharField(
+        label=_(u"确认密码"),
+        widget=forms.PasswordInput,
+        max_length=40
+    )
+    depart = forms.ModelChoiceField(
+        queryset=department.objects.all().order_by('id'),
+        required=True,
+        label=u"所在部门",
+        error_messages={'required': u'必选项'},
+    )
+    
+    def clean_username(self):
+        try:
+            user.objects.get(username=self.cleaned_data['username'])
+        except user.DoesNotExist:
+            return self.cleaned__data['username']
+        raise forms.ValidationError(u"用户名已存在，请选择别的用户名")
+
+    def clean(self):
+        if 'password' in self.clean_data and 'confirmpassword' in self.cleaned_data:
+            if self.clean_data['password'] != self.cleaned_data['confirmpassword']:
+                raise forms.ValidationError("You must type the same password each time")
+        return self.cleaned_data
+             
+    def save(self):
+        new_user = user.objects.create(username =self.cleaned_data['username'],
+                                       realname =self.cleaned_data['realname'],
+                                       password=self.cleaned_data['password'],
+                                       depart=self.cleaned_data['depart'])
+        return new_user
+
+class LoginForm(forms.Form):
+    username=forms.CharField(
+        label=_(u"用户名"),
+        max_length=20,
+        error_messages={'required': u'请输入用户名'}
+        )
+    password=forms.CharField(
+        label=_(u"密码"),
+        required=False,
+        widget=forms.PasswordInput,
+        max_length=20
+        )
+    isautologin=forms.BooleanField(
+        label=_(u"自动登录"),
+        required=False
+        )
+#login
+
+
 class ProjectForm(forms.Form):
 	priority = forms.IntegerField(required=True, error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
 	pname = forms.CharField(required=True, error_messages={'required':u'项目名称不能为空'})

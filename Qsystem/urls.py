@@ -4,12 +4,22 @@ from django.contrib import admin
 admin.autodiscover()
 import project
 
+#login
+from django.views.generic import TemplateView
+#login
+
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'Qsystem.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    #login
+    url('^$', 'project.views.login',name="index"),
+    url('^login$', 'project.views.login',name="login"),
+    url('^register$', 'project.views.register',name="register"),
+    #login
+    
     url(r'^admin/', include(admin.site.urls)),
     url(r'^newproject/$',new_project),
     url(r'^newproject/(\d+)$',new_project),

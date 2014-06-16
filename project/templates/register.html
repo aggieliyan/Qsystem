@@ -1,0 +1,96 @@
+﻿<html lang="en">
+<head>
+<meta charset="utf-8">
+<title >项目管理系统--注册</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
+    <meta http-equiv="Content-Language" content="zh-cn" />
+    <!-- Bootstrap -->
+    <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <link href="../static/css/my.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="../static/css/register.css">
+
+</head>
+<body style="margin:0px;">
+<form action="/register" method="post">
+{% csrf_token %}
+<div class="backgroud">
+<div align="center" class="top" >
+    <div class="top_logo" align="center"></div>
+	 <div class="backgroud_white" align="center" style="overflow:hidden">
+	     <table style="width:72%; height: 240px; margin-left: 60px; margin-top: 30px; margin-bottom: 30px">
+                      <tr>
+                 <td class="table" style="font-family: Verdana,Microsoft YaHei ,宋体;">
+                     用户注册</td>
+                 <td class="table">
+                     </td>
+                 <td class="table">
+                     </td>
+             <tr>
+                 <td class="table">
+                     {{ form.username.errors }}
+                     <label for="id_name">请输入您的帐号:</label>
+                     {{ form.username }}
+                 <td class="table">
+                     </td>
+                 <td class="table">
+                     </td>
+             </tr>
+             <tr>
+                 <td class="table">
+                     {{ form.realname.errors }}
+                     <label for="id_real">请输入您的真实姓名:</label>
+                     {{ form.realname }}
+                 <td class="table">
+                     </td>
+                 <td class="table">
+                     </td>
+             </tr>
+             <tr>
+                 <td class="table">
+                     {{ form.password.errors }}
+                     <label for="id_password">请输入您的密码:</label>
+                     {{ form.password }}
+                 <td class="table">
+                     </td>
+                 <td class="table">
+                     </td>
+             </tr>
+             <tr>
+                 <td class="table">
+                     {{ form.confirmpassword.errors }}
+                     <label for="id_confirmpassword">请再次输入您的密码:</label>
+                     {{ form.confirmpassword }}
+                 <td class="table">
+                     </td>
+                 <td class="table">
+                     </td>
+             </tr>
+             <tr>
+                 <td class="table">
+                     {{ form.depart.errors }}
+                     <label for="id_depart">请选择所在的部门:</label>
+                     {{ form.depart }}
+		     </td>
+                 <td class="table">
+                     </td>
+                 <td class="table">
+                     </td>
+             </tr>
+         </table>
+        <input id="Button_register" type="submit" value="注  册" 
+            style="color: #FFFFFF; background-color: #5CB85C; width: 104px; margin-left: 10px; height: 37px; border-width: 0; font-weight:bolder; cursor:pointer;"/> &nbsp &nbsp &nbsp <a style="font-size:12px;font-family: Verdana,Microsoft YaHei ,宋体; ">已有帐号？马上</a><a href="login" style="color:#5CB85C; font-size:12px;font-family: Verdana,Microsoft YaHei ,宋体; cursor:pointer;">登录>></a>
+        </form>
+        </div>
+</div>
+</div>
+</form>
+</body>
+</html>
+
+
+
+
+
+
