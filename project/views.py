@@ -98,7 +98,7 @@ def project_list(request):
     else:
         a = len(noticess)-5    	
 	
-	
+
     projectlist = None
     puser=None
     project_name=""
