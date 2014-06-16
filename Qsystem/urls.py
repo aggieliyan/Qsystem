@@ -41,8 +41,8 @@ urlpatterns = patterns('',
     url(r'^delet_userlogic3/$',project.views.delet_userlogic3),
     ('^detail/(\d+)/$',detail),
     ('^editproject/(\d+)/$', detail),
-)
-#notice，message,delay
+
+    #notice，message,delay
     url(r'^delay',project.views.delay),
     url(r'^notice',project.views.notice),
     url(r'^historymessage',project.views.historymessage),
@@ -50,3 +50,4 @@ urlpatterns = patterns('',
     url(r'^deletehistory',project.views.deletehistory),
     url(r'^deletenotice',project.views.deletenotice),
     url(r'^approve',project.views.approve),
+)
