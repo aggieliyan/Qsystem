@@ -45,12 +45,6 @@
 				<b>消息提醒<span style="color:#ffa03e">({{count}}):</span></b>
 			</span>
 		</div>
-		<!--<div class="notice_content">
-		
-			  <p style="font-size:12px"><a href="">项目进度提醒：播放页面正式进入开发阶段...</a></p>
-			<p><a href="">延期申请消息：XX项目申请延期X天</a></p>
-			<p><a href="">延期申请消息：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
-			<p><a href="">延期申请消息：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p> </div> -->
 			
 	 <div class="notice_content">		
 
@@ -67,8 +61,17 @@
 		</div>		
 	</div>	
   {% else %}
-    <p> </p>
+  <div style="height:25px;width:100%;margin:auto;border:#ff9933 solid thin;background-color:#ffffdd;position:relative;margin-top:18px;">
+  <div class="notice_title">
+			<span>
+				<b>消息提醒<span style="color:#ffa03e">(0):</span></b>
+			</span>
+		</div>
+		
+    <p>暂无消息。。。。。。 </p>
+   </div>	
   {% endif %}
+  
   
   
   
