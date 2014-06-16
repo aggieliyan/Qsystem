@@ -4,7 +4,6 @@ from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import RequestContext
-import forms
 import json
 from django.db import connection
 import MySQLdb
@@ -12,7 +11,7 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from forms import changedesignForm,delayprojectForm
+from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm
 from project.models import *
 from models import public_message
 from models import project_user 
