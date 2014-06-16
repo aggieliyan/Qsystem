@@ -1,20 +1,20 @@
 .top
     {
-        background: url(../img/top.jpg) repeat-x;
+        background: url(/static/img/top.jpg) repeat-x;
         height: 86px;
         width:100%;
         margin: auto;
     }
     .top_logo
     {
-        background: url(../img/logo.jpg) no-repeat;
+        background: url(/static/img/logo.jpg) no-repeat;
         height: 86px;
         width: 320px;
         padding-left: 400px;
     }
     .backgroud
     {
-        background: url(../img/backgroud.jpg) no-repeat;
+        background: url(/static/img/backgroud.jpg) no-repeat;
         height: 100%;
         width: 100%;
     }
@@ -49,7 +49,7 @@
         width: 266px;
         font-family: Verdana,Microsoft YaHei ,宋体;
     }
-    #Text_repeatpassword
+    #Text_confirmpassword
     {
         height: 29px;
         width: 266px;

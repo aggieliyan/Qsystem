@@ -5,6 +5,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from models import user
 from models import department
+import datetime
 
 class RegisterForm(forms.Form):
     username=forms.CharField(label=_(u"用户名"),max_length=50)
@@ -44,6 +45,23 @@ class RegisterForm(forms.Form):
                                        realname =self.cleaned_data['realname'],
                                        password=self.cleaned_data['password'],
                                        depart=self.cleaned_data['depart'])
+        return new_user
+        
+class UserForm(forms.Form):
+    username = forms.CharField(label='账号：',max_length=100,required=True,error_messages={'required': u'必选项'})
+    realname = forms.CharField(label='姓名：',max_length=100,required=True,error_messages={'required': u'必选项'})
+    password = forms.CharField(label='密码：',max_length=100,widget=forms.PasswordInput(),required=True,error_messages={'required': u'必选项'})
+    confirmpassword=forms.CharField(label="确认密码",max_length=100,widget=forms.PasswordInput(),required=True,error_messages={'required': u'必选项'}
+    )
+    departmentid = forms.CharField(label='部门：',max_length=100)
+    # Create your views here.
+    
+    def save(self):
+        new_user = user.objects.create(username =self.cleaned_data['username'],
+                                       realname =self.cleaned_data['realname'],
+                                       password=self.cleaned_data['password'],
+                                       create_time=datetime.datetime.now(),
+                                       department=department.objects.get(id=self.cleaned_data['departmentid']),isactived=0)
         return new_user
 
 class LoginForm(forms.Form):

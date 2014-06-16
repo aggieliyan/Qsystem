@@ -25,18 +25,19 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 #login
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from forms import RegisterForm,LoginForm
+from forms import RegisterForm, LoginForm, UserForm
 
 def register(request):
-    template_var={}
-    form = RegisterForm()    
-    if request.method=="POST":
-        form=RegisterForm(request.POST.copy())
-        if form.is_valid():
-            new_user = form.save()
-            template_var["error"] = _(u"注册成功！")
-    template_var["form"]=form
-    return render_to_response("register.html",template_var,context_instance=RequestContext(request))
+    if request.method == "POST":
+        uf = UserForm(request.POST)
+        if uf.is_valid(): 
+            #返回注册成功页面
+            user_new = uf.save();
+            return HttpResponseRedirect("/personal_homepage")
+    else:
+        uf = UserForm()
+    return render_to_response('register.html',{'list':department.objects.all()},context_instance=RequestContext(request))
+  
     
 def login(request):
     template_var={}

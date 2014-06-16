@@ -1,94 +1,161 @@
-﻿<html lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <title >项目管理系统--注册</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
+	<meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
     <meta http-equiv="Content-Language" content="zh-cn" />
     <!-- Bootstrap -->
     <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+   <!-- <link href="../static/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="../static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-    <link href="../static/css/my.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" type="text/css" href="../static/css/register.css">
+    <link href="../static/css/my.css" rel="stylesheet" media="screen">-->
+    <link href="/static/css/register.css" rel="stylesheet" type="text/css"/>
+ <script language="javascript" type="text/javascript">
+ var nameId;
+ var name;
+ var pwd;
+ var repeaPwd;
+ var flag=true;
+ var errorMessage="";
 
+//初始化
+ function init(){
+ 	errorMessage="";
+ 	nameId=document.getElementById("Text_nameid").value;
+ 	name=document.getElementById("Text_name").value;
+ 	pwd=document.getElementById("Text_password").value;
+ 	repeaPwd=document.getElementById("Text_repeatpassword").value;
+ 	document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
+ 	document.getElementById("nameErrorMsg").innerHTML=errorMessage;
+ 	document.getElementById("pwdErrorMsg").innerHTML=errorMessage;
+ 	document.getElementById("repeatpwdErrorMsg").innerHTML=errorMessage;
+ }
+
+ function checkRegistMsg(){
+ 		
+ 	init();
+ 	checkRegIsNull();
+ 	if(pwd!=""){
+ 		if(pwd==repeaPwd){
+ 			flag=true;
+ 		}else{
+ 			errorMessage="两次输入的密码不一致";
+ 			document.getElementById("repeatpwdErrorMsg").innerHTML=errorMessage;
+ 			flag=false;
+ 		}
+ 	}	
+ 	return flag
+ } 
+
+ //验证所有狂是否为空
+ function checkRegIsNull(){	
+ 	if(!isNull(nameId)){
+ 		errorMessage="请输入账号";
+ 		document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
+ 		flag=false;
+ 	}
+ 	if(!isNull(name)){
+ 		errorMessage="请输入姓名";
+ 		document.getElementById("nameErrorMsg").innerHTML=errorMessage;
+ 		flag=false;
+ 	}
+ 	if(!isNull(pwd)){
+ 		errorMessage="请输入密码";
+ 		document.getElementById("pwdErrorMsg").innerHTML=errorMessage;
+ 		flag=false;
+ 	}
+ 	if(!isNull(repeaPwd)){
+ 		errorMessage="请输入确认密码";
+ 		document.getElementById("repeatpwdErrorMsg").innerHTML=errorMessage;
+ 		flag=false;
+ 	}
+ 	
+ }
+ function isNull(text){
+ 	if(text==""){
+ 		return false;
+ 	}else{
+ 		return true;
+ 	}
+ 	
+ }
+
+</script>
 </head>
 <body style="margin:0px;">
-<form action="/register" method="post">
-{% csrf_token %}
-<div class="backgroud">
-<div align="center" class="top" >
-    <div class="top_logo" align="center"></div>
-	 <div class="backgroud_white" align="center" style="overflow:hidden">
-	     <table style="width:72%; height: 240px; margin-left: 60px; margin-top: 30px; margin-bottom: 30px">
-                      <tr>
-                 <td class="table" style="font-family: Verdana,Microsoft YaHei ,宋体;">
-                     用户注册</td>
-                 <td class="table">
-                     </td>
-                 <td class="table">
-                     </td>
-             <tr>
-                 <td class="table">
-                     {{ form.username.errors }}
-                     <label for="id_name">请输入您的帐号:</label>
-                     {{ form.username }}
-                 <td class="table">
-                     </td>
-                 <td class="table">
-                     </td>
-             </tr>
-             <tr>
-                 <td class="table">
-                     {{ form.realname.errors }}
-                     <label for="id_real">请输入您的真实姓名:</label>
-                     {{ form.realname }}
-                 <td class="table">
-                     </td>
-                 <td class="table">
-                     </td>
-             </tr>
-             <tr>
-                 <td class="table">
-                     {{ form.password.errors }}
-                     <label for="id_password">请输入您的密码:</label>
-                     {{ form.password }}
-                 <td class="table">
-                     </td>
-                 <td class="table">
-                     </td>
-             </tr>
-             <tr>
-                 <td class="table">
-                     {{ form.confirmpassword.errors }}
-                     <label for="id_confirmpassword">请再次输入您的密码:</label>
-                     {{ form.confirmpassword }}
-                 <td class="table">
-                     </td>
-                 <td class="table">
-                     </td>
-             </tr>
-             <tr>
-                 <td class="table">
-                     {{ form.depart.errors }}
-                     <label for="id_depart">请选择所在的部门:</label>
-                     {{ form.depart }}
-		     </td>
-                 <td class="table">
-                     </td>
-                 <td class="table">
-                     </td>
-             </tr>
-         </table>
-        <input id="Button_register" type="submit" value="注  册" 
-            style="color: #FFFFFF; background-color: #5CB85C; width: 104px; margin-left: 10px; height: 37px; border-width: 0; font-weight:bolder; cursor:pointer;"/> &nbsp &nbsp &nbsp <a style="font-size:12px;font-family: Verdana,Microsoft YaHei ,宋体; ">已有帐号？马上</a><a href="login" style="color:#5CB85C; font-size:12px;font-family: Verdana,Microsoft YaHei ,宋体; cursor:pointer;">登录>></a>
-        </form>
-        </div>
-</div>
-</div>
-</form>
+	<div class="backgroud">
+		<div align="center" class="top" >
+   			<div class="top_logo" align="center">
+			</div>
+			<form action="" method="post" onsubmit="return checkRegistMsg()">{% csrf_token %}
+		 		<div class="backgroud_white" align="center" style="overflow:hidden">
+		     		<table style="width:72%; height: 240px; margin-left: 60px; margin-top: 30px; margin-bottom: 30px">
+	                	<tr>
+	                 		<td class="table" style="font-family: Verdana,Microsoft YaHei ,宋体;">
+	                    		 用户注册
+	                    	</td>
+	                 		<td class="table">
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	             		<tr>
+	                 		<td class="table">
+	                     		<input id="Text_nameid" name="username" type="text" placeholder="请输入您的帐号" onblur="Validation();"/><span id="nameIdErrorMsg" style="color: red"></span>
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	             		</tr>
+	             		<tr>
+	                 		<td class="table">
+	                    		<input id="Text_name" name="realname" type="text" placeholder="请输入您的真实姓名" onblur="Validation();"/><span id="nameErrorMsg" style="color: red"></span>
+	                    	</td>
+	                 		<td class="table">
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	             		</tr>
+	             		<tr>
+	                 		<td class="table">
+	                     		<input id="Text_password" name="password" type="password" placeholder="请输入您的密码" onblur="Validation();"/><span id="pwdErrorMsg" style="color: red"></span>
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	             		</tr>
+	             		<tr>
+	                 		<td class="table">
+	                     		<input id="Text_repeatpassword" name="confirmpassword" type="password" placeholder="请再次输入您的密码"  onblur="Validation();"/><span id="repeatpwdErrorMsg" style="color: red"></span>
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	             		</tr>
+	             		<tr>
+	                 		<td class="table">
+	                 			<select id="Select_part" name="departmentid">
+		                   			<!--<option style="color: #C0C0C0" value={{l.id}}>请选择您所在的部门</option>  -->
+		                         	{% for l in list %}  
+										<option style="color: #000000" value={{ l.id }}>{{ l.department }}</option>  
+									{% endfor %}
+	                     		</select>
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	                 		<td class="table">
+	                     	</td>
+	             		</tr>
+	         		</table>
+	        		<input id="Button_register" type="submit" value="注  册" 
+	            		style="color: #FFFFFF; background-color: #5CB85C; width: 104px; margin-left: 10px; height: 37px; border-width: 0; font-weight:bolder; cursor:pointer;"/> &nbsp &nbsp &nbsp <a style="font-size:12px;font-family: Verdana,Microsoft YaHei ,宋体; ">已有帐号？马上</a><a href="login" style="color:#5CB85C; font-size:12px;font-family: Verdana,Microsoft YaHei ,宋体; cursor:pointer;">登录>></a>
+				</div>
+       	 	</form>
+       	 </div>
+	</div>
 </body>
-</html>
-
 
 
 
