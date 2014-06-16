@@ -26,9 +26,9 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 # Create your views here.
 def new_project(request,pid = ''):
-    form = forms.ProjectForm()
+    form = ProjectForm()
     if request.method == 'POST':
-        form = forms.ProjectForm(request.POST)
+        form = ProjectForm(request.POST)
         if form.is_valid():
             priority = form.cleaned_data['priority']
             pname = form.cleaned_data['pname']
