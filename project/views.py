@@ -534,6 +534,12 @@ def delete_user3(request):
     user.delete()
     return redirect('/show_user/')
 
+def delay(request):
+    useid = 1
+    #raw_sql = 'select * from project_project_delay where isactived is null and application_id=useid'
+    delays = project_delay.objects.filter(application_id=useid).filter(isactived__isnull=True)
+    return render_to_response('delay.html',{'delays':delays})
+
 def notice(request):
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST

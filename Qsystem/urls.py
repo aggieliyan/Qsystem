@@ -42,7 +42,6 @@ urlpatterns = patterns('',
     ('^detail/(\d+)/$',detail),
     ('^editproject/(\d+)/$', detail),
 
-    #notice，message,delay
     url(r'^delay',project.views.delay),
     url(r'^notice',project.views.notice),
     url(r'^historymessage',project.views.historymessage),
