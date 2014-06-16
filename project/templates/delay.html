@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>项目管理系统</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>项目管理系统</title>
 
-	<meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
-	<meta http-equiv="Content-Language" content="zh-cn" />
-	<!-- Bootstrap -->
-	<!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
-	<link href="css/bootstrap1.min.css" rel="stylesheet" media="screen">
-	<link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-	<link href="css/my1.css" rel="stylesheet" media="screen">
-
-
+<meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
+<meta http-equiv="Content-Language" content="zh-cn" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="/static/css/bootstrap.min.css" rel="stylesheet"
+	media="screen">
+<link href="/static/css/datetimepicker.css" rel="stylesheet"
+	media="screen">
+<link href="/static/css/tankuang.css" rel="stylesheet" media="screen">
+<!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
+<!--<link href="/static/css/bootstrap1.min.css" rel="stylesheet" media="screen"> -->
+<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet"
+	media="screen">
+<link href="/static/css/my1.css" rel="stylesheet" media="screen">
+ <!--<script src="/js/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('tr:odd').addClass('odd');
+            $('tr:even').addClass('even')
+        });
+    </script>
+    <style type="text/css">
+        .odd{
+            background-color: #0000FF;
+        }
+        .even{
+            background-color: #00CCFF;
+        }
+    </style>-->
 </head>
+
+
+
 <!-- <body bgcolor="yellow">-->
 <body class="body_all">
 	<div class="top">
@@ -33,148 +56,183 @@
 		</ul>
 
 	</div>
+
 	<div>
-		<ol 
-					class="breadcrumb" 
-					style="background-color:#339966; font:bold">
-			<li><a href="#"
-					style="color:#faf5f5;text-decoration:none;">个人主页>></a>
-					<!--<style >
-					li.zhuye a {
-					font-weight:bold;
-					color:#0ab15e;
-								}				
-					</style>-->
-	
-				
-  					<label class="active" >延期处理</label>
-			</li>
-				<b><a class="one" href="/index.html" style="float:right;text-decoration:none;" target="_blank" >返回上一页 </a></b>
-  		</ol>
+		<ol class="breadcrumb" style="background-color:#339966; font:bold">
+			<li><a href="#" class="divider">个人主页>></a></li>
+
+			<li><label class="active">延期处理</label></li>
+			<b><a class="one" href="/index.html"
+				style="float:right;text-decoration:none;" target="_blank">返回上一页
+			</a></b>
+		</ol>
 
 	</div>
 
 
-<div>
-	<h3 class="head_1">延期处理:</h3>
+	<div>
+		<h3 class="head_1">延期处理:</h3>
 
-	
-	<table class="table table-striped">
+
+		<table class="table table-striped">
+
+
+			<col width="50%" />
+			<col width="25%" />
+			<col width="25%" />
+
+			<thead>
+				<tr>
+					<th class="thead_th">公告标题</th>
+					<th class="thead_th">发布时间</th>
+					<th class="thead_th">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+
+		{% for delay in delays %}
+				{% if forloop.counter|divisibleby:"20" %}
+				<tr class="low1">
+				{% else %}	
+				<tr class="low2">
+				{% endif %}	
+					<td class="col1">&nbsp;{{delay.title}}</td>
+					<td>{{delay.apply_date}}</td>
+					<td>
+						<button style="margin:5px" data-toggle="modal"
+							class="btn btn-success " type="button" onclick="approve_delay({{delay.id}})">批准</button>
+						<button class="btn btn-danger " type="button" data-toggle="modal"
+							onclick="refuse_delay({{delay.id}})">拒绝</button> <!--data-target="#myModal"  </a> --> 
+					</td>
+				</tr>
+
+				
+				{% endfor %}
+			</tbody>
+
+		</table>
+	</div>
+	<div>
+		<ul class="pagination pagination-right" style="float:right">
+			<li class=""><a href="#">&laquo;</a></li>
+			<li class=""><a href="#">1</a></li>
+			<li class=""><a href="#">2</a></li>
+			<li class=""><a href="#">3</a></li>
+			<li class=""><a href="#">4</a></li>
+			<li class=""><a href="#">5</a></li>
+			<li class=""><a href="#">&raquo;</a></li>
+		</ul>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="mymodal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">拒绝延期</h4>
+				</div>
+				<div class="modal-body">
+					<form id="test_form" action="/refuse/" method="post" name="test" class="navbar-form navbar-center">
+						<div class="container-fluid">
+							<div class="row-fluid">
+								<div class="span3">
+									<div class="title">
+										<label class="item-title"> 拒绝理由： </label>
+									</div>
+								</div>
+								<div class="span9">
+									<input id="delayid" name="delayid" type="hidden">
+									<div>
+										<textarea name="reason"
+											style="background-color: #FFFFFF; width: 80%; height: 100px;"></textarea>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<div align="center">
+						<button type="button" class="btn mybtn-success"
+							data-dismiss="modal" onclick="do_refuse()">确定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		</div>
+		<div class="modal fade" id="myModal_approve" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="mymodal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel_approve">批准延期</h4>
+				</div>
+				<div class="modal-body">
+					<form id="approve_form" action="/approve/" method="post" name="test" class="navbar-form navbar-center">
+						<div class="container-fluid">
+							<div class="row-fluid">
+								<div class="span3">
+									<div class="title">
+										<label class="item-title"> 确定批准延期吗？ </label>
+									</div>
+								</div>
+								<div class="span9">
+									<input id="delayid1" name="delayid1" type="hidden">
+									<!--
+									<div>
+										<textarea name="reason"
+											style="background-color: #FFFFFF; width: 80%; height: 100px;"></textarea>
+									</div>
+									-->
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<div align="center">
+						<button type="button" class="btn mybtn-success"
+							data-dismiss="modal" onclick="do_approve()">确定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+		</div>
+		<!-- Le javascript ================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<script type="text/javascript"
+			src="/static/jquery/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			function refuse_delay(id){
+				$('#delayid').val(id);
+				$('#myModal').modal('show');
+			}
+			
+			function do_refuse(){
+				$('#test_form').submit();
+			}
+			
+			function approve_delay(id){
+				$('#delayid1').val(id);
+				$('#myModal_approve').modal('show');
+			}
+			
+			function do_approve(){
+				
+				$('#approve_form').submit();
+			}
+		</script>
 		
-		
-		<col width="50%" />
-		<col width="25%" />
-		<col width="25%" />
-
-		<thead>
-			<tr>
-				<th class="thead_th">公告标题</th>
-				<th class="thead_th">发布时间</th> 
-				<th class="thead_th">操作</th>
-			</tr>
-		</thead>
-		<tbody>
-			
-			
-			<tr class="low1">
-					<td class="col1">&nbsp;申请1：项目1申请延期2天，延期至2013-09-13;</td>
-					<td>高子叶，2013-8-23</td>
-				  	<td>
-				  		<button style="margin:5px" data-toggle="botton" class="btn btn-success " type="button">批准</button>
-				  	  	<button  class="btn btn-danger " type="button">拒绝</button>
-				  	</td>
-			</tr>
-			
-			<tr class="low2" >
-				<td class="col1">&nbsp;申请1：项目1申请延期2天，延期至2013-09-13;</td> 
-				<td>高子叶，2013-8-23</td> 
-				<td>
-						<button style="margin:5px" data-toggle="botton" class="btn btn-success " type="button">批准</button>
-						<button  class="btn btn-danger " type="button">拒绝</button>
-				</td>
-			</tr>
-			<tr class="low1">
-				<td class="col1">&nbsp;申请2：项目2申请延期2天，延期至2013-09-13</td> 
-				<td>高子叶，2013-8-23</td> 
-				<td>
-						<button style="margin:5px" data-toggle="botton" class="btn btn-success " type="button">批准</button>
-						<button  class="btn btn-danger " type="button">拒绝</button>
-				</td>
-			</tr>
-			<tr class="low2">
-				<td class="col1">&nbsp;申请2：项目2申请延期2天，延期至2013-09-13申请2：项目2申请延期2天，延期至2013-09-13</td> 
-				<td>高子叶，2013-8-23</td> 
-				<td>
-						<button style="margin:5px" data-toggle="botton" class="btn btn-success " type="button">批准</button>
-						<button  class="btn btn-danger " type="button">拒绝</button>
-				</td>
-			</tr>
-		</tbody>
-
-	</table>
-</div>
-<div >
-  <ul class="pagination pagination-right" style="float:right">
-   <li class=""><a href="#">&laquo;</a></li>
-   <li class=""><a href="#">1</a></li>
-   <li class=""><a href="#">2</a></li>
-   <li class=""><a href="#">3</a></li>
-   <li class=""><a href="#">4</a></li>
-   <li class=""><a href="#">5</a></li>
-   <li class=""><a href="#">&raquo;</a></li>
-  </ul>
- </div>
-<!-- Le javascript ================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="http://code.jquery.com/jquery.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap.js"></script>
-
-
-
-
-
-</body>
-
-
-</html>
-
-
-<!--<div>
-	<p class="tip"><span>提示</span></p>
-<style >
-	p.tip span {
-		font-weight:bold;
-		color:#ff9955;
-	}
-</style>
-</div>
-
-<table  border="1" 
-		width="98%"
-		align="center">
-<col width="50%" />
-<col width="25%" />
-<col width="25%" />
-
-<thead align="center">
-	<tr>
-		<th>消息标题</th> <th>发布时间</th> <th>操作</th>
-	</tr>
-</thead>
-
-<tfoot align="center">
-	<tr>
-		<td>sum, cell 1</td> <td>row 1, cell 2</td> <td>row 1, cell 3</td>
-	</tr>
-</tfoot>
-
-<tbody align="center">
-	<tr>
-		<td>row 1, cell 1</td> <td>row 1, cell 2</td> <td>row 1, cell 3</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td> <td>row 2, cell 2</td> <td>row 2, cell 3</td>
-	</tr>
-</tbody>
-</table>-->

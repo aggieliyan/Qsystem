@@ -1,0 +1,129 @@
+       li{ 
+	    	list-style: none;
+	    	display: inline-block;
+
+	    }
+	    ul{
+	    	padding-left: 0;
+	    	margin: 0px;
+	    	display: inline-block;
+	    }
+	    body{
+	    	background: url(../img/top.jpg) repeat-x;
+
+	    }
+	    p,a{
+	    	font-size: 12px;
+	    	text-decoration: none;
+	    }
+	    .top{
+	    	width: 1100px;
+	    	height: 86px;
+	    	margin: auto;
+	    }
+	    .top_logo{
+	    	float: left;
+	    	background: url(../img/logo.jpg) no-repeat;
+	    	height: 86px;
+	    	width: 300px;
+	    	padding-left: 40px;
+
+	    }
+	    .top_memu{
+	    	float: left;
+	    }
+	    .top_memu li{
+	    	float: left;
+	    	line-height: 85px;
+	    	padding-right: 113px;
+	    }
+	    .top_memu a{
+	    	color: #fff;	    	
+	    	font-size: 18px;
+	    	font-family: Verdana,​Microsoft YaHei,​宋体;
+	    	font-weight:bold;
+	    }
+	    .breadcrumb > li {
+    		text-shadow: none;
+	    }
+	    .top_memu a:active{
+	    	color: #339966
+	    }
+	    .breadcrumb > li > .divider {
+    		font-size: 14px;
+    		color: white;
+	    }
+	    .top_memu a:hover{
+	    	text-decoration: none;
+	    	color: #339966;
+	    }
+	   
+	    .top_bar{
+	    	float: right;
+	    	padding-right: 28px;
+
+	    }
+	    .top_bar li {
+	    	float: right;
+	    	line-height: 85px;
+	    	color: #fff;
+	    }
+	    .top_bar a{
+	    	color: #fff;
+	    	font-size: 18px;
+	    }
+
+	    .states_yes {
+         color:green; 
+	    }
+
+        .states_no {
+         color:red; 
+	    }
+
+	    .table-striped{
+				text-align:center;
+				width:100%;
+				margin:0 auto;
+			}
+		.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th{background-color:#f8f3ca;}
+		/*.low1 {
+				 background-color:#f8f3ca;
+		 }*/
+		.low2 { 
+				background-color:#ffffdd; 
+		}
+		.col1{
+			text-align:left;
+		}
+		.thead_th{
+		text-align:center;
+		background-color:#e1dddd;	
+		}
+		.body_all{
+			width: 1100px;
+  			margin-left: auto;
+  			margin-right: auto;
+ 			font-family: 'Microsoft YaHei','Helvetica Neue',Helvetica,Arial,sans-serif;
+		}
+		a.one:link {
+			color:black;}
+		a.one:visited {
+			color:black;
+		}
+		a.one:hover {
+			color:#76d5d8;
+		}
+		.active{
+			color:black;
+		}
+		.head_1 {
+			font-weight:bold;
+			text-indent:
+		}
+		.botton_yes{
+
+		}
+
+		
+	

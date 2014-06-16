@@ -39,3 +39,20 @@ class ProjectSearchForm(forms.Form):
 	end_date_s=forms.DateField(required=False)
 	status_p=forms.CharField(required=False)
 	leader_p=forms.CharField(required=False)
+
+class TestForm(forms.Form):
+	delayid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
+	reason = forms.CharField(required=True, error_messages={'required':u'项目名称不能为空'})
+
+class ProusermessForm(forms.Form):
+	usermessageid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
+	
+class MessageForm(forms.Form):
+	messageid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
+	
+class NoticeForm(forms.Form):
+	noticeid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
+
+	
+class Approveform(forms.Form):
+	delayid1 = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})	

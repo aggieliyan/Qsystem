@@ -59,6 +59,7 @@ class public_message(models.Model):
         )  
     type_p = models.CharField(max_length=30,choices=CHOICES)
     publication_date = models.DateField()
+    delay_status = models.CharField(u'批准状态',max_length=10,null=True)
     isactived = models.BooleanField(max_length=1)
         
 
@@ -71,7 +72,7 @@ class project_delay(models.Model):
     reason =models.CharField(u'拒绝理由',max_length=100, blank=True, null=True)
     result = models.CharField(u'状态',max_length=10,blank=True, null=True)
     review_date = models.DateField(blank=True,null=True)
-    isactived = models.BooleanField(max_length=1)
+    isactived = models.BooleanField(max_length=1,null=True)
 
 
 class project_user_message(models.Model):

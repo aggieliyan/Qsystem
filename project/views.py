@@ -13,14 +13,13 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm
 from project.models import *
-from models import public_message
-from models import project_user 
 import math
+import forms
 import models
 
 from django.views.decorators.csrf import csrf_exempt
 
-from models import project,user,project_user,project_delay,public_message
+from models import project,user,project_user,project_delay,public_message,project_user_message
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 
@@ -535,3 +534,102 @@ def delete_user3(request):
     user.delete()
     return redirect('/show_user/')
 
+def notice(request):
+    if request.method == 'POST':  # 如果是post请求
+        wds = request.POST
+        try:
+            wd = wds['wd']
+            notices = public_message.objects.filter(content__icontains=wd).filter(type_p ="notice").order_by('publication_date')
+        except Exception as e:
+            notices = public_message.objects.filter(type_p ="notice").order_by('publication_date')
+    else:  # Get请求
+        notices = public_message.objects.filter(type_p ="notice").order_by('publication_date')
+    
+    return render_to_response('notice.html', locals())
+
+@csrf_exempt
+
+def historymessage(request):
+    # 查询与用户相关的消息
+    #sessionID = request.session['id']
+    #usid = user.objects.get(id=sessionID)
+    useid = 1
+    #request.session['id']
+    tests= project_user_message.objects.filter(userid_id=useid)
+    lists=[]
+    for test in tests:
+        lists.append(test.messageid_id)
+    if request.method == 'POST':  # 如果是post请求
+        wds = request.POST
+        try:
+            wd = wds['wd']
+            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=wd).filter(type_p = "message").order_by('publication_date')
+        except Exception as e:
+            messages = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
+    else:  # Get请求
+        messages = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
+        
+
+    return render_to_response('historymessage.html', locals())
+
+
+def refuse(request):
+    if request.method == 'POST':
+        form = forms.TestForm(request.POST)
+        if form.is_valid():
+            delayid = form.cleaned_data['delayid']
+            reason = form.cleaned_data['reason']
+            delay = project_delay.objects.get(id=delayid)
+            delay.reason = reason
+            delay.isactived = False
+            delay.save();
+    delays = project_delay.objects.filter(isactived=True)
+    return render_to_response('delay.html', {'delays':delays})
+
+
+def approve(request):
+    if request.method == 'POST':
+        form = forms.Approveform(request.POST)
+        if form.is_valid():
+            delayid1 = form.cleaned_data['delayid1']
+            delay = project_delay.objects.get(id=delayid1)
+            delay.isactived = True
+            delay.save();
+    raw_sql = 'select * from project_project_delay where isactived is null'
+    delays = project_delay.objects.raw(raw_sql)
+    return render_to_response('delay.html', {'delays':delays})
+
+
+def deletehistory(request):  
+    useid = 1
+    if request.method == 'POST':
+        form = forms.MessageForm(request.POST)  
+        if form.is_valid():
+            messageid = form.cleaned_data['messageid'] 
+            usermessage= project_user_message.objects.get(userid_id=useid,messageid_id=messageid)
+            usermessage.delete();
+    tests= project_user_message.objects.filter(userid_id=useid)
+    lists=[]
+    for test in tests:
+        lists.append(test.messageid_id)
+    messages  = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
+    return render_to_response('historymessage.html', locals())
+        
+         
+  
+def deletenotice(request):  
+    useid = 1
+    if request.method == 'POST':
+        form = forms.NoticeForm(request.POST) 
+        if form.is_valid():
+            noticeid = form.cleaned_data['noticeid'] 
+            usernotice= project_user_message.objects.get(userid_id=useid,messageid_id=noticeid)
+            print usernotice.messageid_id
+            usernotice.delete();
+    tests= project_user_message.objects.filter(userid_id=useid)
+    lists=[]
+    for test in tests:
+        lists.append(test.messageid_id)
+    notices = public_message.objects.filter(pk__in=lists).filter(type_p = "notice").order_by('publication_date')
+    return render_to_response('notice.html', locals())
+    
