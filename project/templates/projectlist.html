@@ -33,6 +33,7 @@
     
     
 	
+
 	{% if notices %}
 	
 	<div class="notice">
@@ -51,17 +52,25 @@
 			
 		</div>
 		
-		{% if count == 0 %}	
-		
-		{% else %}	
-		<div style="position:absolute;right:500px;bottom:0">
+		<div style="position:absolute;right:10px;bottom:0">
 			<a href="" style="color:#339666">未读公告<span style="color:#ffa03e">({{a}})>></span></a>
 		</div>	
-        {% endif %}	
+ 
 	</div>	
 	{% else %}
+  
+     <div style="height:25px;width:100%;margin:auto;border:#ff9933 solid thin;background-color:#ffffdd;position:relative;margin-top:18px;">
+   <div class="notice_title">
+			<span>
+				<b>消息提醒<span style="color:#ffa03e">(0):</span></b>
+			</span>
+		</div>
+		
+    <p>暂无公告。。。。。。 </p>
+   </div>	
 
     {% endif %}
+
 	
 	
     
