@@ -28,7 +28,7 @@ class project(models.Model):
     designer_p=models.ForeignKey(user, related_name='designer_p', blank=True, null=True)
     tester_p=models.ForeignKey(user, related_name='tester_p', blank=True, null=True)
     start_date = models.DateField(blank=True,null=True)
-    expect_launch_date=models.DateTimeField(blank=True,null=True)
+    expect_launch_date=models.DateField(blank=True,null=True)
     real_launch_date=models.DateField(blank=True,null=True)
     estimated_product_start_date = models.DateField(blank=True,null=True)
     estimated_product_end_date = models.DateField(blank=True,null=True)
@@ -67,7 +67,14 @@ class project_delay(models.Model):
     project=models.ForeignKey(project)
     delay_to_date=models.DateField()
     apply_date=models.DateField()
-    reviewer= models.CharField(u'项目名称',max_length=100)
-    result = models.CharField(u'状态',max_length=10)
+    title = models.CharField(u'项目名称',max_length=100, blank=True, null=True)
+    reason =models.CharField(u'拒绝理由',max_length=100, blank=True, null=True)
+    result = models.CharField(u'状态',max_length=10,blank=True, null=True)
     review_date = models.DateField(blank=True,null=True)
+    isactived = models.BooleanField(max_length=1)
+
+
+class project_user_message(models.Model):
+    userid = models.ForeignKey(user)
+    messageid = models.ForeignKey(public_message)
     isactived = models.BooleanField(max_length=1)
