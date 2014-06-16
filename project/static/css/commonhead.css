@@ -35,7 +35,10 @@
 	    .top_memu li{
 	    	float: left;
 	    	line-height: 85px;
-	    	padding-right: 113px;
+	    	padding-right: 100px;
+	    	margin-left: 50px;
+            margin-top: 5px;
+
 	    }
 	    .top_memu a{
 	    	color: #fff;	    	
@@ -55,12 +58,12 @@
 	    .top_bar{
 	    	float: right;
 	    	padding-right: 28px;
-
 	    }
 	    .top_bar li {
 	    	float: right;
 	    	line-height: 85px;
 	    	color: #fff;
+	    	margin-top: 5px;
 	    }
 	    .top_bar a{
 	    	color: #fff;
