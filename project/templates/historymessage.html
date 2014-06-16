@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>项目管理系统</title>
+  {% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
 
 <meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
 <meta http-equiv="Content-Language" content="zh-cn" />
@@ -28,28 +25,9 @@
 
 <!-- Button trigger modal -->
 
+{% endblock %}
+{% block content %}
 
-</head>
-<!-- <body bgcolor="yellow">-->
-<body class="body_all">
-
-
-	<div class="top">
-		<ul class="top_logo">
-			<li><a href=""> </a></li>
-		</ul>
-		<ul class="top_memu">
-			<li><a href="">个人主页</a></li>
-			<li><a href="">项目管理</a></li>
-			<li><a href="">资源管理</a></li>
-		</ul>
-		<ul class="top_bar">
-			<li><a href="">name</a></li>
-			<li><i> | </i></li>
-			<li><a href="">退出</a></li>
-		</ul>
-
-	</div>
 	<div>
 		<ol class="breadcrumb" style="background-color:#339966; font:bold">
 			<li><a href="#" class="divider">个人主页>></a></li>
@@ -139,7 +117,7 @@
 	</div>
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
+		aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="mymodal-header">
@@ -204,46 +182,9 @@
 			}
 	</script>
 
-
-	<!-- <script>
-
-var delId = 0;
-
-$('.btn-danger').on('click',function(){
-	delId = $(this).data('id');
-})
-
-$('#del-btn').on('click',function(){
-	alert(111);
-	$.ajax({
-		url : 'delete',
-		dataType :　'json',
-		type :　'POST',
-		data :　{
-			id : delId
-		},
-		success : function(data){
-			if(data.success){
-
-			}else{
-				alert(data.message);
-			}
-		}
-		
-	});
+  {% endblock %}
 	
-})
 
 
-
-</script> -->
-
-
-
-
-</body>
-
-
-</html>
 
 

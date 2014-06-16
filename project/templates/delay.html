@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>项目管理系统</title>
-
+{% extends "base.html" %}
+{% block title %}Q系统{% endblock %}
+{% block head %}
 <meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
 <meta http-equiv="Content-Language" content="zh-cn" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,47 +11,12 @@
 	media="screen">
 <link href="/static/css/tankuang.css" rel="stylesheet" media="screen">
 <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
-<!--<link href="/static/css/bootstrap1.min.css" rel="stylesheet" media="screen"> -->
 <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet"
 	media="screen">
 <link href="/static/css/my1.css" rel="stylesheet" media="screen">
- <!--<script src="/js/jquery.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('tr:odd').addClass('odd');
-            $('tr:even').addClass('even')
-        });
-    </script>
-    <style type="text/css">
-        .odd{
-            background-color: #0000FF;
-        }
-        .even{
-            background-color: #00CCFF;
-        }
-    </style>-->
-</head>
-
-
-
-<!-- <body bgcolor="yellow">-->
-<body class="body_all">
-	<div class="top">
-		<ul class="top_logo">
-			<li><a href=""> </a></li>
-		</ul>
-		<ul class="top_memu">
-			<li><a href="">个人主页</a></li>
-			<li><a href="">项目管理</a></li>
-			<li><a href="">资源管理</a></li>
-		</ul>
-		<ul class="top_bar">
-			<li><a href="">name</a></li>
-			<li><i> | </i></li>
-			<li><a href="">退出</a></li>
-		</ul>
-
-	</div>
+ 
+{% endblock %}
+{% block content %}
 
 	<div>
 		<ol class="breadcrumb" style="background-color:#339966; font:bold">
@@ -126,7 +87,7 @@
 
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
+		aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="mymodal-header">
@@ -167,7 +128,7 @@
 		</div>
 		</div>
 		<div class="modal fade" id="myModal_approve" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
+		aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="mymodal-header">
@@ -235,4 +196,4 @@
 				$('#approve_form').submit();
 			}
 		</script>
-		
+		{% endblock %}
