@@ -16,8 +16,8 @@ urlpatterns = patterns('',
 
     #login
     url('^$', 'project.views.login',name="index"),
-    url('^login/$', 'project.views.login',name="login"),
-    url('^register/$', 'project.views.register',name="register"),
+    url('^login$', 'project.views.login',name="login"),
+    url('^register$', 'project.views.register',name="register"),
     #login
     
     url(r'^admin/', include(admin.site.urls)),
