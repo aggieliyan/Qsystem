@@ -73,9 +73,9 @@ def login(request):
                         response.set_cookie("password", password, 3600)
                     return response
                 else:
-                    template_var["error"] = _(u'用户未激活，请联系管理员')
+                    template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
             else:
-                template_var["error"] = _(u'用户不存在，请先注册')
+                template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
     template_var["form"]=form
     return render_to_response("login.html",template_var,context_instance=RequestContext(request))
 #login

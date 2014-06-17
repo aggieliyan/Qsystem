@@ -68,7 +68,7 @@ class LoginForm(forms.Form):
     username=forms.CharField(
         label=_(u"用户名"),
         max_length=20,
-        error_messages={'required': u'请输入用户名'}
+        error_messages={'required': u'您输入的帐号为空，请输入'}
         )
     password=forms.CharField(
         label=_(u"密码"),
