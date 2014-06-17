@@ -138,12 +138,11 @@ $(document).ready(function(){
       //把测试和产品排第一的作为相关负责人
       var d = $(".p-list").eq(0).children().eq(0).attr("value");
       var t = $(".p-list").eq(2).children().eq(0).attr("value");
-      console.log("-------");
-      console.log(d);
       $("[name='designer']").attr("value",d);
       $("[name='tester']").attr("value",t);
 
     });
+
 
     //计算天数
     $(".range input").change(function(){
