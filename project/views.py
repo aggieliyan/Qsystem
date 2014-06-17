@@ -150,8 +150,6 @@ def project_list(request):
         a = 0
     elif count == 4:
         a = 0
-    elif count == 5:
-        a = 0
     else:
         a = len(noticess)-5    	
 	
