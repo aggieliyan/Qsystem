@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-  <meta charset="utf-8">
-  <title>Q系统</title>
+ {% extends "base.html" %}
+ {% block title %}Q系统{% endblock %}
+ {% block head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap -->
 <link rel="stylesheet" type="text/css" href="/static/css/nopermitsourcemaind.css">
@@ -15,54 +13,35 @@
 <script type="text/javascript" src="/static/js/bootstrap.js"></script>
 <script type="text/javascript" src="/static/jquery/jquery-2.0.0.min.js"></script>
 <script type="text/javascript" src="/static/js/source.js" charset="UTF-8"></script>
-</head>
-
-<body>
-<div class="top">
-		<ul class="top_logo">
-			<li><a href=""> </a></li>
-		</ul>
-		<ul class="top_memu">
-			<li><a href="">个人主页</a></li>
-			<li><a href="">项目管理</a></li>
-			<li><a href="">资源管理</a></li>
-		</ul>
-		<ul class="top_bar">
-			<li><a href="">name</a></li>
-			<li><i> | </i></li>
-			<li><a href="">退出</a></li>
-		</ul>
-	</div>  
-
+{% endblock %}
+ 
+{% block content %} 
 <div class="body">
-
 	<form name="form" method="post">
-	
-	<div class="choose">
-		<select name="department" id="department" class="section" onchange="showuser()" >
-		<option value="请选择">请选择</option>
-		{% for department in department_list %}
-		    <option value="{{department}}" >{{department}}</option>
-		    {% endfor %}
-		</select>
-		
-		<button type="button" class="btn-section" id="newdept">新建部门</button>
+	   <div class="choose">
+		  <select name="department" id="department" class="section" onchange="showuser()" >
+		  <option value="请选择">请选择</option>
+		  {% for department in department_list %}
+		  <option value="{{department}}" >{{department}}</option>
+		   {% endfor %}
+		  </select>
+		  
+		<button type="button" class="btn-section">新建部门</button>
 		<button type="button" class="btn-edit" >编辑</button>
 	</div>
 	
 	<div class="people">
-	  <div class="def1">
-		
-		<select name="level_1a" class="section1" id="sec1"  onfocus="this.blur()"  >
-		<option value="请选择">请选择</option>
-		{% for level_1 in level_list %}
-		    <option value="{{level_1}}" {% if level_1 == level %} selected {% endif %} >{{level_1}}</option>
-		    {% endfor %}
-	
-		</select>		
+	   <div class="def1">
+		 <select name="level_1a" class="section1" id="sec1"  >
+		 <option value="请选择">请选择</option>
+		 {% for level_1 in level_list %}
+		 <option value="{{level_1}}" {% if level_1 == level %} selected {% endif %} >{{level_1}}</option>
+		 {% endfor %}
+		 </select>	
+		 	
 		<button type="button" class="addsub" id="add1a" > </button>
 		<button type="button" class="minsub" id="min1"  onclick="del_logic()"> </button>
-		<button type="button" class="delsub" id="del1"  onclick="del()" > </button>
+		<button type="button" class="delsub" id="del1"  onclick="del()"> </button>
 		</div>
 		
 		<div class="def2">
@@ -72,7 +51,7 @@
 		    		<option value="{{level_1}}">{{level_1}}</option>
 		   			{% endfor %}
 			</select>	
-		
+
 			<button type="button" class="addsub" id="add2a" > </button>
 			<button type="button" class="minsub" id="min2"  onclick="del_logic2a()"> </button>
 			<button type="button" class="delsub" id="del1" onclick="del2()"> </button>
@@ -80,7 +59,7 @@
 		</div>
 	
 	  <div class="def3">
-		<select name="level_3a" class="section3" id="sec3" onfocus="this.blur()" onchange="insert3()">
+		<select name="level_3a" class="section3" id="sec3" onchange="insert3()">
 			<option value="请选择">请选择</option>
 				{% for level_1 in level_list %}
 		    <option value="{{level_1}}">{{level_1}}</option>
@@ -95,35 +74,32 @@
 	  <div class="s1">
 	  {% if level_1_list %}
 		{% for level in level_1_list %}
-		<select name="level_1" class="section1" id="sec1"  onfocus="this.blur()"  >
+		<select name="level_1" class="section1" id="sec1" >
 		<option value="请选择">请选择</option>
 		{% for level_1 in level_list %}
 		    <option value="{{level_1}}" {% if level_1 == level %} selected {% endif %} >{{level_1}}</option>
 		    {% endfor %}
-	
 		</select>		
 		<button type="button" class="addsub" id="add1" > </button>
 		<button type="button" class="minsub" id="min1"  onclick="del_logic()"> </button>
 		<button type="button" class="delsub" id="del1"  onclick="del()" > </button>
 		{% endfor %}
 	  {% else %}
-	  		<select name="level_1" class="section1" id="sec1"  onchange="insert1()"  onfocus="this.blur()" >
+	  		<select name="level_1" class="section1" id="sec1"  onchange="insert1()"  >
 		<option value="请选择">请选择</option>
 		{% for level_1 in level_list %}
-		    <option value="{{level_1}}" {% if level_1 == level %} selected {% endif %} >{{level_1}}</option>
+		    <option value="{{level_1}}">{{level_1}}</option>
 		    {% endfor %}
-	
 		</select>
 		<button type="button" class="addsub" id="add1" > </button>
-		<button type="button" class="minsub" id="min1"  onclick="del_logic()"> </button>
+		<button type="button" class="minsub" id="min1"  onclick="del_logic()" > </button>
 		<button type="button" class="delsub" id="del1"  onclick="del()" > </button>
 		{% endif %}
 		</div>
 	
 		{% for level_2 in level_2_list %}
 		 	<div class="s2">
-		 	
-				<select name="level_2" class="section2" id="sec2"  onchange="insert2()"  >
+				<select name="level_2" class="section2" id="sec2"  onchange="insert2()" >
 				<option value="请选择">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1}}" {% if level_1 == level_2 %} selected {% endif %}>{{level_1}}</option>
@@ -134,30 +110,28 @@
 				<button type="button" class="minsub" id="min2" onclick="del_logic2()"> </button>
 				<button type="button" class="delsub" id="del1" onclick="del2()"> </button>
 				
-		   
 		 	</div>
 		 	{% endfor %}
 		 	
-
 	
 	    {% for level_3 in level_3_list %}
 			<div class="s3">
-				<select name="level_3" class="section3" id="sec3"  onchange="insert3()"  onfocus="this.blur()" >
+				<select name="level_3" class="section3" id="sec3"  onchange="insert3()" >
 				<option value="请选择">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1}}" {% if level_1 == level_3 %} selected {% endif %}>{{level_1}}</option>
 		    		{% endfor %}
 	
 				</select>		
-				<button type="button" class="addsub" id="add3 ad3"  > </button>
+				<button type="button" class="addsub ad3" id="add3"  > </button>
 				<button type="button" class="minsub" id="min3"  onclick="del_logic3()"> </button>
 				<button type="button" class="delsub" id="del1"  onclick="del3()"> </button>
 		
 			</div>
 			{% endfor %}
+			</div>
 			</form>
-	</div>	
-</div>
+		</div>
 
 <script type="text/javascript">
     var s1 = document.getElementById("department");
@@ -211,7 +185,6 @@ function del_logic2()
 {
 document.form.action="/delet_userlogic2/"
 document.form.submit()
-
 }
 
 function del_logic3()
@@ -279,5 +252,4 @@ document.form.submit()
 
 </script>
 
-</body>
-</html>
+{% endblock %}
