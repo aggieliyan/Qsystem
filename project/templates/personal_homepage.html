@@ -1,9 +1,7 @@
 
-<!DOCTYPE html>
-<html>
-  <head>
-  <meta charset="utf-8">
-  <title>设计变更</title>
+  {% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap -->
   <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -11,33 +9,10 @@
   <link href="/static/css/datetimepicker.css" rel="stylesheet" media="screen">
   <link href="/static/css/tankuang.css" rel="stylesheet" media="screen">
   <link href="/static/css/top.css" rel="stylesheet" media="screen">
+  {% endblock %}
+  {% block content %}
 
-  </head>
-<body>
-
-    <script type="text/javascript" src="/static/project/jquery/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="/static/project/js/bootstrap.min.js"></script>
-  <!-- Button trigger modal -->
-
-    <div class="top">
-    <ul class="top_logo">
-      <li><a href=""> </a></li>
-    </ul>
-    <ul class="top_memu">
-      <li><a href="">个人主页</a></li>
-      <li><a href="">项目管理</a></li>
-      <li><a href="">资源管理</a></li>
-    </ul>
-    <ul class="top_bar">
-      <li><a href="javascript:void(0);">name</a></li>
-      <li><i> | </i></li>
-      <li><a href="javascript:void(0); "
-            onclick="window.location.href='http://passport.beta.ablesky.com/logout.do?action=Logout&ref='+ encodeURIComponent(window.location.href)">退出</a></li>
-    </ul>
-  </div>
-  
-  
-  
+  <!-- Button trigger modal -->  
   {% if messages %}
 	<div class="notice">
 		<div class="notice_title">
@@ -421,5 +396,4 @@
       }
     </script>
       
-</body>
-</html>
+{% endblock %}
