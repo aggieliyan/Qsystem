@@ -13,8 +13,9 @@ $(document).ready(function(){
       } 
     }
     
-    //选择人员后点确定，在页面显示已选人员
+    //选择人员后点确定，
     $("#test").click(function(){
+
       var testerlist = $("#testerlist input");
     	var jsontester = { tester:[]};
       if(testerlist.length == 0){
@@ -28,18 +29,36 @@ $(document).ready(function(){
 	      }
 	      //console.log(jsontester);
 	    }
-        $("[title='1']").children("div").remove();
-        for (var i= jsontester.tester.length-1; i >=0; i--){
-            $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'" type="radio"><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
-        }	
+      $("[title='1']").children("div").remove();
+      //在页面显示已选人员
+      for (var i= jsontester.tester.length-1; i >=0; i--){
+        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'" type="radio"><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
+      }	
 
-        pl = $("[title='1']").children("div").length;
-        if(pl >= 8){
-          w = (pl/5+1)*30;
-          $("[title='1']").attr("style","height:"+w+"px;");
-        }
-        $("[title='1']").attr("title","0");
+      pl = $("[title='1']").children("div").length;
+      if(pl >= 8){
+        w = (pl/5+1)*30;
+        $("[title='1']").attr("style","height:"+w+"px;");
+      }
+      $("[title='1']").attr("title","0");
 
+
+      //找产品和测试负责人
+      var d = $(".p-list").eq(0).children().eq(0).attr("value");
+      var t = $(".p-list").eq(2).children().eq(0).attr("value");
+      console.log(t);
+      $("[name='designer']").attr("value",d);
+      $("[name='tester']").attr("value",t);
+
+      //设置项目参与人员
+      p = $(".role-item");  
+      var idlist =" ";
+      for(var i=p.length-1; i >=0; i--){
+        item = p.eq(i);
+        idlist = idlist + item.attr("value") + ","
+      } 
+      $("[name='relateduser']").attr("value",idlist);
+     
     });
 
     //删除人员
@@ -119,14 +138,14 @@ $(document).ready(function(){
       console.log("select master");
       p = $(".role-item");  
       $("#master").children("option").remove();
-      var idlist =" ";
+      //var idlist =" ";
       for(var i=p.length-1; i >=0; i--){
         item = p.eq(i);
         $("#master").append("<option value="+item.attr("value")+">"+item.children('span').eq(0).text()+"</option>");
         //console.log(item.children('span').eq(0).text());
-        idlist = idlist + item.attr("value") + ","
+       // idlist = idlist + item.attr("value") + ","
       } 
-      $("[name='relateduser']").attr("value",idlist);
+      //$("[name='relateduser']").attr("value",idlist);
     });
     
     $("#master").blur(function(){
