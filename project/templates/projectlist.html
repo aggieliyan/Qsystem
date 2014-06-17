@@ -1,7 +1,10 @@
+{% extends "base.html" %}
 {% load staticfiles %}
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
+
+{% block title %}Q系统{% endblock %}
+{% block head %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>项目管理系统</title>
@@ -12,25 +15,11 @@
     <link href="{% static 'css/mycss.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/projectlist.css' %}" rel="stylesheet" media="screen">
-</head>
-
+{% endblock %}
+{% block content %}
 <body id="x-table">
-    <div class="top">
-        <ul class="top_logo">
-            <li><a href=""> </a></li>
-        </ul>
-        <ul class="top_memu">
-            <li><a href="">个人主页</a></li>
-            <li><a href="">项目管理</a></li>
-            <li><a href="">资源管理</a></li>
-        </ul>
-        <ul class="top_bar">
-            <li><a href="">name</a></li>
-            <li><i> | </i></li>
-            <li><a href="">退出</a></li>
-        </ul>
-    </div>
-    
+
+
     
 	
 
@@ -161,7 +150,7 @@
                                 {% for p in projectobj %}
                                 <tr>
                                     <td>{{ p.priority }}</td>
-                                    <td><a href="/">{{ p.project }}</a></td>
+                                    <td><a href="{% url 'prodetail' p.id %}">{{ p.project }}</a></td>
                                     <td>{{ p.leader_p.realname}}</td>
                                     <td>{{p.designer_p.realname}}</td>
                                     <td>{{p.tester_p.realname}}</td>
@@ -228,5 +217,5 @@
       });
 </script>
 <script src="../static/js/bootstrap.js"></script>
-</body>
-</html>
+{% endblock %}
+
