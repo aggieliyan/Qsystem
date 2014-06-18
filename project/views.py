@@ -37,7 +37,13 @@ def register(request):
     else:
         uf = UserForm()
     return render_to_response('register.html',{'list':department.objects.all()},context_instance=RequestContext(request))
-  
+
+def logout(request):
+    
+    session_key = request.session.session_key
+    Session.objects.get(session_key=session_key).delete()
+    
+    return HttpResponseRedirect("/login")
     
 def login(request):
     template_var={}
@@ -82,6 +88,9 @@ def login(request):
 
 
 # Create your views here.
+
+
+
 def new_project(request,pid = ''):
     form = ProjectForm()
     if request.method == 'POST':
@@ -291,6 +300,16 @@ def psearch(request):
             rs.append(dic)
         rrs = {"person":rs}
         rs = json.dumps(rrs)
+    return HttpResponse(rs)
+
+def show_headname(request):
+    user ={}
+    #username = request.session['username']
+    realname = request.session['realname']
+    #user['username'] = username
+    user['realname'] = realname      
+    
+    rs = json.dumps(user)
     return HttpResponse(rs)
 
 #homepage部分views

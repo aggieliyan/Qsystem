@@ -20,8 +20,9 @@ urlpatterns = patterns('',
     url('^register/$', 'project.views.register',name="register"),
     url('^register/login$', 'project.views.login',name="login"),
     url('^register/register$', 'project.views.register',name="register"),
-    #login
+    url('^logout','project.views.logout'),
     
+
     url(r'^admin/', include(admin.site.urls)),
     url(r'^newproject/$',new_project),
     url(r'^newproject/(\d+)$',new_project),
@@ -29,7 +30,8 @@ urlpatterns = patterns('',
     url(r'^showperson', project.views.show_person),
     url(r'^projectlist', project.views.project_list),
     url(r'^psearch', project.views.psearch),
-    url(r'^detail/(\d+)/$',detail,name="prodetail"),
+    url(r'^detail/(\d+)/$', detail,name="prodetail"),
+    url(r'^showuser', project.views.show_headname),
     #homepage
     url(r'^personal_homepage/$', project.views.personal_homepage,name="homepage"),
     url(r'^changedesign/', project.views.changedesign,name="design_change"),

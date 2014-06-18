@@ -81,6 +81,7 @@ $(document).ready(function(){
     //点添加
     $(".roles .btn-success").click(function(){      
       $("#select").modal("show");
+
       var roles = $(this).attr("name"); 
       $("#psearch").attr("value",roles)
       var p = $("[title='1']");
@@ -116,8 +117,9 @@ $(document).ready(function(){
           person = allperson;
         }
         show_staff(person);
-
       });
+    
+
     });
 
    //点页码
