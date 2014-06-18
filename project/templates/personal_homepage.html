@@ -127,7 +127,7 @@
                     <td> 
                            
                       <a onclick="change_p({{res.id}})">设计变更</a><span>|</span>
-                      <a href="">编辑<span>|</span></a>
+                      <a href="{% url 'editproject' res.id %}">编辑<span>|</span></a>
                       <a onclick="delay_p({{res.id}})">延期<span>|</span></a>
                       <a href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
                       <a href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
@@ -211,7 +211,7 @@
   </div>
 
   <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <form name="test" class="navbar-form navbar-center" action="/changedesign/" method='post'>
@@ -260,7 +260,7 @@
   
 
   <!-- Modal delay-->
-<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <form name="test" class="navbar-form navbar-center" method='post' action="/delayproject/">

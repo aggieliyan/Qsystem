@@ -52,7 +52,7 @@ urlpatterns = patterns('',
     url(r'^delet_userlogic2/$',project.views.delet_userlogic2),
     url(r'^delet_userlogic3/$',project.views.delet_userlogic3),
     ('^detail/(\d+)/$',detail),
-    ('^editproject/(\d+)/$', detail),
+    url('^editproject/(\d+)/$', detail,name="editproject"),
 
     url(r'^delay',project.views.delay),
     url(r'^notice',project.views.notice),
