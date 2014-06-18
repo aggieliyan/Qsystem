@@ -304,11 +304,14 @@ def psearch(request):
 
 def show_headname(request):
     user ={}
-    #username = request.session['username']
-    realname = request.session['realname']
-    #user['username'] = username
-    user['realname'] = realname      
-    
+    try:
+        username = request.session['username']
+        realname = request.session['realname']
+        user['username'] = username
+        user['realname'] = realname      
+    except KeyError:
+        user['username'] = 'GUEST'
+        user['realname'] = 'GUEST'
     rs = json.dumps(user)
     return HttpResponse(rs)
 
