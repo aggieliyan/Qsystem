@@ -40,8 +40,11 @@ def register(request):
 
 def logout(request):
     
-    session_key = request.session.session_key
-    Session.objects.get(session_key=session_key).delete()
+    try:
+        session_key = request.session.session_key
+        Session.objects.get(session_key=session_key).delete()
+    except:
+        pass
     
     return HttpResponseRedirect("/login")
     
