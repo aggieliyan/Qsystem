@@ -19,7 +19,6 @@
    
   {% if messages %}
   
-  
    {% if count = 1 %}
 	<div style="height:25px" class="notice">
    {% endif %}   
@@ -29,8 +28,9 @@
    {% if count = 3 %}
 	<div style="height:100px" class="notice">
    {% endif %} 
+   
     {% if count >= 4 %}
-	<div class="notice">
+	<div  class="notice">
    {% endif %} 
    
 		<div class="notice_title">
@@ -44,13 +44,13 @@
  
      {% for item in messages %}
        
-        <p><a href="">{{item.content}}</a></p>
+        <p><a href="/historymessage/" target="_blank">{{item.content}}</a></p>
     
       {% endfor %}
    		
 		 </div>								
 		<div style="position:absolute;right:10px;bottom:0">
-			<a href="" style="color:#339666">查看历史记录</a>
+			<a href="/historymessage/" style="color:#339666" target="_blank">查看历史记录</a>
 		</div>		
 	</div>	
   {% else %}
@@ -64,6 +64,7 @@
     <p>暂无消息</p>
    </div>	
   {% endif %}
+ 
   
   
   
