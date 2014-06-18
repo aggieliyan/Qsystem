@@ -21,7 +21,7 @@
 
 
     
-		{% if notices %}
+	{% if notices %}
 	
    {% if count = 1 %}
 	<div style="height:25px" class="notice">
@@ -33,7 +33,7 @@
 	<div style="height:100px" class="notice">
    {% endif %} 
     {% if count = 4 %}
-	<div class="notice">
+	<div style="height:115px" class="notice">
    {% endif %} 
     {% if count >= 5 %}
 	<div class="notice">
@@ -48,14 +48,14 @@
 		
 		{% for item in notices %}
       
-        <p><a href="">{{item.content}}</a></p>
+        <p><a href="/notice/" target="_blank">{{item.content}}</a></p>
     
         {% endfor %}
 			
 		</div>
 		{% if count > 5 %}
 		<div style="position:absolute;right:10px;bottom:0">
-			<a href="" style="color:#339666">未读公告<span style="color:#ffa03e">({{a}})>></span></a>
+			<a href="/notice/" style="color:#339666" target="_blank">未读公告<span style="color:#ffa03e">({{a}})>></span></a>
 		</div>	
          {% endif %} 
 	</div>	
@@ -72,7 +72,6 @@
    </div>	
 
     {% endif %}
-
 	
 	
     
