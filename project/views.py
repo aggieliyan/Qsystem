@@ -89,9 +89,15 @@ def login(request):
 
 # Create your views here.
 
-
+def no_login(request):
+    return render_to_response("nologin.html")
 
 def new_project(request,pid = ''):
+    #没登陆的跳到登录页
+    try:
+        request.session['username']
+    except KeyError:
+        return HttpResponseRedirect("/nologin")
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
