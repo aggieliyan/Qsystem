@@ -70,6 +70,7 @@ body div{margin:0 auto;}
     margin: 2px 5px;
     display: inline;
     float:left;
+    width: 75px;
 }
 
 .role-item span{

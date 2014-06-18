@@ -12,6 +12,17 @@ $(document).ready(function(){
         $("#testerlist table").append("<div>暂无数据<div>");
       } 
     }
+
+    function findmaster (plist) {
+      for(var i=0;i<plist.length;i++){
+        item = plist.eq(i);
+        if(item.children("input")[0].checked){
+          return item.attr("value");
+        }
+
+      }
+
+    }
     
     //选择人员后点确定，
     $("#test").click(function(){
@@ -32,7 +43,7 @@ $(document).ready(function(){
       $("[title='1']").children("div").remove();
       //在页面显示已选人员
       for (var i= jsontester.tester.length-1; i >=0; i--){
-        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'" type="radio"><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
+        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'"><input type="radio"><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
       }	
 
       pl = $("[title='1']").children("div").length;
@@ -44,22 +55,23 @@ $(document).ready(function(){
 
 
       //找产品和测试负责人
-      var d = $(".p-list").eq(0).children().eq(0).attr("value");
-      var t = $(".p-list").eq(2).children().eq(0).attr("value");
-      console.log(t);
-      $("[name='designer']").attr("value",d);
-      $("[name='tester']").attr("value",t);
+      //var d = $(".p-list").eq(0).children().eq(0).attr("value");
+      //var t = $(".p-list").eq(2).children().eq(0).attr("value");
+      //console.log(t);
+      //$("[name='designer']").attr("value",d);
+      //$("[name='tester']").attr("value",t);
 
       //设置项目参与人员
-      p = $(".role-item");  
+      var p = $(".role-item");  
       var idlist =" ";
       for(var i=p.length-1; i >=0; i--){
         item = p.eq(i);
         idlist = idlist + item.attr("value") + ","
       } 
       $("[name='relateduser']").attr("value",idlist);
-     
+
     });
+
 
     //删除人员
     $(".role-item .close").live('click',function(){
@@ -155,8 +167,17 @@ $(document).ready(function(){
       $("[name='leader']").attr("value",p);
 
       //把测试和产品排第一的作为相关负责人
-      var d = $(".p-list").eq(0).children().eq(0).attr("value");
-      var t = $(".p-list").eq(2).children().eq(0).attr("value");
+      //var d = $(".p-list").eq(0).children().eq(0).attr("value");
+      //var t = $(".p-list").eq(2).children().eq(0).attr("value");
+      //$("[name='designer']").attr("value",d);
+      //$("[name='tester']").attr("value",t);
+
+      var pm = $(".p-list").eq(0).children();
+      var tm = $(".p-list").eq(2).children();
+      var d = findmaster(pm);
+      var t = findmaster(tm);
+      console.log(d);;
+      console.log(t);
       $("[name='designer']").attr("value",d);
       $("[name='tester']").attr("value",t);
 
