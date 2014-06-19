@@ -40,6 +40,7 @@ urlpatterns = patterns('',
     url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,name="project_delete"),
     
    #sourcemanage
+    url(r'^judge/$',project.views.judge),
     url(r'^sourcemanage/$',project.views.show_user),
     url(r'^show_user/$',project.views.show_user),
     url(r'^nopermit/$',project.views.nopermit),
