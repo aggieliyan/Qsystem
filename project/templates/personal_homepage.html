@@ -128,7 +128,7 @@
                            
                       <a onclick="change_p({{res.id}})">设计变更</a><span>|</span>
                       <a href="{% url 'editproject' res.id %}">编辑<span>|</span></a>
-                      <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Y-m-d"}}})">延期<span>|</span></a>
+                      <a onclick="delay_p({{res.id}})">延期<span>|</span></a>
                       <a href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
                       <a href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
                     </td>                   
@@ -292,7 +292,7 @@
       </div>
       <div class="span8">
        
-         <div> <input id="protime" name="time" type="text" disabled="disabled" class="form-control inputfield"  style="width:150px; background-color: #FFFFFF;" > 
+         <div> <input id="protime" name="time" type="text" disabled="disabled" class="form-control inputfield"  style="width:150px; background-color: #FFFFFF;" value=""> 
          </div>
             <div class="inputfield input-append date form_datetime">
               <input name="delay_date" class="dateinput" size="16" type="text" value="" readonly="" style="vertical-align:middle; border-right:  medium none; width: 122px; background-color: #FFFFFF;">
@@ -408,12 +408,10 @@
         $('#myModal').modal('show');
       }
 
-      function delay_p(id,time){
+      function delay_p(id){
         $('#delayid').val(id);
-        $('#protime').val(time);
         $('#myModal1').modal('show');
-      }      
-      
+      }
     </script>
       
 {% endblock %}
