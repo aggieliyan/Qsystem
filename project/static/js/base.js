@@ -1,4 +1,4 @@
-$(document).ready(function(){
+﻿$(document).ready(function(){
 
 	var url = "/showuser";
 	$.get(url, function(data){
@@ -13,5 +13,9 @@ $(document).ready(function(){
 	    }
 	});
 
-
+	$(".judge").click(function()
+	{
+	document.form.action="/judge/"
+	document.form.submit()
+	});
 });
