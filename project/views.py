@@ -97,7 +97,7 @@ def login(request):
 
 
 def new_project(request,pid = ''):
-    template_var={}
+    #template_var={}
     try:
         request.session['username']
     except KeyError:
@@ -149,8 +149,8 @@ def new_project(request,pid = ''):
                         project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
                         project_user.save()
             return redirect('/projectlist/')
-        template_var["res"]=form
-    return render_to_response('newproject.html', template_var, context_instance=RequestContext(request))
+        #template_var["res"]=form
+    return render_to_response('newproject.html', {'form':form}, context_instance=RequestContext(request))
     
 
 def project_list(request):

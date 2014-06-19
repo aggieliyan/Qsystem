@@ -126,13 +126,15 @@ position:relative;
 
 .inputfield {
    float:right;
-   margin-right: 140px
+   margin-right: 140px;
+   height: 30px;
 }
 
 #short .dateinput, #long .dateinput{
   background-color:white;
   width:176px;
   border-right: medium none;
+  height: 30px;
 }
 
 .title{
@@ -154,6 +156,7 @@ position:relative;
 #filepath input{
   width:610px;
   float: right;
+  height: 30px;
 }
 
 .list li{list-style-type:none}
