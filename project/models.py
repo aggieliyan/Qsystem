@@ -6,8 +6,6 @@ from django.db import models
 class department(models.Model):
     department= models.CharField(u'部门',max_length=20)
     isactived = models.BooleanField(max_length=1)
-    def __unicode__(self):
-        return self.department
     
 class user(models.Model):
     username= models.CharField(u'用户名',max_length=50)
@@ -17,8 +15,6 @@ class user(models.Model):
     department = models.ForeignKey(department)
     Position_level = models.CharField(max_length=1,blank=True,default=0)
     isactived = models.BooleanField(max_length=1)
-    def __unicode__(self):
-        return self.realname
    
 class project(models.Model):
     priority = models.SmallIntegerField(u'优先级',max_length=8)

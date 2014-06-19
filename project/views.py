@@ -40,11 +40,8 @@ def register(request):
 
 def logout(request):
     
-    try:
-        session_key = request.session.session_key
-        Session.objects.get(session_key=session_key).delete()
-    except:
-        pass
+    session_key = request.session.session_key
+    Session.objects.get(session_key=session_key).delete()
     
     return HttpResponseRedirect("/login")
     
@@ -92,15 +89,9 @@ def login(request):
 
 # Create your views here.
 
-def no_login(request):
-    return render_to_response("nologin.html")
+
 
 def new_project(request,pid = ''):
-    #没登陆的跳到登录页
-    try:
-        request.session['username']
-    except KeyError:
-        return HttpResponseRedirect("/nologin")
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -388,20 +379,26 @@ def changedesign(request):
 
 
 def nopermit(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
+    department=models.department.objects.get(id=department_id).department
     department_list = models.department.objects.all()
-    level_1_list=models.user.objects.filter(department_id='1',Position_level="1")
+    level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
     print level_1_list
-    level_2_list=models.user.objects.filter(department_id='1',Position_level="2")
+    level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
     print level_2_list
-    level_3_list=models.user.objects.filter(department_id='1',Position_level="3")
-    department=" sfsd"
+    level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
     return render_to_response('nopermit.html',locals())
 
 @csrf_exempt
 def show_user2(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
-    department_id=1
-    key=0
     if department=='产品设计部':
         department_id=1
     elif department=='测试部':
@@ -413,7 +410,7 @@ def show_user2(request):
     elif department=='客服部':
         department_id=5
     else:
-        department_id=1
+        department_id=department_id
     level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
     level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
     level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
@@ -422,6 +419,11 @@ def show_user2(request):
 
 @csrf_exempt
 def show_user(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
+    department=models.department.objects.get(id=department_id).department
     if request.method == 'POST':
         department=request.POST['department']
         if department=='产品设计部':
@@ -437,7 +439,7 @@ def show_user(request):
         else:
              department_id=0
     else:
-        department_id=2
+        department_id=department_id
     level_list=models.user.objects.filter(department_id=department_id)
     level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
     level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
@@ -447,6 +449,10 @@ def show_user(request):
 
 @csrf_exempt
 def Insert_user1(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
@@ -466,6 +472,10 @@ def Insert_user1(request):
 
 @csrf_exempt
 def Insert_user2(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
@@ -485,6 +495,10 @@ def Insert_user2(request):
 
 @csrf_exempt
 def Insert_user3(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
@@ -506,6 +520,10 @@ def Insert_user3(request):
 #逻辑删除
 @csrf_exempt
 def delet_userlogic(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
@@ -525,6 +543,10 @@ def delet_userlogic(request):
 
 @csrf_exempt
 def delet_userlogic2(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
@@ -545,6 +567,10 @@ def delet_userlogic2(request):
 
 @csrf_exempt
 def delet_userlogic3(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
@@ -564,6 +590,10 @@ def delet_userlogic3(request):
 
 @csrf_exempt
 def delete_user1(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
@@ -583,6 +613,10 @@ def delete_user1(request):
     return redirect('/show_user/')
 @csrf_exempt
 def delete_user2(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
@@ -603,6 +637,10 @@ def delete_user2(request):
 
 @csrf_exempt
 def delete_user3(request):
+    if request.session['username']:
+        username=request.session['username']
+        department_id=models.user.objects.get(username=username).department_id
+    department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
        department_id=1
