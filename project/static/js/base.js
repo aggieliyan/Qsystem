@@ -15,8 +15,8 @@ $(document).ready(function(){
 
 	$(".judge").click(function()
 	{
-	document.form.action="/judge/";
-	document.form.submit();
+	document.form1.action="/judge/";
+	document.form1.submit();
 	});
 
 });
