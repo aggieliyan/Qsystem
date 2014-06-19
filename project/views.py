@@ -39,11 +39,16 @@ def register(request):
     return render_to_response('register.html',{'list':department.objects.all()},context_instance=RequestContext(request))
 
 def logout(request):
-    
-    session_key = request.session.session_key
-    Session.objects.get(session_key=session_key).delete()
+    try:
+        session_key = request.session.session_key
+        Session.objects.get(session_key=session_key).delete()
+    except:
+        pass
     
     return HttpResponseRedirect("/login")
+
+def no_login(request):
+    return render_to_response("nologin.html")
     
 def login(request):
     template_var={}
@@ -92,6 +97,11 @@ def login(request):
 
 
 def new_project(request,pid = ''):
+
+    try:
+        request.session['username']
+    except KeyError:
+        return HttpResponseRedirect("/nologin")
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
