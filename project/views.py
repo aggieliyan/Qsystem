@@ -400,7 +400,16 @@ def changedesign(request):
             pub_message.save()           
     return HttpResponseRedirect(reverse("homepage"))
 
-
+#资源管理
+def judge(request):
+    if request.session['username']:
+        username=request.session['username']
+    Position_level=models.user.objects.get(username=username).Position_level
+    print Position_level
+    if Position_level=='1':
+        return redirect('/show_user/')
+    else:
+        return redirect('/nopermit/')
 def nopermit(request):
     if request.session['username']:
         username=request.session['username']
