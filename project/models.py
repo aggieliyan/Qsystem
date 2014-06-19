@@ -68,7 +68,7 @@ class project_delay(models.Model):
     reason =models.CharField(u'拒绝理由',max_length=100, blank=True, null=True)
     result = models.CharField(u'状态',max_length=10,blank=True, null=True)
     review_date = models.DateField(blank=True,null=True)
-    isactived = models.IntegerField(max_length=1,null=True)
+    isactived = models.IntegerField(max_length=1,blank=True, null=True)
 
 
 class project_user_message(models.Model):

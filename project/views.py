@@ -328,10 +328,10 @@ def show_headname(request):
 #homepage部分views
 def personal_homepage(request):
     #m没有登录用户跳转到未登录页面
-    try:
-        request.session['username']
-    except KeyError:
-        return HttpResponseRedirect("/nologin")
+    #try:
+       # request.session['username']
+    #except KeyError:
+        #return HttpResponseRedirect("/nologin")
 
     project_user_list = project_user.objects.filter(username__realname__contains=request.session['username'])
     projectids = []
@@ -379,7 +379,7 @@ def delayproject(request):
             delpro=project.objects.get(id=delayid)
             uid=delpro.leader_p
             protitle=delpro.project
-            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason,result="jieshou",review_date=datetime.datetime.now(),isactived="1")
+            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
             delay_p.save()                   
     return HttpResponseRedirect(reverse("homepage"))
 
