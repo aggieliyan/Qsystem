@@ -77,4 +77,8 @@
         font-size: 14px;
         text-shadow: 0 1px 1px #1F8CE3;
     }
+
+    .table-td input{
+        height: 30px;
+    }
     
