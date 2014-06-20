@@ -281,7 +281,7 @@ def show_person(request):
     elif roles == "dev":
         key = 2
     elif roles == "pro":
-        key = 3
+        key = 4
     else:
         key = 0
     person = models.user.objects.filter(department_id = key)
@@ -327,11 +327,11 @@ def show_headname(request):
 
 #homepage部分views
 def personal_homepage(request):
-    #m没有登录用户跳转到未登录页面
-    #try:
-       # request.session['username']
-    #except KeyError:
-        #return HttpResponseRedirect("/nologin")
+    #没有登录用户跳转到未登录页面
+    try:
+        request.session['username']
+    except KeyError:
+        return HttpResponseRedirect("/nologin")
 
     project_user_list = project_user.objects.filter(username__realname__contains=request.session['username'])
     projectids = []
@@ -432,13 +432,13 @@ def show_user2(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-        department_id=1
+        department_id=4
     elif department=='测试部':
-        department_id=2
+        department_id=1
     elif department=='客户端开发':
         department_id=3
     elif department=='网站开发':
-        department_id=4
+        department_id=2
     elif department=='客服部':
         department_id=5
     else:
@@ -456,16 +456,21 @@ def show_user(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=models.department.objects.get(id=department_id).department
+    depart = models.department.objects.all()
+    departdic = {}
+    for item in depart:
+        departdic[item.department] = item.id
+    department_id = departdic[request.POST['department']]
     if request.method == 'POST':
         department=request.POST['department']
         if department=='产品设计部':
-           department_id=1
+           department_id=4
         elif department=='测试部':
-             department_id=2
+             department_id=1
         elif department=='客户端开发':
              department_id=3
         elif department=='网站开发':
-             department_id=4
+             department_id=2
         elif department=='客服部':
              department_id=5
         else:
@@ -487,13 +492,13 @@ def Insert_user1(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
@@ -510,13 +515,13 @@ def Insert_user2(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
@@ -533,13 +538,13 @@ def Insert_user3(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
@@ -558,13 +563,13 @@ def delet_userlogic(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
@@ -581,13 +586,13 @@ def delet_userlogic2(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
@@ -605,13 +610,13 @@ def delet_userlogic3(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
@@ -628,13 +633,13 @@ def delete_user1(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
@@ -651,13 +656,13 @@ def delete_user2(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
@@ -675,13 +680,13 @@ def delete_user3(request):
     department_id=department_id
     department=request.POST['department']
     if department=='产品设计部':
-       department_id=1
+       department_id=4
     elif department=='测试部':
-         department_id=2
+         department_id=1
     elif department=='客户端开发':
          department_id=3
     elif department=='网站开发':
-         department_id=4
+         department_id=2
     elif department=='客服部':
          department_id=5
     else:
