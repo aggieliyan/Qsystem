@@ -441,8 +441,7 @@ def show_user2(request):
         for item in depart:
             departdic[item.department] = item.id
         department_id = departdic[department]
-    else:
-        department_id=department_id
+        
     level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
     level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
     level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
