@@ -41,14 +41,14 @@
                 <div class="title">
                   <label class="item-title"><span class="must">*</span>优先级：</label>
                 </div>
-                <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字" value="{{res.pro.priority}}">
+                <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字" maxlength=4 value="{{res.pro.priority}}" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " >
                 {{form.priority.errors}}
               </div>
               <div>
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目名称：</label>
               </div>
-                <input type="text" name="pname" class="form-control inputfield" value="{{res.pro.project}}">
+                <input type="text" name="pname" class="form-control inputfield" maxlength=100 value="{{res.pro.project}}">
               </div>
               <div >
                 <div class="title">

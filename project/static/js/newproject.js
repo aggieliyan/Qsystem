@@ -42,6 +42,15 @@ $(document).ready(function(){
       $("[name='relateduser']").attr("value",idlist);
     }
     
+    $("input:first").blur(function(){
+      if(parseInt($(this).attr("value")) > 1000){
+        $(this).attr("style","border-color:red");
+      }else{
+        $(this).attr("style","border-color: #ccc");
+      }
+
+    });
+
 
     //选择人员后点确定，
     $("#test").click(function(){

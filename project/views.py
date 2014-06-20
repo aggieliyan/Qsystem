@@ -152,7 +152,7 @@ def new_project(request,pid = ''):
                         project_user.save()
             return redirect('/projectlist/')
 
-    return render(request, 'newproject.html', {'form':form})
+    return render_to_response('newproject.html', {'form':form}, context_instance=RequestContext(request))
     
 
 def project_list(request):
