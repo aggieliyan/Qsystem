@@ -60,8 +60,9 @@ $(document).ready(function(){
 	    }
       $("[title='1']").children("div").remove();
       //在页面显示已选人员
+      var radioname = Math.floor(Math.random()*9999+1).toString();
       for (var i= jsontester.tester.length-1; i >=0; i--){
-        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'"><input type="radio"><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
+        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'"><input type="radio" name='+radioname+'><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
       }	
 
       pl = $("[title='1']").children("div").length;
@@ -162,7 +163,6 @@ $(document).ready(function(){
 
     //选择项目负责人
     $("#master").focus(function(){
-      console.log("select master");
       p = $(".role-item");  
       $("#master").children("option").remove();
       //var idlist =" ";
@@ -170,6 +170,8 @@ $(document).ready(function(){
         item = p.eq(i);
         $("#master").append("<option value="+item.attr("value")+">"+item.children('span').eq(0).text()+"</option>");
       } 
+
+      //set_other_master();
     });
     
     $("#master").blur(function(){
@@ -179,10 +181,13 @@ $(document).ready(function(){
       $("[name='leader']").attr("value",p);
 
       //设置测试和产品负责人
-      set_other_master();
+     // set_other_master();
 
     });
 
+    $(".role-item input").live('click',function(){
+      set_other_master();
+    });
 
     //计算天数
     $(".range input").change(function(){
