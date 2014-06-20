@@ -99,40 +99,39 @@ def login(request):
 
 
 def new_project(request,pid = ''):
-    print "newproject"
+
     try:
         request.session['username']
     except KeyError:
         return HttpResponseRedirect("/nologin")
-    dic_form ={}
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
             priority = form.cleaned_data['priority']
-            pname = form.cleaned_data['project']
-            status = form.cleaned_data['status_p']
-            leader = form.cleaned_data['leader_p']
+            pname = form.cleaned_data['pname']
+            status = form.cleaned_data['status']
+            leader = form.cleaned_data['leader']
             leader = models.user.objects.get(id=leader)
-            designer = form.cleaned_data['designer_p']
+            designer = form.cleaned_data['designer']
             if designer:
                 designer  = models.user.objects.get(id=designer )
-            tester = form.cleaned_data['tester_p']
+            tester = form.cleaned_data['tester']
             if tester:
                 tester  = models.user.objects.get(id=tester )
-            sdate = form.cleaned_data['start_date']
-            pdate = form.cleaned_data['expect_launch_date']
-            psdate = form.cleaned_data['estimated_product_start_date']
-            pedate = form.cleaned_data['estimated_product_end_date']
-            dsdate = form.cleaned_data['estimated_develop_start_date']
-            dedate = form.cleaned_data['estimated_develop_end_date']
-            tsdate = form.cleaned_data['estimated_test_start_date']
-            tedate = form.cleaned_data['estimated_test_end_date']
-            ppath = form.cleaned_data['blueprint_p']
-            dppath = form.cleaned_data['develop_plan_p']
-            tppath = form.cleaned_data['test_plan_p']
-            tcpath = form.cleaned_data['test_case_p']
-            trpath = form.cleaned_data['test_report_p']
+            sdate = form.cleaned_data['startdate']
+            pdate = form.cleaned_data['plandate']
+            psdate = form.cleaned_data['psdate']
+            pedate = form.cleaned_data['pedate']
+            dsdate = form.cleaned_data['dsdate']
+            dedate = form.cleaned_data['dedate']
+            tsdate = form.cleaned_data['tsdate']
+            tedate = form.cleaned_data['tedate']
+            ppath = form.cleaned_data['ppath']
+            dppath = form.cleaned_data['dppath']
+            tppath = form.cleaned_data['tppath']
+            tcpath = form.cleaned_data['tcpath']
+            trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
             if (pid==''):
                 pro = models.project(priority=priority, project=pname, status_p=status, leader_p =leader, designer_p=designer,tester_p=tester, start_date=sdate, expect_launch_date=pdate, real_launch_date=tsdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
@@ -152,11 +151,8 @@ def new_project(request,pid = ''):
                         project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
                         project_user.save()
             return redirect('/projectlist/')
-    
-    res = {}
-    res['pro'] = form
-    dic_form['res'] = res
-    return render_to_response('newproject.html', dic_form, context_instance=RequestContext(request))
+
+    return render(request, 'newproject.html', {'form':form})
     
 
 def project_list(request):
@@ -445,7 +441,7 @@ def show_user2(request):
         for item in depart:
             departdic[item.department] = item.id
         department_id = departdic[department]
-
+        
     level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
     level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
     level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")

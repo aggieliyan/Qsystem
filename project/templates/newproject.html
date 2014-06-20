@@ -41,23 +41,20 @@
                 <div class="title">
                   <label class="item-title"><span class="must">*</span>优先级：</label>
                 </div>
-                {% if res.pro.priority %}
                 <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字" value="{{res.pro.priority}}">
-                {% else %}
-                <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字" value="">
-                {% endif %}
+                {{form.priority.errors}}
               </div>
               <div>
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目名称：</label>
               </div>
-                <input type="text" name="project" class="form-control inputfield" value="{{res.pro.project}}">
+                <input type="text" name="pname" class="form-control inputfield" value="{{res.pro.project}}">
               </div>
               <div >
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目状态：</label>
               </div>
-                <select id="status" name = "status_p" class="inputfield" selected="{{res.pro.status_p}}">
+                <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
                   <option select = 'selected'>{{res.pro.status_p}}</option>
                   <option>需求讨论中</option>
                   <option>设计中</option>
@@ -73,8 +70,8 @@
                 <label class="item-title"><span class="must">*</span>项目负责人：</label>
                 </div>
                 <input name="leader" style="display:none;" value="{{res.user.id}}">
-                <input name="designer_p_id" style="display:none;" value="{{res.pro.designer_p_id}}">
-                <input name="tester_p_id" style="display:none;" value="{{res.pro.tester_p_id}}">
+                <input name="designer" style="display:none;" value="{{res.pro.designer_p_id}}">
+                <input name="tester" style="display:none;" value="{{res.pro.tester_p_id}}">
                 <select id="master"  class="inputfield" >
                 	<option select='selected'>{{res.user.realname}}</option>
                 </select>
@@ -85,7 +82,7 @@
                     <label class="item-title">项目开始时间：</label>
                 </div>
                 <div class="inputfield input-append date form_datetime">
-                  <input name="start_date" class="dateinput" size="16" type="text" value="{{res.pro.start_date|date:"Y-m-d"}}" readonly="">
+                  <input name="startdate" class="dateinput" size="16" type="text" value="{{res.pro.start_date|date:"Y-m-d"}}" readonly="">
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </div>
               </div>
@@ -94,7 +91,7 @@
                     <label class="item-title">计划上线时间：</label>
                 </div>
                 <div class="inputfield input-append date form_datetime">
-                  <input name="expect_launch_date" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly="">
+                  <input name="plandate" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly="">
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </div>
               </div>             
@@ -145,52 +142,52 @@
               <div class="range">
                 <div><label>产品：</label><span class="days">{{res.dt.ptime}}</span>天</div>
                 <span class="input-append date form_datetime">   
-                  <input name='estimated_product_start_date' class="dateinput" size="16" type="text" value="{{res.pro.estimated_product_start_date|date:"Y-m-d"}}" readonly>
+                  <input name='psdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_product_start_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span><span class="word">至</span>
                 <span class="input-append date form_datetime">   
-                  <input name='estimated_product_end_date' class="dateinput" size="16"  type="text" value="{{res.pro.estimated_product_end_date|date:"Y-m-d"}}" readonly>
+                  <input name='pedate' class="dateinput" size="16"  type="text" value="{{res.pro.estimated_product_end_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span>
               </div>
               <div class="range">
                 <div><label>开发：</label><span class="days">{{res.dt.dtime}}</span>天</div>
                 <span class="input-append date form_datetime">   
-                  <input name='estimated_develop_start_date' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_start_date|date:"Y-m-d"}}" readonly>
+                  <input name='dsdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_start_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span><span class="word">至</span>
                 <span class="input-append date form_datetime">   
-                  <input name='estimated_develop_end_date' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_end_date|date:"Y-m-d"}}" readonly>
+                  <input name='dedate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_end_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span>
               </div class="range">
               <div class="range">
                 <div><label>测试：</label><span class="days">{{res.dt.ttime}}</span>天</div>
                 <span class="input-append date form_datetime">   
-                  <input name='estimated_test_start_date' class="dateinput" ="16" type="text" value="{{res.pro.estimated_test_start_date|date:"Y-m-d"}}" readonly>
+                  <input name='tsdate' class="dateinput" ="16" type="text" value="{{res.pro.estimated_test_start_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span><span class="word">至</span>
                 <span class="input-append date form_datetime">   
-                  <input name='estimated_test_end_date' class="dateinput"size="16" type="text" value="{{res.pro.estimated_test_end_date|date:"Y-m-d"}}" readonly>
+                  <input name='tedate' class="dateinput"size="16" type="text" value="{{res.pro.estimated_test_end_date|date:"Y-m-d"}}" readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span>
               </div>
             </div>
             <div id='filepath' class="span12">
               <div>
-                <div><label class="item-title">设计图：</label></div><input type="text" name='blueprint_p' placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}">
+                <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}">
               </div>
               <div>
-                <div><label class="item-title">开发计划：</label></div><input type="text" name='develop_plan_p' placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}">
+                <div><label class="item-title">开发计划：</label></div><input type="text" name='dppath' placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}">
               </div>
               <div>
-                <div><label class="item-title">测试计划：</label></div><input type="text" name='test_plan_p' placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}">
+                <div><label class="item-title">测试计划：</label></div><input type="text" name='tppath' placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}">
               </div>
               <div>
-                <div><label class="item-title">测试用例：</label></div><input type="text" name='test_case_p' placeholder="请输入文件路径" value="{{res.pro.test_case_p}}">
+                <div><label class="item-title">测试用例：</label></div><input type="text" name='tcpath' placeholder="请输入文件路径" value="{{res.pro.test_case_p}}">
               </div>
               <div>
-                <div><label class="item-title">测试报告：</label></div><input type="text" name="test_report_p" placeholder="请输入文件路径" value="{{res.pro.test_report_p}}">
+                <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" placeholder="请输入文件路径" value="{{res.pro.test_report_p}}">
               </div>
             </div>
             <div class="span12">
