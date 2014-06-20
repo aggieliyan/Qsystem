@@ -431,16 +431,14 @@ def show_user2(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-        department_id=4
-    elif department=='测试部':
-        department_id=1
-    elif department=='客户端开发':
-        department_id=3
-    elif department=='网站开发':
-        department_id=2
-    elif department=='客服部':
-        department_id=5
+    if department=='请选择':
+        department_id=0
+    else:
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     else:
         department_id=department_id
     level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
