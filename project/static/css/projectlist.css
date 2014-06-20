@@ -90,3 +90,8 @@
        
     .title1 {display:inline-block; 
         width:110px;}
+
+    .end_date_s, .start_date_s{
+    width: 175px;
+    background-color: #FFFFFF;
+   }
