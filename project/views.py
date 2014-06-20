@@ -16,6 +16,7 @@ from project.models import *
 import math
 import forms
 import models
+import hashlib
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -25,7 +26,7 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 #login
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from forms import RegisterForm, LoginForm, UserForm
+from forms import LoginForm, UserForm
 
 def register(request):
     if request.method == "POST":
@@ -36,6 +37,7 @@ def register(request):
             return HttpResponseRedirect("/personal_homepage")
     else:
         uf = UserForm()
+
     return render_to_response('register.html',{'list':department.objects.all()},context_instance=RequestContext(request))
 
 def logout(request):
@@ -68,7 +70,7 @@ def login(request):
         form=LoginForm(request.POST.copy())
         if form.is_valid():
             username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
+            password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
             _userset=user.objects.filter(username__exact = username,password__exact = password)
             if _userset.count() >= 1:
@@ -454,11 +456,6 @@ def show_user(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=models.department.objects.get(id=department_id).department
-    depart = models.department.objects.all()
-    departdic = {}
-    for item in depart:
-        departdic[item.department] = item.id
-    department_id = departdic[request.POST['department']]
     if request.method == 'POST':
         department=request.POST['department']
         if department=='请选择':
