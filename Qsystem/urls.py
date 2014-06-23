@@ -16,12 +16,13 @@ urlpatterns = patterns('',
 
     #login
     url('^$', 'project.views.login',name="index"),
-    url('^login$', 'project.views.login',name="login"),
-    url('^register/$', 'project.views.register',name="register"),
-    url('^register/login$', 'project.views.login',name="login"),
-    url('^register/register$', 'project.views.register',name="register"),
+    url('^login', 'project.views.login',name="login"),
+    url('^register', 'project.views.register',name="register"),
+    url('^register/login', 'project.views.login',name="login"),
+    url('^register/register', 'project.views.register',name="register"),
     url('^logout','project.views.logout'),
     url('^nologin','project.views.no_login'),
+    url('^noperm/', 'project.views.no_perm'),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^newproject/$',new_project),
@@ -40,6 +41,7 @@ urlpatterns = patterns('',
     url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,name="project_delete"),
     
    #sourcemanage
+    url(r'^judge/$',project.views.judge),
     url(r'^sourcemanage/$',project.views.show_user),
     url(r'^show_user/$',project.views.show_user),
     url(r'^nopermit/$',project.views.nopermit),

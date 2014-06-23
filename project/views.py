@@ -11,11 +11,11 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm
+from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm, LoginForm, UserForm
 from project.models import *
 import math
-import forms
 import models
+import hashlib
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -25,17 +25,42 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 #login
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from forms import RegisterForm, LoginForm, UserForm
+
+#test
+from django.contrib.auth.models import User, Permission
+from django.contrib import auth
+
 
 def register(request):
     if request.method == "POST":
         uf = UserForm(request.POST)
         if uf.is_valid(): 
             #返回注册成功页面
+
+            #往Django user表里再插入一条数据
+            username = uf.cleaned_data['username']
+            password = uf.cleaned_data['password']
+            realname = uf.cleaned_data['realname']
+            email = username+"@lyi.com"
+            
+            try:
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.save()
+            except:
+                uf = UserForm()
+                return render_to_response('register.html',{'list':department.objects.all(), 'error':'注册的用户名已存在'},context_instance=RequestContext(request))
+
             user_new = uf.save();
+
+            #登录
+            uid = models.user.objects.filter(username=username)[0].id
+            request.session['username'] = username
+            request.session['realname'] = realname
+            request.session['id'] = uid
             return HttpResponseRedirect("/personal_homepage")
     else:
         uf = UserForm()
+
     return render_to_response('register.html',{'list':department.objects.all()},context_instance=RequestContext(request))
 
 def logout(request):
@@ -49,8 +74,13 @@ def logout(request):
 
 def no_login(request):
     return render_to_response("nologin.html")
+
+def no_perm(request):
+    return render_to_response("noperm.html")
     
 def login(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/personal_homepage")
     template_var={}
     
     if "username" in request.COOKIES and "password" in request.COOKIES:
@@ -68,9 +98,9 @@ def login(request):
         form=LoginForm(request.POST.copy())
         if form.is_valid():
             username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
+            password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
-            _userset=user.objects.filter(username__exact = username,password__exact = password)
+            _userset=models.user.objects.filter(username__exact = username,password__exact = password)
             if _userset.count() >= 1:
                 _user = _userset[0]
                 if _user.isactived:
@@ -78,10 +108,18 @@ def login(request):
                     request.session['realname'] = _user.realname
                     request.session['id'] = _user.id
                     
-                    response = HttpResponseRedirect("/personal_homepage")
+                    #Django 认证系统的登录
+                    try:
+                        user = auth.authenticate(username=username, password=form.cleaned_data["password"])
+                        auth.login(request, user)
+                        
+                    except:
+                        template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
                     if isautologin:
                         response.set_cookie("username", username, 3600)
                         response.set_cookie("password", password, 3600)
+                        
+                    response = HttpResponseRedirect("/personal_homepage")
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
@@ -94,14 +132,14 @@ def login(request):
 
 # Create your views here.
 
-
-
 def new_project(request,pid = ''):
 
-    try:
-        request.session['username']
-    except KeyError:
+    if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
+    elif not request.user.has_perm('project.add_project'):
+        return HttpResponseRedirect("/noperm")
+    else:
+        pass
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -150,7 +188,7 @@ def new_project(request,pid = ''):
                         project_user.save()
             return redirect('/projectlist/')
 
-    return render(request, 'newproject.html', {'form':form})
+    return render_to_response('newproject.html', {'form':form}, context_instance=RequestContext(request))
     
 
 def project_list(request):
@@ -281,7 +319,7 @@ def show_person(request):
     elif roles == "dev":
         key = 2
     elif roles == "pro":
-        key = 3
+        key = 4
     else:
         key = 0
     person = models.user.objects.filter(department_id = key)
@@ -327,12 +365,20 @@ def show_headname(request):
 
 #homepage部分views
 def personal_homepage(request):
+<<<<<<< HEAD
     #m没有登录用户跳转到未登录页面
     #try:
        # request.session['username']
     #except KeyError:
         #return HttpResponseRedirect("/nologin")
     pro = project.objects.filter()
+=======
+    #没有登录用户跳转到未登录页面
+    try:
+        request.session['username']
+    except KeyError:
+        return HttpResponseRedirect("/nologin")
+>>>>>>> origin/master
 
     project_user_list = project_user.objects.filter(username__realname__contains=request.session['username'])
     projectids = []
@@ -401,7 +447,16 @@ def changedesign(request):
             pub_message.save()           
     return HttpResponseRedirect(reverse("homepage"))
 
-
+#资源管理
+def judge(request):
+    if request.session['username']:
+        username=request.session['username']
+    Position_level=models.user.objects.get(username=username).Position_level
+    print Position_level
+    if Position_level=='1':
+        return redirect('/show_user/')
+    else:
+        return redirect('/nopermit/')
 def nopermit(request):
     if request.session['username']:
         username=request.session['username']
@@ -423,18 +478,15 @@ def show_user2(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-        department_id=1
-    elif department=='测试部':
-        department_id=2
-    elif department=='客户端开发':
-        department_id=3
-    elif department=='网站开发':
-        department_id=4
-    elif department=='客服部':
-        department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-        department_id=department_id
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
+        
     level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
     level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
     level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
@@ -450,18 +502,14 @@ def show_user(request):
     department=models.department.objects.get(id=department_id).department
     if request.method == 'POST':
         department=request.POST['department']
-        if department=='产品设计部':
-           department_id=1
-        elif department=='测试部':
-             department_id=2
-        elif department=='客户端开发':
-             department_id=3
-        elif department=='网站开发':
-             department_id=4
-        elif department=='客服部':
-             department_id=5
+        if department=='请选择':
+            department_id=0
         else:
-             department_id=0
+            depart = models.department.objects.all()
+            departdic = {}
+            for item in depart:
+                departdic[item.department] = item.id
+            department_id = departdic[department]
     else:
         department_id=department_id
     level_list=models.user.objects.filter(department_id=department_id)
@@ -478,18 +526,14 @@ def Insert_user1(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_1']
     user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='1')
     return redirect('/show_user/')
@@ -501,18 +545,14 @@ def Insert_user2(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_2a']
     user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
     return redirect('/show_user/')
@@ -524,18 +564,14 @@ def Insert_user3(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_3a']
     print realname
     user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
@@ -549,18 +585,14 @@ def delet_userlogic(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_1']
     user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     return redirect('/show_user/')
@@ -572,18 +604,14 @@ def delet_userlogic2(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_2']
     print realname
     user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
@@ -596,18 +624,14 @@ def delet_userlogic3(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_3']
     user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     return redirect('/show_user/')
@@ -619,18 +643,14 @@ def delete_user1(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_1']
     user=models.user.objects.get(department_id=department_id,realname=realname)
     user.delete()
@@ -642,18 +662,14 @@ def delete_user2(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+            departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_2']
     user=models.user.objects.get(department_id=department_id,realname=realname)
     user.delete()
@@ -666,18 +682,14 @@ def delete_user3(request):
         department_id=models.user.objects.get(username=username).department_id
     department_id=department_id
     department=request.POST['department']
-    if department=='产品设计部':
-       department_id=1
-    elif department=='测试部':
-         department_id=2
-    elif department=='客户端开发':
-         department_id=3
-    elif department=='网站开发':
-         department_id=4
-    elif department=='客服部':
-         department_id=5
+    if department=='请选择':
+        department_id=0
     else:
-         department_id=0
+        depart = models.department.objects.all()
+        departdic = {}
+        for item in depart:
+           departdic[item.department] = item.id
+        department_id = departdic[department]
     realname=request.POST['level_3']
     user=models.user.objects.get(department_id=department_id,realname=realname)
     user.delete()

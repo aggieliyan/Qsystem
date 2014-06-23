@@ -12,7 +12,8 @@
     <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'css/newproject.css' %}" rel="stylesheet" media="screen">
+
+    <link href="/static/css/tankuang.css" rel="stylesheet" media="screen">
     <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/projectlist.css' %}" rel="stylesheet" media="screen">
 {% endblock %}
@@ -96,6 +97,9 @@
                   <option value="设计中">设计中</option>
                   <option value="设计完成">设计完成</option>
                   <option value="开发中">开发中</option>
+                  <option value="测试中">测试中</option>
+                  <option value="暂停">暂停</option>
+                  <option value="已上线">已上线</option>
                 </select>
               </div>
         </div>
@@ -108,11 +112,11 @@
                 <div style="display: inline-block;">
                     <div style="position:relative;top:-15px;">
                         <span class="input-append date form_datetime">
-                          <input class="start_date_s" size="16" type="text" value="{{start_date_s}}" name="start_date_s" readonly>
+                          <input class="start_date_s" size="16" type="text" value="{{start_date_s|default:""}}" name="start_date_s" readonly>
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>至
                         <span class="input-append date form_datetime">
-                          <input class="end_date_s" size="16" type="text" value="{{end_date_s}}" name="end_date_s" readonly>
+                          <input class="end_date_s" size="16" type="text" value="{{end_date_s|date:"Y-m-d"|default:""}}" name="end_date_s" readonly>
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>
                     </div>
@@ -173,9 +177,9 @@
                                     {%endifequal%}
                                     {%endfor%}
                                     </td>
-                                    <td>{{ p.start_date }}</td>
-                                    <td>{{ p.expect_launch_date }}</td>
-                                    <td>{{ p.real_launch_date }}</td>
+                                    <td>{{ p.start_date|date:"Y-m-d" }}</td>
+                                    <td>{{ p.expect_launch_date|date:"Y-m-d" }}</td>
+                                    <td>{{ p.real_launch_date|date:"Y-m-d" }}</td>
                                     <td>{{ p.status_p }}</td>
                                     <td>
                                         <a onclick="change_p({{p.id}})">设计变更</a><span>|</span>
@@ -210,6 +214,189 @@
     </span>
     </div>
 
+      <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="test" class="navbar-form navbar-center" action="/changedesign/" method='post'>
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">设计变更</h4>
+      </div>
+      <div class="modal-body">
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3">
+             <div class="title">
+                <label class="item-title">
+                变更内容：
+                </label>
+        </div>
+         <div class="title">
+                <label class="item-title">
+                设计图地址：
+                </label>
+        </div>
+    </div>
+    <div class="span9">
+
+       <div> <input name="content" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" >
+       </div>
+     <div> <input name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 10px;" >
+     </div>
+     <input id="changeid" name="changeid" type="hidden">
+    </div>
+  </div>
+</div>
+    </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button type="submit" class="btn mybtn-success" >确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+        </div>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+
+
+
+  <!-- Modal delay-->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="test" class="navbar-form navbar-center" method='post' action="/delayproject/">
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">申请延期</h4>
+      </div>
+      <div class="modal-body">
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+      <div class="span4">
+           <div class="title">
+            <label class="item-title">
+            当前计划时间：
+            </label>
+            </div>
+             <div class="title">
+            <label class="item-title">
+            申请延期时间：
+            </label>
+            </div>
+             <div class="title">
+            <label class="item-title">
+            延期理由：
+            </label>
+            </div>
+
+      </div>
+      <div class="span8">
+
+         <div> <input id="protime" name="protime" type="text" readonly="" class="form-control inputfield"  style="width:150px; background-color: #FFFFFF;">
+         </div>
+            <div class="inputfield input-append date form_datetime">
+              <input name="delay_date" class="dateinput" size="16" type="text" value="" readonly="" style="vertical-align:middle; border-right:  medium none; width: 122px; background-color: #FFFFFF;">
+              <span class="add-on"><i class="icon-calendar"></i></span>
+            </div>
+        <div><textarea name="delay_reason" style="background-color: #FFFFFF; width: 80%; height: 100px;"></textarea>
+        </div>
+        <input id="delayid" name="delayid" type="hidden">
+      </div>
+      </div>
+    </div>
+
+    </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button type="submit" class="btn mybtn-success" >确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+
+  <!-- Modal pause-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">确认延期</h4>
+      </div>
+      <div class="modal-body">
+           <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span1">
+    </div>
+    <div class="span11">
+
+                <label style="float:left">
+                <span class="STYLE1">确定暂停已选中的项目吗？暂停后项目移至已完结项目中</span>                </label>
+
+    </div>
+
+    </div>
+  </div>
+</div>
+
+
+    </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button type="button" class="btn mybtn-success" data-dismiss="modal">确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  </div>
+
+ <!-- Modal delete-->
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="" method="post">
+        {% csrf_token %}
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">确认删除</h4>
+      </div>
+      <div class="modal-body">
+           <div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span1">
+    </div>
+    <div class="span11">
+
+                <label style="float:left">
+                <span class="STYLE1">确定删除选中内容吗？</span></label>
+
+    </div>
+
+    </div>
+  </div>
+</div>
+
+
+    </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button type="button" class="btn mybtn-success" data-dismiss="modal">确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+      <input type="hidden" name='id' id='delete_student_id'/>
+    </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  </div>
 <!-- Le javascript ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="http://code.jquery.com/jquery.js"></script>
@@ -218,6 +405,7 @@
 <script type="text/javascript" src="../static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="../static/js/pm.js"></script>
+<script type="text/javascript" src="/static/js/home_page.js"></script>
 <script type="text/javascript">
       $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
@@ -227,6 +415,16 @@
         language:"zh-CN",
         minView:2
       });
+    function change_p(id){
+        $('#changeid').val(id);
+        $('#myModal').modal('show');
+      }
+
+      function delay_p(id,time){
+        $('#delayid').val(id);
+        $('#protime').val(time);
+        $('#myModal1').modal('show');
+      }
 </script>
 <script src="../static/js/bootstrap.js"></script>
 {% endblock %}

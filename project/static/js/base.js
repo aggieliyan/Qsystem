@@ -13,5 +13,10 @@ $(document).ready(function(){
 	    }
 	});
 
+	$(".judge").click(function()
+	{
+	document.form1.action="/judge/";
+	document.form1.submit();
+	});
 
 });
