@@ -40,11 +40,17 @@ def register(request):
             #往Django user表里再插入一条数据
             username = uf.cleaned_data['username']
             password = uf.cleaned_data['password']
+            realname = uf.cleaned_data['realname']
             email = username+"@lyi.com"
 
             user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
 
+            #登录
+            uid = models.user.objects.filter(username=username)[0].id
+            request.session['username'] = username
+            request.session['realname'] = realname
+            request.session['id'] = uid
             return HttpResponseRedirect("/personal_homepage")
     else:
         uf = UserForm()
