@@ -8,7 +8,7 @@
   <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
   <link href="/static/css/datetimepicker.css" rel="stylesheet" media="screen">
   <link href="/static/css/tankuang.css" rel="stylesheet" media="screen">
-  <link href="/static/css/top.css" rel="stylesheet" media="screen">
+  <link href="/static/css/homepage.css" rel="stylesheet" media="screen">
   {% endblock %}
   {% block content %}
 
@@ -20,10 +20,10 @@
   {% if messages %}
   
    {% if count = 1 %}
-	<div style="height:25px" class="notice">
+	<div style="height:91px" class="notice">
    {% endif %}   
    {% if count = 2 %}
-	<div style="height:95px" class="notice">
+	<div style="height:91px" class="notice">
    {% endif %} 
    {% if count = 3 %}
 	<div style="height:100px" class="notice">
@@ -39,7 +39,7 @@
 			</span>
 		</div>
 			
-	 <div style="width:950px" class="notice_content">		
+	 <div style="width:850px" class="notice_content">		
 
  
      {% for item in messages %}
@@ -65,6 +65,13 @@
    </div>	
   {% endif %}
  
+     <div style="padding:28px 0 15px">
+    <a href="/delay/" style="color:#339666" target="_blank">查看您要处理的延期申请>></a>
+    </div>
+  
+  
+  
+  
   
   
   
@@ -120,15 +127,15 @@
                     {% endfor %}                  
 
                     </td>
-                    <td>{{res.start_date|date:"Y-m-d" }}</td>
+                    <td>{{res.start_date|date:"Y-m-d"}}</td>
                     <td>{{res.expect_launch_date|date:"Y-m-d"}}</td>
                     <td>{{res.real_launch_date|date:"Y-m-d"}}</td>
                     <td>{{res.status_p}}</td>
                     <td> 
                            
                       <a onclick="change_p({{res.id}})">设计变更</a><span>|</span>
-                      <a href="">编辑<span>|</span></a>
-                      <a onclick="delay_p({{res.id}})">延期<span>|</span></a>
+                      <a href="{% url 'editproject' res.id %}">编辑<span>|</span></a>
+                      <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})">延期<span>|</span></a>
                       <a href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
                       <a href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
                     </td>                   
@@ -211,7 +218,7 @@
   </div>
 
   <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <form name="test" class="navbar-form navbar-center" action="/changedesign/" method='post'>
@@ -260,7 +267,7 @@
   
 
   <!-- Modal delay-->
-<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <form name="test" class="navbar-form navbar-center" method='post' action="/delayproject/">
@@ -292,7 +299,7 @@
       </div>
       <div class="span8">
        
-         <div> <input id="protime" name="time" type="text" disabled="disabled" class="form-control inputfield"  style="width:150px; background-color: #FFFFFF;" value=""> 
+         <div> <input id="protime" name="protime" type="text" readonly="" class="form-control inputfield"  style="width:150px; background-color: #FFFFFF;"> 
          </div>
             <div class="inputfield input-append date form_datetime">
               <input name="delay_date" class="dateinput" size="16" type="text" value="" readonly="" style="vertical-align:middle; border-right:  medium none; width: 122px; background-color: #FFFFFF;">
@@ -319,7 +326,7 @@
 
 
   <!-- Modal pause-->
-<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="mymodal-header">
@@ -355,7 +362,7 @@
   </div>
 
  <!-- Modal delete-->
-<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <form action="" method="post">
@@ -408,10 +415,13 @@
         $('#myModal').modal('show');
       }
 
-      function delay_p(id){
+      function delay_p(id,time){
         $('#delayid').val(id);
+        $('#protime').val(time);
         $('#myModal1').modal('show');
       }
+
+
     </script>
       
 {% endblock %}

@@ -12,33 +12,32 @@
     <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'css/mycss.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/newproject.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'css/tankuang.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/projectlist.css' %}" rel="stylesheet" media="screen">
 {% endblock %}
 {% block content %}
 <body id="x-table">
 
 
-
+    
 	{% if notices %}
-
+	
    {% if count = 1 %}
 	<div style="height:25px" class="notice">
-   {% endif %}
+   {% endif %}   
    {% if count = 2 %}
 	<div style="height:80px" class="notice">
-   {% endif %}
+   {% endif %} 
    {% if count = 3 %}
 	<div style="height:100px" class="notice">
-   {% endif %}
+   {% endif %} 
     {% if count = 4 %}
 	<div style="height:115px" class="notice">
-   {% endif %}
+   {% endif %} 
     {% if count >= 5 %}
 	<div class="notice">
-   {% endif %}
+   {% endif %} 
 
 		<div class="notice_title">
 			<span>
@@ -46,36 +45,36 @@
 			</span>
 		</div>
 		<div style="width:860px" class="notice_content">
-
+		
 		{% for item in notices %}
-
+      
         <p><a href="/notice/" target="_blank">{{item.content}}</a></p>
-
+    
         {% endfor %}
-
+			
 		</div>
 		{% if count > 5 %}
 		<div style="position:absolute;right:10px;bottom:0">
 			<a href="/notice/" style="color:#339666" target="_blank">未读公告<span style="color:#ffa03e">({{a}})>></span></a>
-		</div>
-         {% endif %}
-	</div>
+		</div>	
+         {% endif %} 
+	</div>	
 	{% else %}
-
+  
      <div style="height:25px" class="notice">
    <div class="notice_title">
 			<span>
 				<b>消息提醒<span style="color:#ffa03e">(0):</span></b>
 			</span>
 		</div>
-
+		
     <p>暂无公告</p>
-   </div>
+   </div>	
 
     {% endif %}
-
-
-
+	
+	
+    
     <form action="/projectlist/" id="searchform" method="post">
         {% csrf_token %}
     <div class="block-option">
@@ -109,11 +108,11 @@
                 <div style="display: inline-block;">
                     <div style="position:relative;top:-15px;">
                         <span class="input-append date form_datetime">
-                          <input class="start_date_s" size="16" type="text" value="{{start_date_s|default:""}}" name="start_date_s" readonly>
+                          <input class="start_date_s" size="16" type="text" value="{{start_date_s}}" name="start_date_s" readonly>
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>至
                         <span class="input-append date form_datetime">
-                          <input class="end_date_s" size="16" type="text" value="{{end_date_s|default:""}}" name="end_date_s" readonly>
+                          <input class="end_date_s" size="16" type="text" value="{{end_date_s}}" name="end_date_s" readonly>
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>
                     </div>
@@ -124,7 +123,7 @@
                 <div class="title">
                     <label class="item-title">项目成员：</label>
                 </div>
-                <input type="text" class="form-control " style="position:relative;top: -15px;" value="{{ leader_p }}" name="leader_p"/>
+                <input type="text" class="form-control " style="position:relative;top: -15px;" name="leader_p"/>
 
             </div>
             <div>
@@ -151,11 +150,11 @@
                                     <th width="83" style="width:69px">产品负责人</th>
                                     <th width="84" style="width:70px">测试负责人</th>
                                     <th width="148" style="width:134px">项目成员</th>
-                                    <th width="82" style="width:82px">项目开始时间</th>
-                                    <th width="82" style="width:82px">计划上线时间</th>
-                                    <th width="82" style="width:82px">实际上线时间</th>
-                                    <th width="82" style="width:82px">项目状态</th>
-                                    <th width="236" style="width:236px">操作</th>
+                                    <th width="96" style="width:82px">项目开始时间</th>
+                                    <th width="96" style="width:82px">计划上线时间</th>
+                                    <th width="96" style="width:82px">实际上线时间</th>
+                                    <th width="90" style="width:76px">项目状态</th>
+                                    <th width="389" style="width:236px">操作</th>
                                 </tr>
 
                             <thead>
@@ -174,9 +173,9 @@
                                     {%endifequal%}
                                     {%endfor%}
                                     </td>
-                                    <td>{{ p.start_date|date:"Y-m-d" }}</td>
-                                    <td>{{ p.expect_launch_date|date:"Y-m-d" }}</td>
-                                    <td>{{ p.real_launch_date|date:"Y-m-d" }}</td>
+                                    <td>{{ p.start_date }}</td>
+                                    <td>{{ p.expect_launch_date }}</td>
+                                    <td>{{ p.real_launch_date }}</td>
                                     <td>{{ p.status_p }}</td>
                                     <td>
                                         <a onclick="change_p({{p.id}})">设计变更</a><span>|</span>
@@ -219,9 +218,7 @@
 <script type="text/javascript" src="../static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="../static/js/pm.js"></script>
-    <script type="text/javascript" src="../static/js/home_page.js"></script>
 <script type="text/javascript">
-
       $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         autoclose: true,
@@ -230,15 +227,6 @@
         language:"zh-CN",
         minView:2
       });
-      function change_p(id){
-        $('#changeid').val(id);
-        $('#myModal').modal('show');
-      }
-
-      function delay_p(id){
-        $('#delayid').val(id);
-        $('#myModal1').modal('show');
-      }
 </script>
 <script src="../static/js/bootstrap.js"></script>
 {% endblock %}

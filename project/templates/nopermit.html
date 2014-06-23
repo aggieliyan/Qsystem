@@ -18,7 +18,7 @@
 	<div class="choose">
 		<select name="department" id="department" class="section" onchange="javascript:document.forms[0].submit();" >
 		{% for i in department_list %}
-		    <option value="{{i}}">{{i}}</option>
+		    <option value="{{i.department}}">{{i.department}}</option>
 		    {% endfor %}
 		</select>
 		
@@ -28,21 +28,21 @@
 	{% for user in level_1_list %}
 		<div class="s1">
 		
-		<input type="text" class="s11" placeholder="{{user}}" onfocus="this.blur()">
+		<input type="text" class="s11" placeholder="{{user.realname}}" onfocus="this.blur()">
 		
 		</div>
 		{% endfor %}
 			{% for user2 in level_2_list %}
 		<div class="s2">		
 	
-	  <input type="text" class="s22" placeholder="{{user2}}" onfocus="this.blur()">
+	  <input type="text" class="s22" placeholder="{{user2.realname}}" onfocus="this.blur()">
 	
 		 </div>
 			{% endfor %}
 		{% for user3 in level_3_list %}
 		<div class="s3">
 		
-		<input type="text" class="s33" placeholder="{{user3}}" onfocus="this.blur()">		
+		<input type="text" class="s33" placeholder="{{user3.realname}}" onfocus="this.blur()">		
 		
 		</div>
 		{% endfor %}
@@ -51,10 +51,6 @@
 		
 	</div>
     	
-	
-	
-
-	
 </div>
 
 

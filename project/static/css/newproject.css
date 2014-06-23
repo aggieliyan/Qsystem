@@ -23,8 +23,7 @@ body div{margin:0 auto;}
 
 .breadcrumb {
     background-color: #339966;
-    width: 1100px;
-    margin-top: 10px;
+    width: 1020px;
 }
 
 .breadcrumb > li > .divider {
@@ -70,6 +69,7 @@ body div{margin:0 auto;}
     margin: 2px 5px;
     display: inline;
     float:left;
+    width: 75px;
 }
 
 .role-item span{
@@ -125,7 +125,7 @@ position:relative;
 
 .inputfield {
    float:right;
-   margin-right: 140px
+   margin-right: 140px;
 }
 
 #short .dateinput, #long .dateinput{

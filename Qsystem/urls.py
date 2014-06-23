@@ -20,8 +20,9 @@ urlpatterns = patterns('',
     url('^register/$', 'project.views.register',name="register"),
     url('^register/login$', 'project.views.login',name="login"),
     url('^register/register$', 'project.views.register',name="register"),
-    #login
-    
+    url('^logout','project.views.logout'),
+    url('^nologin','project.views.no_login'),
+
     url(r'^admin/', include(admin.site.urls)),
     url(r'^newproject/$',new_project),
     url(r'^newproject/(\d+)$',new_project),
@@ -29,7 +30,8 @@ urlpatterns = patterns('',
     url(r'^showperson', project.views.show_person),
     url(r'^projectlist', project.views.project_list),
     url(r'^psearch', project.views.psearch),
-    url(r'^detail/(\d+)/$',detail,name="prodetail"),
+    url(r'^detail/(\d+)/$', detail,name="prodetail"),
+    url(r'^showuser', project.views.show_headname),
     #homepage
     url(r'^personal_homepage/$', project.views.personal_homepage,name="homepage"),
     url(r'^changedesign/', project.views.changedesign,name="design_change"),
@@ -38,6 +40,7 @@ urlpatterns = patterns('',
     url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,name="project_delete"),
     
    #sourcemanage
+    url(r'^judge/$',project.views.judge),
     url(r'^sourcemanage/$',project.views.show_user),
     url(r'^show_user/$',project.views.show_user),
     url(r'^nopermit/$',project.views.nopermit),
@@ -52,7 +55,7 @@ urlpatterns = patterns('',
     url(r'^delet_userlogic2/$',project.views.delet_userlogic2),
     url(r'^delet_userlogic3/$',project.views.delet_userlogic3),
     ('^detail/(\d+)/$',detail),
-    ('^editproject/(\d+)/$', detail),
+    url('^editproject/(\d+)/$', detail,name="editproject"),
 
     url(r'^delay',project.views.delay),
     url(r'^notice',project.views.notice),

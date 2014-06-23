@@ -6,46 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from models import user
 from models import department
 import datetime
-
-class RegisterForm(forms.Form):
-    username=forms.CharField(label=_(u"用户名"),max_length=50)
-    realname=forms.CharField(label=_(u'真实姓名'),max_length=50)
-    password=forms.CharField(
-        label=_(u"密码"),
-        widget=forms.PasswordInput,
-        max_length=40
-    )
-    confirmpassword=forms.CharField(
-        label=_(u"确认密码"),
-        widget=forms.PasswordInput,
-        max_length=40
-    )
-    depart = forms.ModelChoiceField(
-        queryset=department.objects.all().order_by('id'),
-        required=True,
-        label=u"所在部门",
-        error_messages={'required': u'必选项'},
-    )
-    
-    def clean_username(self):
-        try:
-            user.objects.get(username=self.cleaned_data['username'])
-        except user.DoesNotExist:
-            return self.cleaned__data['username']
-        raise forms.ValidationError(u"用户名已存在，请选择别的用户名")
-
-    def clean(self):
-        if 'password' in self.clean_data and 'confirmpassword' in self.cleaned_data:
-            if self.clean_data['password'] != self.cleaned_data['confirmpassword']:
-                raise forms.ValidationError("You must type the same password each time")
-        return self.cleaned_data
-             
-    def save(self):
-        new_user = user.objects.create(username =self.cleaned_data['username'],
-                                       realname =self.cleaned_data['realname'],
-                                       password=self.cleaned_data['password'],
-                                       depart=self.cleaned_data['depart'])
-        return new_user
+import hashlib
         
 class UserForm(forms.Form):
     username = forms.CharField(label='账号：',max_length=100,required=True,error_messages={'required': u'必选项'})
@@ -57,11 +18,12 @@ class UserForm(forms.Form):
     # Create your views here.
     
     def save(self):
+        password = hashlib.md5(self.cleaned_data['password']).hexdigest()
         new_user = user.objects.create(username =self.cleaned_data['username'],
                                        realname =self.cleaned_data['realname'],
-                                       password=self.cleaned_data['password'],
+                                       password=password,
                                        create_time=datetime.datetime.now(),
-                                       department=department.objects.get(id=self.cleaned_data['departmentid']),isactived=0)
+                                       department=department.objects.get(id=self.cleaned_data['departmentid']),isactived=1)
         return new_user
 
 class LoginForm(forms.Form):
@@ -110,11 +72,13 @@ class changedesignForm(forms.Form):
 	dpath = forms.CharField(required=True,error_messages={'invalid':u'设计图地址不能为空'})
 	changeid = forms.IntegerField(required=True)
 
-
 class delayprojectForm(forms.Form):
-	delay_date=forms.DateField(required=True,error_messages={'invalid':u'延期日期不能为空'})
-	delay_reason = forms.CharField(required=True,error_messages={'invalid':u'延期理由不能为空'})
-	delayid = forms.IntegerField(required=True)
+    delay_date=forms.DateField(required=True,error_messages={'invalid':u'延期日期不能为空'})
+    delay_reason = forms.CharField(required=True,error_messages={'invalid':u'延期理由不能为空'})
+    delayid = forms.IntegerField(required=True)
+    protime = forms.CharField(required=True)
+
+
 class ProjectSearchForm(forms.Form):
 	project=forms.CharField(required=False)
 	start_date_s=forms.DateField(required=False)

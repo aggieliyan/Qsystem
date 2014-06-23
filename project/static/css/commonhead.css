@@ -1,3 +1,10 @@
+       
+body{
+	width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
        .top li{ 
 	    	list-style: none;
 	    	display: inline-block;

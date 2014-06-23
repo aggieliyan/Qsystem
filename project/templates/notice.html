@@ -80,7 +80,7 @@
 				</tr>
 			</thead>
 			<tbody>
-
+				
 				{% for notice in notices %}
 				 {% if forloop.counter|divisibleby:"20"%}
 				<tr class="low1">
@@ -103,15 +103,15 @@
 
 		</table>
 	</div>
-	<div>
-		<ul class="pagination pagination-right" style="float:right">
-			<li class=""><a href="#">&laquo;</a></li>
+	<div class="pagination " style="float:right">
+		<ul>
+			<li class=""><a href="#" onClick="page.prePage();">&laquo;</a></li>
 			<li class=""><a href="#">1</a></li>
 			<li class=""><a href="#">2</a></li>
 			<li class=""><a href="#">3</a></li>
 			<li class=""><a href="#">4</a></li>
 			<li class=""><a href="#">5</a></li>
-			<li class=""><a href="#">&raquo;</a></li>
+			<li class=""><a href="#" onClick="page.nextPage();">&raquo;</a></li>
 		</ul>
 	</div>
 	<!-- Modal -->
