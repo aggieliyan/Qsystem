@@ -11,10 +11,9 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm
+from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm, LoginForm, UserForm
 from project.models import *
 import math
-import forms
 import models
 import hashlib
 
@@ -26,14 +25,38 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 #login
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from forms import LoginForm, UserForm
+
+#test
+from django.contrib.auth.models import User, Permission
+from django.contrib import auth
+
 
 def register(request):
     if request.method == "POST":
         uf = UserForm(request.POST)
         if uf.is_valid(): 
             #返回注册成功页面
+
+            #往Django user表里再插入一条数据
+            username = uf.cleaned_data['username']
+            password = uf.cleaned_data['password']
+            realname = uf.cleaned_data['realname']
+            email = username+"@lyi.com"
+            
+            try:
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.save()
+            except:
+                uf = UserForm()
+                return render_to_response('register.html',{'list':department.objects.all(), 'error':'注册的用户名已存在'},context_instance=RequestContext(request))
+
             user_new = uf.save();
+
+            #登录
+            uid = models.user.objects.filter(username=username)[0].id
+            request.session['username'] = username
+            request.session['realname'] = realname
+            request.session['id'] = uid
             return HttpResponseRedirect("/personal_homepage")
     else:
         uf = UserForm()
@@ -53,6 +76,8 @@ def no_login(request):
     return render_to_response("nologin.html")
     
 def login(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/personal_homepage")
     template_var={}
     
     if "username" in request.COOKIES and "password" in request.COOKIES:
@@ -72,7 +97,7 @@ def login(request):
             username = form.cleaned_data["username"]
             password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
-            _userset=user.objects.filter(username__exact = username,password__exact = password)
+            _userset=models.user.objects.filter(username__exact = username,password__exact = password)
             if _userset.count() >= 1:
                 _user = _userset[0]
                 if _user.isactived:
@@ -80,7 +105,13 @@ def login(request):
                     request.session['realname'] = _user.realname
                     request.session['id'] = _user.id
                     
-                    response = HttpResponseRedirect("/personal_homepage")
+                    #Django 认证系统的登录
+                    try:
+                        user = auth.authenticate(username=username, password=form.cleaned_data["password"])
+                        auth.login(request, user)
+                        response = HttpResponseRedirect("/personal_homepage")
+                    except:
+                        template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
                     if isautologin:
                         response.set_cookie("username", username, 3600)
                         response.set_cookie("password", password, 3600)
@@ -100,10 +131,16 @@ def login(request):
 
 def new_project(request,pid = ''):
 
-    try:
-        request.session['username']
-    except KeyError:
+    #try:
+    #    request.session['username']
+    #except KeyError:
+    #    return HttpResponseRedirect("/nologin")
+    if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
+    elif not request.user.has_perm('project.add_project'):
+        return HttpResponseRedirect("/personal_homepage")
+    else:
+        pass
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
