@@ -365,30 +365,9 @@ def show_headname(request):
 
 #homepage部分views
 def personal_homepage(request):
-<<<<<<< HEAD
-    #m没有登录用户跳转到未登录页面
-    #try:
-       # request.session['username']
-    #except KeyError:
-        #return HttpResponseRedirect("/nologin")
-    pro = project.objects.filter()
-=======
-    #没有登录用户跳转到未登录页面
-    try:
-        request.session['username']
-    except KeyError:
-        return HttpResponseRedirect("/nologin")
->>>>>>> origin/master
 
-    project_user_list = project_user.objects.filter(username__realname__contains=request.session['username'])
-    projectids = []
-    for p in project_user_list:
-        projectids.append(p.project.id)
-        print projectids
-        pro = pro.filter(pk__in=projectids)
-
-    result=pro.objects.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
-    result1=pro.objects.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
+    result=project.objects.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
+    result1=project.objects.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
     puser=project_user.objects.all()
     
     
