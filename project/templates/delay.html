@@ -44,7 +44,7 @@
 
 			<thead>
 				<tr>
-					<th class="thead_th">公告标题</th>
+					<th class="thead_th">消息标题</th>
 					<th class="thead_th">发布时间</th>
 					<th class="thead_th">操作</th>
 				</tr>
@@ -57,7 +57,7 @@
 				{% else %}	
 				<tr class="low2">
 				{% endif %}	
-					<td class="col1">&nbsp;{{delay.title}}</td>
+					<td class="col1" word-wrap="break-all";>&nbsp;{{delay.title}}&nbsp;延期至{{delay.delay_to_date}}</td>
 					<td>{{delay.apply_date}}</td>
 					<td>
 						<button style="margin:5px" data-toggle="modal"
