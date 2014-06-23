@@ -36,15 +36,21 @@ def register(request):
         uf = UserForm(request.POST)
         if uf.is_valid(): 
             #返回注册成功页面
-            user_new = uf.save();
+
             #往Django user表里再插入一条数据
             username = uf.cleaned_data['username']
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
             email = username+"@lyi.com"
+            
+            try:
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.save()
+            except:
+                uf = UserForm()
+                return render_to_response('register.html',{'list':department.objects.all(), 'error':'注册的用户名已存在'},context_instance=RequestContext(request))
 
-            user = User.objects.create_user(username=username, email=email, password=password)
-            user.save()
+            user_new = uf.save();
 
             #登录
             uid = models.user.objects.filter(username=username)[0].id
