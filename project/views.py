@@ -27,7 +27,7 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
 #test
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.contrib import auth
 
 
@@ -120,6 +120,10 @@ def new_project(request,pid = ''):
     #    return HttpResponseRedirect("/nologin")
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
+    elif not request.user.has_perm('project.add_project'):
+        return HttpResponseRedirect("/personal_homepage")
+    else:
+        pass
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
