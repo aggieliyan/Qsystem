@@ -76,6 +76,8 @@ def no_login(request):
     return render_to_response("nologin.html")
     
 def login(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/personal_homepage")
     template_var={}
     
     if "username" in request.COOKIES and "password" in request.COOKIES:
