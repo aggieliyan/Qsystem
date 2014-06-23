@@ -147,14 +147,14 @@ def new_project(request,pid = ''):
             priority = form.cleaned_data['priority']
             pname = form.cleaned_data['pname']
             status = form.cleaned_data['status']
-            leader = form.cleaned_data['leader']
-            leader = models.user.objects.get(id=leader)
-            designer = form.cleaned_data['designer']
-            if designer:
-                designer  = models.user.objects.get(id=designer )
-            tester = form.cleaned_data['tester']
-            if tester:
-                tester  = models.user.objects.get(id=tester )
+            leaderid = form.cleaned_data['leader']
+            leader = models.user.objects.get(id=leaderid)
+            designerid = form.cleaned_data['designer']
+            if designerid:
+                designer  = models.user.objects.get(id=designerid )
+            testerid = form.cleaned_data['tester']
+            if testerid:
+                tester  = models.user.objects.get(id=testerid )
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
@@ -186,6 +186,17 @@ def new_project(request,pid = ''):
                     if uid:
                         project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
                         project_user.save()
+
+            #给项目负责人添加编辑项目权限
+            musername = models.user.objects.get(id=leaderid).username
+            User.objects.get(username=musername).user_permissions.add(26)
+            if designerid:
+                dusername = models.user.objects.get(id=designerid).username
+                User.objects.get(username=dusername).user_permissions.add(26)
+            if testerid:
+                tusername = models.user.objects.get(id=testerid).username
+                User.objects.get(username=tusername).user_permissions.add(26)              
+
             return redirect('/projectlist/')
 
     return render_to_response('newproject.html', {'form':form}, context_instance=RequestContext(request))
