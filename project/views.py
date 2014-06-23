@@ -11,10 +11,9 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm
+from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm, LoginForm, UserForm
 from project.models import *
 import math
-import forms
 import models
 import hashlib
 
@@ -26,7 +25,11 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 #login
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from forms import LoginForm, UserForm
+
+#test
+from django.contrib.auth.models import User
+from django.contrib import auth
+
 
 def register(request):
     if request.method == "POST":
@@ -34,6 +37,14 @@ def register(request):
         if uf.is_valid(): 
             #返回注册成功页面
             user_new = uf.save();
+            #往Django user表里再插入一条数据
+            username = uf.cleaned_data['username']
+            password = uf.cleaned_data['password']
+            email = username+"@lyi.com"
+
+            user = User.objects.create_user(username=username, email=email, password=password)
+            user.save()
+
             return HttpResponseRedirect("/personal_homepage")
     else:
         uf = UserForm()
@@ -72,7 +83,7 @@ def login(request):
             username = form.cleaned_data["username"]
             password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
-            _userset=user.objects.filter(username__exact = username,password__exact = password)
+            _userset=models.user.objects.filter(username__exact = username,password__exact = password)
             if _userset.count() >= 1:
                 _user = _userset[0]
                 if _user.isactived:
@@ -80,6 +91,9 @@ def login(request):
                     request.session['realname'] = _user.realname
                     request.session['id'] = _user.id
                     
+                    #Django 认证系统的登录
+                    user = auth.authenticate(username=username, password=form.cleaned_data["password"])
+                    auth.login(request, user)
                     response = HttpResponseRedirect("/personal_homepage")
                     if isautologin:
                         response.set_cookie("username", username, 3600)
@@ -100,9 +114,11 @@ def login(request):
 
 def new_project(request,pid = ''):
 
-    try:
-        request.session['username']
-    except KeyError:
+    #try:
+    #    request.session['username']
+    #except KeyError:
+    #    return HttpResponseRedirect("/nologin")
+    if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
     form = ProjectForm()
     if request.method == 'POST':
