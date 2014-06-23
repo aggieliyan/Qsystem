@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url('^register/register$', 'project.views.register',name="register"),
     url('^logout','project.views.logout'),
     url('^nologin','project.views.no_login'),
+    url('^noperm', 'project.views.no_perm'),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^newproject/$',new_project),

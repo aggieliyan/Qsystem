@@ -74,6 +74,9 @@ def logout(request):
 
 def no_login(request):
     return render_to_response("nologin.html")
+
+def no_perm(request):
+    return render_to_response("noperm.html")
     
 def login(request):
     if request.user.is_authenticated():
@@ -127,18 +130,12 @@ def login(request):
 
 # Create your views here.
 
-
-
 def new_project(request,pid = ''):
 
-    #try:
-    #    request.session['username']
-    #except KeyError:
-    #    return HttpResponseRedirect("/nologin")
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
     elif not request.user.has_perm('project.add_project'):
-        return HttpResponseRedirect("/personal_homepage")
+        return HttpResponseRedirect("/noperm")
     else:
         pass
     form = ProjectForm()
