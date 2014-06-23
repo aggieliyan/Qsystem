@@ -332,16 +332,17 @@ def personal_homepage(request):
        # request.session['username']
     #except KeyError:
         #return HttpResponseRedirect("/nologin")
+    pro = project.objects.filter()
 
     project_user_list = project_user.objects.filter(username__realname__contains=request.session['username'])
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
         print projectids
-        projectlist = projectlist.filter(pk__in=projectids)
+        pro = pro.filter(pk__in=projectids)
 
-    result=project.objects.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
-    result1=project.objects.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
+    result=pro.objects.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
+    result1=pro.objects.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
     puser=project_user.objects.all()
     
     
