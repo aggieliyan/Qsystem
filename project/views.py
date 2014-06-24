@@ -707,7 +707,8 @@ def delete_user3(request):
     return redirect('/show_user/')
 
 def delay(request):
-    useid = 1
+    if request.session['id']:
+        useid = request.session['id']
     #raw_sql = 'select * from project_project_delay where isactived is null and application_id=useid'
     delays = project_delay.objects.filter(application_id=useid).filter(isactived__isnull=True)
     return render_to_response('delay.html',{'delays':delays})
@@ -729,10 +730,8 @@ def notice(request):
 
 def historymessage(request):
     # 查询与用户相关的消息
-    #sessionID = request.session['id']
-    #usid = user.objects.get(id=sessionID)
-    useid = 1
-    #request.session['id']
+    if request.session['id']:
+        useid = request.session['id']
     tests= project_user_message.objects.filter(userid_id=useid)
     lists=[]
     for test in tests:
@@ -779,7 +778,8 @@ def approve(request):
 
 
 def deletehistory(request):  
-    useid = 1
+    if request.session['id']:
+        useid = request.session['id']
     if request.method == 'POST':
         form = forms.MessageForm(request.POST)  
         if form.is_valid():
@@ -796,7 +796,8 @@ def deletehistory(request):
          
   
 def deletenotice(request):  
-    useid = 1
+    if request.session['id']:
+        useid = request.session['id']
     if request.method == 'POST':
         form = forms.NoticeForm(request.POST) 
         if form.is_valid():
