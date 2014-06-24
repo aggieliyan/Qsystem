@@ -12,10 +12,7 @@
   {% endblock %}
   {% block content %}
 
-  <!-- Button trigger modal -->  
- 
- 
- 
+  <!-- Button trigger modal -->   
    
   {% if messages %}
   
@@ -65,15 +62,9 @@
    </div>	
   {% endif %}
  
-     <div style="padding:28px 0 15px">
+    <div style="padding:28px 0 15px">
     <a href="/delay/" style="color:#339666" target="_blank">查看您要处理的延期申请>></a>
-    </div>
-  
-  
-  
-  
-  
-  
+    </div>  
   
   <div style="padding:28px 0 15px">
     <span><b>我参与的项目:</b></span>
@@ -131,8 +122,7 @@
                     <td>{{res.expect_launch_date|date:"Y-m-d"}}</td>
                     <td>{{res.real_launch_date|date:"Y-m-d"}}</td>
                     <td>{{res.status_p}}</td>
-                    <td> 
-                           
+                    <td>                           
                       <a onclick="change_p({{res.id}})">设计变更</a><span>|</span>
                       <a href="{% url 'editproject' res.id %}">编辑<span>|</span></a>
                       <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})">延期<span>|</span></a>
@@ -178,9 +168,9 @@
                     <td>{{pres.tester_p.realname}}</td>
                     <td>                                                                
                     
-                    {% for res2 in realname %}
-                    {% ifequal res.id res2.project_id %}                                                        
-                    {{res2.realname}}、
+                    {% for us in puser %}
+                    {% ifequal pres.id u.project_id %}                                                        
+                    {{u.username.realname}}&nbsp;
                     {% endifequal %}
                     {% endfor %}                  
 
@@ -407,21 +397,17 @@
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>
-     <script type="text/javascript" src="/static/js/home_page.js"></script>
-     <script type="text/javascript">
-     
+    <script type="text/javascript" src="/static/js/home_page.js"></script>     
+    <script type="text/javascript">     
       function change_p(id){
         $('#changeid').val(id);
         $('#myModal').modal('show');
       }
-
       function delay_p(id,time){
         $('#delayid').val(id);
         $('#protime').val(time);
         $('#myModal1').modal('show');
       }
-
-
     </script>
       
 {% endblock %}

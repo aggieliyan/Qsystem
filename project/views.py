@@ -380,11 +380,17 @@ def show_headname(request):
 
 #homepage部分views
 def personal_homepage(request):
+    #try:
+       # request.session['username']
+    #except KeyError:
+        #return HttpResponseRedirect("/nologin")
+
+
+
 
     result=project.objects.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
     result1=project.objects.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
-    puser=project_user.objects.all()
-    
+    puser=project_user.objects.all()   
     
     #userid = request.session['id']
     userid='1'

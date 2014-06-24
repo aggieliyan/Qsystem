@@ -14,5 +14,14 @@ $(document).ready(function(){
     });
 
 });
+function change_p(id){
+        $('#changeid').val(id);
+        $('#myModal').modal('show');
+      }
+function delay_p(id,time){
+        $('#delayid').val(id);
+        $('#protime').val(time);
+        $('#myModal1').modal('show');
+      }
 
 
