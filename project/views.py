@@ -57,6 +57,10 @@ def register(request):
             request.session['username'] = username
             request.session['realname'] = realname
             request.session['id'] = uid
+
+            #Django 认证系统的登录
+            user = auth.authenticate(username=username, password=password)
+            auth.login(request, user)
             return HttpResponseRedirect("/personal_homepage")
     else:
         uf = UserForm()
