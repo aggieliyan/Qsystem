@@ -137,13 +137,16 @@ def login(request):
 # Create your views here.
 
 def new_project(request,pid = ''):
-
+    
+    #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
-    elif not request.user.has_perm('project.add_project'):
+    #编辑的得有编辑权限
+    if pid and not request.user.has_perm('project.change_project'):
         return HttpResponseRedirect("/noperm")
-    else:
-        pass
+    #新建的得有新建权限
+    if not pid and not request.user.has_perm('project.add_project'):
+        return HttpResponseRedirect("/noperm")
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -153,11 +156,11 @@ def new_project(request,pid = ''):
             status = form.cleaned_data['status']
             leaderid = form.cleaned_data['leader']
             leader = models.user.objects.get(id=leaderid)
-            designerid = form.cleaned_data['designer']
-            if designerid:
+            designer = form.cleaned_data['designer']
+            if designer:
                 designer  = models.user.objects.get(id=designerid )
-            testerid = form.cleaned_data['tester']
-            if testerid:
+            tester = form.cleaned_data['tester']
+            if tester:
                 tester  = models.user.objects.get(id=testerid )
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
@@ -194,11 +197,11 @@ def new_project(request,pid = ''):
             #给项目负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
             User.objects.get(username=musername).user_permissions.add(26)
-            if designerid:
-                dusername = models.user.objects.get(id=designerid).username
+            if designer:
+                dusername = models.user.objects.get(id=form.cleaned_data['designer']).username
                 User.objects.get(username=dusername).user_permissions.add(26)
-            if testerid:
-                tusername = models.user.objects.get(id=testerid).username
+            if tester:
+                tusername = models.user.objects.get(id=form.cleaned_data['tester']).username
                 User.objects.get(username=tusername).user_permissions.add(26)              
 
             return redirect('/projectlist/')
@@ -334,7 +337,7 @@ def show_person(request):
     elif roles == "dev":
         key = 2
     elif roles == "pro":
-        key = 4
+        key = 3
     else:
         key = 0
     person = models.user.objects.filter(department_id = key)
