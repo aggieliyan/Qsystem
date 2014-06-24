@@ -448,9 +448,10 @@ def changedesign(request):
             dpath = form.cleaned_data['dpath']
             chd=project.objects.get(id=changeid)
             uid=chd.leader_p
-            chd.blueprint_p=dpath
-            chd.save()
-            pub_message=public_message(project_id=changeid,publisher=uid,content=content,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+            #chd.blueprint_p=dpath
+            #chd.save()
+            string=content+dpath
+            pub_message=public_message(project_id=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
             pub_message.save()           
     return HttpResponseRedirect(reverse("homepage"))
 
