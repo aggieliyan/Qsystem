@@ -158,10 +158,10 @@ def new_project(request,pid = ''):
             leader = models.user.objects.get(id=leaderid)
             designer = form.cleaned_data['designer']
             if designer:
-                designer  = models.user.objects.get(id=designerid )
+                designer  = models.user.objects.get(id=designer )
             tester = form.cleaned_data['tester']
             if tester:
-                tester  = models.user.objects.get(id=testerid )
+                tester  = models.user.objects.get(id=tester )
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
