@@ -38,8 +38,9 @@ urlpatterns = patterns('',
     url(r'^changedesign/', project.views.changedesign,name="design_change"),
     url(r'^delayproject/$', project.views.delayproject,name="project_delay"),
     url(r'^pauseproject-(?P<id>\d+)/$', project.views.pauseproject,name="project_pause"),
-    url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,name="project_delete"),
-    
+    url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../personal_homepage/'},name="project_delete"),
+    url(r'^pdeleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../projectlist/'},name="pproject_delete"),
+
    #sourcemanage
     url(r'^judge/$',project.views.judge),
     url(r'^sourcemanage/$',project.views.show_user),

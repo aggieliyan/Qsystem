@@ -414,10 +414,10 @@ def personal_homepage(request):
     return render_to_response('personal_homepage.html',
         {'projectlist':projectlist,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count})
 
-def deleteproject(request,id):
+def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
-    return HttpResponseRedirect(reverse("homepage"))
+    return HttpResponseRedirect(url)
 
 
 def pauseproject(request,id):

@@ -186,7 +186,7 @@
                                         <a href="">编辑<span>|</span></a>
                                         <a onclick="delay_p({{p.id}})">延期<span>|</span></a>
                                         <a href="{% url 'project_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
-                                        <a href="{% url 'project_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
+                                        <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
                                     </td>
                                 </tr>
                                 {% endfor %}
