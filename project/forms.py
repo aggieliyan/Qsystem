@@ -68,9 +68,9 @@ class ProjectForm(forms.Form):
 	relateduser = forms.CharField(required=False)
 
 class changedesignForm(forms.Form):
-	content=forms.CharField(required=True,error_messages={'required':u'变更内容不能为空'})
+	content=forms.CharField(required=True,error_messages={'required': u'变更内容不能为空'})
 	dpath = forms.CharField(required=True,error_messages={'required':u'设计图地址不能为空'})
-	changeid = forms.IntegerField(required=True)
+	changeid = forms.IntegerField(required=False)
 
 class delayprojectForm(forms.Form):
     delay_date=forms.DateField(required=True,error_messages={'required':u'延期日期不能为空'})

@@ -384,10 +384,6 @@ def personal_homepage(request):
        # request.session['username']
     #except KeyError:
         #return HttpResponseRedirect("/nologin")
-
-
-
-
     result=project.objects.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
     result1=project.objects.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
     puser=project_user.objects.all()   
