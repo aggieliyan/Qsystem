@@ -384,8 +384,19 @@ def personal_homepage(request):
        # request.session['username']
     #except KeyError:
         #return HttpResponseRedirect("/nologin")
-    result=project.objects.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
-    result1=project.objects.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
+
+
+    projectlist = project.objects.filter()
+    print projectlist
+
+    project_user_list = project_user.objects.filter(username__username__contains=request.session['username'])
+    projectids = []
+    for p in project_user_list:
+        projectids.append(p.project.id)
+    print projectids
+    projectlist = projectlist.filter(pk__in=projectids)    
+    result=projectlist.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
+    result1=projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
     puser=project_user.objects.all()   
     
     #userid = request.session['id']
@@ -398,7 +409,7 @@ def personal_homepage(request):
     messages=messagess[:4]
    
     return render_to_response('personal_homepage.html',
-        {'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count})
+        {'projectlist':projectlist,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count})
 
 def deleteproject(request,id):
     delpro=get_object_or_404(project,pk=int(id))    

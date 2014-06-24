@@ -140,7 +140,7 @@
             <div class="tab-pane" id="tab2">
               <table id="customers">
                 <thead>
-                  {% if not result %}
+                  {% if not result1 %}
                       <p style="text-align:center;">暂无相关项目</p>
                   {% else %}
                 <tr>
@@ -169,8 +169,8 @@
                     <td>                                                                
                     
                     {% for us in puser %}
-                    {% ifequal pres.id u.project_id %}                                                        
-                    {{u.username.realname}}&nbsp;
+                    {% ifequal pres.id us.project_id %}                                                        
+                    {{us.username.realname}}&nbsp;
                     {% endifequal %}
                     {% endfor %}                  
 
