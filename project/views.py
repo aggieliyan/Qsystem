@@ -250,18 +250,18 @@ def project_list(request):
             leader_p = search_form.cleaned_data['leader_p']
            
             print project_name,start_date_s,end_date_s,status_p,leader_p
-            projectlist = project.objects.filter()
+            projectlist = project.objects.filter().order_by("-id")
             
             
             print projectlist
             if not isNone(project_name):
-                projectlist = projectlist.filter(project__contains=project_name.strip())
+                projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-id")
             if not isNone(start_date_s):
-                projectlist = projectlist.filter(start_date__gte=start_date_s)
+                projectlist = projectlist.filter(start_date__gte=start_date_s).order_by("-id")
             if not isNone(end_date_s):
-                projectlist = projectlist.filter(start_date__lte=end_date_s)
+                projectlist = projectlist.filter(start_date__lte=end_date_s).order_by("-id")
             if not isNone(status_p):
-                projectlist = projectlist.filter(status_p=status_p.strip())
+                projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-id")
             if not isNone(leader_p):
                 #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
                 project_user_list = project_user.objects.filter(username__realname__contains=leader_p.strip())
@@ -269,10 +269,10 @@ def project_list(request):
                 for p in project_user_list:
                     projectids.append(p.project.id)
                 print projectids
-                projectlist = projectlist.filter(pk__in=projectids)
+                projectlist = projectlist.filter(pk__in=projectids).order_by("-id")
 
     else:
-        projectlist = project.objects.all()
+        projectlist = project.objects.all().order_by("-id")
         
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
