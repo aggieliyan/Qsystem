@@ -71,12 +71,13 @@ $(document).ready(function(){
       //在页面显示已选人员
       var radioname = Math.floor(Math.random()*9999+1).toString();
       for (var i= jsontester.tester.length-1; i >=0; i--){
-        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'"><input type="radio" name='+radioname+'><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
+        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'"><input type="radio" name='+radioname+'><span class="username">'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
       }	
-
+      
+      //跟数量调整高度
       pl = $("[title='1']").children("div").length;
       if(pl >= 8){
-        w = (pl/5+1)*30;
+        w = (pl/4+1)*30;
         $("[title='1']").attr("style","height:"+w+"px;");
       }
       $("[title='1']").attr("title","0");
