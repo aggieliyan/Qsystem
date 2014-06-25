@@ -74,4 +74,5 @@ class project_delay(models.Model):
 class project_user_message(models.Model):
     userid = models.ForeignKey(user)
     messageid = models.ForeignKey(public_message)
+    project = models.ForeignKey(project)
     isactived = models.BooleanField(max_length=1)

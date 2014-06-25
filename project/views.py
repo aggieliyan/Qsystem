@@ -399,8 +399,8 @@ def personal_homepage(request):
         projectids.append(p.project.id)
     print projectids
     projectlist = projectlist.filter(pk__in=projectids)    
-    result=projectlist.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停'))
-    result1=projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停'))
+    result=projectlist.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停')).order_by("-id")
+    result1=projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停')).order_by("-id")
     puser=project_user.objects.all()   
     
     #userid = request.session['id']
@@ -421,13 +421,13 @@ def deleteproject(request,id,url):
     return HttpResponseRedirect(url)
 
 
-def pauseproject(request,id,url):
+def pauseproject(request,id):
     pausepro=get_object_or_404(project,pk=int(id))
     pausepro.status_p='暂停'
     pausepro.save()
-    return HttpResponseRedirect(url)
+    return HttpResponseRedirect(reverse("homepage"))
 
-def delayproject(request,url):
+def delayproject(request):
     if request.method=='POST':
         form = delayprojectForm(request.POST)
         if form.is_valid():
@@ -439,10 +439,10 @@ def delayproject(request,url):
             protitle=delpro.project
             delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
             delay_p.save()                   
-    return HttpResponseRedirect(url)
+    return HttpResponseRedirect(reverse(homepage))
 
 
-def changedesign(request,url):
+def changedesign(request):
           
     if request.method=='POST':
         form = changedesignForm(request.POST)
@@ -457,7 +457,7 @@ def changedesign(request,url):
             string=content+dpath
             pub_message=public_message(project_id=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
             pub_message.save()           
-    return HttpResponseRedirect(url)
+            return HttpResponseRedirect(reverse("homepage"))
 
 #资源管理
 def judge(request):
