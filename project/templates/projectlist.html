@@ -185,7 +185,7 @@
                                         <a onclick="change_p({{p.id}})">设计变更</a><span>|</span>
                                         <a href="">编辑<span>|</span></a>
                                         <a onclick="delay_p({{p.id}})">延期<span>|</span></a>
-                                        <a href="{% url 'project_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
+                                        <a href="{% url 'pproject_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
                                         <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
                                     </td>
                                 </tr>
@@ -218,7 +218,7 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form name="test" class="navbar-form navbar-center" action="/changedesign/" method='post'>
+      <form name="test" class="navbar-form navbar-center" action="/pchangedesign/" method='post'>
       <div class="mymodal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">设计变更</h4>
@@ -267,7 +267,7 @@
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form name="test" class="navbar-form navbar-center" method='post' action="/delayproject/">
+      <form name="test" class="navbar-form navbar-center" method='post' action="/pdelayproject/">
       <div class="mymodal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">申请延期</h4>
