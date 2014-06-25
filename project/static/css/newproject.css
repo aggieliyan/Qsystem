@@ -26,7 +26,7 @@ body div{margin:0 auto;}
     width: 1020px;
 }
 
-.breadcrumb > li > .divider {
+.breadcrumb > li > .ditable-listder {
     font-size: 14px;
     color: white;
 }
@@ -164,9 +164,8 @@ position:relative;
 .list li{list-style-type:none}
 
 .table-list {
-    width:90px;
     float:left;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .table-list span{
