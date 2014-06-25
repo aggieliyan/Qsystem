@@ -20,6 +20,8 @@ $(document).ready(function(){
           return item.attr("value");
         }
       }
+      //没找到
+      return ""
     }
     
     function set_other_master(){
@@ -27,8 +29,9 @@ $(document).ready(function(){
       var tm = $(".p-list").eq(2).children();
       var d = findmaster(pm);
       var t = findmaster(tm);
-      $("[name='designer']").attr("value",d);
-      $("[name='tester']").attr("value",t);
+
+      $("[name='designer']").attr("value",d); 
+      $("[name='tester']").attr("value",t);   
     } 
 
 
@@ -81,16 +84,21 @@ $(document).ready(function(){
         $("[title='1']").attr("style","height:"+w+"px;");
       }
       $("[title='1']").attr("title","0");
+      //负责人还在的话要选中
+      var dv = $("[name='designer']").attr("value")
+      var tv = $("[name='tester']").attr("value")
+      if(dv){
+        $("[value='"+dv+"'] input").attr("checked","checked");
+      }
+      if(tv){
+        $("[value='"+tv+"'] input").attr("checked","checked");
+      }
 
       //设置项目参与人员
       count_relateduser()
-      //var p = $(".role-item");  
-      //var idlist =" ";
-      //for(var i=p.length-1; i >=0; i--){
-     //   item = p.eq(i);
-      //  idlist = idlist + item.attr("value") + ","
-     // } 
-     // $("[name='relateduser']").attr("value",idlist);
+
+      //设置产品测试负责人
+      set_other_master()
 
     });
 
@@ -117,8 +125,6 @@ $(document).ready(function(){
       }
  
       $(this).next().attr("title","1");
-
-      //选出已存在的
 
       var url="/showperson";
       var para="role=" + roles;
