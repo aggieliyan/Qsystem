@@ -439,7 +439,7 @@ def delayproject(request):
             protitle=delpro.project
             delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
             delay_p.save()                   
-    return HttpResponseRedirect(reverse(homepage))
+    return HttpResponseRedirect(reverse('homepage'))
 
 
 def changedesign(request):
@@ -456,8 +456,15 @@ def changedesign(request):
             #chd.save()
             string=content+dpath
             pub_message=public_message(project_id=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
-            pub_message.save()           
-            return HttpResponseRedirect(reverse("homepage"))
+            pub_message.save()
+            related_user = models.user.objects.filter(project_user__project_id=changeid)
+            message=models.public_message.objects.filter(project__pk=changeid).order_by("-id")[0]            
+            for i in related_user:
+                uid=i.id
+                megid=message.id
+                pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
+                pro_u_message.save()           
+    return HttpResponseRedirect(reverse("homepage"))
 
 #资源管理
 def judge(request):
