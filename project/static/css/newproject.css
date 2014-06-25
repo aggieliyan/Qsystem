@@ -65,15 +65,20 @@ body div{margin:0 auto;}
     border: 1px solid #8EBCEF;
     cursor: auto;
     padding-right: 20px;
-    width: 60px;
     margin: 2px 5px;
     display: inline;
     float:left;
-    width: 75px;
 }
 
 .role-item span{
-  margin-left: 10px;
+  margin-left: 5px;
+}
+
+.username{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width:60px;
 }
 
 .p-list{
@@ -82,7 +87,7 @@ body div{margin:0 auto;}
   border-width: 1px;
   border-color:#DDDDDD;
   height:50px;
-  width:430px;
+  width:480px;
   margin-left: 0;
 }
 
@@ -92,6 +97,7 @@ body div{margin:0 auto;}
 }
 
 .role-item > input{
+  margin-left: 2px;
   vertical-align: baseline;
 }
 .role-item .close{

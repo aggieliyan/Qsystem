@@ -484,10 +484,6 @@ def nopermit(request):
 
 @csrf_exempt
 def show_user2(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
     department=request.POST['department']
     if department=='请选择':
         department_id=0

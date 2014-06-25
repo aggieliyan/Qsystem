@@ -42,7 +42,7 @@ body{
 	    .top_memu li{
 	    	float: left;
 	    	line-height: 85px;
-	    	padding-right: 100px;
+	    	padding-right: 90px;
 	    	margin-left: 50px;
             margin-top: 5px;
 
@@ -83,4 +83,11 @@ body{
 	    .basefooter {
 	    	margin: 20px 0 20px;
             text-align: center;
+	    }
+	    .username{
+	    	display: inline-block;
+	        overflow: hidden;
+	    	text-overflow: ellipsis;
+	    	white-space: nowrap;
+	    	width: 100px;
 	    }
