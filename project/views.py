@@ -11,7 +11,7 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from forms import changedesignForm, delayprojectForm, ProjectForm, ProjectSearchForm, LoginForm, UserForm
+from project.forms import  *
 from project.models import *
 import math
 import models
@@ -352,6 +352,7 @@ def show_person(request):
         realname = item.realname
         dic = {'id':int(uid), 'realname':realname}
         rs.append(dic)
+
     rrs = {"person":rs}
     rs = json.dumps(rrs)
     return HttpResponse(rs)
@@ -748,7 +749,7 @@ def historymessage(request):
 
 def refuse(request):
     if request.method == 'POST':
-        form = forms.TestForm(request.POST)
+        form = TestForm(request.POST)
         if form.is_valid():
             delayid = form.cleaned_data['delayid']
             reason = form.cleaned_data['reason']
@@ -762,7 +763,7 @@ def refuse(request):
 
 def approve(request):
     if request.method == 'POST':
-        form = forms.Approveform(request.POST)
+        form = Approveform(request.POST)
         if form.is_valid():
             delayid1 = form.cleaned_data['delayid1']
             delay = project_delay.objects.get(id=delayid1)
@@ -777,7 +778,7 @@ def deletehistory(request):
     if request.session['id']:
         useid = request.session['id']
     if request.method == 'POST':
-        form = forms.MessageForm(request.POST)  
+        form = MessageForm(request.POST)  
         if form.is_valid():
             messageid = form.cleaned_data['messageid'] 
             usermessage= project_user_message.objects.get(userid_id=useid,messageid_id=messageid)
@@ -795,7 +796,7 @@ def deletenotice(request):
     if request.session['id']:
         useid = request.session['id']
     if request.method == 'POST':
-        form = forms.NoticeForm(request.POST) 
+        form = NoticeForm(request.POST) 
         if form.is_valid():
             noticeid = form.cleaned_data['noticeid'] 
             usernotice= project_user_message.objects.get(userid_id=useid,messageid_id=noticeid)

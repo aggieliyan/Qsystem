@@ -164,9 +164,8 @@ position:relative;
 .list li{list-style-type:none}
 
 .table-list {
-    width:90px;
     float:left;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .table-list span{

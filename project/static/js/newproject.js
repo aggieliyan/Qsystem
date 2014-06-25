@@ -118,6 +118,8 @@ $(document).ready(function(){
  
       $(this).next().attr("title","1");
 
+      //选出已存在的
+
       var url="/showperson";
       var para="role=" + roles;
       $.get(url, para, function(data, status){
@@ -141,6 +143,13 @@ $(document).ready(function(){
           person = allperson;
         }
         show_staff(person);
+
+        p = $("[title='1']").children();
+        for(var i=0;i<p.length;i++){
+          //选中之前已经选过的
+          $("#"+p.eq(i).attr("value")).attr("checked","checked");
+        }
+
       });
     
 
