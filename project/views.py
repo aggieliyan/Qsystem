@@ -352,6 +352,7 @@ def show_person(request):
         realname = item.realname
         dic = {'id':int(uid), 'realname':realname}
         rs.append(dic)
+
     rrs = {"person":rs}
     rs = json.dumps(rrs)
     return HttpResponse(rs)
