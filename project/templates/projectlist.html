@@ -198,10 +198,10 @@
         </div>
     </div>
     <!--分页-->
-    <div class="pagination" >
-    <span class="step-links">
+    <div class="pagination" style="text-align:right;margin-right:150px">
+    <span class="step-links"  >
         {% if projectobj.has_previous %}
-            <a href="?page={{ projectobj.previous_page_number }}"><<</a>
+            <a href="?page={{ projectobj.previous_page_number }}"> << </a>
         {% endif %}
 
         <span class="current">
@@ -209,7 +209,7 @@
         </span>
 
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}">>></a>
+            <a href="?page={{ projectobj.next_page_number }}"> >> </a>
         {% endif %}
     </span>
     </div>
