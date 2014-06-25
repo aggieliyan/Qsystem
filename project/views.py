@@ -421,13 +421,13 @@ def deleteproject(request,id,url):
     return HttpResponseRedirect(url)
 
 
-def pauseproject(request,id):
+def pauseproject(request,id,url):
     pausepro=get_object_or_404(project,pk=int(id))
     pausepro.status_p='暂停'
     pausepro.save()
-    return HttpResponseRedirect(reverse("homepage"))
+    return HttpResponseRedirect(url)
 
-def delayproject(request):
+def delayproject(request,url):
     if request.method=='POST':
         form = delayprojectForm(request.POST)
         if form.is_valid():
@@ -439,10 +439,10 @@ def delayproject(request):
             protitle=delpro.project
             delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
             delay_p.save()                   
-    return HttpResponseRedirect(reverse('homepage'))
+    return HttpResponseRedirect(url)
 
 
-def changedesign(request):
+def changedesign(request,url):
           
     if request.method=='POST':
         form = changedesignForm(request.POST)
@@ -464,7 +464,7 @@ def changedesign(request):
                 megid=message.id
                 pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
                 pro_u_message.save()           
-    return HttpResponseRedirect(reverse("homepage"))
+    return HttpResponseRedirect(url)
 
 #资源管理
 def judge(request):
