@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% load staticfiles %}
 
 <!DOCTYPE html>
@@ -49,14 +49,14 @@
 		
 		{% for item in notices %}
       
-        <p><a href="/notice/" target="_blank">{{item.content}}</a></p>
+        <p><a href="/notice/" >{{item.content}}</a></p>
     
         {% endfor %}
 			
 		</div>
 		{% if count > 5 %}
 		<div style="position:absolute;right:10px;bottom:0">
-			<a href="/notice/" style="color:#339666" target="_blank">未读公告<span style="color:#ffa03e">({{a}})>></span></a>
+			<a href="/notice/" style="color:#339666" >未读公告<span style="color:#ffa03e">({{a}})>></span></a>
 		</div>	
          {% endif %} 
 	</div>	

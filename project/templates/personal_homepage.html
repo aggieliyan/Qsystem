@@ -1,4 +1,4 @@
-
+﻿
   {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
@@ -41,13 +41,13 @@
  
      {% for item in messages %}
        
-        <p><a href="/historymessage/" target="_blank">{{item.content}}</a></p>
+        <p><a href="/historymessage/" >{{item.content}}</a></p>
     
       {% endfor %}
    		
 		 </div>								
 		<div style="position:absolute;right:10px;bottom:0">
-			<a href="/historymessage/" style="color:#339666" target="_blank">查看历史记录</a>
+			<a href="/historymessage/" style="color:#339666">查看历史记录</a>
 		</div>		
 	</div>	
   {% else %}
@@ -64,7 +64,7 @@
  
     {% if superid %}
     <div style="padding:50px 0 15px">
-    <a href="/delay/" style="color:#339666" target="_blank">查看您要处理的延期申请>></a>
+    <a href="/delay/" style="color:#339666" >查看您要处理的延期申请>></a>
     </div>  
    {% else %}
    {% endif %}
