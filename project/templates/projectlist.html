@@ -198,18 +198,18 @@
         </div>
     </div>
     <!--分页-->
-    <div class="pagination">
+    <div class="pagination" >
     <span class="step-links">
         {% if projectobj.has_previous %}
-            <a href="?page={{ projectobj.previous_page_number }}">previous</a>
+            <a href="?page={{ projectobj.previous_page_number }}"><<</a>
         {% endif %}
 
         <span class="current">
-            Page {{ projectobj.number }} of {{ projectobj.paginator.num_pages }}.
+            第 {{ projectobj.number }} 页共 {{ projectobj.paginator.num_pages }}页
         </span>
 
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}">next</a>
+            <a href="?page={{ projectobj.next_page_number }}">>></a>
         {% endif %}
     </span>
     </div>

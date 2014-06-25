@@ -274,7 +274,7 @@ def project_list(request):
     else:
         projectlist = project.objects.all().order_by("-id")
         
-    paginator = Paginator(projectlist, 25)
+    paginator = Paginator(projectlist, 1)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
