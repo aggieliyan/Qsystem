@@ -404,7 +404,8 @@ def personal_homepage(request):
     puser=project_user.objects.all()   
     
     #userid = request.session['id']
-    userid='1'
+    userid=request.session['id']
+    superid=public_message.objects.raw("select * from auth_user where is_superuser=1 and id=%s",[userid])[:]
     messagess=public_message.objects.raw('select a.id,a.content,a.isactived,a.project_id,a.publication_date,a.publisher_id,a.type_p from project_public_message as a,project_project_user as  b WHERE  a.project_id=b.project_id and a.isactived=1 and a.type_p=\'message\' and b.username_id=%s ORDER BY a.id desc',[userid])
     i=0
     for item in messagess:
@@ -413,7 +414,7 @@ def personal_homepage(request):
     messages=messagess[:4]
    
     return render_to_response('personal_homepage.html',
-        {'projectlist':projectlist,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count})
+        {'projectlist':projectlist,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'superid':superid})
 
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
