@@ -9,7 +9,7 @@
 		<div>
 			<div id="head"></div>
 			<div id="bread">
-				<p><a href="">项目管理</a>&nbsp>>项目详情</p>
+				<p><a href="/projectlist">项目管理</a>&nbsp>>项目详情</p>
 			</div>
 			<div class="content">
 				<div id="name">
@@ -89,7 +89,7 @@
 						{% else %}
                        		<li><p>&nbsp;</p></li>
                        	{% endif %}
-                       	{% if res.test_report_p %}
+                       	{% if res.pro.test_report_p %}
 							<li><p>{{res.pro.test_report_p}}</p></li>
 						{% else %}
                        		<li><p>&nbsp;</p></li>

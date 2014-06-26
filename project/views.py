@@ -188,7 +188,8 @@ def new_project(request,pid = ''):
             if len(relateduser):
                 if (pid==''):
                     pid = models.project.objects.filter(project=pname).order_by("-id")[0].id
-                print pid
+                else:
+                    models.project_user.objects.filter(project_id=pid).delete()
                 for uid in relateduser:
                     if uid:
                         project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)

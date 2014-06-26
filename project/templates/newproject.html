@@ -69,9 +69,9 @@
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目负责人：</label>
                 </div>
-                <input name="leader" style="display:none;" value="{{res.user.id}}">
-                <input name="designer" style="display:none;" value="{{res.pro.designer_p_id}}">
-                <input name="tester" style="display:none;" value="{{res.pro.tester_p_id}}">
+                <input name="leader" style="display:none;" value={{res.user.id}}>
+                <input class="init0" name="designer" style="display:none;" value={{res.pro.designer_p_id}}>
+                <input class="init0" name="tester" style="display:none;" value={{res.pro.tester_p_id}}>                
                 <select id="master"  class="inputfield" >
                 	<option select='selected'>{{res.user.realname}}</option>
                 </select>
@@ -105,7 +105,11 @@
                     <div class="p-list">
 						{% if res.reuser.pd.rel %}
                        		{% for item in res.reuser.pd.rel %}
-                       			<div class="role-item" value="{{item.id}}" type="radio"><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% if item.id == res.pro.designer_p_id %}
+                       				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% else %}
+                       				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro'><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% endif %}
                        		{% endfor %}
                         {% endif %}
                     </div>
@@ -115,7 +119,7 @@
                     <div id="roles-dev" class="p-list">
                     	{% if res.reuser.dev.rel %}
                        		{% for item in res.reuser.dev.rel %}
-                       			<div class="role-item" value="{{item.id}}" type="radio"><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-dev'><span>{{item.realname}}</span><span class="close">x</span></div>  
                        		{% endfor %}
                         {% endif %}
                       </div>
@@ -126,7 +130,11 @@
                     <div id="testarea" class="p-list">
                        {% if res.reuser.qa.rel %}
                        		{% for item in res.reuser.qa.rel %}
-                       			<div class="role-item" value="{{item.id}}" type="radio"><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% if item.id == res.pro.tester_p_id %}
+                       				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% else %}
+                       				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa'><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% endif %}
                        		{% endfor %}
                        {% endif %}
                     </div>

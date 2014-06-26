@@ -1,6 +1,15 @@
 $(document).ready(function(){
-
-    function show_staff (person){
+	count_relateduser();
+	init0();
+	
+	function init0(){
+		var a = window.location.pathname;
+		if (a == "/newproject/"){
+			$(".init0").attr("value",0);
+	}
+		
+	}
+	function show_staff (person){
       if(person.length > 0){
         $("#testerlist div").remove();
         for(var i=0; i<person.length;i++){
@@ -108,6 +117,7 @@ $(document).ready(function(){
         $(this).parent().remove();
 
         count_relateduser()
+        change123();
     });
     
     //点添加，弹出人员选择框展示数据
