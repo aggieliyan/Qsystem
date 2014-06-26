@@ -117,7 +117,6 @@ $(document).ready(function(){
         $(this).parent().remove();
 
         count_relateduser()
-        change123();
     });
     
     //点添加，弹出人员选择框展示数据
