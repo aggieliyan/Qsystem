@@ -1,16 +1,19 @@
- {% extends "base.html" %}
+  {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
-<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>资源管理无权限</title>
 <link rel="stylesheet" type="text/css" href="/static/css/nopermit.css">
- {% endblock %}
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+  {% endblock %}
   {% block content %}
 <div class="body">
-<form class="source" action="/show_user2/" method="POST">
+<form name="noperform" class="source"  method="POST">
 	<div class="choose">
-		<select name="department" id="department" class="section" onchange="javascript:document.forms[0].submit();" >
+		<select name="department" id="department" class="section" onchange="showuser2()" >
 		{% for i in department_list %}
 		    <option value="{{i.department}}">{{i.department}}</option>
 		    {% endfor %}
@@ -44,11 +47,10 @@
 		
 		
 	</div>
-    	
+    	</form>
 </div>
 
- {% endblock %}
- <% block js%>
+
 <script type="text/javascript">
     var s1 = document.getElementById("department");
     for(i = 0;i<=s1.length;i++){
@@ -57,6 +59,10 @@
             s1.options[i].selected = true;
         }
     }
+    function showuser2()
+{
+document.noperform.action="/show_user2/"
+document.noperform.submit()
+}
 </script>
-<% endblock %>
-
+ {% endblock %}
