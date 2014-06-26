@@ -392,7 +392,7 @@ def personal_homepage(request):
 
 
     projectlist = project.objects.filter()
-    print projectlist
+    #print projectlist
 
     project_user_list = project_user.objects.filter(username__username__contains=request.session['username'])
     projectids = []
@@ -588,11 +588,22 @@ def Insert_user(request,id):
     return redirect('/show_user/')
 
 def delay(request):
-    if request.session['id']:
-        useid = request.session['id']
-    #raw_sql = 'select * from project_project_delay where isactived is null and application_id=useid'
-    delays = project_delay.objects.filter(application_id=useid).filter(isactived__isnull=True)
+
+    if not request.session['id']:
+        return HttpResponseRedirect("/nologin")
+    
+        
+    if not request.user.has_perm('project.change_project_delay'):
+       
+        return HttpResponseRedirect("/noperm")
+
+    
+    userid=request.session['id']
+        
+    delays=project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     return render_to_response('delay.html',{'delays':delays})
+
+    
 
 def notice(request):
     if request.method == 'POST':  # 如果是post请求
