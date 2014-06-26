@@ -539,7 +539,7 @@ def show_user(request):
     return render_to_response('sourcemanage.html',locals())
 
 @csrf_exempt
-def Insert_user1(request):
+def Insert_user(request,id):
     if request.session['username']:
         username=request.session['username']
         department_id=models.user.objects.get(username=username).department_id
@@ -553,165 +553,38 @@ def Insert_user1(request):
         for item in depart:
             departdic[item.department] = item.id
         department_id = departdic[department]
-    realname=request.POST['level_1']
-    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='1')
-    return redirect('/show_user/')
-
-@csrf_exempt
-def Insert_user2(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
-    else:
-        depart = models.department.objects.all()
-        departdic = {}
-        for item in depart:
-            departdic[item.department] = item.id
-        department_id = departdic[department]
-    realname=request.POST['level_2a']
-    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
-    return redirect('/show_user/')
-
-@csrf_exempt
-def Insert_user3(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
-    else:
-        depart = models.department.objects.all()
-        departdic = {}
-        for item in depart:
-            departdic[item.department] = item.id
-        department_id = departdic[department]
-    realname=request.POST['level_3a']
-    print realname
-    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
-    return redirect('/show_user/')
-
-#逻辑删除
-@csrf_exempt
-def delet_userlogic(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
-    else:
-        depart = models.department.objects.all()
-        departdic = {}
-        for item in depart:
-            departdic[item.department] = item.id
-        department_id = departdic[department]
-    realname=request.POST['level_1']
-    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
-    return redirect('/show_user/')
-
-@csrf_exempt
-def delet_userlogic2(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
-    else:
-        depart = models.department.objects.all()
-        departdic = {}
-        for item in depart:
-            departdic[item.department] = item.id
-        department_id = departdic[department]
-    realname=request.POST['level_2']
-    print realname
-    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
-    return redirect('/show_user/')
-
-@csrf_exempt
-def delet_userlogic3(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
-    else:
-        depart = models.department.objects.all()
-        departdic = {}
-        for item in depart:
-            departdic[item.department] = item.id
-        department_id = departdic[department]
-    realname=request.POST['level_3']
-    user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
-    return redirect('/show_user/')
-
-@csrf_exempt
-def delete_user1(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
-    else:
-        depart = models.department.objects.all()
-        departdic = {}
-        for item in depart:
-            departdic[item.department] = item.id
-        department_id = departdic[department]
-    realname=request.POST['level_1']
-    user=models.user.objects.get(department_id=department_id,realname=realname)
-    user.delete()
-    return redirect('/show_user/')
-@csrf_exempt
-def delete_user2(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
-    else:
-        depart = models.department.objects.all()
-        departdic = {}
-        for item in depart:
-            departdic[item.department] = item.id
-        department_id = departdic[department]
-    realname=request.POST['level_2']
-    user=models.user.objects.get(department_id=department_id,realname=realname)
-    user.delete()
-    return redirect('/show_user/')
-
-@csrf_exempt
-def delete_user3(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
-    else:
-        depart = models.department.objects.all()
-        departdic = {}
-        for item in depart:
-           departdic[item.department] = item.id
-        department_id = departdic[department]
-    realname=request.POST['level_3']
-    user=models.user.objects.get(department_id=department_id,realname=realname)
-    user.delete()
+    print id
+    if id=='1':
+        realname=request.POST['level_1']
+        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='1')
+    elif id=='2':
+        realname=request.POST['level_2a']
+        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
+    elif id=='3':
+        realname=request.POST['level_3a']
+        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
+    elif id=='4':
+        realname=request.POST['level_1']
+        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+    elif id=='5':
+        realname=request.POST['level_2']
+        print realname
+        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+    elif id=='6':
+        realname=request.POST['level_3']
+        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+    elif id=='7':
+        realname=request.POST['level_1']
+        user=models.user.objects.get(department_id=department_id,realname=realname)
+        user.delete()
+    elif id=='8':
+        realname=request.POST['level_2']
+        user=models.user.objects.get(department_id=department_id,realname=realname)
+        user.delete()
+    elif id=='9':
+        realname=request.POST['level_3'] 
+        user=models.user.objects.get(department_id=department_id,realname=realname)
+        user.delete()       
     return redirect('/show_user/')
 
 def delay(request):
