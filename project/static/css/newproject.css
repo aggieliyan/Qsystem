@@ -40,7 +40,11 @@ body div{margin:0 auto;}
   float: right;
   margin-right: 5px;
 }
-
+.all {
+  float: left;
+  margin-left: 20px;
+  margin-top: 10px;
+}
 
 .must{
   color: red;

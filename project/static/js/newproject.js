@@ -179,6 +179,20 @@ $(document).ready(function(){
     console.log(person);
     show_staff(person);
   });
+  //点全选
+  $(".all input").click(function(){
+    var a = $(".table-list input");
+    if($(this).attr("checked")=="checked"){ 
+      for(var i=0;i<a.length;i++){
+        a.eq(i).attr("checked","checked");
+      }
+    }else{
+      for(var i=0;i<a.length;i++){
+        a.eq(i).removeAttr("checked");
+      }
+    }
+
+  });
 
    //选择人员框里搜索
   $("#psearch").click(function(){
