@@ -483,27 +483,31 @@ def changedesign(request,url):
 
 #资源管理
 def judge(request):
-    if request.session['username']:
-        username=request.session['username']
-    Position_level=models.user.objects.get(username=username).Position_level
-    print Position_level
-    if Position_level=='1':
-        return redirect('/show_user/')
-    else:
-        return redirect('/nopermit/')
+    try:
+        if request.session['username']:
+            username=request.session['username']
+        Position_level=models.user.objects.get(username=username).Position_level
+        print Position_level
+        if Position_level=='1':
+            return redirect('/show_user/')
+        else:
+            return redirect('/nopermit/')
+    except KeyError:
+        return redirect('/login/')
 def nopermit(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=models.department.objects.get(id=department_id).department
-    department_list = models.department.objects.all()
-    level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
-    print level_1_list
-    level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
-    print level_2_list
-    level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
-    return render_to_response('nopermit.html',locals())
+    try:
+        if request.session['username']:
+            username=request.session['username']
+            department_id=models.user.objects.get(username=username).department_id
+        department_id=department_id
+        department=models.department.objects.get(id=department_id).department
+        department_list = models.department.objects.all()
+        level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
+        level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
+        level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
+        return render_to_response('nopermit.html',locals())
+    except KeyError:
+        return redirect('/login/')
 
 @csrf_exempt
 def show_user2(request):
@@ -525,29 +529,32 @@ def show_user2(request):
 
 @csrf_exempt
 def show_user(request):
-    if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=models.department.objects.get(id=department_id).department
-    if request.method == 'POST':
-        department=request.POST['department']
-        if department=='请选择':
-            department_id=0
-        else:
-            depart = models.department.objects.all()
-            departdic = {}
-            for item in depart:
-                departdic[item.department] = item.id
-            department_id = departdic[department]
-    else:
+    try:
+        if request.session['username']:
+            username=request.session['username']
+            department_id=models.user.objects.get(username=username).department_id
         department_id=department_id
-    level_list=models.user.objects.filter(department_id=department_id)
-    level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
-    level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
-    level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
-    department_list = models.department.objects.all()
-    return render_to_response('sourcemanage.html',locals())
+        department=models.department.objects.get(id=department_id).department
+        if request.method == 'POST':
+            department=request.POST['department']
+            if department=='请选择':
+                department_id=0
+            else:
+                depart = models.department.objects.all()
+                departdic = {}
+                for item in depart:
+                    departdic[item.department] = item.id
+                department_id = departdic[department]
+        else:
+            department_id=department_id
+        level_list=models.user.objects.filter(department_id=department_id)
+        level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
+        level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
+        level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
+        department_list = models.department.objects.all()
+        return render_to_response('sourcemanage.html',locals())
+    except KeyError:
+        return redirect('/login/')
 
 @csrf_exempt
 def Insert_user(request,id,id2):
