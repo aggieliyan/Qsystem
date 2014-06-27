@@ -4,10 +4,9 @@ $(document).ready(function(){
 	
 	function init0(){
 		var a = window.location.pathname;
-		if (a == "/newproject/"){
+		if ($(".init0").val() == ""){
 			$(".init0").attr("value",0);
-	}
-		
+		}
 	}
 	function show_staff (person){
       if(person.length > 0){
@@ -30,7 +29,7 @@ $(document).ready(function(){
         }
       }
       //没找到
-      return ""
+      return 0
     }
     
     function set_other_master(){
