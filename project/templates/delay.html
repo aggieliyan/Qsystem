@@ -20,7 +20,7 @@
 
 	<div>
 		<ol class="breadcrumb" style="background-color:#339966; font:bold">
-			<li><a href="#" class="divider">个人主页>></a></li>
+			<li><a href="/personal_homepage/" class="divider">个人主页>></a></li>
 
 			<li><label class="active">延期处理</label></li>
 			<b><a class="one" href="/index.html"
@@ -51,13 +51,13 @@
 			</thead>
 			<tbody>
 
-		        {% for delay in delays %}
+		        {% for delay in projectobj %}
 				{% if forloop.counter|divisibleby:"20" %}
 				<tr class="low1">
 				{% else %}	
 				<tr class="low2">
 				{% endif %}	
-					<td class="col1" word-wrap="break-all";>&nbsp;{{delay.title}}申请延期，&nbsp;延期至{{delay.delay_to_date}}&nbsp;延期理由：{{delay.reason}}</td>
+					<td class="col1" word-wrap="break-all";>&nbsp;{{delay.title}}申请延期，&nbsp;延期至{{delay.delay_to_date}}，&nbsp;延期理由：{{delay.reason}}</td>
 					<td>{{delay.apply_date}}</td>
 					<td>
 						<button style="margin:5px" data-toggle="modal"
@@ -73,17 +73,22 @@
 
 		</table>
 	</div>
-	<div>
-		<ul class="pagination pagination-right" style="float:right">
-			<li class=""><a href="#">&laquo;</a></li>
-			<li class=""><a href="#">1</a></li>
-			<li class=""><a href="#">2</a></li>
-			<li class=""><a href="#">3</a></li>
-			<li class=""><a href="#">4</a></li>
-			<li class=""><a href="#">5</a></li>
-			<li class=""><a href="#">&raquo;</a></li>
-		</ul>
-	</div>
+	<!--分页-->
+    <div class="pagination" style="text-align:right;margin-right:10px">
+    <span class="step-links"  >
+        {% if projectobj.has_previous %}
+            <a href="?page={{ projectobj.previous_page_number }}"> << </a>
+        {% endif %}
+
+        <span class="current">
+            第 {{ projectobj.number }} 页共 {{ projectobj.paginator.num_pages }}页
+        </span>
+
+        {% if projectobj.has_next %}
+            <a href="?page={{ projectobj.next_page_number }}"> >> </a>
+        {% endif %}
+    </span>
+    </div>
 
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -172,9 +177,9 @@
 		</div>
 		<!-- Le javascript ================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="http://code.jquery.com/jquery.js"></script>
-		<script type="text/javascript"
-			src="/static/jquery/jquery-1.8.3.min.js"></script>
+
+		{% endblock %}
+		{% block js%}
 		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			function refuse_delay(id){
@@ -196,4 +201,4 @@
 				$('#approve_form').submit();
 			}
 		</script>
-		{% endblock %}
+		{% endblock%}

@@ -618,7 +618,18 @@ def delay(request):
     userid=request.session['id']
         
     delays=project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
-    return render_to_response('delay.html',{'delays':delays})
+
+    paginator = Paginator(delays, 1)
+    page = request.GET.get('page')
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+        #If page is not an integer, deliver first page.
+        projectobj = paginator.page(1)
+    except EmptyPage:
+        #If page is out of range (e.g. 9999), deliver last page of results.
+        projectobj = paginator.page(paginator.num_pages)
+    return render_to_response('delay.html',RequestContext(request, {'projectobj': projectobj}))
 
     
 
@@ -665,13 +676,25 @@ def historymessage(request):
     else:  # Get请求
         messages = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
         
+        paginator = Paginator(messages, 1)
+        page = request.GET.get('page')
+        try:
+            projectobj = paginator.page(page)
+        except PageNotAnInteger:
+        #If page is not an integer, deliver first page.
+            projectobj = paginator.page(1)
+        except EmptyPage:
+        #If page is out of range (e.g. 9999), deliver last page of results.
+            projectobj = paginator.page(paginator.num_pages)
 
-    return render_to_response('historymessage.html', locals())
+    return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
 
 
 def refuse(request):
     if request.method == 'POST':
+        print "111111111111111111111111111111111111111111111111111111111111111"
         form = TestForm(request.POST)
+        print form
         if form.is_valid():
             delayid = form.cleaned_data['delayid']
             reason = form.cleaned_data['reason']
@@ -680,16 +703,19 @@ def refuse(request):
             project_id = delay.project_id
             deltitle = delay.title
             string = deltitle+reason
-            delpro=project.objects.get(id=delayid)
-            uid=delpro.leader_p
-            pub_message=public_message(project_id=project_id,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),delay_status="已拒绝",isactived="1")
+            #delpro=project.objects.get(id=delayid)
+            if request.session['id']:
+
+                useid = request.session['id']
+                publisher = user.objects.get(id =useid )
+                pub_message=public_message(project_id=project_id,publisher=publisher,content=string,type_p="message",publication_date=datetime.datetime.now(),delay_status="已拒绝",isactived="1")
             #delay.reason = reason
             
-            delay.isactived = 0
-            delay.save();
-            pub_message.save();
-            related_user = models.user.objects.filter(project_user__project_id=project_id)
-            message=models.public_message.objects.filter(project__pk=project_id).order_by("-id")[0]            
+                delay.isactived = 0
+                delay.save();
+                pub_message.save();
+                related_user = models.user.objects.filter(project_user__project_id=project_id)
+                message=models.public_message.objects.filter(project__pk=project_id).order_by("-id")[0]            
             for i in related_user:
                 uid=i.id
                 megid=message.id
@@ -709,9 +735,11 @@ def approve(request):
             project_id = delay.project_id
             deltitle = delay.title
             string = deltitle
-            delpro=project.objects.get(id=delayid1)
-            uid=delpro.leader_p
-            pub_message=public_message(project_id=project_id,publisher=uid,content=string,type_p="notice",publication_date=datetime.datetime.now(),delay_status="已批准",isactived="1")
+            #delpro=project_delay.objects.get(id=delayid1)
+        if request.session['id']:
+            useid = request.session['id']
+            publisher = user.objects.get(id =useid )
+            pub_message=public_message(project_id=project_id,publisher=publisher,content=string,type_p="notice",publication_date=datetime.datetime.now(),delay_status="已批准",isactived="1")
             #delay.reason = reason
             
             delay.isactived = 1
