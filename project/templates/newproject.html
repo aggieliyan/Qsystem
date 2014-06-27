@@ -70,8 +70,8 @@
                 <label class="item-title"><span class="must">*</span>项目负责人：</label>
                 </div>
                 <input name="leader" style="display:none;" value={{res.user.id}}>
-                <input class="init0" name="designer" style="display:none;" value={{res.pro.designer_p_id}}>
-                <input class="init0" name="tester" style="display:none;" value={{res.pro.tester_p_id}}>                
+                <input class="init0" name="designer" style="display:none;" value={{res.pro.designer_p}}>
+                <input class="init0" name="tester" style="display:none;" value={{res.pro.tester_p}}>                
                 <select id="master"  class="inputfield" >
                 	<option select='selected'>{{res.user.realname}}</option>
                 </select>
@@ -105,7 +105,7 @@
                     <div class="p-list">
 						{% if res.reuser.pd.rel %}
                        		{% for item in res.reuser.pd.rel %}
-                       			{% if item.id == res.pro.designer_p_id %}
+                       			{% if item.id == res.pro.designer_p %}
                        				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
                        			{% else %}
                        				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro'><span>{{item.realname}}</span><span class="close">x</span></div>
@@ -130,7 +130,7 @@
                     <div id="testarea" class="p-list">
                        {% if res.reuser.qa.rel %}
                        		{% for item in res.reuser.qa.rel %}
-                       			{% if item.id == res.pro.tester_p_id %}
+                       			{% if item.id == res.pro.tester_p %}
                        				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
                        			{% else %}
                        				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa'><span>{{item.realname}}</span><span class="close">x</span></div>
