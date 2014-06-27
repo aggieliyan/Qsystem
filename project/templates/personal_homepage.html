@@ -86,7 +86,7 @@
               
               <table  id="customers">
                 <thead>
-                  {% if not result %}
+                  {% if not projectobj %}
                       <p style="text-align:center;">暂无相关项目</p>
                   {% else %}
                   <tr>
@@ -105,7 +105,7 @@
                 <thead>
                 <tbody id="group_one">
                   
-                      {% for res in result %}                                 
+                      {% for res in projectobj %}                                 
                   <tr>               
                     <td>{{res.priority}}</td>
                     <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
@@ -200,7 +200,7 @@
 <!--分页--> 
   <div class="pagination pagination-right">
     <ul>
-      <li class=""><a href="#" onclick="page.prePage();">&laquo;</a></li>
+      <li class=""><a href=href="" onclick="page.prePage();">&laquo;</a></li>
       <li class=""><a href="#">1</a></li>
       <li class=""><a href="#">2</a></li>
       <li class=""><a href="#">3</a></li>
@@ -209,6 +209,34 @@
       <li class=""><a href="#" onclick="page.nextPage();">&raquo;</a></li>
     </ul>
   </div>
+
+  <!--分页--> 
+  <div class="pagination pagination-right">
+    <ul>
+      <li class=""><a href="" onclick="page.prePage();">&laquo;</a></li>
+      {% for i in  projectobj %}
+      <li class=""><a href="?page={{ projectobj.number }}">{{ projectobj.number }}</a></li>
+      {% endfor %}
+      <li class=""><a href="#" onclick="page.nextPage();">&raquo;</a></li>
+    </ul>
+  </div>
+
+  <!--分页-->
+    <div class="pagination" style="text-align:right;margin-right:10px">
+    <span class="step-links"  >
+        {% if projectobj.has_previous %}
+            <a href="?page={{ projectobj.previous_page_number }}"> << </a>
+        {% endif %}
+
+        <span class="current">
+            第 {{ projectobj.number }} 页共 {{ projectobj.paginator.num_pages }}页
+        </span>
+
+        {% if projectobj.has_next %}
+            <a href="?page={{ projectobj.next_page_number }}"> >> </a>
+        {% endif %}
+    </span>
+    </div>
 
   <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">

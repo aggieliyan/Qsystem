@@ -402,7 +402,18 @@ def personal_homepage(request):
     projectlist = projectlist.filter(pk__in=projectids)    
     result=projectlist.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停')).order_by("-id")
     result1=projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停')).order_by("-id")
-    puser=project_user.objects.all()   
+    puser=project_user.objects.all()
+    #分页 
+    paginator = Paginator(result, 1)
+    page = request.GET.get('page')
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        projectobj = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        projectobj = paginator.page(paginator.num_pages)
     
     #userid = request.session['id']
     userid=request.session['id']
@@ -417,7 +428,7 @@ def personal_homepage(request):
     messages=messagess[:4]
    
     return render_to_response('personal_homepage.html',
-        {'projectlist':projectlist,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
 
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
