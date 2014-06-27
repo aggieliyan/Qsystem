@@ -539,7 +539,7 @@ def show_user(request):
     return render_to_response('sourcemanage.html',locals())
 
 @csrf_exempt
-def Insert_user(request,id):
+def Insert_user(request,id,id2):
     if request.session['username']:
         username=request.session['username']
         department_id=models.user.objects.get(username=username).department_id
@@ -553,7 +553,6 @@ def Insert_user(request,id):
         for item in depart:
             departdic[item.department] = item.id
         department_id = departdic[department]
-    print id
     if id=='1':
         realname=request.POST['level_1']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='1')
@@ -567,22 +566,22 @@ def Insert_user(request,id):
         realname=request.POST['level_1']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='5':
-        realname=request.POST['level_2']
+        realname=request.POST[id2]
         print realname
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='6':
-        realname=request.POST['level_3']
+        realname=request.POST[id2]
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='7':
         realname=request.POST['level_1']
         user=models.user.objects.get(department_id=department_id,realname=realname)
         user.delete()
     elif id=='8':
-        realname=request.POST['level_2']
+        realname=request.POST[id2]
         user=models.user.objects.get(department_id=department_id,realname=realname)
         user.delete()
-    elif id=='9':
-        realname=request.POST['level_3'] 
+    elif id=='9': 
+        realname=request.POST[id2]
         user=models.user.objects.get(department_id=department_id,realname=realname)
         user.delete()       
     return redirect('/show_user/')

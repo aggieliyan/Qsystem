@@ -50,7 +50,7 @@ urlpatterns = patterns('',
     url(r'^show_user/$',project.views.show_user),
     url(r'^nopermit/$',project.views.nopermit),
     url(r'^show_user2/$',project.views.show_user2),
-    url(r'^Insert_user/(\d+)/$',project.views.Insert_user),
+    url(r'^Insert_user/(\d+)/(\d+)/$',project.views.Insert_user),
     ('^detail/(\d+)/$',detail),
     url('^editproject/(\d+)/$', detail,name="editproject"),
 

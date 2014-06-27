@@ -116,7 +116,7 @@
 	
 		{% for level_2 in level_2_list %}
 		 	<div class="s2">
-				<select name="level_2" class="section2" id="sec2"  onchange="insert2()" >
+				<select name="{{level_2.id}}" class="section2" id="sec2"  onchange="insert2()" >
 				<option value="请选择">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1.realname}}" {% if level_1 == level_2 %} selected {% endif %}>{{level_1.realname}}</option>
@@ -124,8 +124,8 @@
 				</select>	
 
 				<button type="button" class="addsub ad2" id="add2" > </button>
-				<button type="button" class="minsub" id="min2" onclick="del_logic2()"> </button>
-				<button type="button" class="delsub" id="del1" onclick="del2()"> </button>
+				<button type="button" class="minsub" id="min2" onclick="del_logic2('{{level_2.id}}')"> </button>
+				<button type="button" class="delsub" id="del1" onclick="del2('{{level_2.id}}')"> </button>
 				
 		 	</div>
 		 	{% endfor %}
@@ -133,7 +133,7 @@
 	
 	    {% for level_3 in level_3_list %}
 			<div class="s3">
-				<select name="level_3" class="section3" id="sec3"  onchange="insert3()" >
+				<select name="{{level_3.id}}" class="section3" id="sec3"  onchange="insert3()" >
 				<option value="请选择">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1.realname}}" {% if level_1 == level_3 %} selected {% endif %}>{{level_1.realname}}</option>
@@ -141,8 +141,8 @@
 	
 				</select>		
 				<button type="button" class="addsub ad3" id="add3"  > </button>
-				<button type="button" class="minsub" id="min3"  onclick="del_logic3()"> </button>
-				<button type="button" class="delsub" id="del1"  onclick="del3()"> </button>
+				<button type="button" class="minsub" id="min3"  onclick="del_logic3('{{level_3.id}}')"> </button>
+				<button type="button" class="delsub" id="del1"  onclick="del3('{{level_3.id}}')"> </button>
 		
 			</div>
 			{% endfor %}
@@ -169,18 +169,18 @@ document.form.submit()
 //增加人员
 function insert1()
 {
-document.form.action="/Insert_user/1/"
+document.form.action="/Insert_user/1/0/"
 document.form.submit()
 }
 function insert2()
 {
-document.form.action="/Insert_user/2/"
+document.form.action="/Insert_user/2/0/"
 document.form.submit()
 }
  
 function insert3()
 {
-document.form.action="/Insert_user/3/"
+document.form.action="/Insert_user/3/0/"
 document.form.submit()
 }
 
@@ -192,20 +192,20 @@ if(l1.value == '请选择'){
 alert('请选择要求删除的人员'); 
 }
 else{
-document.form.action="/Insert_user/4/";
+document.form.action="/Insert_user/4/0/";
 document.form.submit();
 }
 }
 
-function del_logic2()
+function del_logic2(id)
 {
-document.form.action="/Insert_user/5/"
+document.form.action="/Insert_user/5/"+id+"/"
 document.form.submit()
 }
 
-function del_logic3()
+function del_logic3(id)
 {
-document.form.action="/Insert_user/6/"
+document.form.action="/Insert_user/6/"+id+"/"
 document.form.submit()
 }
 
@@ -216,7 +216,7 @@ if(l1.value == '请选择'){
 alert('请选择要求删除的人员'); 
 }
 else{
-document.form.action="/Insert_user/5/"
+document.form.action="/Insert_user/5/0/"
 document.form.submit()
 }
 }
@@ -228,7 +228,7 @@ if(l1.value == '请选择'){
 alert('请选择要求删除的人员'); 
 }
 else{
-document.form.action="/Insert_user/6/"
+document.form.action="/Insert_user/6/0/"
 document.form.submit()
 }
 }
@@ -239,29 +239,30 @@ if (!confirm("确认要删除？")) {
             window.event.returnValue = false; 
         } 
 else{
-document.form.action="/Insert_user/7/"
+document.form.action="/Insert_user/7/0/"
 document.form.submit()
 }
 }
 
-function del2()
+function del2(id)
 {
   if (!confirm("确认要删除？")) { 
             window.event.returnValue = false; 
         } 
 else{
-document.form.action="/Insert_user/8/"
+document.form.action="/Insert_user/8/"+id+"/"
 document.form.submit()
 }
 } 
 
-function del3()
+function del3(id)
 {
+
 if (!confirm("确认要删除？")) { 
             window.event.returnValue = false; 
         } 
 else{
-document.form.action="/Insert_user/9/"
+document.form.action="/Insert_user/9/"+id+"/"
 document.form.submit()
 }
 }
