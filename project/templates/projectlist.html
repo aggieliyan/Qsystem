@@ -47,12 +47,11 @@
 		</div>
 		<div style="width:800px" class="notice_content">
 		
-		{% for item in notices %}
+	{% for item in notices %}
       
-        <p><a href="/notice/" >{{item.content}}</a></p>
+        <p><a href="/notice/" target="_blank" style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;">{{item.content}}</a></p>
     
-        {% endfor %}
-			
+        {% endfor %}	
 		</div>
 		{% if count > 5 %}
 		<div style="position:absolute;right:10px;bottom:0">
