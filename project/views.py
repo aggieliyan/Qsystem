@@ -620,13 +620,23 @@ def notice(request):
         wds = request.POST
         try:
             wd = wds['wd']
-            notices = public_message.objects.filter(content__icontains=wd).filter(type_p ="notice").order_by('publication_date')
+            notices = public_message.objects.filter(content__icontains=wd).filter(type_p ="notice").order_by("-id")
         except Exception as e:
-            notices = public_message.objects.filter(type_p ="notice").order_by('publication_date')
+            notices = public_message.objects.filter(type_p ="notice").order_by("-id")
     else:  # Get请求
-        notices = public_message.objects.filter(type_p ="notice").order_by('publication_date')
+        notices = public_message.objects.filter(type_p ="notice").order_by("-id")
     
-    return render_to_response('notice.html', locals())
+        paginator = Paginator(notices, 1)
+        page = request.GET.get('page')
+        try:
+            projectobj = paginator.page(page)
+        except PageNotAnInteger:
+        #If page is not an integer, deliver first page.
+            projectobj = paginator.page(1)
+        except EmptyPage:
+        #If page is out of range (e.g. 9999), deliver last page of results.
+            projectobj = paginator.page(paginator.num_pages)
+    return render_to_response('notice.html', RequestContext(request, {'projectobj': projectobj}))
 
 @csrf_exempt
 

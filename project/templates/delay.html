@@ -38,9 +38,9 @@
 		<table class="table table-striped">
 
 
-			<col width="50%" />
-			<col width="25%" />
-			<col width="25%" />
+			<col width="60%" />
+			<col width="20%" />
+			<col width="20%" />
 
 			<thead>
 				<tr>
@@ -51,13 +51,13 @@
 			</thead>
 			<tbody>
 
-		{% for delay in delays %}
+		        {% for delay in delays %}
 				{% if forloop.counter|divisibleby:"20" %}
 				<tr class="low1">
 				{% else %}	
 				<tr class="low2">
 				{% endif %}	
-					<td class="col1" word-wrap="break-all";>&nbsp;{{delay.title}}&nbsp;延期至{{delay.delay_to_date}}</td>
+					<td class="col1" word-wrap="break-all";>&nbsp;{{delay.title}}申请延期，&nbsp;延期至{{delay.delay_to_date}}&nbsp;延期理由：{{delay.reason}}</td>
 					<td>{{delay.apply_date}}</td>
 					<td>
 						<button style="margin:5px" data-toggle="modal"

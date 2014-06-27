@@ -66,10 +66,10 @@
 		<table class="table table-striped">
 
 
-			<col width="40%" />
-			<col width="20%" />
-			<col width="20%" />
-			<col width="20%" />
+			<col width="70%" />
+			<col width="15%" />
+			<col width="15%" />
+			
 
 			<thead>
 				<tr>
@@ -83,7 +83,7 @@
 			</thead>
 			<tbody>
 				
-				{% for notice in notices %}
+				{% for notice in projectobj %}
 				 {% if forloop.counter|divisibleby:"20"%}
 				<tr class="low1">
 				{% else %}
@@ -107,17 +107,24 @@
 
 		</table>
 	</div>
-	<div class="pagination " style="float:right">
-		<ul>
-			<li class=""><a href="#" onClick="page.prePage();">&laquo;</a></li>
-			<li class=""><a href="#">1</a></li>
-			<li class=""><a href="#">2</a></li>
-			<li class=""><a href="#">3</a></li>
-			<li class=""><a href="#">4</a></li>
-			<li class=""><a href="#">5</a></li>
-			<li class=""><a href="#" onClick="page.nextPage();">&raquo;</a></li>
-		</ul>
-	</div>
+	<!--分页-->
+    <div class="pagination" style="text-align:right;margin-right:10px">
+    <span class="step-links"  >
+        {% if projectobj.has_previous %}
+            <a href="?page={{ projectobj.previous_page_number }}"> << </a>
+        {% endif %}
+
+        <span class="current">
+            第 {{ projectobj.number }} 页共 {{ projectobj.paginator.num_pages }}页
+        </span>
+
+        {% if projectobj.has_next %}
+            <a href="?page={{ projectobj.next_page_number }}"> >> </a>
+        {% endif %}
+    </span>
+    </div>
+
+
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
