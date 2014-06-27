@@ -648,27 +648,11 @@ def refuse(request):
             delayid = form.cleaned_data['delayid']
             reason = form.cleaned_data['reason']
             delay = project_delay.objects.get(id=delayid)
-            publisher_id = delay.application_id
-            project_id = delay.project_id
-            deltitle = delay.title
-            string = deltitle+reason
-            delpro=project.objects.get(id=delayid)
-            uid=delpro.leader_p
-            pub_message=public_message(project_id=project_id,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),delay_status="已拒绝",isactived="1")
-            #delay.reason = reason
-            
-            delay.isactived = 0
+            delay.reason = reason
+            delay.isactived = False
             delay.save();
-            pub_message.save();
-            related_user = models.user.objects.filter(project_user__project_id=project_id)
-            message=models.public_message.objects.filter(project__pk=project_id).order_by("-id")[0]            
-            for i in related_user:
-                uid=i.id
-                megid=message.id
-                pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=project_id,isactived='1')
-                pro_u_message.save()  
     delays = project_delay.objects.filter(isactived=True)
-    return HttpResponseRedirect('/delay/', {'delays':delays})
+    return render_to_response('delay.html', {'delays':delays})
 
 
 def approve(request):
@@ -677,23 +661,11 @@ def approve(request):
         if form.is_valid():
             delayid1 = form.cleaned_data['delayid1']
             delay = project_delay.objects.get(id=delayid1)
-            publisher_id = delay.application_id
-            project_id = delay.project_id
-            deltitle = delay.title
-            string = deltitle
-            delpro=project.objects.get(id=delayid1)
-            uid=delpro.leader_p
-            pub_message=public_message(project_id=project_id,publisher=uid,content=string,type_p="notice",publication_date=datetime.datetime.now(),delay_status="已批准",isactived="1")
-            #delay.reason = reason
-            
-            delay.isactived = 1
+            delay.isactived = True
             delay.save();
-            pub_message.save();
-            
     raw_sql = 'select * from project_project_delay where isactived is null'
     delays = project_delay.objects.raw(raw_sql)
-    return HttpResponseRedirect('/delay/', {'delays':delays})
-
+    return render_to_response('delay.html', {'delays':delays})
 
 
 def deletehistory(request):  
