@@ -585,6 +585,7 @@ def show_user(request):
                 department_id = departdic[department]
         else:
             department_id=department_id
+        #lkakaka
         level_list=models.user.objects.filter(department_id=department_id)
         level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
         level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
