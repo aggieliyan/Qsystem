@@ -142,11 +142,11 @@ def new_project(request,pid = ''):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
     #编辑的得有编辑权限
-    if pid and not request.user.has_perm('project.change_project'):
-        return HttpResponseRedirect("/noperm")
+    #if pid and not request.user.has_perm('project.change_project'):
+    #    return HttpResponseRedirect("/noperm")
     #新建的得有新建权限
-    if not pid and not request.user.has_perm('project.add_project'):
-        return HttpResponseRedirect("/noperm")
+    #if not pid and not request.user.has_perm('project.add_project'):
+    #    return HttpResponseRedirect("/noperm")
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
