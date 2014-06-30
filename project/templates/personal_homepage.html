@@ -214,7 +214,7 @@
   <div class="pagination pagination-right">
     <ul>
       <li class=""><a href="" onclick="page.prePage();">&laquo;</a></li>
-      {% for i in  projectobj %}
+      {% for i in result %}
       <li class=""><a href="?page={{ projectobj.number }}">{{ projectobj.number }}</a></li>
       {% endfor %}
       <li class=""><a href="#" onclick="page.nextPage();">&raquo;</a></li>
@@ -264,9 +264,9 @@
     </div>
     <div class="span9">
      
-       <div> <input name="content" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" > 
+       <div> <textarea  name="content" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" ></textarea> 
        </div>
-     <div> <input name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 10px;" > 
+     <div> <textarea name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 0px;" ></textarea> 
      </div>
      <input id="changeid" name="changeid" type="hidden">       
     </div>

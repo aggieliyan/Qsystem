@@ -385,11 +385,10 @@ def show_headname(request):
 
 #homepage部分views
 def personal_homepage(request):
-    #try:
-       # request.session['username']
-    #except KeyError:
-        #return HttpResponseRedirect("/nologin")
-
+    try:
+        request.session['username']
+    except KeyError:
+        return HttpResponseRedirect("/nologin")
 
     projectlist = project.objects.filter()
     #print projectlist
@@ -472,6 +471,7 @@ def changedesign(request,url):
             dpath = form.cleaned_data['dpath']
             chd=project.objects.get(id=changeid)
             uid=chd.leader_p
+
             #chd.blueprint_p=dpath
             #chd.save()
             string=content+dpath
