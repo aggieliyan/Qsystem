@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     url(r'^showperson', project.views.show_person),
     url(r'^projectlist/', project.views.project_list),
     url(r'^psearch', project.views.psearch),
-    url(r'^detail/(\d+)/$', detail,name="prodetail"),
+    url(r'^detail/(\d+)/$', project.views.detail,name="prodetail"),
     url(r'^showuser', project.views.show_headname),
     #homepage url added 'p' is projectlist's url
     url(r'^personal_homepage/$', project.views.personal_homepage,name="homepage"),
