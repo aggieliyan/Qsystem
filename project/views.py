@@ -754,8 +754,7 @@ def refuse(request):
             if request.session['id']:
 
                 useid = request.session['id']
-                publisher = user.objects.get(id =useid )
-                pub_message=public_message(project=project_id,publisher=publisher,content=string,type_p="message",publication_date=datetime.datetime.now(),delay_status="已拒绝",isactived="1")
+                pub_message=public_message(project=project_id,publisher=useid,content=string,type_p="message",publication_date=datetime.datetime.now(),delay_status="已拒绝",isactived="1")
             #delay.reason = reason
             
                 delay.isactived = 0
@@ -787,8 +786,7 @@ def approve(request):
             #delpro=project_delay.objects.get(id=delayid1)
         if request.session['id']:
             useid = request.session['id']
-            publisher = user.objects.get(id =useid )
-            pub_message=public_message(project=project_id,publisher=publisher,content=string,type_p="notice",publication_date=datetime.datetime.now(),delay_status="已批准",isactived="1")
+            pub_message=public_message(project=project_id,publisher=useid,content=string,type_p="notice",publication_date=datetime.datetime.now(),delay_status="已批准",isactived="1")
             #delay.reason = reason
             
             delay.isactived = 1
