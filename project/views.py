@@ -424,9 +424,11 @@ def personal_homepage(request):
     i=0
     tests= project_user_message.objects.filter(userid_id=userid)
     lists=[]
+    messagess=[]
     for test in tests:
         lists.append(test.messageid_id)
         messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')
+  
     for item in messagess:
         i=i+1 
     count=i
