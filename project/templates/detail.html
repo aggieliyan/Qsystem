@@ -50,7 +50,11 @@
 						<li><p>测试: {{res.dt.ttime}}天    ({{res.pro.estimated_test_start_date|date:"Y-m-d"}}至{{res.pro.estimated_test_end_date|date:"Y-m-d"}})</p></li>
 						{% if res.reuser.pd.rel %}
 							<li><p>{% for item in res.reuser.pd.rel %}
-                       				{{item.realname}}&nbsp;&nbsp;
+                       					{% if item.id == res.pro.designer_p %}
+                       						<b>{{item.realname}}</b>&nbsp;&nbsp;
+                       					{% else %}
+                       						{{item.realname}}&nbsp;&nbsp;
+                       					{% endif %}
                        			{% endfor %}</p></li>
                        	{% else %}
                        		<li><p>&nbsp;</p></li>
@@ -64,7 +68,11 @@
                        	{% endif %}
 						{% if res.reuser.qa.rel %}
 							<li><p>{% for item in res.reuser.qa.rel %}
-                       				{{item.realname}}&nbsp;&nbsp;
+										{% if item.id == res.pro.tester_p %}
+                       						<b>{{item.realname}}</b>&nbsp;&nbsp;
+                       					{% else %}
+                       						{{item.realname}}&nbsp;&nbsp;
+                       					{% endif %}
                        			{% endfor %}</p></li>
                        	{% else %}
                        		<li><p>&nbsp;</p></li>

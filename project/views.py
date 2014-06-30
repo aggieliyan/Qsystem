@@ -205,7 +205,39 @@ def new_project(request,pid = ''):
             if tester:
                 tusername = models.user.objects.get(id=form.cleaned_data['tester']).username
                 User.objects.get(username=tusername).user_permissions.add(26)              
-
+            
+            #上线后发一条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
+            if status == "已上线":
+                prolist = models.public_message.objects.filter(project=pid).order_by("isactived")
+                try:
+                    prolist[0].isactived
+                except IndexError:
+                    try:
+                        request.session['id']
+                    except KeyError:
+                        return HttpResponseRedirect("/nologin")
+                    else:
+                        usrid = request.session['id']
+                        projectname = models.project.objects.get(id=pid).project
+                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                        content = projectname + u"于"+time+u"已上线"
+                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(), isactived=False)
+                        pmessage.save()
+                else:
+                    if prolist[0].isactived != 0:
+                        try:
+                            request.session['id']
+                        except KeyError:
+                            return HttpResponseRedirect("/nologin")
+                        else:
+                            usrid = request.session['id']
+                            print usrid
+                        projectname = models.project.objects.get(id=pid).project
+                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                        content = projectname + u"于"+time+u"已上线"
+                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),isactived=False)
+                        pmessage.save()
+                    
             return redirect('/projectlist/')
 
     return render_to_response('newproject.html', {'form':form}, context_instance=RequestContext(request))
@@ -555,6 +587,7 @@ def show_user(request):
                 department_id = departdic[department]
         else:
             department_id=department_id
+        #lkakaka
         level_list=models.user.objects.filter(department_id=department_id)
         level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
         level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
