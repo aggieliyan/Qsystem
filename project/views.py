@@ -590,7 +590,7 @@ def Insert_user(request,id,id2):
         realname=request.POST['level_1']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='5':
-        realname=request.POST[id2]
+        realname=request.POST[id2].encode('utf-8')
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='6':
         realname=request.POST[id2]
