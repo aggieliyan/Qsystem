@@ -584,17 +584,22 @@ def Insert_user(request,id,id2):
         realname=request.POST['level_2a']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
     elif id=='3':
+        print "333333"
         realname=request.POST['level_3a'].encode('utf-8')
+        print type(realname)
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
     elif id=='4':
         realname=request.POST['level_1']
+        print "44444"
         print type(realname)
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='5':
         realname=request.POST[id2]
+        print "555555"
         print type(realname)
         user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='6':
+        print "66666"
         realname=request.POST[id2]
         print type(realname)
         user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
