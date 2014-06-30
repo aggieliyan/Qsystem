@@ -749,7 +749,7 @@ def refuse(request):
             publisher_id = delay.application_id
             project_id = delay.project_id
             deltitle = delay.title
-            string = deltitle+u"被拒绝，理由"+reason
+            string = deltitle+u"申请延期被拒绝，理由"+reason
             #delpro=project.objects.get(id=delayid)
             if request.session['id']:
 
