@@ -812,7 +812,7 @@ def deletehistory(request):
     for test in tests:
         lists.append(test.messageid_id)
     messages  = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
-    return render_to_response('historymessage.html', locals())
+    return HttpResponseRedirect('/historymessage/')
         
          
   
@@ -831,5 +831,5 @@ def deletenotice(request):
     for test in tests:
         lists.append(test.messageid_id)
     notices = public_message.objects.filter(pk__in=lists).filter(type_p = "notice").order_by('publication_date')
-    return render_to_response('notice.html', locals())
+    return HttpResponseRedirect('/notice/')
     
