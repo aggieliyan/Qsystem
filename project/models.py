@@ -45,8 +45,10 @@ class project_user(models.Model):
     isactived = models.BooleanField(max_length=1)
     
 class public_message(models.Model): 
-    project = models.IntegerField()  
-    publisher=models.IntegerField() 
+    #project = models.IntegerField()  
+    #publisher=models.IntegerField()
+    project = models.ForeignKey(project)  
+    publisher=models.ForeignKey(user 
     content=models.CharField(u'公告内容',max_length=200)
     CHOICES = (  
         (u'notice',u'notice'),
