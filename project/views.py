@@ -16,6 +16,7 @@ from project.models import *
 import math
 import models
 import hashlib
+import time
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -696,7 +697,7 @@ def historymessage(request):
 
 def refuse(request):
     if request.method == 'POST':
-        print "111111111111111111111111111111111111111111111111111111111111111"
+        
         form = TestForm(request.POST)
         print form
         if form.is_valid():
@@ -706,7 +707,7 @@ def refuse(request):
             publisher_id = delay.application_id
             project_id = delay.project_id
             deltitle = delay.title
-            string = deltitle+reason
+            string = deltitle+u"被拒绝，理由"+reason
             #delpro=project.objects.get(id=delayid)
             if request.session['id']:
 
@@ -738,7 +739,9 @@ def approve(request):
             publisher_id = delay.application_id
             project_id = delay.project_id
             deltitle = delay.title
-            string = deltitle
+            aa=delay.delay_to_date
+            del_to_date = str(aa)
+            string = deltitle+u"延期至："+del_to_date
             #delpro=project_delay.objects.get(id=delayid1)
         if request.session['id']:
             useid = request.session['id']
