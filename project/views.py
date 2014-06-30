@@ -593,24 +593,23 @@ def Insert_user(request,id,id2):
     elif id=='5':
         realname=request.POST[id2]
         print type(realname)
-        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+        user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='6':
         realname=request.POST[id2]
         print type(realname)
-        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+        user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='7':
         realname=request.POST['level_1']
         user=models.user.objects.get(department_id=department_id,realname=realname)
         user.delete()
     elif id=='8':
-        realname=request.POST[id2]
-        user=models.user.objects.get(department_id=department_id,realname=realname)
+        user=models.user.objects.get(department_id=department_id,id=id2)
         user.delete()
     elif id=='9': 
-        realname=request.POST[id2]
-        user=models.user.objects.get(department_id=department_id,realname=realname)
+        user=models.user.objects.get(department_id=department_id,id=id2)
         user.delete()       
     return redirect('/show_user/')
+
 
 def delay(request):
 
