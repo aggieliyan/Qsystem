@@ -585,7 +585,6 @@ def Insert_user(request,id,id2):
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='5':
         realname=request.POST[id2]
-        print realname
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='6':
         realname=request.POST[id2]
