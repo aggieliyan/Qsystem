@@ -761,7 +761,7 @@ def refuse(request):
                 delay.save();
                 pub_message.save();
                 related_user = models.user.objects.filter(project_user__project_id=project_id)
-                message=models.public_message.objects.filter(project__pk=project_id).order_by("-id")[0]            
+                message=models.public_message.objects.filter(project=project_id).order_by("-id")[0]            
             for i in related_user:
                 uid=i.id
                 megid=message.id
