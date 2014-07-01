@@ -114,7 +114,8 @@ $(document).ready(function(){
     //点添加，弹出人员选择框展示数据
     $(".roles .btn-success").click(function(){      
       $("#select").modal("show");
-
+      $("#skey").attr("value","");
+      $(".all input").removeAttr("checked");
       var roles = $(this).attr("name"); 
       $("#psearch").attr("value",roles)
       var p = $("[title='1']");
