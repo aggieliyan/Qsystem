@@ -89,8 +89,6 @@ class ProjectSearchForm(forms.Form):
 class TestForm(forms.Form):
 	delayid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
 	reason = forms.CharField(required=False)
-	#content = forms.CharField(required=True,error_messages={'required': u'拒绝理由不能为空'})
-
 
 class ProusermessForm(forms.Form):
 	usermessageid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
