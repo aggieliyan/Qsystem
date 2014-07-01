@@ -688,6 +688,7 @@ def notice(request):
 @csrf_exempt
 
 def historymessage(request):
+    global projectobj
     # 查询与用户相关的消息
     if request.session['id']:
         useid = request.session['id']
