@@ -230,7 +230,6 @@ def new_project(request,pid = ''):
                             return HttpResponseRedirect("/nologin")
                         else:
                             usrid = request.session['id']
-                            print usrid
                         projectname = models.project.objects.get(id=pid).project
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
                         content = projectname + u"于"+time+u"已上线"
@@ -270,7 +269,6 @@ def project_list(request):
     status_p=""
     leader_p=""
     project_user_list=None
-    print request.method
     puser=project_user.objects.all()
     #projectlist = project.objects.all()
     if request.method == 'POST':
@@ -281,12 +279,9 @@ def project_list(request):
             end_date_s = search_form.cleaned_data['end_date_s']
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
-           
-            print project_name,start_date_s,end_date_s,status_p,leader_p
+
             projectlist = project.objects.filter().order_by("-id")
             
-            
-            print projectlist
             if not isNone(project_name):
                 projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-id")
             if not isNone(start_date_s):
@@ -301,7 +296,7 @@ def project_list(request):
                 projectids = []
                 for p in project_user_list:
                     projectids.append(p.project.id)
-                print projectids
+
                 projectlist = projectlist.filter(pk__in=projectids).order_by("-id")
 
     else:
@@ -427,7 +422,7 @@ def personal_homepage(request):
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
-    print projectids
+
     projectlist = projectlist.filter(pk__in=projectids)    
     result=projectlist.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停')).order_by("-id")
     result1=projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停')).order_by("-id")
@@ -523,7 +518,7 @@ def judge(request):
         if request.session['username']:
             username=request.session['username']
         Position_level=models.user.objects.get(username=username).Position_level
-        print Position_level
+
         if Position_level=='1':
             return redirect('/show_user/')
         else:
@@ -727,7 +722,6 @@ def refuse(request):
     if request.method == 'POST':
         
         form = TestForm(request.POST)
-        print form
         if form.is_valid():
             delayid = form.cleaned_data['delayid']
             reason = form.cleaned_data['reason']
@@ -810,7 +804,6 @@ def deletenotice(request):
         if form.is_valid():
             noticeid = form.cleaned_data['noticeid'] 
             usernotice= project_user_message.objects.get(userid_id=useid,messageid_id=noticeid)
-            print usernotice.messageid_id
             usernotice.delete();
     tests= project_user_message.objects.filter(userid_id=useid)
     lists=[]
