@@ -634,7 +634,7 @@ def Insert_user(request,id,id2):
 
 
 def delay(request):
-
+    global projectobj
     if not request.session['id']:
         return HttpResponseRedirect("/nologin")
     
@@ -663,6 +663,7 @@ def delay(request):
     
 
 def notice(request):
+    global projectobj
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
