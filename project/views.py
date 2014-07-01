@@ -247,7 +247,7 @@ def new_project(request,pid = ''):
     
 
 def project_list(request):
-    
+	
     noticess=public_message.objects.filter(isactived='1',type_p='notice').order_by('-id')
     count=len(noticess)
     notices=noticess[:5]
@@ -263,9 +263,9 @@ def project_list(request):
     elif count == 4:
         a = 0
     else:
-        a = len(noticess)-5  
-        
-          	
+        a = len(noticess)-5    	
+	
+
     projectlist = None
     puser=None
     project_name=""
@@ -639,7 +639,7 @@ def Insert_user(request,id,id2):
 
 
 def delay(request):
-    global projectobj
+
     if not request.session['id']:
         return HttpResponseRedirect("/nologin")
     
@@ -668,12 +668,12 @@ def delay(request):
     
 
 def notice(request):
-    global projectobj
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
             wd = wds['wd']
             notices = public_message.objects.filter(content__icontains=wd).filter(type_p ="notice").order_by("-id")
+            
         except Exception as e:
             notices = public_message.objects.filter(type_p ="notice").order_by("-id")
     else:  # Get请求
@@ -694,7 +694,6 @@ def notice(request):
 @csrf_exempt
 
 def historymessage(request):
-    global projectobj
     # 查询与用户相关的消息
     if request.session['id']:
         useid = request.session['id']
