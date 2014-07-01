@@ -776,7 +776,7 @@ def approve(request):
             
     raw_sql = 'select * from project_project_delay where isactived is null'
     delays = project_delay.objects.raw(raw_sql)
-    return HttpResponseRedirect('/delay/', {'delays':delays})
+    return HttpResponseRedirect('/delay/')
 
 
 def deletehistory(request):  
