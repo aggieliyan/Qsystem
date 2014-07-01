@@ -585,9 +585,9 @@ def show_user(request):
                 for item in depart:
                     departdic[item.department] = item.id
                 department_id = departdic[department]
+        
         else:
             department_id=department_id
-        #lkakaka
         level_list=models.user.objects.filter(department_id=department_id)
         level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
         level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
@@ -619,24 +619,14 @@ def Insert_user(request,id,id2):
         realname=request.POST['level_2a']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
     elif id=='3':
-        print "333333"
-        realname=request.POST['level_3a'].encode('utf-8')
-        print type(realname)
+        realname=request.POST['level_3a']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
     elif id=='4':
         realname=request.POST['level_1']
-        print "44444"
-        print type(realname)
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='5':
-        realname=request.POST[id2]
-        print "555555"
-        print type(realname)
         user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='6':
-        print "66666"
-        realname=request.POST[id2]
-        print type(realname)
         user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='7':
         realname=request.POST['level_1']
