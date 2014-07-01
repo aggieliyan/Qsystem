@@ -452,7 +452,7 @@ def personal_homepage(request):
     j=0
     if request.user.has_perm('project.change_project_delay'):
         j=1
-    #messagess=public_message.objects.raw('select a.id,a.content,a.isactived,a.project_id,a.publication_date,a.publisher_id,a.type_p from project_public_message as a,project_project_user as  b WHERE  a.project_id=b.project_id and a.isactived=1 and a.type_p=\'message\' and b.username_id=%s ORDER BY a.id desc',[userid])
+    
     i=0
     tests= project_user_message.objects.filter(userid_id=userid)
     lists=[]
