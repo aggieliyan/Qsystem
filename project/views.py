@@ -392,12 +392,24 @@ def show_person(request):
     
 def psearch(request):
     key = request.GET['key']
-    prs = models.user.objects.filter(realname__contains=key)
-    rs = []
+    role = request.GET['role']
+    if role == "tes":
+        key = 1
+    elif role == "dev":
+        ptype = 2
+    elif role == "pro":
+        ptype = 3
+    else:
+        ptype = 0
+    prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived =1)
+    rs =[]
     if len(prs) > 0:
         for item in prs:
             dic = {'id':item.id, 'realname':item.realname}
             rs.append(dic)
+        rrs = {"person":rs}
+        rs = json.dumps(rrs)
+    else:
         rrs = {"person":rs}
         rs = json.dumps(rrs)
     return HttpResponse(rs)

@@ -188,10 +188,13 @@ $(document).ready(function(){
 
    //选择人员框里搜索
   $("#psearch").click(function(){
-      var skey = $("#skey").val();
+      var skey = $("#skey").val();//
+      var role = $("[title='1']").prev("button").attr("name");
+
       if(skey.length >0){
         url = "/psearch"
-        para = "key="+skey
+        para = {"key":skey, "role":role}
+        //"key="+skey
         $.get(url, para, function(data){
           var person = eval('('+data+')');
           person = person.person;
@@ -242,9 +245,7 @@ $(document).ready(function(){
           var diff = etime - stime; 
           var days = diff/1000/60/60/24 + 1;
           $(this).parent().siblings('div').children('span').text(days);
-          }
+        }
 
-        //}
     });
-
 });
