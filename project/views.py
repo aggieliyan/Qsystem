@@ -452,7 +452,7 @@ def personal_homepage(request):
     j=0
     if request.user.has_perm('project.change_project_delay'):
         j=1
-    #messagess=public_message.objects.raw('select a.id,a.content,a.isactived,a.project_id,a.publication_date,a.publisher_id,a.type_p from project_public_message as a,project_project_user as  b WHERE  a.project_id=b.project_id and a.isactived=1 and a.type_p=\'message\' and b.username_id=%s ORDER BY a.id desc',[userid])
+    
     i=0
     tests= project_user_message.objects.filter(userid_id=userid)
     lists=[]
@@ -585,9 +585,9 @@ def show_user(request):
                 for item in depart:
                     departdic[item.department] = item.id
                 department_id = departdic[department]
+        
         else:
             department_id=department_id
-        #lkakaka
         level_list=models.user.objects.filter(department_id=department_id)
         level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
         level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
@@ -619,24 +619,14 @@ def Insert_user(request,id,id2):
         realname=request.POST['level_2a']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
     elif id=='3':
-        print "333333"
-        realname=request.POST['level_3a'].encode('utf-8')
-        print type(realname)
+        realname=request.POST['level_3a']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
     elif id=='4':
         realname=request.POST['level_1']
-        print "44444"
-        print type(realname)
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='5':
-        realname=request.POST[id2]
-        print "555555"
-        print type(realname)
         user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='6':
-        print "66666"
-        realname=request.POST[id2]
-        print type(realname)
         user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='7':
         realname=request.POST['level_1']
