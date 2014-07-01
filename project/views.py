@@ -652,7 +652,7 @@ def delay(request):
     userid=request.session['id']
         
     delays=project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
-
+    global  projectobj
     paginator = Paginator(delays, 20)
     page = request.GET.get('page')
     try:
@@ -678,17 +678,17 @@ def notice(request):
             notices = public_message.objects.filter(type_p ="notice").order_by("-id")
     else:  # Get请求
         notices = public_message.objects.filter(type_p ="notice").order_by("-id")
-    
-        paginator = Paginator(notices, 20)
-        page = request.GET.get('page')
-        try:
-            projectobj = paginator.page(page)
-        except PageNotAnInteger:
-        #If page is not an integer, deliver first page.
-            projectobj = paginator.page(1)
-        except EmptyPage:
-        #If page is out of range (e.g. 9999), deliver last page of results.
-            projectobj = paginator.page(paginator.num_pages)
+    global  projectobj
+    paginator = Paginator(notices, 20)
+    page = request.GET.get('page')
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+    #If page is not an integer, deliver first page.
+        projectobj = paginator.page(1)
+    except EmptyPage:
+    #If page is out of range (e.g. 9999), deliver last page of results.
+        projectobj = paginator.page(paginator.num_pages)
     return render_to_response('notice.html', RequestContext(request, {'projectobj': projectobj}))
 
 @csrf_exempt
@@ -710,17 +710,17 @@ def historymessage(request):
             messages = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
     else:  # Get请求
         messages = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
-        
-        paginator = Paginator(messages, 20)
-        page = request.GET.get('page')
-        try:
-            projectobj = paginator.page(page)
-        except PageNotAnInteger:
-        #If page is not an integer, deliver first page.
-            projectobj = paginator.page(1)
-        except EmptyPage:
-        #If page is out of range (e.g. 9999), deliver last page of results.
-            projectobj = paginator.page(paginator.num_pages)
+    global  projectobj
+    paginator = Paginator(messages, 20)
+    page = request.GET.get('page')
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+    #If page is not an integer, deliver first page.
+        projectobj = paginator.page(1)
+    except EmptyPage:
+    #If page is out of range (e.g. 9999), deliver last page of results.
+         projectobj = paginator.page(paginator.num_pages)
 
     return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
 
