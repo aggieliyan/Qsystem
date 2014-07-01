@@ -92,7 +92,11 @@
 
 					<td class="col1">&nbsp;{{message.content}}</td>
 					<td>{{message.publication_date}}</td>
+					{% if message.delay_status %}
 					<td class="states_yes">{{message.delay_status}}</td>
+					{% else %}
+					<td class="states_yes"></td>
+					{% endif %}
 					<td>
 						<button class="btn btn-danger " type="button" data-toggle="modal"
 							onclick="delete_mes({{message.id}})">删除</button>
