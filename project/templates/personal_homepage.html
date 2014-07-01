@@ -273,6 +273,9 @@
   </div>
 </div>
     </div>
+    {% for field in form %}    
+                {{ field.errors }}          
+              {% endfor %}
       <div class="modal-footer">
         <div align="center">
           <button type="submit" class="btn mybtn-success" >确定</button>
