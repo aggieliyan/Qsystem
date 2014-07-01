@@ -505,15 +505,14 @@ def changedesign(request,url):
             content = form.cleaned_data['content']
             dpath = form.cleaned_data['dpath']
             chd=project.objects.get(id=changeid)
-            uid=chd.leader_p
-
+            uid=chd.leader_p_id
             #chd.blueprint_p=dpath
             #chd.save()
             string=content+dpath
-            pub_message=public_message(project_id=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
             pub_message.save()
             related_user = models.user.objects.filter(project_user__project_id=changeid)
-            message=models.public_message.objects.filter(project__pk=changeid).order_by("-id")[0]            
+            message=models.public_message.objects.filter(project=changeid).order_by("-id")[0]            
             for i in related_user:
                 uid=i.id
                 megid=message.id
