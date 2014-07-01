@@ -91,13 +91,19 @@
 
 					<td class="col1">&nbsp;{{notice.content}}延期至：</td>
 					<td>{{notice.publication_date}}</td>
+					{% if notice.delay_status %}
 					<td class="states_yes">{{notice.delay_status}}</td>
+					{% else %}
+					<td class="states_yes"></td>
+					{% endif %}
+
 					<!--
 					<td>
 						<button class="btn btn-danger " type="button" data-toggle="modal"
 							onclick="delete_notice({{notice.id}})">删除</button>
 					</td>
 					-->
+
 				</tr>
 
 				</tr>
