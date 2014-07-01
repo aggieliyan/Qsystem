@@ -218,11 +218,13 @@ def new_project(request,pid = ''):
                         return HttpResponseRedirect("/nologin")
                     else:
                         usrid = request.session['id']
-                        projectname = models.project.objects.get(id=pid).project
+                        project = models.project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                        content = projectname + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(), isactived=False)
+                        content = project.project + u"于"+time+u"已上线"
+                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),delay_status=' ',isactived=False)
                         pmessage.save()
+                        project.real_launch_date = datetime.datetime.now()
+                        project.save()
                 else:
                     if prolist[0].isactived != 0:
                         try:
@@ -232,11 +234,13 @@ def new_project(request,pid = ''):
                         else:
                             usrid = request.session['id']
                             print usrid
-                        projectname = models.project.objects.get(id=pid).project
+                        project = models.project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                        content = projectname + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),isactived=False)
+                        content = project.project + u"于"+time+u"已上线"
+                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),delay_status=' ',isactived=False)
                         pmessage.save()
+                        project.real_launch_date = datetime.datetime.now()
+                        project.save()
                     
             return redirect('/projectlist/')
 
