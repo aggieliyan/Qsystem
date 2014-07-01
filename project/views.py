@@ -420,13 +420,11 @@ def show_headname(request):
 def personal_homepage(request):
     try:
         request.session['username']
+        projectlist = project.objects.filter()
+        #print projectlist
+        project_user_list = project_user.objects.filter(username__username__contains=request.session['username'])
     except KeyError:
-        return HttpResponseRedirect("/nologin")
-
-    projectlist = project.objects.filter()
-    #print projectlist
-
-    project_user_list = project_user.objects.filter(username__username__contains=request.session['username'])
+        return HttpResponseRedirect("/nologin")          
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
