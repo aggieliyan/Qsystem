@@ -233,14 +233,18 @@ $(document).ready(function(){
     $(".range input").change(function(){
         var endtime = $(this).val().split("-", 3);
         var s = $(this).parent().prev("span").prev("span");
-        if(s.length > 0){
-          var startime = s.eq(0).children('input').val().split("-", 3);
+        var temp = s.eq(0).children('input').val()
+      
+        if(temp){
+          var startime = temp.split("-", 3);
           var stime = Date.UTC(startime[0], startime[1], startime[2]);
           var etime = Date.UTC(endtime[0], endtime[1], endtime[2]);
           var diff = etime - stime; 
           var days = diff/1000/60/60/24 + 1;
           $(this).parent().siblings('div').children('span').text(days);
-        }
+          }
+
+        //}
     });
 
 });
