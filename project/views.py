@@ -185,7 +185,6 @@ def new_project(request,pid = ''):
             
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ","").split(",")
-            print relateduser
             if len(relateduser):
                 if (pid==''):
                     pid = models.project.objects.filter(project=pname).order_by("-id")[0].id
