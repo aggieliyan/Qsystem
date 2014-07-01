@@ -22,7 +22,7 @@ $(document).ready(function(){
         }
       }
       //没找到
-      return 0
+      return ''
     }
     
     function set_other_master(){
