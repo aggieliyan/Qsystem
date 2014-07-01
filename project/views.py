@@ -242,7 +242,7 @@ def new_project(request,pid = ''):
     
 
 def project_list(request):
-	
+    
     noticess=public_message.objects.filter(isactived='1',type_p='notice').order_by('-id')
     count=len(noticess)
     notices=noticess[:5]
@@ -258,9 +258,9 @@ def project_list(request):
     elif count == 4:
         a = 0
     else:
-        a = len(noticess)-5    	
-	
-
+        a = len(noticess)-5  
+        
+          	
     projectlist = None
     puser=None
     project_name=""
