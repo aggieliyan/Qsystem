@@ -71,14 +71,14 @@
                 </div>
                 <input name="leader" style="display:none;" value={{res.user.id}}>
                 {% if res.pro.designer_p_id %}
-                	<input class="init0" name="designer" style="display:none;" value={{res.pro.designer_p_id}}>
+                	<input name="designer" style="display:none;" value={{res.pro.designer_p_id}}>
                 {% else %}
-                	<input class="init0" name="designer" style="display:none;" value=''>
+                	<input name="designer" style="display:none;" value=''>
                 {% endif %} 
                 {% if res.pro.tester_p_id %}
-                	<input class="init0" name="tester" style="display:none;" value={{res.pro.tester_p_id}}> 
+                	<input name="tester" style="display:none;" value={{res.pro.tester_p_id}}> 
                 {% else %}                	
-                	<input class="init0" name="tester" style="display:none;" value=''>  
+                	<input name="tester" style="display:none;" value=''>  
                 {% endif %}              
                 <select id="master"  class="inputfield" >
                 	<option select='selected'>{{res.user.realname}}</option>

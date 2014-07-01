@@ -1,14 +1,6 @@
 $(document).ready(function(){
 	count_relateduser();
-	init0();
-	
-	function init0(){
-		var a = window.location.pathname;
-		//只有新建的时候才会为空,编辑不存在为空的情况,因为数据库中已存了0.
-		if (a == "/newproject/"){
-			$(".init0").attr("value",0);
-	}
-	}
+
 	function show_staff (person){
       if(person.length > 0){
         $("#testerlist div").remove();
