@@ -1,4 +1,4 @@
-﻿  {% extends "base.html" %}
+  {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
 <meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
@@ -31,7 +31,7 @@
 		<ol class="breadcrumb" style="background-color:#339966; font:bold">
 			<li><a href="/personal_homepage/" class="divider">个人主页>></a></li>
 			<li><label class="active">项目公告</label></li>
-			<b><a class="one" href="/index.html"
+			<b><a class="one" href="/personal_homepage/"
 				style="float:right;text-decoration:none;" target="_blank">返回上一页
 			</a></b>
 		</ol>
@@ -89,7 +89,7 @@
 				{% else %}
 				<tr class="low2">
 
-					<td class="col1">&nbsp;{{notice.content}}</td>
+					<td class="col1">&nbsp;{{notice.content}}延期至：</td>
 					<td>{{notice.publication_date}}</td>
 					<td class="states_yes">{{notice.delay_status}}</td>
 					<!--

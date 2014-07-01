@@ -185,7 +185,6 @@ def new_project(request,pid = ''):
             
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ","").split(",")
-            print relateduser
             if len(relateduser):
                 if (pid==''):
                     pid = models.project.objects.filter(project=pname).order_by("-id")[0].id
@@ -218,13 +217,11 @@ def new_project(request,pid = ''):
                         return HttpResponseRedirect("/nologin")
                     else:
                         usrid = request.session['id']
-                        project = models.project.objects.get(id=pid)
+                        projectname = models.project.objects.get(id=pid).project
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                        content = project.project + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),delay_status=' ',isactived=False)
+                        content = projectname + u"于"+time+u"已上线"
+                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(), isactived=False)
                         pmessage.save()
-                        project.real_launch_date = datetime.datetime.now()
-                        project.save()
                 else:
                     if prolist[0].isactived != 0:
                         try:
@@ -233,14 +230,11 @@ def new_project(request,pid = ''):
                             return HttpResponseRedirect("/nologin")
                         else:
                             usrid = request.session['id']
-                            print usrid
-                        project = models.project.objects.get(id=pid)
+                        projectname = models.project.objects.get(id=pid).project
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                        content = project.project + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),delay_status=' ',isactived=False)
+                        content = projectname + u"于"+time+u"已上线"
+                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),isactived=False)
                         pmessage.save()
-                        project.real_launch_date = datetime.datetime.now()
-                        project.save()
                     
             return redirect('/projectlist/')
 
@@ -248,7 +242,7 @@ def new_project(request,pid = ''):
     
 
 def project_list(request):
-	
+    
     noticess=public_message.objects.filter(isactived='1',type_p='notice').order_by('-id')
     count=len(noticess)
     notices=noticess[:5]
@@ -264,9 +258,9 @@ def project_list(request):
     elif count == 4:
         a = 0
     else:
-        a = len(noticess)-5    	
-	
-
+        a = len(noticess)-5  
+        
+          	
     projectlist = None
     puser=None
     project_name=""
@@ -275,7 +269,6 @@ def project_list(request):
     status_p=""
     leader_p=""
     project_user_list=None
-    print request.method
     puser=project_user.objects.all()
     #projectlist = project.objects.all()
     if request.method == 'POST':
@@ -286,12 +279,9 @@ def project_list(request):
             end_date_s = search_form.cleaned_data['end_date_s']
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
-           
-            print project_name,start_date_s,end_date_s,status_p,leader_p
+
             projectlist = project.objects.filter().order_by("-id")
             
-            
-            print projectlist
             if not isNone(project_name):
                 projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-id")
             if not isNone(start_date_s):
@@ -306,13 +296,13 @@ def project_list(request):
                 projectids = []
                 for p in project_user_list:
                     projectids.append(p.project.id)
-                print projectids
+
                 projectlist = projectlist.filter(pk__in=projectids).order_by("-id")
 
     else:
         projectlist = project.objects.all().order_by("-id")
         
-    paginator = Paginator(projectlist, 1)
+    paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -424,17 +414,15 @@ def show_headname(request):
 def personal_homepage(request):
     try:
         request.session['username']
+        projectlist = project.objects.filter()
+        #print projectlist
+        project_user_list = project_user.objects.filter(username__username__contains=request.session['username'])
     except KeyError:
-        return HttpResponseRedirect("/nologin")
-
-    projectlist = project.objects.filter()
-    #print projectlist
-
-    project_user_list = project_user.objects.filter(username__username__contains=request.session['username'])
+        return HttpResponseRedirect("/nologin")          
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
-    print projectids
+
     projectlist = projectlist.filter(pk__in=projectids)    
     result=projectlist.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停')).order_by("-id")
     result1=projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停')).order_by("-id")
@@ -509,21 +497,21 @@ def changedesign(request,url):
             content = form.cleaned_data['content']
             dpath = form.cleaned_data['dpath']
             chd=project.objects.get(id=changeid)
-            uid=chd.leader_p
-
+            uid=chd.leader_p_id
             #chd.blueprint_p=dpath
             #chd.save()
             string=content+dpath
-            pub_message=public_message(project_id=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
             pub_message.save()
             related_user = models.user.objects.filter(project_user__project_id=changeid)
-            message=models.public_message.objects.filter(project__pk=changeid).order_by("-id")[0]            
+            message=models.public_message.objects.filter(project=changeid).order_by("-id")[0]            
             for i in related_user:
                 uid=i.id
                 megid=message.id
                 pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
                 pro_u_message.save()           
     return HttpResponseRedirect(url)
+    return render_to_response('personal_homepage.html', {'form': form})
 
 #资源管理
 def judge(request):
@@ -531,7 +519,7 @@ def judge(request):
         if request.session['username']:
             username=request.session['username']
         Position_level=models.user.objects.get(username=username).Position_level
-        print Position_level
+
         if Position_level=='1':
             return redirect('/show_user/')
         else:
@@ -646,7 +634,7 @@ def Insert_user(request,id,id2):
 
 
 def delay(request):
-
+    global projectobj
     if not request.session['id']:
         return HttpResponseRedirect("/nologin")
     
@@ -675,6 +663,7 @@ def delay(request):
     
 
 def notice(request):
+    global projectobj
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
@@ -700,6 +689,7 @@ def notice(request):
 @csrf_exempt
 
 def historymessage(request):
+    global projectobj
     # 查询与用户相关的消息
     if request.session['id']:
         useid = request.session['id']
@@ -735,7 +725,6 @@ def refuse(request):
     if request.method == 'POST':
         
         form = TestForm(request.POST)
-        print form
         if form.is_valid():
             delayid = form.cleaned_data['delayid']
             reason = form.cleaned_data['reason']
@@ -762,7 +751,7 @@ def refuse(request):
                 pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=project_id,isactived='1')
                 pro_u_message.save()  
     delays = project_delay.objects.filter(isactived=True)
-    return HttpResponseRedirect('/delay/', {'delays':delays})
+    return HttpResponseRedirect('/delay/')
 
 
 def approve(request):
@@ -789,7 +778,7 @@ def approve(request):
             
     raw_sql = 'select * from project_project_delay where isactived is null'
     delays = project_delay.objects.raw(raw_sql)
-    return HttpResponseRedirect('/delay/', {'delays':delays})
+    return HttpResponseRedirect('/delay/')
 
 
 def deletehistory(request):  
@@ -818,7 +807,6 @@ def deletenotice(request):
         if form.is_valid():
             noticeid = form.cleaned_data['noticeid'] 
             usernotice= project_user_message.objects.get(userid_id=useid,messageid_id=noticeid)
-            print usernotice.messageid_id
             usernotice.delete();
     tests= project_user_message.objects.filter(userid_id=useid)
     lists=[]
