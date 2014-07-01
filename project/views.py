@@ -393,8 +393,9 @@ def show_person(request):
 def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
+    ptype = 0
     if role == "tes":
-        key = 1
+        ptype = 1
     elif role == "dev":
         ptype = 2
     elif role == "pro":
