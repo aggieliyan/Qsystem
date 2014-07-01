@@ -111,7 +111,7 @@
                 <div style="display: inline-block;">
                     <div style="position:relative;top:-15px;">
                         <span class="input-append date form_datetime">
-                          <input class="start_date_s" size="16" type="text" value="{{start_date_s|default:""}}" name="start_date_s" readonly>
+                          <input class="start_date_s" size="16" type="text" value="{{start_date_s|date:"Y-m-d"|default:""}}" name="start_date_s" readonly>
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>至
                         <span class="input-append date form_datetime">

@@ -321,7 +321,7 @@ def project_list(request):
     return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
 
 def isNone(s):
-    if s is None or len(s.strip()) == 0:
+    if s is None or (isinstance(s,basestring) and len(s.strip()) == 0):
         return True
     else:
         return False
