@@ -205,7 +205,39 @@ def new_project(request,pid = ''):
             if tester:
                 tusername = models.user.objects.get(id=form.cleaned_data['tester']).username
                 User.objects.get(username=tusername).user_permissions.add(26)              
-
+            
+            #上线后发一条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
+            if status == "已上线":
+                prolist = models.public_message.objects.filter(project=pid).order_by("isactived")
+                try:
+                    prolist[0].isactived
+                except IndexError:
+                    try:
+                        request.session['id']
+                    except KeyError:
+                        return HttpResponseRedirect("/nologin")
+                    else:
+                        usrid = request.session['id']
+                        projectname = models.project.objects.get(id=pid).project
+                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                        content = projectname + u"于"+time+u"已上线"
+                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(), isactived=False)
+                        pmessage.save()
+                else:
+                    if prolist[0].isactived != 0:
+                        try:
+                            request.session['id']
+                        except KeyError:
+                            return HttpResponseRedirect("/nologin")
+                        else:
+                            usrid = request.session['id']
+                            print usrid
+                        projectname = models.project.objects.get(id=pid).project
+                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                        content = projectname + u"于"+time+u"已上线"
+                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),isactived=False)
+                        pmessage.save()
+                    
             return redirect('/projectlist/')
 
     return render_to_response('newproject.html', {'form':form}, context_instance=RequestContext(request))
@@ -424,9 +456,11 @@ def personal_homepage(request):
     i=0
     tests= project_user_message.objects.filter(userid_id=userid)
     lists=[]
+    messagess=[]
     for test in tests:
         lists.append(test.messageid_id)
         messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')
+  
     for item in messagess:
         i=i+1 
     count=i
@@ -476,7 +510,7 @@ def changedesign(request,url):
             #chd.blueprint_p=dpath
             #chd.save()
             string=content+dpath
-            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+            pub_message=public_message(project_id=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
             pub_message.save()
             related_user = models.user.objects.filter(project_user__project_id=changeid)
             message=models.public_message.objects.filter(project__pk=changeid).order_by("-id")[0]            
@@ -553,6 +587,7 @@ def show_user(request):
                 department_id = departdic[department]
         else:
             department_id=department_id
+        #lkakaka
         level_list=models.user.objects.filter(department_id=department_id)
         level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
         level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
@@ -584,30 +619,37 @@ def Insert_user(request,id,id2):
         realname=request.POST['level_2a']
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
     elif id=='3':
-        realname=request.POST['level_3a']
+        print "333333"
+        realname=request.POST['level_3a'].encode('utf-8')
+        print type(realname)
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
     elif id=='4':
         realname=request.POST['level_1']
+        print "44444"
+        print type(realname)
         user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
     elif id=='5':
         realname=request.POST[id2]
-        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+        print "555555"
+        print type(realname)
+        user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='6':
+        print "66666"
         realname=request.POST[id2]
-        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
+        print type(realname)
+        user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
     elif id=='7':
         realname=request.POST['level_1']
         user=models.user.objects.get(department_id=department_id,realname=realname)
         user.delete()
     elif id=='8':
-        realname=request.POST[id2]
-        user=models.user.objects.get(department_id=department_id,realname=realname)
+        user=models.user.objects.get(department_id=department_id,id=id2)
         user.delete()
     elif id=='9': 
-        realname=request.POST[id2]
-        user=models.user.objects.get(department_id=department_id,realname=realname)
+        user=models.user.objects.get(department_id=department_id,id=id2)
         user.delete()       
     return redirect('/show_user/')
+
 
 def delay(request):
 
@@ -707,20 +749,19 @@ def refuse(request):
             publisher_id = delay.application_id
             project_id = delay.project_id
             deltitle = delay.title
-            string = deltitle+u"被拒绝，理由"+reason
+            string = deltitle+u"申请延期被拒绝，理由"+reason
             #delpro=project.objects.get(id=delayid)
             if request.session['id']:
 
                 useid = request.session['id']
-                publisher = user.objects.get(id =useid )
-                pub_message=public_message(project_id=project_id,publisher=publisher,content=string,type_p="message",publication_date=datetime.datetime.now(),delay_status="已拒绝",isactived="1")
+                pub_message=public_message(project=project_id,publisher=useid,content=string,type_p="message",publication_date=datetime.datetime.now(),delay_status="已拒绝",isactived="1")
             #delay.reason = reason
             
                 delay.isactived = 0
                 delay.save();
                 pub_message.save();
                 related_user = models.user.objects.filter(project_user__project_id=project_id)
-                message=models.public_message.objects.filter(project__pk=project_id).order_by("-id")[0]            
+                message=models.public_message.objects.filter(project=project_id).order_by("-id")[0]            
             for i in related_user:
                 uid=i.id
                 megid=message.id
@@ -745,8 +786,7 @@ def approve(request):
             #delpro=project_delay.objects.get(id=delayid1)
         if request.session['id']:
             useid = request.session['id']
-            publisher = user.objects.get(id =useid )
-            pub_message=public_message(project_id=project_id,publisher=publisher,content=string,type_p="notice",publication_date=datetime.datetime.now(),delay_status="已批准",isactived="1")
+            pub_message=public_message(project=project_id,publisher=useid,content=string,type_p="notice",publication_date=datetime.datetime.now(),delay_status="已批准",isactived="1")
             #delay.reason = reason
             
             delay.isactived = 1
@@ -772,7 +812,7 @@ def deletehistory(request):
     for test in tests:
         lists.append(test.messageid_id)
     messages  = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
-    return render_to_response('historymessage.html', locals())
+    return HttpResponseRedirect('/historymessage/')
         
          
   
@@ -791,5 +831,5 @@ def deletenotice(request):
     for test in tests:
         lists.append(test.messageid_id)
     notices = public_message.objects.filter(pk__in=lists).filter(type_p = "notice").order_by('publication_date')
-    return render_to_response('notice.html', locals())
+    return HttpResponseRedirect('/notice/')
     
