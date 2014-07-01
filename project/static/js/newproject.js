@@ -106,8 +106,18 @@ $(document).ready(function(){
 
     //删除人员,重新数一遍参与人员
     $(".role-item .close").live('click',function(){
-        $(this).parent().remove();
-
+        var lv = $("[name='leader']").attr("value");
+        if(lv){
+          var rv = $(this).parent().attr("value");
+          if(rv == lv){//要删的是负责人的话提示不能删
+            alert("不能移除项目负责人");
+          }else{
+            $(this).parent().remove();
+          }
+        }
+        else{
+          $(this).parent().remove();
+        }
         count_relateduser()
     });
     
