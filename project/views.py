@@ -749,7 +749,7 @@ def refuse(request):
                 pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=project_id,isactived='1')
                 pro_u_message.save()  
     delays = project_delay.objects.filter(isactived=True)
-    return HttpResponseRedirect('/delay/', {'delays':delays})
+    return HttpResponseRedirect('/delay/')
 
 
 def approve(request):
