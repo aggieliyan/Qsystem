@@ -44,7 +44,7 @@ a:hover {
 .content #name div{
 	display: inline-block;
 	position: relative;
-	margin: -5px 0 -15px 30px;
+	margin: 0px 0 -5px 30px;
 }
 .line-name {
 	width: 13%;
