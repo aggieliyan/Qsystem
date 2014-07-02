@@ -113,6 +113,16 @@ body div{margin:0 auto;}
   width:110px
 
 }
+.start_date_s{
+  background-color:#FFFFFF;
+  width:176px;
+  border-right: medium none;
+}
+.end_date_s{
+  background-color:#FFFFFF;
+  width:176px;
+  border-right: medium none;
+}
 
 
 
