@@ -19,6 +19,7 @@
 	   
 	    .breadcrumb > li {
     		text-shadow: none;
+
 	    }
 	    
 	    .breadcrumb > li > .divider {
@@ -26,7 +27,12 @@
     		color: white;
 	    }
 	    
-	   
+	   .breadcrumb {
+  			padding: 8px 15px;
+  			margin-top: 15px ;
+  			list-style: none;
+  			border-radius: 4px;
+}
 	    .states_yes {
          color:green; 
 	    }
@@ -64,6 +70,7 @@
 			color:black;}
 		a.one:visited {
 			color:black;
+			font-size: 13px;
 		}
 		a.one:hover {
 			color:#76d5d8;
