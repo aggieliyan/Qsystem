@@ -42,7 +42,7 @@ def register(request):
             username = uf.cleaned_data['username']
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
-            email = username+"@lyi.com"
+            email = username+"@ablesky.com"
             
             try:
                 user = User.objects.create_user(username=username, email=email, password=password)
