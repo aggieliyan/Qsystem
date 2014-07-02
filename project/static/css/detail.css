@@ -8,6 +8,14 @@ body {
     padding: 0;
     font-size: 14px;
 }
+
+table {
+	width: 100%;
+	empty-cells: show;
+}
+tr {
+	height: 40px;
+}
 a {
 	text-decoration: none;
 	color: #09f;
@@ -20,11 +28,13 @@ a:hover {
 	width: 100%;
 	background-color: #339966;
 	border-radius: 2px;
-	display: inline-block;
-	position: relative;
+
+	margin-top: -5px;
 }
 #bread p {
+	padding: 17px;
 	line-height: 5px;
+	font-size: 14px;
 }
 #bread a {
 	text-decoration: none;
@@ -33,41 +43,22 @@ a:hover {
 #bread a:hover {
 	color: #333333;
 }
-#bread p {
-	padding: 5px;
-}
 .content #name div{
 	display: inline-block;
 	position: relative;
 }
-
-.list-name {
-	display: inline-block;
-	width: 13%;
-}
-.list-text {
-	display: inline-block;
-	width:86%;
-	float: right;
-}
-
-.line-name2 {
-	color: #555;
-	position: relative;
-	left: 40%;
-}
-
-.line-text2 {
-	position: relative;
-	left: 45%;
-}
 .line-name {
+	width: 13%;
+	font-size: 16px;
 	list-style: none;
 	text-align: right;
 	color: #555;
 
 }
 .line-text {
+	width:37%;
+	padding: 0 0 0 20px;
+	font-size: 18px;
 	list-style: none;
 	text-align: left;
 }
