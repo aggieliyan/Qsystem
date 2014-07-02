@@ -7,6 +7,7 @@ body {
 	font-family: "Microsoft YaHei",arial,宋体;
     padding: 0;
     font-size: 14px;
+    margin-top: 0px;
 }
 
 table {
@@ -24,17 +25,14 @@ a:hover {
     color: #FF3300;
 } 
 #bread {
-	height: 40px;
+	height: 36px;
 	width: 100%;
 	background-color: #339966;
 	border-radius: 2px;
-
-	margin-top: -5px;
 }
 #bread p {
-	padding: 17px;
+	padding: 16px;
 	line-height: 5px;
-	font-size: 14px;
 }
 #bread a {
 	text-decoration: none;
@@ -46,10 +44,10 @@ a:hover {
 .content #name div{
 	display: inline-block;
 	position: relative;
+	margin: -5px 0 -15px 30px;
 }
 .line-name {
 	width: 13%;
-	font-size: 16px;
 	list-style: none;
 	text-align: right;
 	color: #555;
@@ -58,7 +56,7 @@ a:hover {
 .line-text {
 	width:37%;
 	padding: 0 0 0 20px;
-	font-size: 18px;
+	font-size: 16px;
 	list-style: none;
 	text-align: left;
 }
