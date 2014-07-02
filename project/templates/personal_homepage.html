@@ -273,9 +273,13 @@
   </div>
 </div>
     </div>
-    {% for field in form %}    
-                {{ field.errors }}          
-              {% endfor %}
+    <div  style="width:300px; background-color: #FFFFFF; vertical-align: middle;">
+      <p>sadfsd</p>
+      {% for field in form %}
+      {{ field.errors }} 
+      {% endfor %}
+    </div>
+    
       <div class="modal-footer">
         <div align="center">
           <button type="submit" class="btn mybtn-success" >确定</button>

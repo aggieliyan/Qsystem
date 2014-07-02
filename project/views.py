@@ -515,7 +515,7 @@ def changedesign(request,url):
             content = form.cleaned_data['content']
             dpath = form.cleaned_data['dpath']
             chd=project.objects.get(id=changeid)
-            uid=chd.leader_p_id
+            uid=request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
             string=content+dpath
