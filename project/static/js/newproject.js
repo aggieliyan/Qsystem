@@ -57,8 +57,7 @@ $(document).ready(function(){
 
 
     //选择人员后点确定，
-    $("#test").click(function(){
-
+    $("#selectok").click(function(){
       var testerlist = $("#testerlist input");
     	var jsontester = { tester:[]};
       if(testerlist.length == 0){
@@ -122,7 +121,8 @@ $(document).ready(function(){
     });
     
     //点添加，弹出人员选择框展示数据
-    $(".roles .btn-success").click(function(){      
+    $(".roles .btn-success").click(function(){    
+      console.log("选人");  
       $("#select").modal("show");
       $("#skey").attr("value","");
       $(".all input").removeAttr("checked");
@@ -245,6 +245,7 @@ $(document).ready(function(){
 
     //计算天数
     $(".range input").change(function(){
+        console.log("jisuantianshu");
         var endtime = $(this).val().split("-", 3);
         var s = $(this).parent().prev("span").prev("span");
         var temp = s.eq(0).children('input').val()
