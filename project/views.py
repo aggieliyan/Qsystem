@@ -1,34 +1,26 @@
 # coding=utf-8
-from django.shortcuts import render_to_response, redirect, render,get_object_or_404,RequestContext
-from django.template.loader import get_template
-from django.template import Context
-from django.http import HttpResponse,Http404,HttpResponseRedirect
+from django.shortcuts import render_to_response, redirect, get_object_or_404, RequestContext
+#from django.template.loader import get_template
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 import json
-from django.db import connection
-import MySQLdb
 from django.contrib.sessions.models import Session
 import datetime
-from django.core.urlresolvers import reverse
 from django.db.models import Q
-from project.forms import  *
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, TestForm, Approveform, LoginForm
 from project.models import *
-import math
 import models
 import hashlib
-import time
 
 from django.views.decorators.csrf import csrf_exempt
 
-from models import project,user,project_user,project_delay,public_message,project_user_message
-from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from models import project, user, project_user, project_delay, public_message, project_user_message
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-#login
-from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
 #test
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User
 from django.contrib import auth
 
 
