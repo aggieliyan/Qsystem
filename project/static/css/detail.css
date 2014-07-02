@@ -63,3 +63,11 @@ a:hover {
 span {
 	display: inline-block;
 }
+#well {
+	color: red;
+	font-size: 20px;
+}
+#notwell {
+	color: blue;
+	font-size: 20px;
+}

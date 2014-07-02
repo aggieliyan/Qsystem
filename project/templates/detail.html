@@ -24,6 +24,17 @@
 					<tr>	
 						<td class="line-name">项目状态:</td>
 						<td class="line-text">{{res.pro.status_p}}</td>
+						{% if res.pro.real_launch_date %}
+							<td class="line-name">实际上线时间:</td>
+							<td class="line-text">{{res.pro.real_launch_date|date:"Y-m-d"}}&nbsp&nbsp
+							{% if res.pro.real_launch_date > res.pro.expect_launch_date %}
+								<span id="notwell"><b>踩..</b></span>
+							{% else %}
+								<span id="well"><b>赞!</b></span>
+							{% endif %}
+							
+						{% endif %}
+						</td>
 					</tr>
 					<tr>
 						<td class="line-name">项目负责人:</td>
