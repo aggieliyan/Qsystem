@@ -23,7 +23,7 @@ body div{margin:0 auto;}
 
 .breadcrumb {
     background-color: #339966;
-    width: 1020px;
+    margin-top: 0px;
 }
 
 .breadcrumb > li > .divider {

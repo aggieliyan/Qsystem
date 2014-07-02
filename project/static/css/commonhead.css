@@ -91,3 +91,7 @@ body{
 	    	width: 100px;
 	    	text-align:right;
 	    }
+
+	    form[name='form1'] {
+	    	margin-bottom: 0px;
+	    }
