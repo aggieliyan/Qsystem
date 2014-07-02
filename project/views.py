@@ -129,7 +129,7 @@ def login(request):
 
 # Create your views here.
 
-def new_project(request,pid=''):
+def new_project(request, pid=''):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
@@ -153,7 +153,7 @@ def new_project(request,pid=''):
                 designer = models.user.objects.get(id=designer)
             tester = form.cleaned_data['tester']
             if tester:
-               tester = models.user.objects.get(id=tester )
+                tester = models.user.objects.get(id=tester)
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
@@ -168,31 +168,33 @@ def new_project(request,pid=''):
             tcpath = form.cleaned_data['tcpath']
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
-            
-            if (pid == ''):
-                pro = models.project(priority=priority, project=pname, status_p=status, leader_p =leader, designer_p=designer,tester_p=tester, \
-                    start_date=sdate, expect_launch_date=pdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, \
-                    estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, estimated_test_start_date=tsdate, estimated_test_end_date=tedate, \
-                    blueprint_p=ppath, develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
+            if pid == '':
+                pro = models.project(priority=priority, project=pname, status_p=status, leader_p=leader, \
+                    designer_p=designer, tester_p=tester, start_date=sdate, expect_launch_date=pdate, \
+                    estimated_product_start_date=psdate, estimated_product_end_date=pedate, \
+                    estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, \
+                    estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, \
+                    develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
             else:
                 rdate = models.project.objects.get(id=pid).real_launch_date
-                print rdate
-                pro = models.project(id=pid,priority=priority, project=pname, status_p=status, leader_p =leader, designer_p=designer,tester_p=tester, \
-                    start_date=sdate, expect_launch_date=pdate, real_launch_date=rdate,estimated_product_start_date=psdate, estimated_product_end_date=pedate, \
-                    estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, estimated_test_start_date=tsdate, estimated_test_end_date=tedate, \
-                    blueprint_p=ppath, develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
+                pro = models.project(id=pid, priority=priority, project=pname, status_p=status, leader_p=leader, \
+                    designer_p=designer, tester_p=tester, start_date=sdate, expect_launch_date=pdate, \
+                    real_launch_date=rdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, \
+                    estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, \
+                    estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, \
+                    develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
             pro.save()
             
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
-                if (pid == ''):
+                if pid == '':
                     pid = models.project.objects.filter(project=pname).order_by("-id")[0].id
                 else:
                     models.project_user.objects.filter(project_id=pid).delete()
                 for uid in relateduser:
                     if uid:
-                        project_user = models.project_user(username_id=uid, project_id=pid,isactived=1)
+                        project_user = models.project_user(username_id=uid, project_id=pid, isactived=1)
                         project_user.save()
 
             #给项目负责人添加编辑项目权限
@@ -203,8 +205,8 @@ def new_project(request,pid=''):
                 User.objects.get(username=dusername).user_permissions.add(26)
             if tester:
                 tusername = models.user.objects.get(id=form.cleaned_data['tester']).username
-                User.objects.get(username=tusername).user_permissions.add(26)              
-            
+                User.objects.get(username=tusername).user_permissions.add(26)
+
             #上线后发一条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
                 prolist = models.public_message.objects.filter(project=pid).order_by("isactived")
@@ -220,7 +222,7 @@ def new_project(request,pid=''):
                         project = models.project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
                         content = project.project + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),isactived=False)
+                        pmessage = models.public_message(project=pid, publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),isactived=False)
                         pmessage.save()
                         project.real_launch_date = datetime.datetime.now()
                         project.save()
@@ -377,7 +379,7 @@ def show_person(request):
         key = 0
     person = models.user.objects.filter(department_id=key)
     rs = []
-    num = len(person) 
+    num = len(person)
     if num == 0:
         rrs = {"person":rs}
         rs = json.dumps(rrs)
@@ -390,8 +392,7 @@ def show_person(request):
 
     rrs = {"person":rs}
     rs = json.dumps(rrs)
-    return HttpResponse(rs)
-    
+    return HttpResponse(rs)  
 def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
@@ -404,7 +405,7 @@ def psearch(request):
         ptype = 3
     else:
         ptype = 0
-    prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived =1)
+    prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
     rs = []
     if len(prs) > 0:
         for item in prs:
