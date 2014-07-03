@@ -27,18 +27,18 @@ class UserForm(forms.Form):
         return new_user
 
 class LoginForm(forms.Form):
-    username=forms.CharField(
+    username = forms.CharField(
         label=_(u"用户名"),
         max_length=20,
         error_messages={'required': u'您输入的帐号为空，请输入'}
         )
-    password=forms.CharField(
+    password = forms.CharField(
         label=_(u"密码"),
         required=False,
         widget=forms.PasswordInput,
         max_length=20
         )
-    isautologin=forms.BooleanField(
+    isautologin = forms.BooleanField(
         label=_(u"自动登录"),
         required=False
         )
