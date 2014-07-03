@@ -47,7 +47,7 @@ class project_user(models.Model):
 class public_message(models.Model): 
     project = models.IntegerField()  
     publisher=models.IntegerField()
-    content=models.CharField(u'公告内容',max_length=200)
+    content=models.CharField(u'公告内容',max_length=1100)
     CHOICES = (  
         (u'notice',u'notice'),
         (u'message',u'message'), 

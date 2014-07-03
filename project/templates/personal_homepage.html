@@ -242,17 +242,15 @@
     </div>
     <div class="span9">
      
-       <div> <textarea  name="content" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" ></textarea> 
+       <div> <textarea  name="content" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)"></textarea> 
        </div>
-     <div> <textarea name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 0px;" ></textarea> 
-     </div>
-     <input id="changeid" name="changeid" type="hidden">       
+     <div> <textarea name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 0px;" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)"></textarea> 
+     </div>       
     </div>
   </div>
 </div>
     </div>
     <div  style="width:300px; background-color: #FFFFFF; vertical-align: middle;">
-      <p>sadfsd</p>
       {% for field in form %}
       {{ field.errors }} 
       {% endfor %}
@@ -311,7 +309,7 @@
               <input name="delay_date" class="dateinput" size="16" type="text" value="" readonly="" style="vertical-align:middle; border-right:  medium none; width: 122px; background-color: #FFFFFF;">
               <span class="add-on"><i class="icon-calendar"></i></span>
             </div>
-        <div><textarea name="delay_reason" style="background-color: #FFFFFF; width: 80%; height: 100px;"></textarea>
+        <div><textarea name="delay_reason" style="background-color: #FFFFFF; width: 80%; height: 100px;" maxlength="500" onchange="this.value=this.value.substring(0, 100)" onkeydown="this.value=this.value.substring(0, 100)" onkeyup="this.value=this.value.substring(0, 100)"></textarea>
         </div>
         <input id="delayid" name="delayid" type="hidden">
       </div>
