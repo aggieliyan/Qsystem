@@ -42,7 +42,6 @@
                   <label class="item-title"><span class="must">*</span>优先级：</label>
                 </div>
                 <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字" maxlength=4 value="{{res.pro.priority}}" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " >
-                {{form.priority.errors}}
               </div>
               <div>
                 <div class="title">
@@ -207,12 +206,12 @@
               </div>
             </div>
             <div class="span12">
-              <div style="color:red;">
+              <div style="color:red;" id="errofield">
               {% for field in form%}    
                 {{ field.errors }}          
               {% endfor %}
                </div>
-              <button id="submit" type="submit" class="btn btn-success" style="margin-left:43px; margin-top:50px;">提交</button>
+              <button id="submitbutton" type="submit" class="btn btn-success" style="margin-left:43px; margin-top:50px;">提交</button>
               <button type="button" class="btn btn-default" style="margin-left:30px;margin-top:50px;" onclick="javascript:history.back()">取消</button>
             </div>
           </form>
