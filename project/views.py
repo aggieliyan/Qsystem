@@ -82,7 +82,7 @@ def login(request):
     if "username" in request.COOKIES and "password" in request.COOKIES:
         username = request.COOKIES["username"]
         password = request.COOKIES["password"]
-        _userset = user.objects.filter(username__exact = username,password__exact = password)
+        _userset = user.objects.filter(username__exact=username, password__exact=password)
         if _userset.count() >= 1:
             _user = _userset[0]
             request.session['username'] = _user.username
@@ -95,7 +95,7 @@ def login(request):
             username = form.cleaned_data["username"]
             password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
-            _userset = models.user.objects.filter(username__exact = username,password__exact = password)
+            _userset = models.user.objects.filter(username__exact=username, password__exact=password)
             if _userset.count() >= 1:
                 _user = _userset[0]
                 if _user.isactived:
@@ -118,7 +118,7 @@ def login(request):
             else:
                 template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
     template_var["form"] = form
-    return render_to_response("login.html",template_var,context_instance = RequestContext(request))
+    return render_to_response("login.html", template_var, context_instance=RequestContext(request))
 
 def new_project(request, pid=''):
     #没登陆的提示去登录
