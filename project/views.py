@@ -701,8 +701,6 @@ def delay(request):
         projectobj = paginator.page(paginator.num_pages)
     return render_to_response('delay.html',RequestContext(request, {'projectobj': projectobj}))
 
-    
-
 def notice(request):
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
@@ -763,7 +761,7 @@ def historymessage(request):
 
 def refuse(request):
     if request.method == 'POST':
-        
+
         form = TestForm(request.POST)
         if form.is_valid():
             delayid = form.cleaned_data['delayid']
@@ -854,4 +852,4 @@ def deletenotice(request):
         lists.append(test.messageid_id)
     notices = public_message.objects.filter(pk__in=lists).filter(type_p="notice").order_by('publication_date')
     return HttpResponseRedirect('/notice/')
-    
+
