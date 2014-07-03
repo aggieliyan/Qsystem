@@ -183,8 +183,7 @@ def new_project(request, pid=''):
                     estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, \
                     estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, \
                     develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
-            pro.save()
-            
+            pro.save()       
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
