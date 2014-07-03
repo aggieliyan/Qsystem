@@ -680,16 +680,14 @@ def delay(request):
 
     if not request.session['id']:
         return HttpResponseRedirect("/nologin")
-    
-        
+
     if not request.user.has_perm('project.change_project_delay'):
-       
         return HttpResponseRedirect("/noperm")
 
+
+    userid = request.session['id']
     
-    userid=request.session['id']
-        
-    delays=project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
+    delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     global  projectobj
     paginator = Paginator(delays, 20)
     page = request.GET.get('page')
@@ -710,12 +708,12 @@ def notice(request):
         wds = request.POST
         try:
             wd = wds['wd']
-            notices = public_message.objects.filter(content__icontains=wd).filter(type_p ="notice").order_by("-id")
+            notices = public_message.objects.filter(content__icontains=wd).filter(type_p="notice").order_by("-id")
             
         except Exception as e:
-            notices = public_message.objects.filter(type_p ="notice").order_by("-id")
+            notices = public_message.objects.filter(type_p="notice").order_by("-id")
     else:  # Get请求
-        notices = public_message.objects.filter(type_p ="notice").order_by("-id")
+        notices = public_message.objects.filter(type_p="notice").order_by("-id")
     global  projectobj
     paginator = Paginator(notices, 20)
     page = request.GET.get('page')
@@ -735,19 +733,19 @@ def historymessage(request):
     # 查询与用户相关的消息
     if request.session['id']:
         useid = request.session['id']
-    tests= project_user_message.objects.filter(userid_id=useid)
-    lists=[]
+    tests = project_user_message.objects.filter(userid_id=useid)
+    lists = []
     for test in tests:
         lists.append(test.messageid_id)
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
             wd = wds['wd']
-            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=wd).filter(type_p = "message").order_by('publication_date')
+            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=wd).filter(type_p="message").order_by('publication_date')
         except Exception as e:
-            messages = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
+            messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     else:  # Get请求
-        messages = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
+        messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     global  projectobj
     paginator = Paginator(messages, 20)
     page = request.GET.get('page')
@@ -760,7 +758,7 @@ def historymessage(request):
     #If page is out of range (e.g. 9999), deliver last page of results.
          projectobj = paginator.page(paginator.num_pages)
 
-    return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
+    return render_to_response('historymessage.html', RequestContext(request, {'projectobj':projectobj}))
 
 
 def refuse(request):
@@ -779,18 +777,19 @@ def refuse(request):
             if request.session['id']:
 
                 useid = request.session['id']
-                pub_message=public_message(project=project_id,publisher=useid,content=string,type_p="message",publication_date=datetime.datetime.now(),delay_status="已拒绝",isactived="1")
+                pub_message = public_message(project=project_id, publisher=useid, content=string, \
+                    type_p="message", publication_date=datetime.datetime.now(), delay_status="已拒绝", isactived="1")
             #delay.reason = reason
-            
+
                 delay.isactived = 0
                 delay.save();
                 pub_message.save();
                 related_user = models.user.objects.filter(project_user__project_id=project_id)
-                message=models.public_message.objects.filter(project=project_id).order_by("-id")[0]            
+                message = models.public_message.objects.filter(project=project_id).order_by("-id")[0]            
             for i in related_user:
-                uid=i.id
-                megid=message.id
-                pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=project_id,isactived='1')
+                uid = i.id
+                megid = message.id
+                pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=project_id, isactived='1')
                 pro_u_message.save()  
     delays = project_delay.objects.filter(isactived=True)
     return HttpResponseRedirect('/delay/')
@@ -805,19 +804,20 @@ def approve(request):
             publisher_id = delay.application_id
             project_id = delay.project_id
             deltitle = delay.title
-            aa=delay.delay_to_date
+            aa = delay.delay_to_date
             del_to_date = str(aa)
             string = deltitle+u"延期至："+del_to_date
             #delpro=project_delay.objects.get(id=delayid1)
         if request.session['id']:
             useid = request.session['id']
-            pub_message=public_message(project=project_id,publisher=useid,content=string,type_p="notice",publication_date=datetime.datetime.now(),delay_status="已批准",isactived="1")
+            pub_message = public_message(project=project_id, publisher=useid, content=string, type_p="notice", \
+                publication_date=datetime.datetime.now(), delay_status="已批准", isactived="1")
             #delay.reason = reason
-            
+
             delay.isactived = 1
             delay.save();
             pub_message.save();
-            
+
     raw_sql = 'select * from project_project_delay where isactived is null'
     delays = project_delay.objects.raw(raw_sql)
     return HttpResponseRedirect('/delay/')
@@ -830,17 +830,15 @@ def deletehistory(request):
         form = MessageForm(request.POST)  
         if form.is_valid():
             messageid = form.cleaned_data['messageid'] 
-            usermessage= project_user_message.objects.get(userid_id=useid,messageid_id=messageid)
+            usermessage = project_user_message.objects.get(userid_id=useid, messageid_id=messageid)
             usermessage.delete();
-    tests= project_user_message.objects.filter(userid_id=useid)
-    lists=[]
+    tests = project_user_message.objects.filter(userid_id=useid)
+    lists =[]
     for test in tests:
         lists.append(test.messageid_id)
     messages  = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
     return HttpResponseRedirect('/historymessage/')
-        
-         
-  
+
 def deletenotice(request):  
     if request.session['id']:
         useid = request.session['id']
@@ -848,12 +846,12 @@ def deletenotice(request):
         form = NoticeForm(request.POST) 
         if form.is_valid():
             noticeid = form.cleaned_data['noticeid'] 
-            usernotice= project_user_message.objects.get(userid_id=useid,messageid_id=noticeid)
+            usernotice = project_user_message.objects.get(userid_id=useid, messageid_id=noticeid)
             usernotice.delete();
-    tests= project_user_message.objects.filter(userid_id=useid)
-    lists=[]
+    tests = project_user_message.objects.filter(userid_id=useid)
+    lists = []
     for test in tests:
         lists.append(test.messageid_id)
-    notices = public_message.objects.filter(pk__in=lists).filter(type_p = "notice").order_by('publication_date')
+    notices = public_message.objects.filter(pk__in=lists).filter(type_p="notice").order_by('publication_date')
     return HttpResponseRedirect('/notice/')
     
