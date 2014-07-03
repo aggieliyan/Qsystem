@@ -7,7 +7,7 @@ import json
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm,ProjectSearchForm
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm
 from project.models import department, project, project_user, public_message, project_delay, project_user_message
 import models
 import hashlib
@@ -514,13 +514,13 @@ def changedesign(request, url):
         form = changedesignForm(request.POST)
         if form.is_valid():
             changeid = form.cleaned_data['changeid']
-            content = form.cleaned_data['content']
+            cont = form.cleaned_data['cont']
             dpath = form.cleaned_data['dpath']
             chd = project.objects.get(id = changeid)
             uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
-            string = content + dpath
+            string = cont + dpath
             pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()
