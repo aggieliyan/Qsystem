@@ -752,8 +752,7 @@ def historymessage(request):
     #If page is not an integer, deliver first page.
         projectobj = paginator.page(1)
     except EmptyPage:
-    #If page is out of range (e.g. 9999), deliver last page of results.
-         projectobj = paginator.page(paginator.num_pages)
+        projectobj = paginator.page(paginator.num_pages)
     return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
 
 
@@ -827,7 +826,7 @@ def deletehistory(request):
         if form.is_valid():
             messageid = form.cleaned_data['messageid']
             usermessage = project_user_message.objects.get(userid_id=useid, messageid_id=messageid)
-            usermessage.delete();
+            usermessage.delete()
     tests = project_user_message.objects.filter(userid_id=useid)
     lists = []
     for test in tests:
@@ -843,7 +842,7 @@ def deletenotice(request):
         if form.is_valid():
             noticeid = form.cleaned_data['noticeid']
             usernotice = project_user_message.objects.get(userid_id=useid, messageid_id=noticeid)
-            usernotice.delete();
+            usernotice.delete()
     tests = project_user_message.objects.filter(userid_id=useid)
     lists = []
     for test in tests:
