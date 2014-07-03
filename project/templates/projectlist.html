@@ -25,19 +25,19 @@
 	{% if notices %}
 	
    {% if count = 1 %}
-	<div style="height:90px" class="notice">
+	<div style="height:90px;padding-left:5px;" class="notice">
    {% endif %}   
    {% if count = 2 %}
-	<div style="height:90px" class="notice">
+	<div style="height:90px;padding-left:5px;" class="notice">
    {% endif %} 
    {% if count = 3 %}
-	<div style="height:100px" class="notice">
+	<div style="height:100px;padding-left:5px;" class="notice">
    {% endif %} 
     {% if count = 4 %}
-	<div style="height:140px" class="notice">
+	<div style="height:140px;padding-left:5px;" class="notice">
    {% endif %} 
     {% if count >= 5 %}
-	<div style="height:170px"  class="notice">
+	<div style="height:170px;padding-left:5px;"  class="notice">
    {% endif %} 
 
 		<div class="notice_title">
@@ -60,11 +60,10 @@
          {% endif %} 
 	</div>	
 	{% else %}
-  
       <div style="height:25px;padding-left:5px;" class="notice">
    <div class="notice_title">
 			<span>
-				<b>消息提醒<span style="color:#ffa03e">(0):</span></b>
+				<b>项目公告<span style="color:#ffa03e">(0):</span></b>
 			</span>
 		</div>
 		
