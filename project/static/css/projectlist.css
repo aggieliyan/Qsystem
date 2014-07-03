@@ -35,17 +35,15 @@
       border:#ddd solid thin;           
       background-color:#ffffff;}
     
-    .block-option{width:1100px;height:140px;}
+    .block-option{width:1100px;height:140px;margin-left: 0px;}
     
     #customers{
-      font-family:"Trebuchet MS", Arial, 12px;
       width:100%;
       margin:auto;
       padding-bottom: 30px;
       border-collapse:collapse;
         table-layout:fixed;}
       #customers td, #customers th{
-        font-size:12px;
         border:1px solid #ddd;
         padding:3px 7px 2px 7px;
         width:100%;
