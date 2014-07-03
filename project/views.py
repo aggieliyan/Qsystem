@@ -7,7 +7,7 @@ import json
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProusermessForm
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm
 from project.models import department, project, project_user, public_message, project_delay, project_user_message
 import models
 import hashlib
@@ -774,7 +774,6 @@ def refuse(request):
             delayid = form.cleaned_data['delayid']
             reason = form.cleaned_data['reason']
             delay = project_delay.objects.get(id=delayid)
-            publisher_id = delay.application_id
             project_id = delay.project_id
             deltitle = delay.title
             string = deltitle+u"申请延期被拒绝，理由"+reason
@@ -806,7 +805,6 @@ def approve(request):
         if form.is_valid():
             delayid1 = form.cleaned_data['delayid1']
             delay = project_delay.objects.get(id=delayid1)
-            publisher_id = delay.application_id
             project_id = delay.project_id
             deltitle = delay.title
             aa = delay.delay_to_date
@@ -841,7 +839,6 @@ def deletehistory(request):
     lists = []
     for test in tests:
         lists.append(test.messageid_id)
-    messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     return HttpResponseRedirect('/historymessage/')
 
 #删除公告
@@ -858,6 +855,5 @@ def deletenotice(request):
     lists = []
     for test in tests:
         lists.append(test.messageid_id)
-    notices = public_message.objects.filter(pk__in=lists).filter(type_p="notice").order_by('publication_date')
     return HttpResponseRedirect('/notice/')
 
