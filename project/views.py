@@ -538,10 +538,10 @@ def changedesign(request,url):
 def judge(request):
     try:
         if request.session['username']:
-            username=request.session['username']
-        Position_level=models.user.objects.get(username=username).Position_level
-
-        if Position_level=='1':
+            username = request.session['username']
+        Position_level = models.user.objects.get(username=\
+        username).Position_level
+        if Position_level == '1':
             return redirect('/show_user/')
         else:
             return redirect('/nopermit/')
@@ -550,107 +550,129 @@ def judge(request):
 def nopermit(request):
     try:
         if request.session['username']:
-            username=request.session['username']
-            department_id=models.user.objects.get(username=username).department_id
-        department_id=department_id
-        department=models.department.objects.get(id=department_id).department
+            username = request.session['username']
+            department_id = models.user.objects.get(username=\
+            username).department_id
+        department_id = department_id
+        department = models.department.objects.get(id=\
+        department_id).department
         department_list = models.department.objects.all()
-        level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
-        level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
-        level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
-        return render_to_response('nopermit.html',locals())
+        level_1_list = models.user.objects.filter(department_id=\
+        department_id, Position_level="1")
+        level_2_list = models.user.objects.filter(department_id=\
+        department_id, Position_level="2")
+        level_3_list = models.user.objects.filter(department_id=\
+        department_id, Position_level="3")
+        return render_to_response('nopermit.html', locals())
     except KeyError:
         return redirect('/login/')
 
 @csrf_exempt
 def show_user2(request):
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
+    department = request.POST['department']
+    if department == '请选择':
+        department_id = 0
     else:
         depart = models.department.objects.all()
         departdic = {}
         for item in depart:
             departdic[item.department] = item.id
         department_id = departdic[department]
-        
-    level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
-    level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
-    level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
+    level_1_list = models.user.objects.filter(department_id=\
+    department_id, Position_level="1")
+    level_2_list = models.user.objects.filter(department_id=\
+    department_id, Position_level="2")
+    level_3_list = models.user.objects.filter(department_id=\
+    department_id, Position_level="3")
     department_list = models.department.objects.all()
-    return render_to_response('nopermit.html',locals())
+    return render_to_response('nopermit.html', locals())
 
 @csrf_exempt
 def show_user(request):
     try:
         if request.session['username']:
-            username=request.session['username']
-            department_id=models.user.objects.get(username=username).department_id
-        department_id=department_id
-        department=models.department.objects.get(id=department_id).department
+            username = request.session['username']
+            department_id = models.user.objects.get(username=\
+            username).department_id
+        department_id = department_id
+        department = models.department.objects.get(id=\
+        department_id).department
         if request.method == 'POST':
-            department=request.POST['department']
-            if department=='请选择':
-                department_id=0
+            department = request.POST['department']
+            if department == '请选择':
+                department_id = 0
             else:
                 depart = models.department.objects.all()
                 departdic = {}
                 for item in depart:
                     departdic[item.department] = item.id
                 department_id = departdic[department]
-        
         else:
-            department_id=department_id
-        level_list=models.user.objects.filter(department_id=department_id)
-        level_1_list=models.user.objects.filter(department_id=department_id,Position_level="1")
-        level_2_list=models.user.objects.filter(department_id=department_id,Position_level="2")
-        level_3_list=models.user.objects.filter(department_id=department_id,Position_level="3")
+            department_id = department_id
+        level_list = models.user.objects.filter(department_id=\
+        department_id)
+        level_1_list = models.user.objects.filter(department_id=\
+        department_id, Position_level="1")
+        level_2_list = models.user.objects.filter(department_id=\
+        department_id, Position_level="2")
+        level_3_list = models.user.objects.filter(department_id=\
+        department_id, Position_level="3")
         department_list = models.department.objects.all()
-        return render_to_response('sourcemanage.html',locals())
+        return render_to_response('sourcemanage.html', locals())
     except KeyError:
         return redirect('/login/')
 
 @csrf_exempt
-def Insert_user(request,id,id2):
+def Insert_user(request, id, id2):
     if request.session['username']:
-        username=request.session['username']
-        department_id=models.user.objects.get(username=username).department_id
-    department_id=department_id
-    department=request.POST['department']
-    if department=='请选择':
-        department_id=0
+        username = request.session['username']
+        department_id = models.user.objects.get(username=\
+        username).department_id
+    department_id = department_id
+    department = request.POST['department']
+    if department == '请选择':
+        department_id = 0
     else:
         depart = models.department.objects.all()
         departdic = {}
         for item in depart:
             departdic[item.department] = item.id
         department_id = departdic[department]
-    if id=='1':
-        realname=request.POST['level_1']
-        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='1')
-    elif id=='2':
-        realname=request.POST['level_2a']
-        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='2')
-    elif id=='3':
-        realname=request.POST['level_3a']
-        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='3')
-    elif id=='4':
-        realname=request.POST['level_1']
-        user=models.user.objects.filter(department_id=department_id,realname=realname).update(Position_level='0')
-    elif id=='5':
-        user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
-    elif id=='6':
-        user=models.user.objects.filter(department_id=department_id,id=id2).update(Position_level='0')
-    elif id=='7':
-        realname=request.POST['level_1']
-        user=models.user.objects.get(department_id=department_id,realname=realname)
+    if id == '1':
+        realname = request.POST['level_1']
+        user = models.user.objects.filter(department_id=\
+        department_id, realname=realname).update(Position_level='1')
+    elif id == '2':
+        realname = request.POST['level_2a']
+        user = models.user.objects.filter(department_id=department_id, \
+        realname=realname).update(Position_level='2')
+    elif id == '3':
+        realname = request.POST['level_3a']
+        user = models.user.objects.filter(department_id=department_id, \
+        realname=realname).update(Position_level='3')
+    elif id == '4':
+        realname = request.POST['level_1']
+        user = models.user.objects.filter(department_id=department_id, \
+        realname=realname).update(Position_level='0')
+    elif id == '5':
+        user = models.user.objects.filter(department_id=department_id, \
+        id=id2).update(Position_level='0')
+    elif id == '6':
+        user = models.user.objects.filter(department_id=department_id, \
+        id=id2).update(Position_level='0')
+    elif id == '7':
+        realname = request.POST['level_1']
+        user = models.user.objects.get(department_id=department_id, \
+        realname=realname)
         user.delete()
-    elif id=='8':
-        user=models.user.objects.get(department_id=department_id,id=id2)
+    elif id == '8':
+        user = models.user.objects.get(department_id=department_id, \
+        id=id2)
         user.delete()
-    elif id=='9': 
-        user=models.user.objects.get(department_id=department_id,id=id2)
-        user.delete()       
+    elif id == '9':
+        user = models.user.objects.get(department_id=department_id, \
+        id=id2)
+        user.delete()
     return redirect('/show_user/')
 
 
