@@ -73,12 +73,10 @@ def no_login(request):
 
 def no_perm(request):
     return render_to_response("noperm.html")
-    
 def login(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect("/personal_homepage")
-    template_var={}
-    
+    template_var = {}
     if "username" in request.COOKIES and "password" in request.COOKIES:
         username = request.COOKIES["username"]
         password = request.COOKIES["password"]
