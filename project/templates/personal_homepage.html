@@ -221,7 +221,7 @@
     </span>
     </div>
 
-  <!-- Modal -->
+ <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -247,7 +247,7 @@
     </div>
     <div class="span9">
      
-       <div> <textarea  name="content" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)"></textarea> 
+       <div> <textarea  name="dcontent" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)"></textarea> 
        </div>
      <div> <textarea name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 0px;" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)"></textarea> 
      </div>       
@@ -255,15 +255,9 @@
   </div>
 </div>
     </div>
-    <div  style="width:300px; background-color: #FFFFFF; vertical-align: middle;">
-      {% for field in form %}
-      {{ field.errors }} 
-      {% endfor %}
-    </div>
-    
       <div class="modal-footer">
         <div align="center">
-          <button type="submit" class="btn mybtn-success" >确定</button>
+          <button type="submit" class="btn mybtn-success" onclick="return chk();">确定</button>
           <button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
         </div>
       </div>
@@ -271,7 +265,6 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div>
-
 
   
 
@@ -425,6 +418,14 @@
         $('#delayid').val(id);
         $('#protime').val(time);
         $('#myModal1').modal('show');
+      }
+      function chk(){
+        var chcontent = document.test.dcontent.value;
+        var chdpath = document.test.dpath.value;
+        if(!chcontent||!chdpath){
+          alert('变更内容或设计图路径不能为空');
+        console.log("adfs")
+        }
       }
     </script>    
 {% endblock %}
