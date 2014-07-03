@@ -7,11 +7,7 @@ import json
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-<<<<<<< HEAD
 from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm
-=======
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm
->>>>>>> 4bc9d4a2f6df8b396cde87c8260d1e0e251ad2f4
 from project.models import department, project, project_user, public_message, project_delay, project_user_message
 import models
 import hashlib
@@ -473,26 +469,17 @@ def personal_homepage(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-<<<<<<< HEAD
-    #userid = request.session['id']
-    userid=request.session['id']
-    j=0
-    if request.user.has_perm('project.change_project_delay'):
-        j=1    
-=======
     #message
     userid=request.session['id']
     j=0
     if request.user.has_perm('project.change_project_delay'):
         j=1
->>>>>>> 4bc9d4a2f6df8b396cde87c8260d1e0e251ad2f4
     i=0
     tests= project_user_message.objects.filter(userid_id = userid)
     lists=[]
     messagess=[]
     for test in tests:
         lists.append(test.messageid_id)
-<<<<<<< HEAD
         messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')  
     for item in messagess:
         i = i + 1 
@@ -500,21 +487,8 @@ def personal_homepage(request):
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count, 'j':j})
-def deleteproject(request, id, url):
-    delpro = get_object_or_404(project, pk = int(id))
-=======
-        messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')
-    for item in messagess:
-        i=i+1 
-    count=i
-    messages=messagess[:4]
-    ##
-    return render_to_response('personal_homepage.html',
-        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
-
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
->>>>>>> 4bc9d4a2f6df8b396cde87c8260d1e0e251ad2f4
     delpro.delete()
     return HttpResponseRedirect(url)
 def pauseproject(request, id, url):
