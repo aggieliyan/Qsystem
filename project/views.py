@@ -162,46 +162,64 @@ def new_project(request, pid=''):
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
             if pid == '':
-                pro = models.project(priority=priority, project=pname, status_p=status, leader_p=leader, \
-                    designer_p=designer, tester_p=tester, start_date=sdate, expect_launch_date=pdate, \
-                    estimated_product_start_date=psdate, estimated_product_end_date=pedate, \
-                    estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, \
-                    estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, \
-                    develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
+                pro = models.project(priority=priority,\
+                    project=pname, status_p=status, leader_p=leader, \
+                    designer_p=designer, tester_p=tester, start_date=sdate, \
+                    expect_launch_date=pdate, \
+                    estimated_product_start_date=psdate, \
+                    estimated_product_end_date=pedate, \
+                    estimated_develop_start_date=dsdate, \
+                    estimated_develop_end_date=dedate, \
+                    estimated_test_start_date=tsdate, \
+                    estimated_test_end_date=tedate, blueprint_p=ppath, \
+                    develop_plan_p=dppath, test_plan_p=tppath, \
+                    test_case_p=tcpath, test_report_p=trpath, isactived=1)
             else:
                 rdate = models.project.objects.get(id=pid).real_launch_date
-                pro = models.project(id=pid, priority=priority, project=pname, status_p=status, leader_p=leader, \
-                    designer_p=designer, tester_p=tester, start_date=sdate, expect_launch_date=pdate, \
-                    real_launch_date=rdate, estimated_product_start_date=psdate, estimated_product_end_date=pedate, \
-                    estimated_develop_start_date=dsdate, estimated_develop_end_date=dedate, \
-                    estimated_test_start_date=tsdate, estimated_test_end_date=tedate, blueprint_p=ppath, \
-                    develop_plan_p=dppath, test_plan_p=tppath, test_case_p=tcpath, test_report_p=trpath, isactived=1)
-            pro.save()       
+                pro = models.project(id=pid, priority=priority,\
+                    project=pname, status_p=status, leader_p=leader, \
+                    designer_p=designer, tester_p=tester, start_date=sdate, \
+                    expect_launch_date=pdate, \
+                    real_launch_date=rdate, \
+                    estimated_product_start_date=psdate, \
+                    estimated_product_end_date=pedate, \
+                    estimated_develop_start_date=dsdate, \
+                    estimated_develop_end_date=dedate, \
+                    estimated_test_start_date=tsdate, \
+                    estimated_test_end_date=tedate, blueprint_p=ppath, \
+                    develop_plan_p=dppath, test_plan_p=tppath, \
+                    test_case_p=tcpath, test_report_p=trpath, isactived=1)
+            pro.save()
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
                 if pid == '':
-                    pid = models.project.objects.filter(project=pname).order_by("-id")[0].id
+                    pid = models.project.objects.filter\
+                    (project=pname).order_by("-id")[0].id
                 else:
                     models.project_user.objects.filter(project_id=pid).delete()
                 for uid in relateduser:
                     if uid:
-                        project_user = models.project_user(username_id=uid, project_id=pid, isactived=1)
+                        project_user = models.project_user\
+                        (username_id=uid, project_id=pid, isactived=1)
                         project_user.save()
 
             #给项目负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
             User.objects.get(username=musername).user_permissions.add(26)
             if designer:
-                dusername = models.user.objects.get(id=form.cleaned_data['designer']).username
+                dusername = models.user.objects.get\
+                (id=form.cleaned_data['designer']).username
                 User.objects.get(username=dusername).user_permissions.add(26)
             if tester:
-                tusername = models.user.objects.get(id=form.cleaned_data['tester']).username
+                tusername = models.user.objects.get\
+                (id=form.cleaned_data['tester']).username
                 User.objects.get(username=tusername).user_permissions.add(26)
 
-            #上线后发一条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
+            #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
-                prolist = models.public_message.objects.filter(project=pid).order_by("isactived")
+                prolist = models.public_message.objects.filter\
+                (project=pid).order_by("isactived")
                 try:
                     prolist[0].isactived
                 except IndexError:
@@ -214,7 +232,10 @@ def new_project(request, pid=''):
                         project = models.project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
                         content = project.project + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid, publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),isactived=False)
+                        pmessage = models.public_message(project=pid, \
+                            publisher=usrid, content=content, type_p="notice", \
+                            publication_date=datetime.datetime.now(), \
+                            isactived=False)
                         pmessage.save()
                         project.real_launch_date = datetime.datetime.now()
                         project.save()
@@ -231,15 +252,17 @@ def new_project(request, pid=''):
                         project = models.project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
                         content = project.project + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid,publisher=usrid, content=content, type_p="notice", publication_date=datetime.datetime.now(),isactived=False)
+                        pmessage = models.public_message(project=pid, \
+                            publisher=usrid, content=content, type_p="notice", \
+                            publication_date=datetime.datetime.now(), \
+                            isactived=False)
                         pmessage.save()
                         project.real_launch_date = datetime.datetime.now()
                         project.save()
-                        print 222
-                    
+                        print 222                    
             return redirect('/projectlist/')
-
-    return render_to_response('newproject.html', {'form':form}, context_instance=RequestContext(request))
+    return render_to_response('newproject.html', \
+        {'form':form}, context_instance=RequestContext(request))
     
 
 def project_list(request):
