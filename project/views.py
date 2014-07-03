@@ -571,7 +571,7 @@ def nopermit(request):
         department_id, Position_level="2")
         level_3_list = models.user.objects.filter(department_id=\
         department_id, Position_level="3")
-        return render_to_response('nopermit.html', locals())
+        return render_to_response('show_source.html', locals())
     except KeyError:
         return redirect('/login/')
 
@@ -593,7 +593,7 @@ def show_user2(request):
     level_3_list = models.user.objects.filter(department_id=\
     department_id, Position_level="3")
     department_list = models.department.objects.all()
-    return render_to_response('nopermit.html', locals())
+    return render_to_response('show_source.html', locals())
 
 @csrf_exempt
 def show_user(request):
