@@ -770,9 +770,9 @@ def refuse(request):
         if form.is_valid():
             delayid = form.cleaned_data['delayid']
             reason = form.cleaned_data['reason']
-            delay = project_delay.objects.get(id=delayid)
-            project_id = delay.project_id
-            deltitle = delay.title
+            refusedelay = project_delay.objects.get(id=delayid)
+            project_id = refusedelay.project_id
+            deltitle = refusedelay.title
             string = deltitle+u"申请延期被拒绝，理由"+reason
             #delpro=project.objects.get(id=delayid)
             if request.session['id']:
@@ -780,10 +780,10 @@ def refuse(request):
                 useid = request.session['id']
                 pub_message = public_message(project=project_id, publisher=useid, content=string, \
                     type_p="message", publication_date=datetime.datetime.now(), delay_status="已拒绝", isactived="1")
-            #delay.reason = reason
+            #refusedelay.reason = reason
 
-                delay.isactived = 0
-                delay.save()
+                refusedelay.isactived = 0
+                refusedelay.save()
                 pub_message.save()
                 related_user = models.user.objects.filter(project_user__project_id=project_id)
                 message = models.public_message.objects.filter(project=project_id).order_by("-id")[0]
@@ -792,7 +792,6 @@ def refuse(request):
                 megid = message.id
                 pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=project_id, isactived='1')
                 pro_u_message.save()
-    delays = project_delay.objects.filter(isactived=True)
     return HttpResponseRedirect('/delay/')
 
 #接受
@@ -801,10 +800,10 @@ def approve(request):
         form = Approveform(request.POST)
         if form.is_valid():
             delayid1 = form.cleaned_data['delayid1']
-            delay = project_delay.objects.get(id=delayid1)
-            project_id = delay.project_id
-            deltitle = delay.title
-            delaydate= delay.delay_to_date
+            approvedelay = project_delay.objects.get(id=delayid1)
+            project_id = approvedelay.project_id
+            deltitle = approvedelay.title
+            delaydate= approvedelay.delay_to_date
             del_to_date = str(delaydate)
             string = deltitle + u"延期至：" + del_to_date
             #delpro=project_delay.objects.get(id=delayid1)
@@ -812,10 +811,10 @@ def approve(request):
             useid = request.session['id']
             pub_message = public_message(project=project_id, publisher=useid, content=string, type_p="notice", \
                 publication_date=datetime.datetime.now(), delay_status="已批准", isactived="1")
-            #delay.reason = reason
+            #approvedelay.reason = reason
 
-            delay.isactived = 1
-            delay.save()
+            approvedelay.isactived = 1
+            approvedelay.save()
             pub_message.save()
     return HttpResponseRedirect('/delay/')
 
