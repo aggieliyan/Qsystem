@@ -1,5 +1,7 @@
+#mybody{
+  width: 1500px;
+}
 
-                  
     .notice{
       height:150px;
       width:100%;
@@ -28,7 +30,7 @@
       background-color:#ffffff;
     }
     #x-table2{
-      width:1100px;
+      width:1500px;
       margin:auto;
       border:#ddd solid thin;           
       background-color:#ffffff;}
@@ -91,6 +93,12 @@
     .title1 {display:inline-block; 
         width:110px;}
 
+body{
+	width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
 
 body div{margin:0 auto;}
  .icon-calendar {
