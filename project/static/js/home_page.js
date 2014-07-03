@@ -13,6 +13,18 @@ $(document).ready(function(){
     	$("#myModal").modal("show");
     });
 
+
+    $("#smalltable").click(function(){
+      console.log("aaaaaaaa");
+      $("#mybody").css("width","1100px");
+      $("#x-table2").css("width","1100px");
+    });
+
+    $("#bigtable").click(function(){
+      $("#mybody").css("width","1500px");
+      $("#x-table2").css("width","1500px");
+    });
+
 });
 function change_p(id){
         $('#changeid').val(id);
