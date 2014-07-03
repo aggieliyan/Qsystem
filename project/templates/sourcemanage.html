@@ -76,7 +76,7 @@
 		<select name="level_1" class="section1" id="sec1" >
 		<option value="请选择">请选择</option>
 		{% for level_1 in level_list %}
-		    <option value="{{level_1.realname}}" {% if level_1 == level %} selected {% endif %} >{{level_1.realname}}</option>
+		    <option value="{{level_1.id}}" {% if level_1 == level %} selected {% endif %} >{{level_1.realname}}</option>
 		    {% endfor %}
 		</select>		
 		<button type="button" class="addsub" id="add1" > </button>
