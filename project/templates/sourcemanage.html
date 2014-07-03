@@ -47,7 +47,7 @@
 		   <select name="level_2a" class="section2" id="sec2" onchange="insert2()">
 			  <option value="请选择">请选择</option>
 					{% for level_1 in level_list %}
-		    		<option value="{{level_1.realname}}">{{level_1.id}}</option>
+		    		<option value="{{level_1.id}}">{{level_1.realname}}</option>
 		   			{% endfor %}
 			</select>	
 
@@ -61,7 +61,7 @@
 		<select name="level_3a" class="section3" id="sec3" onchange="insert3()">
 			<option value="请选择">请选择</option>
 				{% for level_1 in level_list %}
-		    <option value="{{level_1.realname}}">{{level_1.id}}</option>
+		    <option value="{{level_1.id}}">{{level_1.realname}}</option>
 		    	{% endfor %}
 		</select>		
 		<button type="button" class="addsub" id="add3a" > </button>
