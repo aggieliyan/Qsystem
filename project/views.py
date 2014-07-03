@@ -686,7 +686,7 @@ def delay(request):
 
 
     userid = request.session['id']
-    
+
     delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     global  projectobj
     paginator = Paginator(delays, 20)
@@ -699,7 +699,7 @@ def delay(request):
     except EmptyPage:
         #If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-    return render_to_response('delay.html',RequestContext(request, {'projectobj': projectobj}))
+    return render_to_response('delay.html', RequestContext(request, {'projectobj': projectobj}))
 
 def notice(request):
     if request.method == 'POST':  # 如果是post请求
@@ -707,7 +707,7 @@ def notice(request):
         try:
             wd = wds['wd']
             notices = public_message.objects.filter(content__icontains=wd).filter(type_p="notice").order_by("-id")
-            
+
         except Exception as e:
             notices = public_message.objects.filter(type_p="notice").order_by("-id")
     else:  # Get请求
@@ -755,8 +755,7 @@ def historymessage(request):
     except EmptyPage:
     #If page is out of range (e.g. 9999), deliver last page of results.
          projectobj = paginator.page(paginator.num_pages)
-
-    return render_to_response('historymessage.html', RequestContext(request, {'projectobj':projectobj}))
+    return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
 
 
 def refuse(request):
@@ -780,15 +779,15 @@ def refuse(request):
             #delay.reason = reason
 
                 delay.isactived = 0
-                delay.save();
-                pub_message.save();
+                delay.save()
+                pub_message.save()
                 related_user = models.user.objects.filter(project_user__project_id=project_id)
-                message = models.public_message.objects.filter(project=project_id).order_by("-id")[0]            
+                message = models.public_message.objects.filter(project=project_id).order_by("-id")[0]
             for i in related_user:
                 uid = i.id
                 megid = message.id
                 pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=project_id, isactived='1')
-                pro_u_message.save()  
+                pro_u_message.save()
     delays = project_delay.objects.filter(isactived=True)
     return HttpResponseRedirect('/delay/')
 
@@ -804,7 +803,7 @@ def approve(request):
             deltitle = delay.title
             aa = delay.delay_to_date
             del_to_date = str(aa)
-            string = deltitle+u"延期至："+del_to_date
+            string = deltitle + u"延期至：" + del_to_date
             #delpro=project_delay.objects.get(id=delayid1)
         if request.session['id']:
             useid = request.session['id']
@@ -813,37 +812,37 @@ def approve(request):
             #delay.reason = reason
 
             delay.isactived = 1
-            delay.save();
-            pub_message.save();
+            delay.save()
+            pub_message.save()
 
     raw_sql = 'select * from project_project_delay where isactived is null'
     delays = project_delay.objects.raw(raw_sql)
     return HttpResponseRedirect('/delay/')
 
 
-def deletehistory(request):  
+def deletehistory(request):
     if request.session['id']:
         useid = request.session['id']
     if request.method == 'POST':
-        form = MessageForm(request.POST)  
+        form = MessageForm(request.POST)
         if form.is_valid():
-            messageid = form.cleaned_data['messageid'] 
+            messageid = form.cleaned_data['messageid']
             usermessage = project_user_message.objects.get(userid_id=useid, messageid_id=messageid)
             usermessage.delete();
     tests = project_user_message.objects.filter(userid_id=useid)
-    lists =[]
+    lists = []
     for test in tests:
         lists.append(test.messageid_id)
-    messages  = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('publication_date')
+    messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     return HttpResponseRedirect('/historymessage/')
 
-def deletenotice(request):  
+def deletenotice(request):
     if request.session['id']:
         useid = request.session['id']
     if request.method == 'POST':
-        form = NoticeForm(request.POST) 
+        form = NoticeForm(request.POST)
         if form.is_valid():
-            noticeid = form.cleaned_data['noticeid'] 
+            noticeid = form.cleaned_data['noticeid']
             usernotice = project_user_message.objects.get(userid_id=useid, messageid_id=noticeid)
             usernotice.delete();
     tests = project_user_message.objects.filter(userid_id=useid)
