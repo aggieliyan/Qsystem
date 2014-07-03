@@ -347,39 +347,38 @@ def isNone(s):
     
 def detail(request, pid):
     pro = models.project.objects.get(id=int(pid))
-    user = models.user.objects.get(id = pro.leader_p_id)
+    user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
     qa = {'rel': qas}
     devs = models.user.objects.filter(project_user__project_id=pid, department_id=2)
-    dev= {'rel': devs}
+    dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
-    dt_temp ={}
+    dt_temp = {}
     dt = {}
-    #处理时间为空,无法计算时间差   
-    if ((pro.estimated_product_end_date!=None) & (pro.estimated_product_start_date!=None)):
-        dt_temp['p']= pro.estimated_product_end_date - pro.estimated_product_start_date
-        dt['ptime']= int(dt_temp['p'].days+1)
+    #处理时间为空,无法计算时间差
+    if (pro.estimated_product_end_date != None) & (pro.estimated_product_start_date != None):
+        dt_temp['p'] = pro.estimated_product_end_date - pro.estimated_product_start_date
+        dt['ptime'] = int(dt_temp['p'].days+1)
     else:
-        dt['ptime']= 0
-    if ((pro.estimated_develop_end_date!=None) & (pro.estimated_develop_start_date!=None)):
-        dt_temp['d']= pro.estimated_develop_end_date - pro.estimated_develop_start_date
-        dt['dtime']= int(dt_temp['d'].days+1)
+        dt['ptime'] = 0
+    if (pro.estimated_develop_end_date != None) & (pro.estimated_develop_start_date != None):
+        dt_temp['d'] = pro.estimated_develop_end_date - pro.estimated_develop_start_date
+        dt['dtime'] = int(dt_temp['d'].days+1)
     else:
-        dt['dtime']= 0
-    if ((pro.estimated_test_end_date!=None) & (pro.estimated_test_start_date!=None)):
-        dt_temp['t']= pro.estimated_test_end_date - pro.estimated_test_start_date
-        dt['ttime']= int(dt_temp['t'].days+1)
+        dt['dtime'] = 0
+    if (pro.estimated_test_end_date != None) & (pro.estimated_test_start_date != None):
+        dt_temp['t'] = pro.estimated_test_end_date - pro.estimated_test_start_date
+        dt['ttime'] = int(dt_temp['t'].days+1)
     else:
-        dt['ttime']= 0    
-    
-    if ('/detail/' in request.path) :
+        dt['ttime'] = 0
+    if '/detail/' in request.path:
         res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user}
-        return render_to_response('detail.html',{'res': res})
-    elif ('/editproject' in request.path):
+        return render_to_response('detail.html', {'res': res})
+    elif '/editproject' in request.path:
         res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
-        return render_to_response('newproject.html',{'res': res})
+        return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
     roles = request.GET['role']
