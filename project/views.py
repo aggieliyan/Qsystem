@@ -713,8 +713,8 @@ def notice(request):
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
-            wd = wds['wd']
-            notices = public_message.objects.filter(content__icontains=wd).filter(type_p="notice").order_by("-id")
+            noticetext = wds['wd']
+            notices = public_message.objects.filter(content__icontains=noticetext).filter(type_p="notice").order_by("-id")
 
         except Exception:
             notices = public_message.objects.filter(type_p="notice").order_by("-id")
@@ -747,8 +747,8 @@ def historymessage(request):
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
-            wd = wds['wd']
-            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=wd).filter(type_p="message").order_by('publication_date')
+            messagetext = wds['wd']
+            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=messagetext).filter(type_p="message").order_by('publication_date')
         except Exception:
             messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     else:  # Get请求
@@ -807,8 +807,8 @@ def approve(request):
             delay = project_delay.objects.get(id=delayid1)
             project_id = delay.project_id
             deltitle = delay.title
-            aa = delay.delay_to_date
-            del_to_date = str(aa)
+            delaydate= delay.delay_to_date
+            del_to_date = str(delaydate)
             string = deltitle + u"延期至：" + del_to_date
             #delpro=project_delay.objects.get(id=delayid1)
         if request.session['id']:
@@ -820,9 +820,6 @@ def approve(request):
             delay.isactived = 1
             delay.save()
             pub_message.save()
-
-    raw_sql = 'select * from project_project_delay where isactived is null'
-    delays = project_delay.objects.raw(raw_sql)
     return HttpResponseRedirect('/delay/')
 
 #删除历史消息
