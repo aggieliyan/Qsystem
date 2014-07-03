@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     #login
-    url('^$', 'project.views.login',name="index"),
+    url('^$', 'project.views.project_list',name="index"),
     url('^login', 'project.views.login',name="login"),
     url('^register', 'project.views.register',name="register"),
     url('^register/login', 'project.views.login',name="login"),
