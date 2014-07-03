@@ -643,13 +643,13 @@ def Insert_user(request, id, id2):
         user = models.user.objects.filter(department_id=\
         department_id, realname=realname).update(Position_level='1')
     elif id == '2':
-        realname = request.POST['level_2a']
+        id = request.POST['level_2a']
         user = models.user.objects.filter(department_id=department_id, \
-        realname=realname).update(Position_level='2')
+        id=id).update(Position_level='2')
     elif id == '3':
-        realname = request.POST['level_3a']
+        id = request.POST['level_3a']
         user = models.user.objects.filter(department_id=department_id, \
-        realname=realname).update(Position_level='3')
+        id=id).update(Position_level='3')
     elif id == '4':
         realname = request.POST['level_1']
         user = models.user.objects.filter(department_id=department_id, \
