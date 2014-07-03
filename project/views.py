@@ -388,21 +388,21 @@ def show_person(request):
     else:
         key = 0
     person = models.user.objects.filter(department_id=key)
-    rs = []
+    person_rs = []
     num = len(person)
     if num == 0:
-        rrs = {"person":rs}
-        rs = json.dumps(rrs)
-        return HttpResponse(rs)
+        rrs = {"person":person_rs}
+        person_rs = json.dumps(rrs)
+        return HttpResponse(person_rs)
     for item in person:
         uid = item.id
         realname = item.realname
         dic = {'id':int(uid), 'realname':realname}
-        rs.append(dic)
+        person_rs.append(dic)
 
-    rrs = {"person":rs}
-    rs = json.dumps(rrs)
-    return HttpResponse(rs)  
+    rrs = {"person":person_rs}
+    person_rs = json.dumps(rrs)
+    return HttpResponse(person_rs)  
 def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
@@ -416,17 +416,17 @@ def psearch(request):
     else:
         ptype = 0
     prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
-    rs = []
+    search_rs = []
     if len(prs) > 0:
         for item in prs:
             dic = {'id':item.id, 'realname':item.realname}
-            rs.append(dic)
-        rrs = {"person":rs}
-        rs = json.dumps(rrs)
+            search_rs.append(dic)
+        rrs = {"person":search_rs}
+        search_rs = json.dumps(rrs)
     else:
-        rrs = {"person":rs}
-        rs = json.dumps(rrs)
-    return HttpResponse(rs)
+        rrs = {"person":search_rs}
+        search_rs = json.dumps(rrs)
+    return HttpResponse(search_rs)
 
 def show_headname(request):
     user = {}

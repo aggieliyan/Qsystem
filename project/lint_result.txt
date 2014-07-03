@@ -1,0 +1,928 @@
+************* Module project.views
+C:  2, 0: Line too long (92/80) (line-too-long)
+C: 10, 0: Line too long (110/80) (line-too-long)
+C: 12, 0: Line too long (113/80) (line-too-long)
+C: 18, 0: Line too long (93/80) (line-too-long)
+C: 31, 0: Trailing whitespace (trailing-whitespace)
+C: 41, 0: Line too long (98/80) (line-too-long)
+C: 45, 0: Line too long (154/80) (line-too-long)
+C: 45, 0: Exactly one space required after comma
+                return render_to_response('register.html',{'list':department.objects.all(), 'error':'注册的用户名已存在'},context_instance=RequestContext(request))
+                                                         ^ (bad-whitespace)
+C: 45, 0: Exactly one space required after comma
+                return render_to_response('register.html',{'list':department.objects.all(), 'error':'注册的用户名已存在'},context_instance=RequestContext(request))
+                                                                                                                ^ (bad-whitespace)
+W: 47, 0: Unnecessary semicolon (unnecessary-semicolon)
+C: 62, 0: Line too long (121/80) (line-too-long)
+C: 62, 0: Exactly one space required after comma
+    return render_to_response('register.html',{'list':department.objects.all()},context_instance=RequestContext(request))
+                                             ^ (bad-whitespace)
+C: 62, 0: Exactly one space required after comma
+    return render_to_response('register.html',{'list':department.objects.all()},context_instance=RequestContext(request))
+                                                                               ^ (bad-whitespace)
+C: 77, 0: Trailing whitespace (trailing-whitespace)
+C: 81, 0: Exactly one space required around assignment
+    template_var={}
+                ^ (bad-whitespace)
+C: 82, 0: Trailing whitespace (trailing-whitespace)
+C: 86, 0: Line too long (90/80) (line-too-long)
+C: 99, 0: Line too long (101/80) (line-too-long)
+C:108, 0: Line too long (107/80) (line-too-long)
+C:122, 0: Line too long (99/80) (line-too-long)
+C:232, 0: Line too long (84/80) (line-too-long)
+C:252, 0: Line too long (84/80) (line-too-long)
+C:261, 0: Trailing whitespace (trailing-whitespace)
+C:265, 0: Trailing whitespace (trailing-whitespace)
+C:268, 0: Trailing whitespace (trailing-whitespace)
+C:269, 0: Exactly one space required around assignment
+    noticess=public_message.objects.filter(type_p='notice').order_by('-id')
+            ^ (bad-whitespace)
+C:270, 0: Exactly one space required around assignment
+    count=len(noticess)
+         ^ (bad-whitespace)
+C:271, 0: Exactly one space required around assignment
+    notices=noticess[:5]
+           ^ (bad-whitespace)
+C:284, 0: Trailing whitespace (trailing-whitespace)
+C:285, 0: Trailing whitespace (trailing-whitespace)
+C:288, 0: Exactly one space required around assignment
+    puser=None
+         ^ (bad-whitespace)
+C:289, 0: Exactly one space required around assignment
+    project_name=""
+                ^ (bad-whitespace)
+C:290, 0: Exactly one space required around assignment
+    start_date_s=""
+                ^ (bad-whitespace)
+C:291, 0: Exactly one space required around assignment
+    end_date_s=""
+              ^ (bad-whitespace)
+C:292, 0: Exactly one space required around assignment
+    status_p=""
+            ^ (bad-whitespace)
+C:293, 0: Exactly one space required around assignment
+    leader_p=""
+            ^ (bad-whitespace)
+C:294, 0: Exactly one space required around assignment
+    project_user_list=None
+                     ^ (bad-whitespace)
+C:295, 0: Exactly one space required around assignment
+    puser=project_user.objects.all()
+         ^ (bad-whitespace)
+C:307, 0: Trailing whitespace (trailing-whitespace)
+C:309, 0: Line too long (104/80) (line-too-long)
+C:311, 0: Line too long (94/80) (line-too-long)
+C:313, 0: Line too long (92/80) (line-too-long)
+C:315, 0: Line too long (91/80) (line-too-long)
+C:317, 0: Line too long (96/80) (line-too-long)
+C:318, 0: Line too long (110/80) (line-too-long)
+C:323, 0: Line too long (83/80) (line-too-long)
+C:327, 0: Trailing whitespace (trailing-whitespace)
+C:339, 0: Line too long (274/80) (line-too-long)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                  ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                                ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                                                            ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                                                                                        ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                                                                                                                ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                                                                                                                                    ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                                                                                                                                                        ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                                                                                                                                                                           ^ (bad-whitespace)
+C:339, 0: Exactly one space required after comma
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+                                                                                                                                                                                                                                                                         ^ (bad-whitespace)
+C:342, 0: Exactly one space required after comma
+    if s is None or (isinstance(s,basestring) and len(s.strip()) == 0):
+                                 ^ (bad-whitespace)
+C:346, 0: Trailing whitespace (trailing-whitespace)
+C:350, 0: Line too long (83/80) (line-too-long)
+C:352, 0: Line too long (84/80) (line-too-long)
+C:354, 0: Line too long (83/80) (line-too-long)
+C:360, 0: Line too long (93/80) (line-too-long)
+C:361, 0: Line too long (88/80) (line-too-long)
+C:365, 0: Line too long (93/80) (line-too-long)
+C:366, 0: Line too long (88/80) (line-too-long)
+C:370, 0: Line too long (87/80) (line-too-long)
+C:371, 0: Line too long (82/80) (line-too-long)
+C:379, 0: Line too long (86/80) (line-too-long)
+C:408, 0: Trailing whitespace (trailing-whitespace)
+C:421, 0: Line too long (94/80) (line-too-long)
+C:440, 0: Trailing whitespace (trailing-whitespace)
+C:453, 0: Line too long (113/80) (line-too-long)
+C:455, 0: Trailing whitespace (trailing-whitespace)
+C:460, 0: Trailing whitespace (trailing-whitespace)
+C:461, 0: Line too long (85/80) (line-too-long)
+C:461, 0: Exactly one space required around assignment
+    result=projectlist.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停')).order_by("-id")
+          ^ (bad-whitespace)
+C:462, 0: Line too long (88/80) (line-too-long)
+C:462, 0: Exactly one space required around assignment
+    result1=projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停')).order_by("-id")
+           ^ (bad-whitespace)
+C:463, 0: Exactly one space required around assignment
+    puser=project_user.objects.all()
+         ^ (bad-whitespace)
+C:464, 0: Trailing whitespace (trailing-whitespace)
+C:475, 0: Trailing whitespace (trailing-whitespace)
+C:477, 0: Exactly one space required around assignment
+    userid=request.session['id']
+          ^ (bad-whitespace)
+C:478, 0: Exactly one space required around assignment
+    j=0
+     ^ (bad-whitespace)
+C:480, 0: Exactly one space required around assignment
+        j=1
+         ^ (bad-whitespace)
+C:481, 0: Trailing whitespace (trailing-whitespace)
+C:482, 0: Exactly one space required around assignment
+    i=0
+     ^ (bad-whitespace)
+C:483, 0: Exactly one space required before assignment
+    tests= project_user_message.objects.filter(userid_id=userid)
+         ^ (bad-whitespace)
+C:484, 0: Exactly one space required around assignment
+    lists=[]
+         ^ (bad-whitespace)
+C:485, 0: Exactly one space required around assignment
+    messagess=[]
+             ^ (bad-whitespace)
+C:488, 0: Line too long (120/80) (line-too-long)
+C:488, 0: No space allowed around keyword argument assignment
+        messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')
+                                                                              ^ (bad-whitespace)
+C:489, 0: Trailing whitespace (trailing-whitespace)
+C:491, 0: Trailing whitespace (trailing-whitespace)
+C:491, 0: Exactly one space required around assignment
+        i=i+1 
+         ^ (bad-whitespace)
+C:492, 0: Exactly one space required around assignment
+    count=i
+         ^ (bad-whitespace)
+C:493, 0: Exactly one space required around assignment
+    messages=messagess[:4]
+            ^ (bad-whitespace)
+C:494, 0: Trailing whitespace (trailing-whitespace)
+C:496, 0: Wrong continued indentation.
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+        ^                     | (bad-continuation)
+C:496, 0: Line too long (123/80) (line-too-long)
+C:496, 0: Exactly one space required after comma
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+                                ^ (bad-whitespace)
+C:496, 0: Exactly one space required after comma
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+                                                ^ (bad-whitespace)
+C:496, 0: Exactly one space required after comma
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+                                                                  ^ (bad-whitespace)
+C:496, 0: Exactly one space required after comma
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+                                                                                ^ (bad-whitespace)
+C:496, 0: Exactly one space required after comma
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+                                                                                                     ^ (bad-whitespace)
+C:496, 0: Exactly one space required after comma
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+                                                                                                                   ^ (bad-whitespace)
+C:498, 0: Exactly one space required after comma
+def deleteproject(request,id,url):
+                         ^ (bad-whitespace)
+C:498, 0: Exactly one space required after comma
+def deleteproject(request,id,url):
+                            ^ (bad-whitespace)
+C:499, 0: Trailing whitespace (trailing-whitespace)
+C:499, 0: Exactly one space required around assignment
+    delpro=get_object_or_404(project,pk=int(id))    
+          ^ (bad-whitespace)
+C:499, 0: Exactly one space required after comma
+    delpro=get_object_or_404(project,pk=int(id))    
+                                    ^ (bad-whitespace)
+C:504, 0: Exactly one space required after comma
+def pauseproject(request,id,url):
+                        ^ (bad-whitespace)
+C:504, 0: Exactly one space required after comma
+def pauseproject(request,id,url):
+                           ^ (bad-whitespace)
+C:505, 0: Exactly one space required around assignment
+    pausepro=get_object_or_404(project,pk=int(id))
+            ^ (bad-whitespace)
+C:505, 0: Exactly one space required after comma
+    pausepro=get_object_or_404(project,pk=int(id))
+                                      ^ (bad-whitespace)
+C:506, 0: Exactly one space required around assignment
+    pausepro.status_p='暂停'
+                     ^ (bad-whitespace)
+C:510, 0: Exactly one space required after comma
+def delayproject(request,url):
+                        ^ (bad-whitespace)
+C:511, 0: Exactly one space required around comparison
+    if request.method=='POST':
+                     ^^ (bad-whitespace)
+C:514, 0: Exactly one space required around assignment
+            delayid=form.cleaned_data['delayid']
+                   ^ (bad-whitespace)
+C:517, 0: Exactly one space required around assignment
+            delpro=project.objects.get(id=delayid)
+                  ^ (bad-whitespace)
+C:518, 0: Exactly one space required around assignment
+            uid=delpro.leader_p
+               ^ (bad-whitespace)
+C:519, 0: Exactly one space required around assignment
+            protitle=delpro.project
+                    ^ (bad-whitespace)
+C:520, 0: Line too long (164/80) (line-too-long)
+C:520, 0: Exactly one space required around assignment
+            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
+                   ^ (bad-whitespace)
+C:520, 0: Exactly one space required after comma
+            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
+                                                 ^ (bad-whitespace)
+C:520, 0: Exactly one space required after comma
+            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
+                                                                    ^ (bad-whitespace)
+C:520, 0: Exactly one space required after comma
+            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
+                                                                                             ^ (bad-whitespace)
+C:520, 0: Exactly one space required after comma
+            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
+                                                                                                                                ^ (bad-whitespace)
+C:520, 0: Exactly one space required after comma
+            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
+                                                                                                                                               ^ (bad-whitespace)
+C:521, 0: Trailing whitespace (trailing-whitespace)
+C:525, 0: Exactly one space required after comma
+def changedesign(request,url):
+                        ^ (bad-whitespace)
+C:526, 0: Trailing whitespace (trailing-whitespace)
+C:527, 0: Exactly one space required around comparison
+    if request.method=='POST':
+                     ^^ (bad-whitespace)
+C:530, 0: Exactly one space required around assignment
+            changeid=form.cleaned_data['changeid']
+                    ^ (bad-whitespace)
+C:533, 0: Exactly one space required around assignment
+            chd=project.objects.get(id=changeid)
+               ^ (bad-whitespace)
+C:534, 0: Exactly one space required around assignment
+            uid=request.session['id']
+               ^ (bad-whitespace)
+C:537, 0: Exactly one space required around assignment
+            string=content+dpath
+                  ^ (bad-whitespace)
+C:538, 0: Line too long (157/80) (line-too-long)
+C:538, 0: Exactly one space required around assignment
+            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+                       ^ (bad-whitespace)
+C:538, 0: Exactly one space required after comma
+            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+                                                       ^ (bad-whitespace)
+C:538, 0: Exactly one space required after comma
+            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+                                                                     ^ (bad-whitespace)
+C:538, 0: Exactly one space required after comma
+            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+                                                                                    ^ (bad-whitespace)
+C:538, 0: Exactly one space required after comma
+            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+                                                                                                     ^ (bad-whitespace)
+C:538, 0: Exactly one space required after comma
+            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+                                                                                                                                              ^ (bad-whitespace)
+C:540, 0: Line too long (88/80) (line-too-long)
+C:541, 0: Trailing whitespace (trailing-whitespace)
+C:541, 0: Line too long (93/80) (line-too-long)
+C:541, 0: Exactly one space required around assignment
+            message=models.public_message.objects.filter(project=changeid).order_by("-id")[0]            
+                   ^ (bad-whitespace)
+C:543, 0: Exactly one space required around assignment
+                uid=i.id
+                   ^ (bad-whitespace)
+C:544, 0: Exactly one space required around assignment
+                megid=message.id
+                     ^ (bad-whitespace)
+C:545, 0: Line too long (118/80) (line-too-long)
+C:545, 0: Exactly one space required around assignment
+                pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
+                             ^ (bad-whitespace)
+C:545, 0: Exactly one space required after comma
+                pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
+                                                                ^ (bad-whitespace)
+C:545, 0: Exactly one space required after comma
+                pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
+                                                                                   ^ (bad-whitespace)
+C:545, 0: Exactly one space required after comma
+                pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
+                                                                                                       ^ (bad-whitespace)
+C:546, 0: Trailing whitespace (trailing-whitespace)
+C:700, 0: Line too long (88/80) (line-too-long)
+C:712, 0: Line too long (96/80) (line-too-long)
+C:720, 0: Line too long (114/80) (line-too-long)
+C:723, 0: Line too long (84/80) (line-too-long)
+C:737, 0: Line too long (97/80) (line-too-long)
+C:754, 0: Line too long (150/80) (line-too-long)
+C:756, 0: Line too long (120/80) (line-too-long)
+C:758, 0: Line too long (116/80) (line-too-long)
+C:769, 0: Line too long (105/80) (line-too-long)
+C:788, 0: Line too long (99/80) (line-too-long)
+C:789, 0: Line too long (114/80) (line-too-long)
+C:795, 0: Line too long (94/80) (line-too-long)
+C:796, 0: Line too long (101/80) (line-too-long)
+C:800, 0: Line too long (125/80) (line-too-long)
+C:821, 0: Line too long (112/80) (line-too-long)
+C:822, 0: Line too long (92/80) (line-too-long)
+C:841, 0: Line too long (99/80) (line-too-long)
+C:847, 0: Line too long (112/80) (line-too-long)
+C:858, 0: Line too long (97/80) (line-too-long)
+C:864, 0: Line too long (110/80) (line-too-long)
+C:  1, 0: Missing module docstring (missing-docstring)
+W: 13, 0: Relative import 'models', should be 'project.models' (relative-import)
+W: 18, 0: Relative import 'models', should be 'project.models' (relative-import)
+C: 28, 0: Missing function docstring (missing-docstring)
+C: 30, 8: Invalid variable name "uf" (invalid-name)
+E: 30,13: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E: 30,13: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E: 31,11: Instance of 'UserForm' has no 'is_valid' member (no-member)
+E: 35,23: Instance of 'UserForm' has no 'cleaned_data' member (no-member)
+E: 36,23: Instance of 'UserForm' has no 'cleaned_data' member (no-member)
+E: 37,23: Instance of 'UserForm' has no 'cleaned_data' member (no-member)
+W: 43,12: No exception type(s) specified (bare-except)
+C: 44,16: Invalid variable name "uf" (invalid-name)
+E: 44,21: No value for argument 'name' in constructor call (no-value-for-parameter)
+E: 44,21: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E: 44,21: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E: 45,66: Class 'department' has no 'objects' member (no-member)
+E: 50,18: Class 'user' has no 'objects' member (no-member)
+C: 60, 8: Invalid variable name "uf" (invalid-name)
+E: 60,13: No value for argument 'name' in constructor call (no-value-for-parameter)
+E: 60,13: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E: 60,13: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E: 62,54: Class 'department' has no 'objects' member (no-member)
+W: 47,12: Unused variable 'user_new' (unused-variable)
+C: 64, 0: Missing function docstring (missing-docstring)
+W: 68, 4: No exception type(s) specified (bare-except)
+C: 72, 0: Missing function docstring (missing-docstring)
+W: 72,13: Unused argument 'request' (unused-argument)
+C: 75, 0: Missing function docstring (missing-docstring)
+W: 75,12: Unused argument 'request' (unused-argument)
+C: 78, 0: Missing function docstring (missing-docstring)
+E: 86,19: Using variable 'user' before assignment (used-before-assignment)
+E: 92,11: No value for argument 'name' in constructor call (no-value-for-parameter)
+E: 92,11: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E: 92,11: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E: 94,15: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E: 94,15: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E: 95,11: Instance of 'LoginForm' has no 'is_valid' member (no-member)
+E: 96,23: Instance of 'LoginForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E: 97,35: Instance of 'LoginForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E: 98,26: Instance of 'LoginForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E: 99,23: Class 'user' has no 'objects' member (no-member)
+W:110,20: No exception type(s) specified (bare-except)
+E:108,77: Instance of 'LoginForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:113,24: Using variable 'response' before assignment (used-before-assignment)
+W:231,24: Redefining name 'project' from outer scope (line 12) (redefined-outer-name)
+W:202,24: Redefining name 'project_user' from outer scope (line 12) (redefined-outer-name)
+R:124, 0: Too many local variables (37/15) (too-many-locals)
+C:124, 0: Missing function docstring (missing-docstring)
+E:134,11: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:134,11: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:134,11: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:136,15: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:136,15: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:137,11: Instance of 'ProjectForm' has no 'is_valid' member (no-member)
+E:138,23: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:139,20: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:140,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:141,23: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:142,21: Class 'user' has no 'objects' member (no-member)
+E:143,23: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:145,27: Class 'user' has no 'objects' member (no-member)
+E:146,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:148,25: Class 'user' has no 'objects' member (no-member)
+E:149,20: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:150,20: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:151,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:152,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:153,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:154,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:155,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:156,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:157,20: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:158,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:159,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:160,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:161,21: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:162,26: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:164,22: Unexpected keyword argument 'designer_p' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'project' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'estimated_develop_end_date' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'test_plan_p' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'develop_plan_p' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'estimated_product_start_date' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'tester_p' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'test_case_p' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'estimated_test_start_date' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'test_report_p' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'priority' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'leader_p' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'estimated_develop_start_date' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'estimated_product_end_date' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'blueprint_p' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'estimated_test_end_date' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'expect_launch_date' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'start_date' in constructor call (unexpected-keyword-arg)
+E:164,22: Unexpected keyword argument 'status_p' in constructor call (unexpected-keyword-arg)
+E:164,22: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:164,22: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:164,22: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:177,24: Class 'project' has no 'objects' member (no-member)
+E:178,22: Unexpected keyword argument 'designer_p' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'real_launch_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'estimated_develop_start_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'estimated_test_end_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'expect_launch_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'id' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'status_p' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'test_plan_p' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'estimated_product_start_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'priority' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'test_case_p' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'blueprint_p' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'start_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'estimated_product_end_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'estimated_develop_end_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'develop_plan_p' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'tester_p' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'test_report_p' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'estimated_test_start_date' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'project' in constructor call (unexpected-keyword-arg)
+E:178,22: Unexpected keyword argument 'leader_p' in constructor call (unexpected-keyword-arg)
+E:178,22: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:178,22: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:178,22: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:196,26: Class 'project' has no 'objects' member (no-member)
+E:199,20: Class 'project_user' has no 'objects' member (no-member)
+E:202,39: Unexpected keyword argument 'project_id' in constructor call (unexpected-keyword-arg)
+E:202,39: Unexpected keyword argument 'username_id' in constructor call (unexpected-keyword-arg)
+E:202,39: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:202,39: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:202,39: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:202,39: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:207,24: Class 'user' has no 'objects' member (no-member)
+E:210,28: Class 'user' has no 'objects' member (no-member)
+E:211,20: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:214,28: Class 'user' has no 'objects' member (no-member)
+E:215,20: Instance of 'ProjectForm' has no 'cleaned_data' member (but some types could not be inferred) (maybe-no-member)
+E:220,26: Class 'public_message' has no 'objects' member (no-member)
+E:231,34: Class 'project' has no 'objects' member (no-member)
+E:234,35: Unexpected keyword argument 'publisher' in constructor call (unexpected-keyword-arg)
+E:234,35: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:234,35: Unexpected keyword argument 'project' in constructor call (unexpected-keyword-arg)
+E:234,35: Unexpected keyword argument 'type_p' in constructor call (unexpected-keyword-arg)
+E:234,35: Unexpected keyword argument 'publication_date' in constructor call (unexpected-keyword-arg)
+E:234,35: Unexpected keyword argument 'content' in constructor call (unexpected-keyword-arg)
+E:234,35: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:234,35: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:234,35: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:251,34: Class 'project' has no 'objects' member (no-member)
+E:254,35: Unexpected keyword argument 'publisher' in constructor call (unexpected-keyword-arg)
+E:254,35: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:254,35: Unexpected keyword argument 'project' in constructor call (unexpected-keyword-arg)
+E:254,35: Unexpected keyword argument 'type_p' in constructor call (unexpected-keyword-arg)
+E:254,35: Unexpected keyword argument 'publication_date' in constructor call (unexpected-keyword-arg)
+E:254,35: Unexpected keyword argument 'content' in constructor call (unexpected-keyword-arg)
+E:254,35: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:254,35: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:254,35: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+R:124, 0: Too many branches (22/12) (too-many-branches)
+R:124, 0: Too many statements (88/50) (too-many-statements)
+W:331, 8: Redefining name 'projectobj' from outer scope (line 705) (redefined-outer-name)
+R:267, 0: Too many local variables (19/15) (too-many-locals)
+C:267, 0: Missing function docstring (missing-docstring)
+E:269,13: Class 'public_message' has no 'objects' member (no-member)
+C:272, 4: Invalid variable name "a" (invalid-name)
+C:274, 8: Invalid variable name "a" (invalid-name)
+C:276, 8: Invalid variable name "a" (invalid-name)
+C:278, 8: Invalid variable name "a" (invalid-name)
+C:280, 8: Invalid variable name "a" (invalid-name)
+C:282, 8: Invalid variable name "a" (invalid-name)
+C:284, 8: Invalid variable name "a" (invalid-name)
+E:295,10: Class 'project_user' has no 'objects' member (no-member)
+E:298,22: Undefined variable 'ProjectSearchForm' (undefined-variable)
+E:306,26: Class 'project' has no 'objects' member (no-member)
+E:318,36: Class 'project_user' has no 'objects' member (no-member)
+C:320,20: Invalid variable name "p" (invalid-name)
+E:326,22: Class 'project' has no 'objects' member (no-member)
+R:267, 0: Too many branches (17/12) (too-many-branches)
+R:267, 0: Too many statements (59/50) (too-many-statements)
+C:341, 0: Invalid function name "isNone" (invalid-name)
+C:341, 0: Invalid argument name "s" (invalid-name)
+C:341, 0: Missing function docstring (missing-docstring)
+C:347, 0: Missing function docstring (missing-docstring)
+E:348,10: Class 'project' has no 'objects' member (no-member)
+E:349,11: Class 'user' has no 'objects' member (no-member)
+E:350,10: Class 'user' has no 'objects' member (no-member)
+C:351, 4: Invalid variable name "qa" (invalid-name)
+E:352,11: Class 'user' has no 'objects' member (no-member)
+E:354,10: Class 'user' has no 'objects' member (no-member)
+C:355, 4: Invalid variable name "pd" (invalid-name)
+C:358, 4: Invalid variable name "dt" (invalid-name)
+C:382, 0: Missing function docstring (missing-docstring)
+E:393,13: Class 'user' has no 'objects' member (no-member)
+C:409, 0: Missing function docstring (missing-docstring)
+E:421,10: Class 'user' has no 'objects' member (no-member)
+C:434, 0: Missing function docstring (missing-docstring)
+C:444, 4: Invalid variable name "rs" (invalid-name)
+W:468, 8: Redefining name 'projectobj' from outer scope (line 705) (redefined-outer-name)
+R:448, 0: Too many local variables (21/15) (too-many-locals)
+C:448, 0: Missing function docstring (missing-docstring)
+W:450, 8: Statement seems to have no effect (pointless-statement)
+E:451,22: Class 'project' has no 'objects' member (no-member)
+E:453,28: Class 'project_user' has no 'objects' member (no-member)
+C:457, 8: Invalid variable name "p" (invalid-name)
+E:463,10: Class 'project_user' has no 'objects' member (no-member)
+E:483,11: Class 'project_user_message' has no 'objects' member (no-member)
+E:488,20: Class 'public_message' has no 'objects' member (no-member)
+W:490, 8: Unused variable 'item' (unused-variable)
+W:498,26: Redefining built-in 'id' (redefined-builtin)
+C:498, 0: Invalid argument name "id" (invalid-name)
+C:498, 0: Missing function docstring (missing-docstring)
+W:498,18: Unused argument 'request' (unused-argument)
+W:504,25: Redefining built-in 'id' (redefined-builtin)
+C:504, 0: Invalid argument name "id" (invalid-name)
+C:504, 0: Missing function docstring (missing-docstring)
+W:504,17: Unused argument 'request' (unused-argument)
+C:510, 0: Missing function docstring (missing-docstring)
+E:512,15: Undefined variable 'delayprojectForm' (undefined-variable)
+E:517,19: Class 'project' has no 'objects' member (no-member)
+E:520,20: Unexpected keyword argument 'title' in constructor call (unexpected-keyword-arg)
+E:520,20: Unexpected keyword argument 'application' in constructor call (unexpected-keyword-arg)
+E:520,20: Unexpected keyword argument 'reason' in constructor call (unexpected-keyword-arg)
+E:520,20: Unexpected keyword argument 'apply_date' in constructor call (unexpected-keyword-arg)
+E:520,20: Unexpected keyword argument 'project_id' in constructor call (unexpected-keyword-arg)
+E:520,20: Unexpected keyword argument 'delay_to_date' in constructor call (unexpected-keyword-arg)
+E:520,20: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:520,20: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:520,20: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+C:525, 0: Missing function docstring (missing-docstring)
+E:528,15: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:528,15: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:529,11: Instance of 'changedesignForm' has no 'is_valid' member (no-member)
+E:530,21: Instance of 'changedesignForm' has no 'cleaned_data' member (no-member)
+E:531,22: Instance of 'changedesignForm' has no 'cleaned_data' member (no-member)
+E:532,20: Instance of 'changedesignForm' has no 'cleaned_data' member (no-member)
+E:533,16: Class 'project' has no 'objects' member (no-member)
+E:538,24: Unexpected keyword argument 'publisher' in constructor call (unexpected-keyword-arg)
+E:538,24: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:538,24: Unexpected keyword argument 'project' in constructor call (unexpected-keyword-arg)
+E:538,24: Unexpected keyword argument 'type_p' in constructor call (unexpected-keyword-arg)
+E:538,24: Unexpected keyword argument 'publication_date' in constructor call (unexpected-keyword-arg)
+E:538,24: Unexpected keyword argument 'content' in constructor call (unexpected-keyword-arg)
+E:538,24: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:538,24: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:538,24: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:540,27: Class 'user' has no 'objects' member (no-member)
+E:541,20: Class 'public_message' has no 'objects' member (no-member)
+E:545,30: Unexpected keyword argument 'project_id' in constructor call (unexpected-keyword-arg)
+E:545,30: Unexpected keyword argument 'messageid_id' in constructor call (unexpected-keyword-arg)
+E:545,30: Unexpected keyword argument 'userid_id' in constructor call (unexpected-keyword-arg)
+E:545,30: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:545,30: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:545,30: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:545,30: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+W:533,12: Unused variable 'chd' (unused-variable)
+C:551, 0: Missing function docstring (missing-docstring)
+C:555, 8: Invalid variable name "Position_level" (invalid-name)
+E:555,25: Class 'user' has no 'objects' member (no-member)
+W:570, 8: Redefining name 'department' from outer scope (line 12) (redefined-outer-name)
+C:563, 0: Missing function docstring (missing-docstring)
+E:567,28: Class 'user' has no 'objects' member (no-member)
+E:570,21: Class 'department' has no 'objects' member (no-member)
+E:572,26: Class 'department' has no 'objects' member (no-member)
+E:573,23: Class 'user' has no 'objects' member (no-member)
+E:575,23: Class 'user' has no 'objects' member (no-member)
+E:577,23: Class 'user' has no 'objects' member (no-member)
+W:575, 8: Unused variable 'level_2_list' (unused-variable)
+W:573, 8: Unused variable 'level_1_list' (unused-variable)
+W:577, 8: Unused variable 'level_3_list' (unused-variable)
+W:570, 8: Unused variable 'department' (unused-variable)
+W:572, 8: Unused variable 'department_list' (unused-variable)
+W:585, 4: Redefining name 'department' from outer scope (line 12) (redefined-outer-name)
+C:584, 0: Missing function docstring (missing-docstring)
+E:589,17: Class 'department' has no 'objects' member (no-member)
+E:594,19: Class 'user' has no 'objects' member (no-member)
+E:596,19: Class 'user' has no 'objects' member (no-member)
+E:598,19: Class 'user' has no 'objects' member (no-member)
+E:600,22: Class 'department' has no 'objects' member (no-member)
+W:596, 4: Unused variable 'level_2_list' (unused-variable)
+W:594, 4: Unused variable 'level_1_list' (unused-variable)
+W:598, 4: Unused variable 'level_3_list' (unused-variable)
+W:600, 4: Unused variable 'department_list' (unused-variable)
+W:611, 8: Redefining name 'department' from outer scope (line 12) (redefined-outer-name)
+C:604, 0: Missing function docstring (missing-docstring)
+E:608,28: Class 'user' has no 'objects' member (no-member)
+E:611,21: Class 'department' has no 'objects' member (no-member)
+E:618,25: Class 'department' has no 'objects' member (no-member)
+E:625,21: Class 'user' has no 'objects' member (no-member)
+E:627,23: Class 'user' has no 'objects' member (no-member)
+E:629,23: Class 'user' has no 'objects' member (no-member)
+E:631,23: Class 'user' has no 'objects' member (no-member)
+E:633,26: Class 'department' has no 'objects' member (no-member)
+W:625, 8: Unused variable 'level_list' (unused-variable)
+W:629, 8: Unused variable 'level_2_list' (unused-variable)
+W:627, 8: Unused variable 'level_1_list' (unused-variable)
+W:631, 8: Unused variable 'level_3_list' (unused-variable)
+W:633, 8: Unused variable 'department_list' (unused-variable)
+W:645, 4: Redefining name 'department' from outer scope (line 12) (redefined-outer-name)
+W:639,25: Redefining built-in 'id' (redefined-builtin)
+C:639, 0: Invalid function name "Insert_user" (invalid-name)
+C:639, 0: Invalid argument name "id" (invalid-name)
+C:639, 0: Missing function docstring (missing-docstring)
+E:642,24: Class 'user' has no 'objects' member (no-member)
+E:649,17: Class 'department' has no 'objects' member (no-member)
+E:656,15: Class 'user' has no 'objects' member (no-member)
+E:660,15: Class 'user' has no 'objects' member (no-member)
+E:664,15: Class 'user' has no 'objects' member (no-member)
+E:668,15: Class 'user' has no 'objects' member (no-member)
+E:671,15: Class 'user' has no 'objects' member (no-member)
+E:674,15: Class 'user' has no 'objects' member (no-member)
+E:678,15: Class 'user' has no 'objects' member (no-member)
+E:682,15: Class 'user' has no 'objects' member (no-member)
+E:686,15: Class 'user' has no 'objects' member (no-member)
+R:639, 0: Too many branches (13/12) (too-many-branches)
+C:692, 0: Missing function docstring (missing-docstring)
+E:700,13: Class 'project_delay' has no 'objects' member (no-member)
+W:701, 4: Global variable 'projectobj' undefined at the module level (global-variable-undefined)
+C:701, 4: Invalid constant name "projectobj" (invalid-name)
+C:715, 0: Missing function docstring (missing-docstring)
+W:722,15: Catching too general exception Exception (broad-except)
+C:719,12: Invalid variable name "wd" (invalid-name)
+E:720,22: Class 'public_message' has no 'objects' member (no-member)
+E:723,22: Class 'public_message' has no 'objects' member (no-member)
+E:725,18: Class 'public_message' has no 'objects' member (no-member)
+W:726, 4: Global variable 'projectobj' undefined at the module level (global-variable-undefined)
+C:726, 4: Invalid constant name "projectobj" (invalid-name)
+C:740, 0: Missing function docstring (missing-docstring)
+E:746,12: Class 'project_user_message' has no 'objects' member (no-member)
+W:755,15: Catching too general exception Exception (broad-except)
+C:753,12: Invalid variable name "wd" (invalid-name)
+E:754,23: Class 'public_message' has no 'objects' member (no-member)
+E:756,23: Class 'public_message' has no 'objects' member (no-member)
+E:758,19: Class 'public_message' has no 'objects' member (no-member)
+W:759, 4: Global variable 'projectobj' undefined at the module level (global-variable-undefined)
+C:759, 4: Invalid constant name "projectobj" (invalid-name)
+W:779,12: Redefining name 'delay' from outer scope (line 692) (redefined-outer-name)
+R:772, 0: Too many local variables (18/15) (too-many-locals)
+C:772, 0: Missing function docstring (missing-docstring)
+E:775,15: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:775,15: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:776,11: Instance of 'TestForm' has no 'is_valid' member (no-member)
+E:777,22: Instance of 'TestForm' has no 'cleaned_data' member (no-member)
+E:778,21: Instance of 'TestForm' has no 'cleaned_data' member (no-member)
+E:779,20: Class 'project_delay' has no 'objects' member (no-member)
+E:788,30: Unexpected keyword argument 'publisher' in constructor call (unexpected-keyword-arg)
+E:788,30: Unexpected keyword argument 'delay_status' in constructor call (unexpected-keyword-arg)
+E:788,30: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:788,30: Unexpected keyword argument 'project' in constructor call (unexpected-keyword-arg)
+E:788,30: Unexpected keyword argument 'type_p' in constructor call (unexpected-keyword-arg)
+E:788,30: Unexpected keyword argument 'publication_date' in constructor call (unexpected-keyword-arg)
+E:788,30: Unexpected keyword argument 'content' in constructor call (unexpected-keyword-arg)
+E:788,30: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:788,30: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:788,30: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:795,31: Class 'user' has no 'objects' member (no-member)
+E:796,26: Class 'public_message' has no 'objects' member (no-member)
+E:800,32: Unexpected keyword argument 'project_id' in constructor call (unexpected-keyword-arg)
+E:800,32: Unexpected keyword argument 'messageid_id' in constructor call (unexpected-keyword-arg)
+E:800,32: Unexpected keyword argument 'userid_id' in constructor call (unexpected-keyword-arg)
+E:800,32: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:800,32: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:800,32: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:800,32: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:802,13: Class 'project_delay' has no 'objects' member (no-member)
+W:802, 4: Unused variable 'delays' (unused-variable)
+W:780,12: Unused variable 'publisher_id' (unused-variable)
+W:811,12: Redefining name 'delay' from outer scope (line 692) (redefined-outer-name)
+C:806, 0: Missing function docstring (missing-docstring)
+E:808,15: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:808,15: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:809,11: Instance of 'Approveform' has no 'is_valid' member (no-member)
+E:810,23: Instance of 'Approveform' has no 'cleaned_data' member (no-member)
+E:811,20: Class 'project_delay' has no 'objects' member (no-member)
+C:815,12: Invalid variable name "aa" (invalid-name)
+E:821,26: Unexpected keyword argument 'publisher' in constructor call (unexpected-keyword-arg)
+E:821,26: Unexpected keyword argument 'delay_status' in constructor call (unexpected-keyword-arg)
+E:821,26: Unexpected keyword argument 'isactived' in constructor call (unexpected-keyword-arg)
+E:821,26: Unexpected keyword argument 'project' in constructor call (unexpected-keyword-arg)
+E:821,26: Unexpected keyword argument 'type_p' in constructor call (unexpected-keyword-arg)
+E:821,26: Unexpected keyword argument 'publication_date' in constructor call (unexpected-keyword-arg)
+E:821,26: Unexpected keyword argument 'content' in constructor call (unexpected-keyword-arg)
+E:821,26: No value for argument 'name' in constructor call (no-value-for-parameter)
+E:821,26: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:821,26: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:830,13: Class 'project_delay' has no 'objects' member (no-member)
+W:830, 4: Unused variable 'delays' (unused-variable)
+W:812,12: Unused variable 'publisher_id' (unused-variable)
+C:834, 0: Missing function docstring (missing-docstring)
+E:838,15: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:838,15: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:839,11: Instance of 'MessageForm' has no 'is_valid' member (no-member)
+E:840,24: Instance of 'MessageForm' has no 'cleaned_data' member (no-member)
+E:841,26: Class 'project_user_message' has no 'objects' member (no-member)
+E:843,12: Class 'project_user_message' has no 'objects' member (no-member)
+E:847,15: Class 'public_message' has no 'objects' member (no-member)
+W:847, 4: Unused variable 'messages' (unused-variable)
+C:851, 0: Missing function docstring (missing-docstring)
+E:855,15: No value for argument 'bases' in constructor call (no-value-for-parameter)
+E:855,15: No value for argument 'attrs' in constructor call (no-value-for-parameter)
+E:856,11: Instance of 'NoticeForm' has no 'is_valid' member (no-member)
+E:857,23: Instance of 'NoticeForm' has no 'cleaned_data' member (no-member)
+E:858,25: Class 'project_user_message' has no 'objects' member (no-member)
+E:860,12: Class 'project_user_message' has no 'objects' member (no-member)
+E:864,14: Class 'public_message' has no 'objects' member (no-member)
+W:864, 4: Unused variable 'notices' (unused-variable)
+W: 11, 0: Unused import ProusermessForm (unused-import)
+
+
+Report
+======
+655 statements analysed.
+
+Statistics by type
+------------------
+
++---------+-------+-----------+-----------+------------+---------+
+|type     |number |old number |difference |%documented |%badname |
++=========+=======+===========+===========+============+=========+
+|module   |1      |1          |=          |0.00        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|class    |0      |0          |=          |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|method   |0      |0          |=          |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|function |29     |29         |=          |0.00        |6.90     |
++---------+-------+-----------+-----------+------------+---------+
+
+
+
+Messages by category
+--------------------
+
++-----------+-------+---------+-----------+
+|type       |number |previous |difference |
++===========+=======+=========+===========+
+|convention |235    |238      |-3.00      |
++-----------+-------+---------+-----------+
+|refactor   |9      |9        |=          |
++-----------+-------+---------+-----------+
+|warning    |53     |53       |=          |
++-----------+-------+---------+-----------+
+|error      |289    |289      |=          |
++-----------+-------+---------+-----------+
+
+
+
+Messages
+--------
+
++--------------------------+------------+
+|message id                |occurrences |
++==========================+============+
+|no-member                 |107         |
++--------------------------+------------+
+|unexpected-keyword-arg    |91          |
++--------------------------+------------+
+|bad-whitespace            |87          |
++--------------------------+------------+
+|line-too-long             |62          |
++--------------------------+------------+
+|no-value-for-parameter    |61          |
++--------------------------+------------+
+|missing-docstring         |30          |
++--------------------------+------------+
+|invalid-name              |29          |
++--------------------------+------------+
+|trailing-whitespace       |26          |
++--------------------------+------------+
+|maybe-no-member           |26          |
++--------------------------+------------+
+|unused-variable           |23          |
++--------------------------+------------+
+|redefined-outer-name      |10          |
++--------------------------+------------+
+|unused-argument           |4           |
++--------------------------+------------+
+|too-many-locals           |4           |
++--------------------------+------------+
+|too-many-branches         |3           |
++--------------------------+------------+
+|redefined-builtin         |3           |
++--------------------------+------------+
+|global-variable-undefined |3           |
++--------------------------+------------+
+|bare-except               |3           |
++--------------------------+------------+
+|used-before-assignment    |2           |
++--------------------------+------------+
+|undefined-variable        |2           |
++--------------------------+------------+
+|too-many-statements       |2           |
++--------------------------+------------+
+|relative-import           |2           |
++--------------------------+------------+
+|broad-except              |2           |
++--------------------------+------------+
+|unused-import             |1           |
++--------------------------+------------+
+|unnecessary-semicolon     |1           |
++--------------------------+------------+
+|pointless-statement       |1           |
++--------------------------+------------+
+|bad-continuation          |1           |
++--------------------------+------------+
+
+
+
+Global evaluation
+-----------------
+Your code has been rated at -16.60/10 (previous run: -16.64/10, +0.05)
+
+Raw metrics
+-----------
+
++----------+-------+------+---------+-----------+
+|type      |number |%     |previous |difference |
++==========+=======+======+=========+===========+
+|code      |746    |92.67 |746      |=          |
++----------+-------+------+---------+-----------+
+|docstring |0      |0.00  |0        |=          |
++----------+-------+------+---------+-----------+
+|comment   |23     |2.86  |23       |=          |
++----------+-------+------+---------+-----------+
+|empty     |36     |4.47  |36       |=          |
++----------+-------+------+---------+-----------+
+
+
+
+External dependencies
+---------------------
+::
+
+    django 
+      \-contrib 
+      | \-auth (project.views)
+      | | \-models (project.views)
+      | \-sessions 
+      |   \-models (project.views)
+      \-core 
+      | \-paginator (project.views)
+      \-db 
+      | \-models (project.views)
+      \-http (project.views)
+      \-shortcuts (project.views)
+      \-template (project.views)
+      \-utils 
+      | \-translation (project.views)
+      \-views 
+        \-decorators 
+          \-csrf (project.views)
+    hashlib (project.views)
+    json (project.views)
+    project 
+      \-forms (project.views)
+      \-models (project.views)
+
+
+
+Duplication
+-----------
+
++-------------------------+------+---------+-----------+
+|                         |now   |previous |difference |
++=========================+======+=========+===========+
+|nb duplicated lines      |0     |0        |=          |
++-------------------------+------+---------+-----------+
+|percent duplicated lines |0.000 |0.000    |=          |
++-------------------------+------+---------+-----------+
+
+
+
