@@ -35,14 +35,15 @@ def register(request):
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
-
+            
             try:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
             except:
                 uf = UserForm()
-                return render_to_response('register.html',{'list':department.objects.all(), 'error':'注册的用户名已存在'},context_instance=RequestContext(request))
-
+                return render_to_response('register.html', {'list':department.objects.all(),
+                                                            'error':'注册的用户名已存在'},
+                                          context_instance=RequestContext(request))
             user_new = uf.save();
 
             #登录
