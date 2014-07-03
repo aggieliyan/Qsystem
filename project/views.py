@@ -552,10 +552,10 @@ def judge(request):
         if Position_level == '1':
             return redirect('/show_user/')
         else:
-            return redirect('/nopermit/')
+            return redirect('/show_source/')
     except KeyError:
         return redirect('/login/')
-def nopermit(request):
+def show_source(request):
     try:
         if request.session['username']:
             username = request.session['username']
