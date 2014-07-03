@@ -218,14 +218,17 @@ $(document).ready(function(){
     //选择项目负责人
     $("#master").focus(function(){
       p = $(".role-item");  
+      //没有值的时候提示去添加人员
+      if(p.length == 0){
+        alert("请先在右侧添加人员");
+      }
       $("#master").children("option").remove();
-      //var idlist =" ";
       for(var i=p.length-1; i >=0; i--){
         item = p.eq(i);
         $("#master").append("<option value="+item.attr("value")+">"+item.children('span').eq(0).text()+"</option>");
       } 
+    
 
-      //set_other_master();
     });
     
     $("#master").blur(function(){
@@ -245,7 +248,6 @@ $(document).ready(function(){
 
     //计算天数
     $(".range input").change(function(){
-        console.log("jisuantianshu");
         var endtime = $(this).val().split("-", 3);
         var s = $(this).parent().prev("span").prev("span");
         var temp = s.eq(0).children('input').val()
@@ -258,6 +260,7 @@ $(document).ready(function(){
           var days = diff/1000/60/60/24 + 1;
           $(this).parent().siblings('div').children('span').text(days);
         }
-
     });
+
+
 });

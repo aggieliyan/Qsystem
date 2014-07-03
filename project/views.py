@@ -7,7 +7,11 @@ import json
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
+<<<<<<< HEAD
 from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm
+=======
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm
+>>>>>>> 4bc9d4a2f6df8b396cde87c8260d1e0e251ad2f4
 from project.models import department, project, project_user, public_message, project_delay, project_user_message
 import models
 import hashlib
@@ -35,14 +39,15 @@ def register(request):
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
-
+            
             try:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
             except:
                 uf = UserForm()
-                return render_to_response('register.html',{'list':department.objects.all(), 'error':'注册的用户名已存在'},context_instance=RequestContext(request))
-
+                return render_to_response('register.html', {'list':department.objects.all(),
+                                                            'error':'注册的用户名已存在'},
+                                          context_instance=RequestContext(request))
             user_new = uf.save();
 
             #登录
@@ -58,7 +63,8 @@ def register(request):
     else:
         uf = UserForm()
 
-    return render_to_response('register.html',{'list':department.objects.all()},context_instance=RequestContext(request))
+    return render_to_response('register.html', {'list':department.objects.all()},
+                              context_instance=RequestContext(request))
 
 def logout(request):
     try:
@@ -73,37 +79,33 @@ def no_login(request):
 
 def no_perm(request):
     return render_to_response("noperm.html")
-    
 def login(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect("/personal_homepage")
-    template_var={}
-    
+    template_var = {}
     if "username" in request.COOKIES and "password" in request.COOKIES:
         username = request.COOKIES["username"]
         password = request.COOKIES["password"]
-        _userset=user.objects.filter(username__exact = username,password__exact = password)
+        _userset = user.objects.filter(username__exact=username, password__exact=password)
         if _userset.count() >= 1:
             _user = _userset[0]
             request.session['username'] = _user.username
             request.session['realname'] = _user.realname
             return HttpResponseRedirect("/personal_homepage")
-    
     form = LoginForm()
     if request.method == 'POST':
-        form=LoginForm(request.POST.copy())
+        form = LoginForm(request.POST.copy())
         if form.is_valid():
             username = form.cleaned_data["username"]
             password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
-            _userset=models.user.objects.filter(username__exact = username,password__exact = password)
+            _userset = models.user.objects.filter(username__exact=username, password__exact=password)
             if _userset.count() >= 1:
                 _user = _userset[0]
                 if _user.isactived:
                     request.session['username'] = _user.username
                     request.session['realname'] = _user.realname
                     request.session['id'] = _user.id
-                    
                     #Django 认证系统的登录
                     try:
                         user = auth.authenticate(username=username, password=form.cleaned_data["password"])
@@ -112,26 +114,26 @@ def login(request):
                         template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)         
+                        response.set_cookie("password", password, 3600)
                     response = HttpResponseRedirect("/personal_homepage")
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
             else:
                 template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
-    template_var["form"]=form
-    return render_to_response("login.html",template_var,context_instance=RequestContext(request))
+    template_var["form"] = form
+    return render_to_response("login.html", template_var, context_instance=RequestContext(request))
 
 def new_project(request, pid=''):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
     #编辑的得有编辑权限
-    #if pid and not request.user.has_perm('project.change_project'):
-     #   return HttpResponseRedirect("/noperm")
+    if pid and not request.user.has_perm('project.change_project'):
+        return HttpResponseRedirect("/noperm")
     #新建的得有新建权限
-    #if not pid and not request.user.has_perm('project.add_project'):
-     #   return HttpResponseRedirect("/noperm")
+    if not pid and not request.user.has_perm('project.add_project'):
+        return HttpResponseRedirect("/noperm")
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -266,7 +268,7 @@ def new_project(request, pid=''):
     
 
 def project_list(request):
-	
+	#notice
     noticess=public_message.objects.filter(type_p='notice').order_by('-id')
     count=len(noticess)
     notices=noticess[:5]
@@ -283,8 +285,7 @@ def project_list(request):
         a = 0
     else:
         a = len(noticess)-5    	
-	
-
+    ##
     projectlist = None
     puser=None
     project_name=""
@@ -347,39 +348,38 @@ def isNone(s):
     
 def detail(request, pid):
     pro = models.project.objects.get(id=int(pid))
-    user = models.user.objects.get(id = pro.leader_p_id)
+    user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
     qa = {'rel': qas}
     devs = models.user.objects.filter(project_user__project_id=pid, department_id=2)
-    dev= {'rel': devs}
+    dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
-    dt_temp ={}
+    dt_temp = {}
     dt = {}
-    #处理时间为空,无法计算时间差   
-    if ((pro.estimated_product_end_date!=None) & (pro.estimated_product_start_date!=None)):
-        dt_temp['p']= pro.estimated_product_end_date - pro.estimated_product_start_date
-        dt['ptime']= int(dt_temp['p'].days+1)
+    #处理时间为空,无法计算时间差
+    if (pro.estimated_product_end_date != None) & (pro.estimated_product_start_date != None):
+        dt_temp['p'] = pro.estimated_product_end_date - pro.estimated_product_start_date
+        dt['ptime'] = int(dt_temp['p'].days+1)
     else:
-        dt['ptime']= 0
-    if ((pro.estimated_develop_end_date!=None) & (pro.estimated_develop_start_date!=None)):
-        dt_temp['d']= pro.estimated_develop_end_date - pro.estimated_develop_start_date
-        dt['dtime']= int(dt_temp['d'].days+1)
+        dt['ptime'] = 0
+    if (pro.estimated_develop_end_date != None) & (pro.estimated_develop_start_date != None):
+        dt_temp['d'] = pro.estimated_develop_end_date - pro.estimated_develop_start_date
+        dt['dtime'] = int(dt_temp['d'].days+1)
     else:
-        dt['dtime']= 0
-    if ((pro.estimated_test_end_date!=None) & (pro.estimated_test_start_date!=None)):
-        dt_temp['t']= pro.estimated_test_end_date - pro.estimated_test_start_date
-        dt['ttime']= int(dt_temp['t'].days+1)
+        dt['dtime'] = 0
+    if (pro.estimated_test_end_date != None) & (pro.estimated_test_start_date != None):
+        dt_temp['t'] = pro.estimated_test_end_date - pro.estimated_test_start_date
+        dt['ttime'] = int(dt_temp['t'].days+1)
     else:
-        dt['ttime']= 0    
-    
-    if ('/detail/' in request.path) :
+        dt['ttime'] = 0
+    if '/detail/' in request.path:
         res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user}
-        return render_to_response('detail.html',{'res': res})
-    elif ('/editproject' in request.path):
+        return render_to_response('detail.html', {'res': res})
+    elif '/editproject' in request.path:
         res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
-        return render_to_response('newproject.html',{'res': res})
+        return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
     roles = request.GET['role']
@@ -393,21 +393,21 @@ def show_person(request):
     else:
         key = 0
     person = models.user.objects.filter(department_id=key)
-    rs = []
+    person_rs = []
     num = len(person)
     if num == 0:
-        rrs = {"person":rs}
-        rs = json.dumps(rrs)
-        return HttpResponse(rs)
+        rrs = {"person":person_rs}
+        person_rs = json.dumps(rrs)
+        return HttpResponse(person_rs)
     for item in person:
         uid = item.id
         realname = item.realname
         dic = {'id':int(uid), 'realname':realname}
-        rs.append(dic)
+        person_rs.append(dic)
 
-    rrs = {"person":rs}
-    rs = json.dumps(rrs)
-    return HttpResponse(rs)  
+    rrs = {"person":person_rs}
+    person_rs = json.dumps(rrs)
+    return HttpResponse(person_rs)  
 def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
@@ -421,17 +421,17 @@ def psearch(request):
     else:
         ptype = 0
     prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
-    rs = []
+    search_rs = []
     if len(prs) > 0:
         for item in prs:
             dic = {'id':item.id, 'realname':item.realname}
-            rs.append(dic)
-        rrs = {"person":rs}
-        rs = json.dumps(rrs)
+            search_rs.append(dic)
+        rrs = {"person":search_rs}
+        search_rs = json.dumps(rrs)
     else:
-        rrs = {"person":rs}
-        rs = json.dumps(rrs)
-    return HttpResponse(rs)
+        rrs = {"person":search_rs}
+        search_rs = json.dumps(rrs)
+    return HttpResponse(search_rs)
 
 def show_headname(request):
     user = {}
@@ -473,17 +473,26 @@ def personal_homepage(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
+<<<<<<< HEAD
     #userid = request.session['id']
     userid=request.session['id']
     j=0
     if request.user.has_perm('project.change_project_delay'):
         j=1    
+=======
+    #message
+    userid=request.session['id']
+    j=0
+    if request.user.has_perm('project.change_project_delay'):
+        j=1
+>>>>>>> 4bc9d4a2f6df8b396cde87c8260d1e0e251ad2f4
     i=0
     tests= project_user_message.objects.filter(userid_id = userid)
     lists=[]
     messagess=[]
     for test in tests:
         lists.append(test.messageid_id)
+<<<<<<< HEAD
         messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')  
     for item in messagess:
         i = i + 1 
@@ -493,6 +502,19 @@ def personal_homepage(request):
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count, 'j':j})
 def deleteproject(request, id, url):
     delpro = get_object_or_404(project, pk = int(id))
+=======
+        messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')
+    for item in messagess:
+        i=i+1 
+    count=i
+    messages=messagess[:4]
+    ##
+    return render_to_response('personal_homepage.html',
+        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
+
+def deleteproject(request,id,url):
+    delpro=get_object_or_404(project,pk=int(id))    
+>>>>>>> 4bc9d4a2f6df8b396cde87c8260d1e0e251ad2f4
     delpro.delete()
     return HttpResponseRedirect(url)
 def pauseproject(request, id, url):
@@ -569,7 +591,7 @@ def nopermit(request):
         department_id, Position_level="2")
         level_3_list = models.user.objects.filter(department_id=\
         department_id, Position_level="3")
-        return render_to_response('nopermit.html', locals())
+        return render_to_response('show_source.html', locals())
     except KeyError:
         return redirect('/login/')
 
@@ -591,7 +613,7 @@ def show_user2(request):
     level_3_list = models.user.objects.filter(department_id=\
     department_id, Position_level="3")
     department_list = models.department.objects.all()
-    return render_to_response('nopermit.html', locals())
+    return render_to_response('show_source.html', locals())
 
 @csrf_exempt
 def show_user(request):
@@ -681,7 +703,7 @@ def Insert_user(request, id, id2):
         user.delete()
     return redirect('/show_user/')
 
-
+#延期
 def delay(request):
 
     if not request.session['id']:
@@ -689,9 +711,6 @@ def delay(request):
 
     if not request.user.has_perm('project.change_project_delay'):
         return HttpResponseRedirect("/noperm")
-
-
-    userid = request.session['id']
 
     delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     global  projectobj
@@ -707,14 +726,15 @@ def delay(request):
         projectobj = paginator.page(paginator.num_pages)
     return render_to_response('delay.html', RequestContext(request, {'projectobj': projectobj}))
 
+#公告
 def notice(request):
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
-            wd = wds['wd']
-            notices = public_message.objects.filter(content__icontains=wd).filter(type_p="notice").order_by("-id")
+            noticetext = wds['wd']
+            notices = public_message.objects.filter(content__icontains=noticetext).filter(type_p="notice").order_by("-id")
 
-        except Exception as e:
+        except Exception:
             notices = public_message.objects.filter(type_p="notice").order_by("-id")
     else:  # Get请求
         notices = public_message.objects.filter(type_p="notice").order_by("-id")
@@ -733,6 +753,7 @@ def notice(request):
 
 @csrf_exempt
 
+#历史消息
 def historymessage(request):
     # 查询与用户相关的消息
     if request.session['id']:
@@ -744,9 +765,9 @@ def historymessage(request):
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
-            wd = wds['wd']
-            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=wd).filter(type_p="message").order_by('publication_date')
-        except Exception as e:
+            messagetext = wds['wd']
+            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=messagetext).filter(type_p="message").order_by('publication_date')
+        except Exception:
             messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     else:  # Get请求
         messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
@@ -762,7 +783,7 @@ def historymessage(request):
         projectobj = paginator.page(paginator.num_pages)
     return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
 
-
+#拒绝
 def refuse(request):
     if request.method == 'POST':
 
@@ -770,10 +791,9 @@ def refuse(request):
         if form.is_valid():
             delayid = form.cleaned_data['delayid']
             reason = form.cleaned_data['reason']
-            delay = project_delay.objects.get(id=delayid)
-            publisher_id = delay.application_id
-            project_id = delay.project_id
-            deltitle = delay.title
+            refusedelay = project_delay.objects.get(id=delayid)
+            project_id = refusedelay.project_id
+            deltitle = refusedelay.title
             string = deltitle+u"申请延期被拒绝，理由"+reason
             #delpro=project.objects.get(id=delayid)
             if request.session['id']:
@@ -781,10 +801,10 @@ def refuse(request):
                 useid = request.session['id']
                 pub_message = public_message(project=project_id, publisher=useid, content=string, \
                     type_p="message", publication_date=datetime.datetime.now(), delay_status="已拒绝", isactived="1")
-            #delay.reason = reason
+            #refusedelay.reason = reason
 
-                delay.isactived = 0
-                delay.save()
+                refusedelay.isactived = 0
+                refusedelay.save()
                 pub_message.save()
                 related_user = models.user.objects.filter(project_user__project_id=project_id)
                 message = models.public_message.objects.filter(project=project_id).order_by("-id")[0]
@@ -793,38 +813,33 @@ def refuse(request):
                 megid = message.id
                 pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=project_id, isactived='1')
                 pro_u_message.save()
-    delays = project_delay.objects.filter(isactived=True)
     return HttpResponseRedirect('/delay/')
 
-
+#接受
 def approve(request):
     if request.method == 'POST':
         form = Approveform(request.POST)
         if form.is_valid():
             delayid1 = form.cleaned_data['delayid1']
-            delay = project_delay.objects.get(id=delayid1)
-            publisher_id = delay.application_id
-            project_id = delay.project_id
-            deltitle = delay.title
-            aa = delay.delay_to_date
-            del_to_date = str(aa)
+            approvedelay = project_delay.objects.get(id=delayid1)
+            project_id = approvedelay.project_id
+            deltitle = approvedelay.title
+            delaydate= approvedelay.delay_to_date
+            del_to_date = str(delaydate)
             string = deltitle + u"延期至：" + del_to_date
             #delpro=project_delay.objects.get(id=delayid1)
         if request.session['id']:
             useid = request.session['id']
             pub_message = public_message(project=project_id, publisher=useid, content=string, type_p="notice", \
                 publication_date=datetime.datetime.now(), delay_status="已批准", isactived="1")
-            #delay.reason = reason
+            #approvedelay.reason = reason
 
-            delay.isactived = 1
-            delay.save()
+            approvedelay.isactived = 1
+            approvedelay.save()
             pub_message.save()
-
-    raw_sql = 'select * from project_project_delay where isactived is null'
-    delays = project_delay.objects.raw(raw_sql)
     return HttpResponseRedirect('/delay/')
 
-
+#删除历史消息
 def deletehistory(request):
     if request.session['id']:
         useid = request.session['id']
@@ -838,9 +853,9 @@ def deletehistory(request):
     lists = []
     for test in tests:
         lists.append(test.messageid_id)
-    messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     return HttpResponseRedirect('/historymessage/')
 
+#删除公告
 def deletenotice(request):
     if request.session['id']:
         useid = request.session['id']
@@ -854,6 +869,5 @@ def deletenotice(request):
     lists = []
     for test in tests:
         lists.append(test.messageid_id)
-    notices = public_message.objects.filter(pk__in=lists).filter(type_p="notice").order_by('publication_date')
     return HttpResponseRedirect('/notice/')
 
