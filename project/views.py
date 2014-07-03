@@ -160,7 +160,7 @@ def new_project(request, pid=''):
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
             if pid == '':
-                pro = models.project(priority=priority,\
+                pro = models.project(priority=priority, \
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
                     expect_launch_date=pdate, \
@@ -237,7 +237,6 @@ def new_project(request, pid=''):
                         pmessage.save()
                         project.real_launch_date = datetime.datetime.now()
                         project.save()
-                        print 123
                 else:
                     if prolist[0].isactived != 0:
                         try:
