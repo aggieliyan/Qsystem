@@ -687,7 +687,7 @@ def Insert_user(request, id, id2):
         user.delete()
     return redirect('/show_user/')
 
-
+#延期
 def delay(request):
 
     if not request.session['id']:
@@ -695,9 +695,6 @@ def delay(request):
 
     if not request.user.has_perm('project.change_project_delay'):
         return HttpResponseRedirect("/noperm")
-
-
-    userid = request.session['id']
 
     delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     global  projectobj
@@ -713,6 +710,7 @@ def delay(request):
         projectobj = paginator.page(paginator.num_pages)
     return render_to_response('delay.html', RequestContext(request, {'projectobj': projectobj}))
 
+#公告
 def notice(request):
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
@@ -720,7 +718,7 @@ def notice(request):
             wd = wds['wd']
             notices = public_message.objects.filter(content__icontains=wd).filter(type_p="notice").order_by("-id")
 
-        except Exception as e:
+        except Exception:
             notices = public_message.objects.filter(type_p="notice").order_by("-id")
     else:  # Get请求
         notices = public_message.objects.filter(type_p="notice").order_by("-id")
@@ -739,6 +737,7 @@ def notice(request):
 
 @csrf_exempt
 
+#历史消息
 def historymessage(request):
     # 查询与用户相关的消息
     if request.session['id']:
@@ -752,7 +751,7 @@ def historymessage(request):
         try:
             wd = wds['wd']
             messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=wd).filter(type_p="message").order_by('publication_date')
-        except Exception as e:
+        except Exception:
             messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     else:  # Get请求
         messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
@@ -768,7 +767,7 @@ def historymessage(request):
         projectobj = paginator.page(paginator.num_pages)
     return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
 
-
+#拒绝
 def refuse(request):
     if request.method == 'POST':
 
@@ -802,7 +801,7 @@ def refuse(request):
     delays = project_delay.objects.filter(isactived=True)
     return HttpResponseRedirect('/delay/')
 
-
+#接受
 def approve(request):
     if request.method == 'POST':
         form = Approveform(request.POST)
@@ -830,7 +829,7 @@ def approve(request):
     delays = project_delay.objects.raw(raw_sql)
     return HttpResponseRedirect('/delay/')
 
-
+#删除历史消息
 def deletehistory(request):
     if request.session['id']:
         useid = request.session['id']
@@ -847,6 +846,7 @@ def deletehistory(request):
     messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
     return HttpResponseRedirect('/historymessage/')
 
+#删除公告
 def deletenotice(request):
     if request.session['id']:
         useid = request.session['id']
