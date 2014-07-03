@@ -25,7 +25,9 @@ class UserForm(forms.Form):
                                        realname=self.cleaned_data['realname'],
                                        password=password,
                                        create_time=datetime.datetime.now(),
-                                       department=department.objects.get(id=self.cleaned_data['departmentid']), isactived=1)
+                                       department=department.objects.get(id=self.cleaned_data
+                                                                         ['departmentid']),
+                                       isactived=1)
         return new_user
 
 class LoginForm(forms.Form):
