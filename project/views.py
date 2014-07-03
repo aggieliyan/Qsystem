@@ -243,6 +243,7 @@ def new_project(request, pid=''):
     
 
 def project_list(request):
+	
     noticess=public_message.objects.filter(type_p='notice').order_by('-id')
     count=len(noticess)
     notices=noticess[:5]
@@ -259,6 +260,8 @@ def project_list(request):
         a = 0
     else:
         a = len(noticess)-5    	
+	
+
     projectlist = None
     puser=None
     project_name=""
@@ -448,11 +451,13 @@ def personal_homepage(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-    #message
+    
+    #userid = request.session['id']
     userid=request.session['id']
     j=0
     if request.user.has_perm('project.change_project_delay'):
         j=1
+    
     i=0
     tests= project_user_message.objects.filter(userid_id=userid)
     lists=[]
@@ -460,11 +465,12 @@ def personal_homepage(request):
     for test in tests:
         lists.append(test.messageid_id)
         messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')
+  
     for item in messagess:
         i=i+1 
     count=i
     messages=messagess[:4]
-    ##
+   
     return render_to_response('personal_homepage.html',
         {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
 
