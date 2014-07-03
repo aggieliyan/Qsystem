@@ -15,8 +15,10 @@
  var name;
  var pwd;
  var repeaPwd;
+ var departmentid;
  var flag=true;
  var errorMessage="";
+ 
 
 //初始化
  function init(){
@@ -25,25 +27,19 @@
  	name=document.getElementById("Text_name").value;
  	pwd=document.getElementById("Text_password").value;
  	repeaPwd=document.getElementById("Text_repeatpassword").value;
+ 	departmentid=document.getElementById("Select_part").value;
  	document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
  	document.getElementById("nameErrorMsg").innerHTML=errorMessage;
  	document.getElementById("pwdErrorMsg").innerHTML=errorMessage;
  	document.getElementById("repeatpwdErrorMsg").innerHTML=errorMessage;
+ 	document.getElementById("departmentidErrorMsg").innerHTML=errorMessage;
  }
 
  function checkRegistMsg(){
  		
  	init();
  	checkRegIsNull();
- 	if(pwd!=""){
- 		if(pwd==repeaPwd){
- 			flag=true;
- 		}else{
- 			errorMessage="两次输入的密码不一致";
- 			document.getElementById("repeatpwdErrorMsg").innerHTML=errorMessage;
- 			flag=false;
- 		}
- 	}	
+ 		
  	return flag
  } 
 
@@ -69,6 +65,18 @@
  		document.getElementById("repeatpwdErrorMsg").innerHTML=errorMessage;
  		flag=false;
  	}
+ 	if(pwd!=""&&pwd!=repeaPwd){
+ 			errorMessage="两次输入的密码不一致";
+ 			document.getElementById("repeatpwdErrorMsg").innerHTML=errorMessage;
+ 			flag=false;
+ 
+ 	}
+ 	if(!isNull(departmentid)){
+ 		errorMessage="请选择您所在的部门";
+ 		document.getElementById("departmentidErrorMsg").innerHTML=errorMessage;
+ 		flag=false;
+ 	}
+ 	
  	
  }
  function isNull(text){
@@ -139,12 +147,13 @@
 	             		</tr>
 	             		<tr>
 	                 		<td class="table">
-	                 			<select id="Select_part" name="departmentid">
-		                   			<!--<option style="color: #C0C0C0" value={{l.id}}>请选择您所在的部门</option>  -->
+	                 			<select id="Select_part" name="departmentid">m
+		                   			<option style="color: #C0C0C0" value="">请选择您所在的部门</option>
 		                         	{% for l in list %}  
 										<option style="color: #000000" value={{ l.id }}>{{ l.department }}</option>  
 									{% endfor %}
 	                     		</select>
+	                     		<span id="departmentidErrorMsg" style="color: red"></span>	                     		
 	                     	</td>
 	                 		<td class="table">
 	                     	</td>
@@ -154,7 +163,7 @@
 	         		</table>
 	        		<input id="Button_register" type="submit" value="注  册" 
 	            		style="color: #FFFFFF; background-color: #5CB85C; width: 104px; margin-left: 10px; height: 37px; border-width: 0; font-weight:bolder; cursor:pointer;"/> &nbsp &nbsp &nbsp <a style="font-size:12px;font-family: Verdana,Microsoft YaHei ,宋体; ">已有帐号？马上</a><a href="/login/" style="color:#5CB85C; font-size:12px;font-family: Verdana,Microsoft YaHei ,宋体; cursor:pointer;">登录>></a>
-				</div><p style="font-size: 13px; margin-top: 125px;font-family: Verdana,Microsoft YaHei ,宋体;">© 2014 Ablesky, Inc. 版权所有, 能力天空科技（北京）有限公司 </p>
+				</div>
        	 	</form>
        	 </div>
 	</div>
