@@ -14,7 +14,7 @@ import hashlib
 
 from django.views.decorators.csrf import csrf_exempt
 
-from models import project, user, project_user, project_delay, public_message, project_user_message
+from models import project, project_user, project_delay, public_message, project_user_message
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from django.utils.translation import ugettext_lazy as _
@@ -35,7 +35,7 @@ def register(request):
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
-            
+
             try:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
@@ -66,7 +66,6 @@ def logout(request):
         Session.objects.get(session_key=session_key).delete()
     except:
         pass
-    
     return HttpResponseRedirect("/login")
 
 def no_login(request):
@@ -109,13 +108,11 @@ def login(request):
                     try:
                         user = auth.authenticate(username=username, password=form.cleaned_data["password"])
                         auth.login(request, user)
-                        
                     except:
                         template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)
-                        
+                        response.set_cookie("password", password, 3600)         
                     response = HttpResponseRedirect("/personal_homepage")
                     return response
                 else:
@@ -124,10 +121,6 @@ def login(request):
                 template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
     template_var["form"]=form
     return render_to_response("login.html",template_var,context_instance=RequestContext(request))
-#login
-
-
-# Create your views here.
 
 def new_project(request, pid=''):
     #没登陆的提示去登录
