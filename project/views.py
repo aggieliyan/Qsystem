@@ -532,7 +532,7 @@ def changedesign(request,url):
                 pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
                 pro_u_message.save()           
     return HttpResponseRedirect(url)
-    return render_to_response('personal_homepage.html', {'form': form})
+    #return render_to_response('personal_homepage.html', {'form': form})
 
 #资源管理
 def judge(request):
