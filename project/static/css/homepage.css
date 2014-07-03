@@ -1,5 +1,7 @@
 
-
+#mybody{
+  width: 1500px;
+}
                   
     .notice{
       height:120px;
@@ -24,25 +26,25 @@
           color:#003366;
         }
     #x-table{
-      width:1100px;
+      width:100px;
       margin:auto;                  
       background-color:#ffffff;
     }
     #x-table2{
-      width:1100px;
-      margin:auto;
-      border:#ddd solid thin;           
+      width:1500px;
+      margin:0px auto;
+      border:#ddd solid thin; 
+               
       background-color:#ffffff;}
 
     #customers{
-      font-family:"Trebuchet MS", Arial, 12px;
       width:100%;
       margin:auto;
       padding-bottom: 30px;
       border-collapse:collapse;
-        table-layout:fixed;}
+      table-layout:fixed;}
       #customers td, #customers th{
-        font-size:12px;
+        font-size:14px;
         border:1px solid #ddd;
         padding:3px 7px 2px 7px;
         width:100%;
@@ -52,9 +54,12 @@
             text-overflow: ellipsis;
            
         }
+      #customers td{
+        line-height: 30px;
+        }
       #customers th{
         background-image: url(../img/list.png);
-            height: 20px;
+            height: 30px;
             text-align:center;
         }
         #customers th tr{

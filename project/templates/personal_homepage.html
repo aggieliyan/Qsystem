@@ -11,6 +11,7 @@
   <link href="/static/css/homepage.css" rel="stylesheet" media="screen">
   {% endblock %}
   {% block content %}
+  <body id="mybody">
 
   <!-- Button trigger modal -->   
    
@@ -196,29 +197,6 @@
         </div>
       </div>
     </div>
-  </div>
-<!--分页--> 
-  <div class="pagination pagination-right">
-    <ul>
-      <li class=""><a href=href="" onclick="page.prePage();">&laquo;</a></li>
-      <li class=""><a href="#">1</a></li>
-      <li class=""><a href="#">2</a></li>
-      <li class=""><a href="#">3</a></li>
-      <li class=""><a href="#">4</a></li>
-      <li class=""><a href="#">5</a></li>
-      <li class=""><a href="#" onclick="page.nextPage();">&raquo;</a></li>
-    </ul>
-  </div>
-
-  <!--分页--> 
-  <div class="pagination pagination-right">
-    <ul>
-      <li class=""><a href="" onclick="page.prePage();">&laquo;</a></li>
-      {% for i in result %}
-      <li class=""><a href="?page={{ projectobj.number }}">{{ projectobj.number }}</a></li>
-      {% endfor %}
-      <li class=""><a href="#" onclick="page.nextPage();">&raquo;</a></li>
-    </ul>
   </div>
 
   <!--分页-->
@@ -427,7 +405,8 @@
     </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
-  </div>       
+  </div> 
+  </body>      
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
