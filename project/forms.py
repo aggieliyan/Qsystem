@@ -9,21 +9,23 @@ import datetime
 import hashlib
         
 class UserForm(forms.Form):
-    username = forms.CharField(label='账号：',max_length=100,required=True,error_messages={'required': u'必选项'})
-    realname = forms.CharField(label='姓名：',max_length=100,required=True,error_messages={'required': u'必选项'})
-    password = forms.CharField(label='密码：',max_length=100,widget=forms.PasswordInput(),required=True,error_messages={'required': u'必选项'})
-    confirmpassword=forms.CharField(label="确认密码",max_length=100,widget=forms.PasswordInput(),required=True,error_messages={'required': u'必选项'}
-    )
-    departmentid = forms.CharField(label='部门：',max_length=100)
+    username = forms.CharField(label='账号：', max_length=100, required=True,
+                               error_messages={'required' : u'必选项'})
+    realname = forms.CharField(label='姓名：', max_length=100, required=True,
+                               error_messages={'required': u'必选项'})
+    password = forms.CharField(label='密码：', max_length=100, widget=forms.PasswordInput(),
+                               required=True, error_messages={'required':u'必选项'})
+    confirmpassword = forms.CharField(label="确认密码：", max_length=100, widget=forms.PasswordInput(),
+                                      required=True, error_messages={'required':u'必选项'})
+    departmentid = forms.CharField(label='部门：', max_length=100)
     # Create your views here.
-    
     def save(self):
         password = hashlib.md5(self.cleaned_data['password']).hexdigest()
-        new_user = user.objects.create(username =self.cleaned_data['username'],
-                                       realname =self.cleaned_data['realname'],
+        new_user = user.objects.create(username=self.cleaned_data['username'],
+                                       realname=self.cleaned_data['realname'],
                                        password=password,
                                        create_time=datetime.datetime.now(),
-                                       department=department.objects.get(id=self.cleaned_data['departmentid']),isactived=1)
+                                       department=department.objects.get(id=self.cleaned_data['departmentid']), isactived=1)
         return new_user
 
 class LoginForm(forms.Form):
