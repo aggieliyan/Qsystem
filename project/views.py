@@ -7,7 +7,7 @@ import json
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, TestForm, Approveform, LoginForm
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm
 from project.models import department, project, project_user, public_message, project_delay, project_user_message
 import models
 import hashlib
@@ -446,24 +446,23 @@ def show_headname(request):
     rs = json.dumps(user)
     return HttpResponse(rs)
 
-#homepage部分views
+#homepage
 def personal_homepage(request):
     try:
         request.session['username']
         projectlist = project.objects.filter()
         #print projectlist
-        project_user_list = project_user.objects.filter(username__username__contains=request.session['username'])
+        project_user_list = project_user.objects.filter(username__username__contains = request.session['username'])
     except KeyError:
-        return HttpResponseRedirect("/nologin")          
+        return HttpResponseRedirect("/nologin")
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
-
-    projectlist = projectlist.filter(pk__in=projectids)    
-    result=projectlist.exclude(Q(status_p=u'已上线')| Q(status_p=u'暂停')).order_by("-id")
-    result1=projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停')).order_by("-id")
-    puser=project_user.objects.all()
-    #分页 
+    projectlist = projectlist.filter(pk__in = projectids)
+    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")   
+    result1 = projectlist.exclude(~Q(status_p = u'已上线') & ~Q(status_p = u'暂停')).order_by("-id")
+    puser = project_user.objects.all()
+    """分页"""
     paginator = Paginator(result, 1)
     page = request.GET.get('page')
     try:
@@ -474,77 +473,69 @@ def personal_homepage(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-    
     #userid = request.session['id']
     userid=request.session['id']
     j=0
     if request.user.has_perm('project.change_project_delay'):
-        j=1
-    
+        j=1    
     i=0
-    tests= project_user_message.objects.filter(userid_id=userid)
+    tests= project_user_message.objects.filter(userid_id = userid)
     lists=[]
     messagess=[]
     for test in tests:
         lists.append(test.messageid_id)
-        messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')
-  
+        messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')  
     for item in messagess:
-        i=i+1 
-    count=i
-    messages=messagess[:4]
-   
-    return render_to_response('personal_homepage.html',
-        {'projectobj':projectobj,'result':result,'result1':result1,'puser':puser,'messages': messages,'count':count,'j':j})
-
-def deleteproject(request,id,url):
-    delpro=get_object_or_404(project,pk=int(id))    
+        i = i + 1 
+    count = i
+    messages = messagess[:4]   
+    return render_to_response('personal_homepage.html', \
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count, 'j':j})
+def deleteproject(request, id, url):
+    delpro = get_object_or_404(project, pk = int(id))
     delpro.delete()
     return HttpResponseRedirect(url)
-
-
-def pauseproject(request,id,url):
-    pausepro=get_object_or_404(project,pk=int(id))
-    pausepro.status_p='暂停'
+def pauseproject(request, id, url):
+    pausepro = get_object_or_404(project, pk = int(id))
+    pausepro.status_p ='暂停'
     pausepro.save()
     return HttpResponseRedirect(url)
-
-def delayproject(request,url):
-    if request.method=='POST':
+def delayproject(request, url):
+    if request.method == 'POST':
         form = delayprojectForm(request.POST)
         if form.is_valid():
-            delayid=form.cleaned_data['delayid']
+            delayid = form.cleaned_data['delayid']
             delay_date = form.cleaned_data['delay_date']
             delay_reason = form.cleaned_data['delay_reason']
-            delpro=project.objects.get(id=delayid)
-            uid=delpro.leader_p
-            protitle=delpro.project
-            delay_p=project_delay(application=uid,project_id=delayid,delay_to_date=delay_date,apply_date=datetime.datetime.now(),title=protitle,reason=delay_reason)
+            delpro = project.objects.get(id=delayid)
+            uid = delpro.leader_p
+            protitle = delpro.project
+            delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
+                apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason)
             delay_p.save()                   
     return HttpResponseRedirect(url)
-
-
-def changedesign(request,url):
-          
-    if request.method=='POST':
+def changedesign(request, url):          
+    if request.method == 'POST':
         form = changedesignForm(request.POST)
         if form.is_valid():
-            changeid=form.cleaned_data['changeid']
+            changeid = form.cleaned_data['changeid']
             content = form.cleaned_data['content']
             dpath = form.cleaned_data['dpath']
-            chd=project.objects.get(id=changeid)
-            uid=request.session['id']
+            chd = project.objects.get(id = changeid)
+            uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
-            string=content+dpath
-            pub_message=public_message(project=changeid,publisher=uid,content=string,type_p="message",publication_date=datetime.datetime.now(),isactived="1")
+            string = content + dpath
+            pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
+             publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()
-            related_user = models.user.objects.filter(project_user__project_id=changeid)
-            message=models.public_message.objects.filter(project=changeid).order_by("-id")[0]            
+            related_user = models.user.objects.filter(project_user__project_id = changeid)
+            message = models.public_message.objects.filter(project=changeid).order_by("-id")[0]            
             for i in related_user:
-                uid=i.id
-                megid=message.id
-                pro_u_message=project_user_message(userid_id=uid,messageid_id=megid,project_id=changeid,isactived='1')
+                uid = i.id
+                megid = message.id
+                pro_u_message = project_user_message(userid_id = uid, messageid_id = megid, \
+                    project_id = changeid, isactived = '1')
                 pro_u_message.save()           
     return HttpResponseRedirect(url)
     #return render_to_response('personal_homepage.html', {'form': form})
