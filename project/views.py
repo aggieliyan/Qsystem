@@ -349,9 +349,10 @@ def detail(request, pid):
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
     qa = {'rel': qas}
-    devs = models.user.objects.filter(project_user__project_id=pid, department_id=2)
+    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4))
     dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
+    print pds
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
     dt_temp = {}
