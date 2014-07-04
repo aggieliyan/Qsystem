@@ -716,9 +716,12 @@ def Insert_user(request, id, id2, id3):
         id=id3).update(Position_level='0')
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='3')
+    elif id == '12':
+        user = models.user.objects.filter(department_id=department_id, \
+        id=id3).update(Position_level='0')
+        user = models.user.objects.filter(department_id=department_id, \
+        id=id2).update(Position_level='1')
     return redirect('/show_user/')
-
-
 #延期
 def delay(request):
 
