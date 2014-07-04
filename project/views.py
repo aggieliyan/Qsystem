@@ -677,11 +677,11 @@ def Insert_user(request, id, id2):
     elif id == '10':
         id = request.POST['level_2']
         user = models.user.objects.filter(department_id=department_id, \
-        id=id).update(Position_level='2')
+        id=id2).update(Position_level='2')
     elif id == '11':
         id = request.POST['level_3']
         user = models.user.objects.filter(department_id=department_id, \
-        id=id).update(Position_level='3')
+        id=id2).update(Position_level='3')
     return redirect('/show_user/')
 
 #延期
