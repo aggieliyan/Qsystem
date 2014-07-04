@@ -246,9 +246,9 @@
     </div>
     <div class="span9">
 
-       <div> <input name="content" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" >
+       <div> <textarea  name="cont" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 8px;" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)"></textarea>
        </div>
-     <div> <input name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 10px;" >
+     <div> <textarea name="dpath" type="text" class="form-control inputfield" style="width:300px; background-color: #FFFFFF; vertical-align: middle; margin-top: 0px;" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)"></textarea>
      </div>
      <input id="changeid" name="changeid" type="hidden">
     </div>
