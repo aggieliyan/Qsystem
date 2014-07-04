@@ -35,7 +35,7 @@
       border:#ddd solid thin;           
       background-color:#ffffff;}
     
-    .block-option{width:1100px;height:140px;margin-left: 0px;}
+    .block-option{width:1100px;height:140px;margin-bottom:-40px;margin-left: 0px;}
     
     #customers{
       width:100%;
@@ -61,13 +61,15 @@
         
     .option-item{
     width:380px;
-    margin-top:5px;
+    margin-top:15px;
+    margin-bottom:-35px;
     height:60px;
     float:left;
     }
     .option-item-right{
     width:720px;
-    margin-top:5px;
+    margin-top:15px;
+    margin-bottom:-25px;
     height:60px;
     float:left;
     }
