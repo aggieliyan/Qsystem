@@ -674,6 +674,15 @@ def Insert_user(request, id, id2, id3):
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='0')
     elif id == '7':
+        id = request.POST['level_1']
+        user = models.user.objects.get(department_id=department_id, \
+        id=id)
+        user.delete()
+    elif id == '8':
+        user = models.user.objects.get(department_id=department_id, \
+        id=id2)
+        user.delete()
+    elif id == '9':
         user = models.user.objects.get(department_id=department_id, \
         id=id2)
         user.delete()
@@ -682,7 +691,13 @@ def Insert_user(request, id, id2, id3):
         id=id3).update(Position_level='0')
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='2')
+    elif id == '11':
+        user = models.user.objects.filter(department_id=department_id, \
+        id=id3).update(Position_level='0')
+        user = models.user.objects.filter(department_id=department_id, \
+        id=id2).update(Position_level='3')
     return redirect('/show_user/')
+
 
 #延期
 def delay(request):
