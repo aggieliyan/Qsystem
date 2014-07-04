@@ -487,7 +487,7 @@ def personal_homepage(request):
     messagess=[]
     for test in tests:
         lists.append(test.messageid_id)
-        messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-publication_date')  
+        messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-id')  
     for item in messagess:
         i = i + 1 
     count = i
