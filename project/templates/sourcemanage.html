@@ -98,7 +98,7 @@
 	
 		{% for level_2 in level_2_list %}
 		 	<div class="s2">
-				<select name="{{level_2.id}}" class="section2" id="sec2"  onchange="insert2()" >
+				<select name="{{level_2.id}}" class="section2" id="sec2"  onchange="insert22()" >
 				<option value="请选择">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1.id}}" {% if level_1 == level_2 %} selected {% endif %}>{{level_1.realname}}</option>
@@ -115,7 +115,7 @@
 	
 	    {% for level_3 in level_3_list %}
 			<div class="s3">
-				<select name="{{level_3.id}}" class="section3" id="sec3"  onchange="insert3()" >
+				<select name="{{level_3.id}}" class="section3" id="sec3"  onchange="insert33()" >
 				<option value="请选择">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1.id}}" {% if level_1 == level_3 %} selected {% endif %}>{{level_1.realname}}</option>
@@ -163,6 +163,18 @@ document.form.submit()
 function insert3()
 {
 document.form.action="/Insert_user/3/0/"
+document.form.submit()
+}
+
+function insert22()
+{
+document.form.action="/Insert_user/10/0/"
+document.form.submit()
+}
+ 
+function insert33()
+{
+document.form.action="/Insert_user/11/0/"
 document.form.submit()
 }
 
