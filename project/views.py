@@ -812,7 +812,7 @@ def historymessage(request):
     else:  # Get请求
         messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')
     global  projectobj
-    paginator = Paginator(messages, 20)
+    paginator = Paginator(messages, 19)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
