@@ -263,9 +263,6 @@ def new_project(request, pid=''):
     
 
 def project_list(request):
-    #没登陆的提示去登录
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect("/nologin")
     #设计变更
     c=0
     if request.user.has_perm('project.change_public_message'):
