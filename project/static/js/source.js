@@ -91,10 +91,6 @@ $(document).ready(function(){
 	 $(".ad3").click(function() {  
             alert("不能添加第四级");  
         });
-	 $("#add3").click(function() {  
-            alert("不能添加第四级");  
-        });
-	 
   
 	//删除类目
     $("#min1").click(function() {  
