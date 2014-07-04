@@ -39,8 +39,8 @@
 		 </select>	
 		 	
 		<button type="button" class="addsub" id="add1a" > </button>
-		<button type="button" class="minsub" id="min1"  onclick="del_logic()"> </button>
-		<button type="button" class="delsub" id="del1"  onclick="del()"> </button>
+		<button type="button" class="minsub" id="min1" > </button>
+		<button type="button" class="delsub" id="del1" > </button>
 		</div>
 		
 		<div class="def2">
@@ -73,15 +73,15 @@
 	  <div class="s1">
 	  {% if level_1_list %}
 		{% for level in level_1_list %}
-		<select name="level_1" class="section1" id="sec1" >
+		<select name="{{level_1.id}}" class="section1" id="sec1" onchange="insert11('{{level_1.id}}')" >
 		<option value="请选择">请选择</option>
 		{% for level_1 in level_list %}
 		    <option value="{{level_1.id}}" {% if level_1 == level %} selected {% endif %} >{{level_1.realname}}</option>
 		    {% endfor %}
 		</select>		
 		<button type="button" class="addsub" id="add1" > </button>
-		<button type="button" class="minsub" id="min1"  onclick="del_logic()"> </button>
-		<button type="button" class="delsub" id="del1"  onclick="del()" > </button>
+		<button type="button" class="minsub" id="min1"  onclick="del_logic('{{level_1.id}}')"> </button>
+		<button type="button" class="delsub" id="del1"  onclick="del('{{level_1.id}}')" > </button>
 		{% endfor %}
 	  {% else %}
 	  		<select name="level_1" class="section1" id="sec1"  onchange="insert1()"  >
@@ -91,8 +91,8 @@
 		    {% endfor %}
 		</select>
 		<button type="button" class="addsub" id="add1" > </button>
-		<button type="button" class="minsub" id="min1"  onclick="del_logic()" > </button>
-		<button type="button" class="delsub" id="del1"  onclick="del()" > </button>
+		<button type="button" class="minsub" id="min1" onclick="del_logic()"> </button>
+		<button type="button" class="delsub" id="del1" onclick="del()"> </button>
 		{% endif %}
 		</div>
 	
@@ -107,7 +107,7 @@
 
 				<button type="button" class="addsub ad2" id="add2" > </button>
 				<button type="button" class="minsub" id="min2" onclick="del_logic2('{{level_2.id}}')"> </button>
-				<button type="button" class="delsub" id="del1" onclick="del2('{{level_2.id}}')"> </button>
+				<button type="button" class="delsub" id="del1" onclick="del('{{level_2.id}}')"> </button>
 				
 		 	</div>
 		 	{% endfor %}
@@ -124,7 +124,7 @@
 				</select>		
 				<button type="button" class="addsub ad3" id="add3"  > </button>
 				<button type="button" class="minsub" id="min3"  onclick="del_logic3('{{level_3.id}}')"> </button>
-				<button type="button" class="delsub" id="del1"  onclick="del3('{{level_3.id}}')"> </button>
+				<button type="button" class="delsub" id="del1"  onclick="del('{{level_3.id}}')"> </button>
 		
 			</div>
 			{% endfor %}
@@ -154,6 +154,7 @@ function insert1()
 document.form.action="/Insert_user/1/0/0/"
 document.form.submit()
 }
+
 function insert2()
 {
 document.form.action="/Insert_user/2/0/0/"
@@ -165,7 +166,13 @@ function insert3()
 document.form.action="/Insert_user/3/0/0/"
 document.form.submit()
 }
-
+function insert11(id)
+{
+var a2=document.getElementsByName(id)[0]
+id2=a2.value
+document.form.action="/Insert_user/10/"+id2+"/"+id+"/"
+document.form.submit())
+}
 function insert22(id)
 {
 var a2=document.getElementsByName(id)[0]
@@ -178,7 +185,7 @@ function insert33(id)
 {
 var a3=document.getElementsByName(id)[0]
 id3=a3.value
-document.form.action="/Insert_user/11/"+id3+"/"+id+"/"
+document.form.action="/Insert_user/10/"+id3+"/"+id+"/"
 document.form.submit()
 }
 
@@ -194,7 +201,17 @@ document.form.action="/Insert_user/4/0/0/";
 document.form.submit();
 }
 }
-
+function del_logic(id)
+{
+var l1= document.getElementsByName(id)[0];
+if(l1.value == '请选择'){
+alert('请选择要求删除的人员'); 
+}
+else{
+document.form.action="/Insert_user/5/+id+"/"+"0/"
+document.form.submit();
+}
+}
 function del_logic2(id)
 {
 document.form.action="/Insert_user/5/"+id+"/"+"0/"
@@ -241,29 +258,15 @@ document.form.action="/Insert_user/7/0/0/"
 document.form.submit()
 }
 }
-
-function del2(id)
+function del(id)
 {
-  if (!confirm("确认要删除？")) { 
-            window.event.returnValue = false; 
-        } 
-else{
-document.form.action="/Insert_user/8/"+id+"/"+"0/"
-document.form.submit()
-}
-} 
-
-function del3(id)
-{
-
 if (!confirm("确认要删除？")) { 
             window.event.returnValue = false; 
         } 
 else{
-document.form.action="/Insert_user/9/"+id+"/"+"0/"
+document.form.action="/Insert_user/7/+id+"/"+"0/"
 document.form.submit()
 }
 }
-
 </script>
- {% endblock%}
+{% endblock%}
