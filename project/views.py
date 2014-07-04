@@ -754,7 +754,7 @@ def delay(request):
 
     delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     global  projectobj
-    paginator = Paginator(delays, 20)
+    paginator = Paginator(delays, 18)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -779,7 +779,7 @@ def notice(request):
     else:  # Get请求
         notices = public_message.objects.filter(type_p="notice").order_by("-id")
     global  projectobj
-    paginator = Paginator(notices, 20)
+    paginator = Paginator(notices, 18)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -812,7 +812,7 @@ def historymessage(request):
     else:  # Get请求
         messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')
     global  projectobj
-    paginator = Paginator(messages, 19)
+    paginator = Paginator(messages, 18)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
