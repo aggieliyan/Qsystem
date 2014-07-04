@@ -632,12 +632,12 @@ def show_user(request):
         return redirect('/login/')
 
 @csrf_exempt
-def Insert_user(request, id, id2):
+def Insert_user(request, id, id2, id3):
     if request.session['username']:
         username = request.session['username']
         department_id = models.user.objects.get(username=\
         username).department_id
-    department_id = department_id
+    department_id = 2
     department = request.POST['department']
     if department == '请选择':
         department_id = 0
@@ -683,12 +683,19 @@ def Insert_user(request, id, id2):
         id=id2)
         user.delete()
     elif id == '10':
+        user = models.user.objects.get(department_id=department_id, \
+        id=id3)
+        user.delete()
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='2')
     elif id == '11':
+        user = models.user.objects.get(department_id=department_id, \
+        id=id3)
+        user.delete()
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='3')
     return redirect('/show_user/')
+
 
 #延期
 def delay(request):
