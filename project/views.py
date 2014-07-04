@@ -387,7 +387,11 @@ def show_person(request):
         key = 3
     else:
         key = 0
-    person = models.user.objects.filter(department_id=key)
+
+    if key == 2:
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4))
+    else:
+        person = models.user.objects.filter(department_id=key)
     person_rs = []
     num = len(person)
     if num == 0:
@@ -415,7 +419,11 @@ def psearch(request):
         ptype = 3
     else:
         ptype = 0
-    prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
+
+    if ptype == 2:
+        prs = models.user.objects.filter(realname__contains=key, isactived=1, department_id=ptype)
+    else:
+        prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
     search_rs = []
     if len(prs) > 0:
         for item in prs:
