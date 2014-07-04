@@ -348,7 +348,7 @@ def detail(request, pid):
     qa = {'rel': qas}
     devs = models.user.objects.filter(project_user__project_id=pid, department_id=2)
     dev = {'rel': devs}
-    pds = models.user.objects.filter(project_user__project_id=pid, department_id=3, department_id=4)
+    pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
     dt_temp = {}
@@ -683,15 +683,13 @@ def Insert_user(request, id, id2, id3):
         id=id2)
         user.delete()
     elif id == '10':
-        user = models.user.objects.get(department_id=department_id, \
-        id=id3)
-        user.delete()
+        user = models.user.objects.filter(department_id=department_id, \
+        id=id3).update(Position_level='0')
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='2')
     elif id == '11':
-        user = models.user.objects.get(department_id=department_id, \
-        id=id3)
-        user.delete()
+        user = models.user.objects.filter(department_id=department_id, \
+        id=id3).update(Position_level='0')
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='3')
     return redirect('/show_user/')
