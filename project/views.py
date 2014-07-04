@@ -641,7 +641,6 @@ def Insert_user(request, id, id2, id3):
         username = request.session['username']
         department_id = models.user.objects.get(username=\
         username).department_id
-    department_id = 2
     department = request.POST['department']
     if department == '请选择':
         department_id = 0
