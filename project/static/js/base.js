@@ -20,3 +20,14 @@ $(document).ready(function(){
 	});
 
 });
+ (function(){
+                //导航选中
+                var url = location.pathname, navg = $('.top_memu li a');
+                if(url == '/personal_homepage/'||url=='/historymessage/'||url=='/delay/'){
+                    navg.eq(0).addClass('selected');
+                }else if(!url.indexOf('/projectlist/')||!url.indexOf('/newproject/')||!url.indexOf('/detail/')||!url.indexOf('/editproject/')){
+                    navg.eq(1).addClass('selected');
+                }else if(!url.indexOf('/judge/')||!url.indexOf('/sourcemanage/')||!url.indexOf('/show_source/')){
+                    navg.eq(2).addClass('selected');
+                }
+            })()
