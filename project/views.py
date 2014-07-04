@@ -263,7 +263,10 @@ def new_project(request, pid=''):
     
 
 def project_list(request):
-	#notice
+    #没登陆的提示去登录
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/nologin")
+    #notice
     noticess=public_message.objects.filter(type_p='notice').order_by('-id')
     count=len(noticess)
     notices=noticess[:5]
