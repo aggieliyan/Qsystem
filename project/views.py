@@ -266,6 +266,26 @@ def project_list(request):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
+    #设计变更
+    c=0
+    if request.user.has_perm('project.change_public_message'):
+        c=1
+    #编辑
+    d=0
+    if request.user.has_perm('project.change_project'):
+        d=1
+    #延期申请权限
+    m=0
+    if request.user.has_perm('project.add_project_delay'):
+        m=1
+    #暂停
+    n=0 
+    if request.user.has_perm('project.delete_project'):
+        n=1 
+    #删除
+    k=0
+    if request.user.has_perm('project.delete_project'):
+        k=1   
     #notice
     noticess=public_message.objects.filter(type_p='notice').order_by('-id')
     count=len(noticess)
@@ -336,7 +356,7 @@ def project_list(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
 
-    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a}))
+    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,"status_p":status_p,"leader_p":leader_p,'notices': notices,'count':count,'a':a,'c':c,'d':d,'m':m,'n':n,'k':k}))
 
 def isNone(s):
     if s is None or (isinstance(s,basestring) and len(s.strip()) == 0):
