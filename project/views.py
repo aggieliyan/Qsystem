@@ -485,6 +485,26 @@ def personal_homepage(request):
         project_user_list = project_user.objects.filter(username__username__contains = request.session['username'])
     except KeyError:
         return HttpResponseRedirect("/nologin")
+    #设计变更
+    c=0
+    if request.user.has_perm('project.change_public_message'):
+        c=1
+    #编辑
+    d=0
+    if request.user.has_perm('project.change_project'):
+        d=1
+    #延期申请权限
+    m=0
+    if request.user.has_perm('project.add_project_delay'):
+        m=1
+    #暂停
+    n=0 
+    if request.user.has_perm('project.delete_project'):
+        n=1 
+    #删除
+    k=0
+    if request.user.has_perm('project.delete_project'):
+        k=1 
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
@@ -514,13 +534,14 @@ def personal_homepage(request):
     messagess=[]
     for test in tests:
         lists.append(test.messageid_id)
-        messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-id')  
+    messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-id')  
+    count1=messagess.count()
     for item in messagess:
         i = i + 1 
     count = i
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
-        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count, 'j':j})
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count1, 'j':j,'c':c,'d':d,'m':m,'n':n,'k':k})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
