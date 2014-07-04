@@ -788,11 +788,11 @@ def historymessage(request):
         wds = request.POST
         try:
             messagetext = wds['wd']
-            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=messagetext).filter(type_p="message").order_by('publication_date')
+            messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=messagetext).filter(type_p="message").order_by('-publication_date')
         except Exception:
-            messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
+            messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-publication_date')
     else:  # Get请求
-        messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('publication_date')
+        messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-publication_date')
     global  projectobj
     paginator = Paginator(messages, 20)
     page = request.GET.get('page')
