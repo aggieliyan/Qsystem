@@ -80,8 +80,8 @@
 		    {% endfor %}
 		</select>		
 		<button type="button" class="addsub" id="add1" > </button>
-		<button type="button" class="minsub" id="min1"  onclick="del_logic()"> </button>
-		<button type="button" class="delsub" id="del1"  onclick="del()" > </button>
+		<button type="button" class="minsub" id="min1"  onclick="del_logic2('{{level.id}}')"> </button>
+		<button type="button" class="delsub" id="del1"  onclick="del2('{{level.id}}')" > </button>
 		{% endfor %}
 	  {% else %}
 	  		<select name="level_1" class="section1" id="sec1"  onchange="insert1()"  >
