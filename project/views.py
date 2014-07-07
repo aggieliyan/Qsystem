@@ -66,6 +66,9 @@ def logout(request):
     try:
         session_key = request.session.session_key
         Session.objects.get(session_key=session_key).delete()
+
+        #认证系统的退出
+        auth.logout() 
     except:
         pass
     return HttpResponseRedirect("/login")
