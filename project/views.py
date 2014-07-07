@@ -8,13 +8,13 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
 from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm
-from project.models import department, project, project_user, public_message, project_delay, project_user_message
-import project.models
+from models import department, project, project_user, public_message, project_delay, project_user_message
+import models
 import hashlib
 
 from django.views.decorators.csrf import csrf_exempt
 
-from project.models import project, project_user, project_delay, public_message, project_user_message
+from models import project, project_user, project_delay, public_message, project_user_message
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from django.utils.translation import ugettext_lazy as _
@@ -46,7 +46,7 @@ def register(request):
             user_new = uf.save()
 
             #登录
-            uid = project.models.user.objects.filter(username=username)[0].id
+            uid = models.user.objects.filter(username=username)[0].id
             request.session['username'] = username
             request.session['realname'] = realname
             request.session['id'] = uid
@@ -162,7 +162,7 @@ def new_project(request, pid=''):
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
             if pid == '':
-                pro = models.project(priority=priority, \
+                pro = project(priority=priority, \
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
                     expect_launch_date=pdate, \
@@ -175,8 +175,8 @@ def new_project(request, pid=''):
                     develop_plan_p=dppath, test_plan_p=tppath, \
                     test_case_p=tcpath, test_report_p=trpath, isactived=1)
             else:
-                rdate = models.project.objects.get(id=pid).real_launch_date
-                pro = models.project(id=pid, priority=priority,\
+                rdate = project.objects.get(id=pid).real_launch_date
+                pro = project(id=pid, priority=priority,\
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
                     expect_launch_date=pdate, \
@@ -194,10 +194,10 @@ def new_project(request, pid=''):
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
                 if pid == '':
-                    pid = models.project.objects.filter\
+                    pid = project.objects.filter\
                     (project=pname).order_by("-id")[0].id
                 else:
-                    models.project_user.objects.filter(project_id=pid).delete()
+                    project_user.objects.filter(project_id=pid).delete()
                 for uid in relateduser:
                     if uid:
                         project_user = models.project_user\
@@ -218,7 +218,7 @@ def new_project(request, pid=''):
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
-                prolist = models.public_message.objects.filter\
+                prolist = public_message.objects.filter\
                 (project=pid).order_by("isactived")
                 try:
                     prolist[0].isactived
@@ -229,10 +229,10 @@ def new_project(request, pid=''):
                         return HttpResponseRedirect("/nologin")
                     else:
                         usrid = request.session['id']
-                        project = models.project.objects.get(id=pid)
+                        project = project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
                         content = project.project + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid, \
+                        pmessage = public_message(project=pid, \
                             publisher=usrid, content=content, type_p="notice", \
                             publication_date=datetime.datetime.now(), \
                             isactived=False)
@@ -248,10 +248,10 @@ def new_project(request, pid=''):
                         else:
                             usrid = request.session['id']
                             print usrid
-                        project = models.project.objects.get(id=pid)
+                        project = project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
                         content = project.project + u"于"+time+u"已上线"
-                        pmessage = models.public_message(project=pid, \
+                        pmessage = public_message(project=pid, \
                             publisher=usrid, content=content, type_p="notice", \
                             publication_date=datetime.datetime.now(), \
                             isactived=False)
@@ -370,7 +370,7 @@ def isNone(s):
         return False
     
 def detail(request, pid):
-    pro = models.project.objects.get(id=int(pid))
+    pro = project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
     qa = {'rel': qas}
@@ -586,7 +586,7 @@ def changedesign(request, url):
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()
             related_user = models.user.objects.filter(project_user__project_id = changeid)
-            message = models.public_message.objects.filter(project=changeid).order_by("-id")[0]            
+            message = public_message.objects.filter(project=changeid).order_by("-id")[0]            
             for i in related_user:
                 uid = i.id
                 megid = message.id
@@ -855,7 +855,7 @@ def refuse(request):
                 refusedelay.save()
                 pub_message.save()
                 related_user = models.user.objects.filter(project_user__project_id=project_id)
-                message = models.public_message.objects.filter(project=project_id).order_by("-id")[0]
+                message = public_message.objects.filter(project=project_id).order_by("-id")[0]
             for i in related_user:
                 uid = i.id
                 megid = message.id
