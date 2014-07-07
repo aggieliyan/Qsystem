@@ -607,7 +607,7 @@ def judge(request):
             username = request.session['username']
         Position_level = models.user.objects.get(username=\
         username).Position_level
-        if Position_level == '1':
+        if Position_level == '1' or request.user.has_perm('user.change_user'):
             return redirect('/show_user/')
         else:
             return redirect('/show_source/')
