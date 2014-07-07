@@ -196,7 +196,7 @@ def new_project(request, pid=''):
                     pid = models.project.objects.filter\
                     (project=pname).order_by("-id")[0].id
                 else:
-                    project_user.objects.filter(project_id=pid).delete()
+                    models.project_user.objects.filter(project_id=pid).delete()
                 for uid in relateduser:
                     if uid:
                         project_user = models.project_user\
