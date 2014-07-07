@@ -29,8 +29,7 @@ def register(request):
         uf = UserForm(request.POST)
         if uf.is_valid():
             #返回注册成功页面
-
-            #往Django user表里再插入一条数据
+			#往Django user表里再插入一条数据
             username = uf.cleaned_data['username']
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
