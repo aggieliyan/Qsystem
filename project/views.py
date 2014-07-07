@@ -29,8 +29,7 @@ def register(request):
         uf = UserForm(request.POST)
         if uf.is_valid():
             #返回注册成功页面
-
-            #往Django user表里再插入一条数据
+			#往Django user表里再插入一条数据
             username = uf.cleaned_data['username']
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
@@ -266,32 +265,32 @@ def new_project(request, pid=''):
 
 def project_list(request):
     #设计变更
-    c=0
+    c = 0
     if request.user.has_perm('project.change_public_message'):
-        c=1
+        c = 1
     #编辑
-    d=0
+    d = 0
     if request.user.has_perm('project.change_project'):
-        d=1
+        d = 1
     #延期申请权限
-    userid=0
+    userid = 0
     if request.user.is_authenticated():
-        userid=request.session['id']
-    m=0
+        userid = request.session['id']
+    m = 0
     if request.user.has_perm('project.add_project_delay'):
-        m=1
+        m = 1
     #暂停
-    n=0 
+    n = 0 
     if request.user.has_perm('project.delete_project'):
-        n=1 
+        n = 1 
     #删除
-    k=0
+    k = 0
     if request.user.has_perm('project.delete_project'):
-        k=1   
+        k = 1   
     #notice
-    noticess=public_message.objects.filter(type_p='notice').order_by('-id')
-    count=len(noticess)
-    notices=noticess[:5]
+    noticess = public_message.objects.filter(type_p='notice').order_by('-id')
+    count = len(noticess)
+    notices = noticess[:5]
     a = 0
     if count == 0:
         a = 0
@@ -307,6 +306,7 @@ def project_list(request):
         a = len(noticess)-5    	
     ##
     projectlist = None
+<<<<<<< HEAD
     puser=None
     project_name=""
     start_date_s=""
@@ -316,6 +316,17 @@ def project_list(request):
     project_user_list=None
     puser=project_user.objects.all()
     #projectlist = models.project.objects.all()
+=======
+    puser = None
+    project_name = ""
+    start_date_s = ""
+    end_date_s = ""
+    status_p = ""
+    leader_p = ""
+    project_user_list = None
+    puser = project_user.objects.all()
+    #projectlist = project.objects.all()
+>>>>>>> origin/master
     if request.method == 'POST':
         search_form = ProjectSearchForm(request.POST)
         if search_form.is_valid():
@@ -358,13 +369,13 @@ def project_list(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
 
-    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,\
-            'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,\
-            "status_p":status_p,"leader_p":leader_p,'notices': notices,\
-            'count':count,'a':a,'c':c,'d':d,'m':m,'n':n,'k':k,'userid':userid}))
+    return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
+            'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
+            "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
+            'count':count, 'a':a, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid':userid}))
 
 def isNone(s):
-    if s is None or (isinstance(s,basestring) and len(s.strip()) == 0):
+    if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
         return True
     else:
         return False
@@ -488,28 +499,28 @@ def personal_homepage(request):
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
-    c=0
+    c = 0
     if request.user.has_perm('project.change_public_message'):
-        c=1
+        c = 1
     #编辑
-    d=0
+    d = 0
     if request.user.has_perm('project.change_project'):
-        d=1
+        d = 1
     #延期申请权限
-    userid1=0
+    userid1 = 0
     if request.user.is_authenticated():
-        userid1=request.session['id']
-    m=0
+        userid1 = request.session['id']
+    m = 0
     if request.user.has_perm('project.add_project_delay'):
-        m=1
+        m = 1
     #暂停
-    n=0 
+    n = 0 
     if request.user.has_perm('project.delete_project'):
-        n=1 
+        n = 1 
     #删除
-    k=0
+    k = 0
     if request.user.has_perm('project.delete_project'):
-        k=1 
+        k = 1 
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
@@ -529,24 +540,25 @@ def personal_homepage(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
     #message
-    userid=request.session['id']
-    j=0
+    userid = request.session['id']
+    j = 0
     if request.user.has_perm('project.change_project_delay'):
-        j=1
-    i=0
+        j = 1
+    i = 0
     tests= project_user_message.objects.filter(userid_id = userid)
-    lists=[]
-    messagess=[]
+    lists = []
+    messagess = []
     for test in tests:
         lists.append(test.messageid_id)
-    messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-id')  
-    count1=messagess.count()
+    messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')  
+    count1 = messagess.count()
     for item in messagess:
         i = i + 1 
     count = i
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
-        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count1, 'j':j,'c':c,'d':d,'m':m,'n':n,'k':k,'userid1':userid1})
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
+         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid1':userid1})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
