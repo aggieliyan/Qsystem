@@ -203,7 +203,7 @@ def new_project(request, pid=''):
                         (username_id=uid, project_id=pid, isactived=1)
                         project_user.save()
 
-            #给项目负责人添加编辑项目权限
+            #给项目的各负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
             User.objects.get(username=musername).user_permissions.add(26)
             if designer:
@@ -214,6 +214,10 @@ def new_project(request, pid=''):
                 tusername = models.user.objects.get\
                 (id=form.cleaned_data['tester']).username
                 User.objects.get(username=tusername).user_permissions.add(26)
+
+            #给项目负责人添加申请延期权限
+            User.objects.get(username=musername).user_permissions.add(34)
+
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
