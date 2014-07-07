@@ -9,12 +9,12 @@ import datetime
 from django.db.models import Q
 from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm
 from project.models import department, project, project_user, public_message, project_delay, project_user_message
-import models
+import project.models
 import hashlib
 
 from django.views.decorators.csrf import csrf_exempt
 
-from models import project, project_user, project_delay, public_message, project_user_message
+from project.models import project, project_user, project_delay, public_message, project_user_message
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from django.utils.translation import ugettext_lazy as _
@@ -27,7 +27,7 @@ from django.contrib import auth
 def register(request):
     if request.method == "POST":
         uf = UserForm(request.POST)
-        if uf.is_valid(): 
+        if uf.is_valid():
             #返回注册成功页面
 
             #往Django user表里再插入一条数据
@@ -35,7 +35,6 @@ def register(request):
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
-            
             try:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
@@ -44,10 +43,10 @@ def register(request):
                 return render_to_response('register.html', {'list':department.objects.all(),
                                                             'error':'注册的用户名已存在'},
                                           context_instance=RequestContext(request))
-            user_new = uf.save();
+            user_new = uf.save()
 
             #登录
-            uid = models.user.objects.filter(username=username)[0].id
+            uid = project.models.user.objects.filter(username=username)[0].id
             request.session['username'] = username
             request.session['realname'] = realname
             request.session['id'] = uid
@@ -66,6 +65,9 @@ def logout(request):
     try:
         session_key = request.session.session_key
         Session.objects.get(session_key=session_key).delete()
+
+        #认证系统的退出
+        auth.logout()
     except:
         pass
     return HttpResponseRedirect("/login")
@@ -272,6 +274,9 @@ def project_list(request):
     if request.user.has_perm('project.change_project'):
         d=1
     #延期申请权限
+    userid=0
+    if request.user.is_authenticated():
+        userid=request.session['id']
     m=0
     if request.user.has_perm('project.add_project_delay'):
         m=1
@@ -356,7 +361,7 @@ def project_list(request):
     return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,\
             'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,\
             "status_p":status_p,"leader_p":leader_p,'notices': notices,\
-            'count':count,'a':a,'c':c,'d':d,'m':m,'n':n,'k':k}))
+            'count':count,'a':a,'c':c,'d':d,'m':m,'n':n,'k':k,'userid':userid}))
 
 def isNone(s):
     if s is None or (isinstance(s,basestring) and len(s.strip()) == 0):
@@ -430,7 +435,7 @@ def show_person(request):
 
     rrs = {"person":person_rs}
     person_rs = json.dumps(rrs)
-    return HttpResponse(person_rs)  
+    return HttpResponse(person_rs)
 def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
@@ -491,6 +496,9 @@ def personal_homepage(request):
     if request.user.has_perm('project.change_project'):
         d=1
     #延期申请权限
+    userid1=0
+    if request.user.is_authenticated():
+        userid1=request.session['id']
     m=0
     if request.user.has_perm('project.add_project_delay'):
         m=1
@@ -538,7 +546,7 @@ def personal_homepage(request):
     count = i
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
-        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count1, 'j':j,'c':c,'d':d,'m':m,'n':n,'k':k})
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count1, 'j':j,'c':c,'d':d,'m':m,'n':n,'k':k,'userid1':userid1})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
