@@ -450,7 +450,7 @@ def psearch(request):
         ptype = 0
 
     if ptype == 2:
-        prs = models.user.objects.filter(realname__contains=key, isactived=1, department_id=ptype)
+        prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4))
     else:
         prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
     search_rs = []
