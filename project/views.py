@@ -306,17 +306,6 @@ def project_list(request):
         a = len(noticess)-5    	
     ##
     projectlist = None
-<<<<<<< HEAD
-    puser=None
-    project_name=""
-    start_date_s=""
-    end_date_s=""
-    status_p=""
-    leader_p=""
-    project_user_list=None
-    puser=project_user.objects.all()
-    #projectlist = models.project.objects.all()
-=======
     puser = None
     project_name = ""
     start_date_s = ""
@@ -326,7 +315,6 @@ def project_list(request):
     project_user_list = None
     puser = project_user.objects.all()
     #projectlist = project.objects.all()
->>>>>>> origin/master
     if request.method == 'POST':
         search_form = ProjectSearchForm(request.POST)
         if search_form.is_valid():
