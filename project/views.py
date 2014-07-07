@@ -494,6 +494,9 @@ def personal_homepage(request):
     if request.user.has_perm('project.change_project'):
         d=1
     #延期申请权限
+    userid1=0
+    if request.user.is_authenticated():
+        userid1=request.session['id']
     m=0
     if request.user.has_perm('project.add_project_delay'):
         m=1
@@ -541,7 +544,7 @@ def personal_homepage(request):
     count = i
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
-        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count1, 'j':j,'c':c,'d':d,'m':m,'n':n,'k':k})
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count1, 'j':j,'c':c,'d':d,'m':m,'n':n,'k':k,'userid1':userid1})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
