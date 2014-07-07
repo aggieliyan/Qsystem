@@ -88,7 +88,7 @@
       <!-- Only required for left/right tabs -->
           <ul class="nav nav-tabs" style="display:block;background-color:#339966"> 
             <li class="active"><a href="#tab1" data-toggle="tab" style="color:#000" id="inpro">进行中的项目</a></li>
-            <li><a href="#tab2" data-toggle="tab" style="color:#000" id="finishedpro">已完结的项目</a></li>
+            <li><a href="#tab2" data-toggle="tab" style="color:#000" id="finishedpro" onLoad="AutoClick()">已完结的项目</a></li>
           </ul> 
           <div class="tab-content" style="padding:0px">
             <div class="tab-pane active" id="tab1">
@@ -138,36 +138,38 @@
                       {% if c = 1 %}                           
                       <a onclick="change_p({{res.id}})">设计变更</a><span>|</span>
                       {% else %}
-                                                                              设计变更<span>|</span>
+                      设计变更<span>|</span>
                       {% endif %}
                        
                       {% if d = 1 %}
                       <a href="{% url 'editproject' res.id %}">编辑<span>|</span></a>
                       {% else %}
-                                                                                编辑<span>|</span>
+                      编辑<span>|</span>
                       {% endif %}
                       
                       {% if m = 1 %}
-                        {% ifequal userid1 res.leader_p_id %}
+                      {% ifequal userid1 res.leader_p_id %}
                       <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})">延期<span>|</span></a>
-                         {%endifequal%}
-                        {% ifnotequal userid1 res.leader_p_id %}    
-                                                                                             延期<span>|</span>
-                         {%endifnotequal%}
+                      {%endifequal%}
+
+                      {% ifnotequal userid1 res.leader_p_id %}
+                      延期<span>|</span>
+                      {%endifnotequal%}
+
                       {% else %}
-                                                                           延期<span>|</span>
+                      延期<span>|</span>
                       {% endif %}
                       
                       {% if n = 1 %}
                       <a href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
                       {% else %}
-                                                                               暂停<span>|</span>
+                      暂停<span>|</span>
                       {% endif %}
                        
-                       {% if k = 1 %}
+                      {% if k = 1 %}
                       <a href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
                       {% else %}
-                                                                               删除<span></span>
+                      删除<span></span>
                       {% endif %}
                       
                     </td>                   

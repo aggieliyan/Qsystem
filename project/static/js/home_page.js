@@ -49,5 +49,11 @@ function delay_p(id,time){
                     $("#mypage").hide();
                 }
             })()
+function AutoClick()
+{ 
+    var myLink = document.getElementById("finshedpro");
+    myLink.click();
+
+}
 
 

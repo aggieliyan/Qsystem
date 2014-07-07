@@ -27,7 +27,7 @@ $(document).ready(function(){
                     navg.eq(0).addClass('selected');
                 }else if(!url.indexOf('/projectlist/')||!url.indexOf('/newproject/')||!url.indexOf('/detail/')||!url.indexOf('/editproject/')){
                     navg.eq(1).addClass('selected');
-                }else if(!url.indexOf('/judge/')||!url.indexOf('/sourcemanage/')||!url.indexOf('/show_source/')){
+                }else if(!url.indexOf('/show_user/')||!url.indexOf('/sourcemanage/')||!url.indexOf('/show_source/')||!url.indexOf('/show_user2/')){
                     navg.eq(2).addClass('selected');
                 }
             })()
