@@ -175,7 +175,7 @@ def new_project(request, pid=''):
                     test_case_p=tcpath, test_report_p=trpath, isactived=1)
             else:
                 rdate = models.project.objects.get(id=pid).real_launch_date
-                pro = project(id=pid, priority=priority,\
+                pro = models.project(id=pid, priority=priority,\
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
                     expect_launch_date=pdate, \
