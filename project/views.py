@@ -507,10 +507,10 @@ def personal_homepage(request):
         projectids.append(p.project.id)
     projectlist = projectlist.filter(pk__in = projectids)
     result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")   
-    result1 = projectlist.exclude(~Q(status_p = u'已上线') & ~Q(status_p = u'暂停')).order_by("-id")
+    result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
     puser = project_user.objects.all()
     """分页"""
-    paginator = Paginator(result, 1)
+    paginator = Paginator(result1, 1)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)

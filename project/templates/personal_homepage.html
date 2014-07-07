@@ -87,15 +87,15 @@
       <div style=""class="tabbable">
       <!-- Only required for left/right tabs -->
           <ul class="nav nav-tabs" style="display:block;background-color:#339966"> 
-            <li class="active"><a href="#tab1" data-toggle="tab" style="color:#000">进行中的项目</a></li>
-            <li><a href="#tab2" data-toggle="tab" style="color:#000">已完结的项目</a></li>
+            <li class="active"><a href="#tab1" data-toggle="tab" style="color:#000" id="inpro">进行中的项目</a></li>
+            <li><a href="#tab2" data-toggle="tab" style="color:#000" id="finishedpro">已完结的项目</a></li>
           </ul> 
           <div class="tab-content" style="padding:0px">
             <div class="tab-pane active" id="tab1">
               
               <table  id="customers">
                 <thead>
-                  {% if not projectobj %}
+                  {% if not result %}
                       <p style="text-align:center;">暂无相关项目</p>
                   {% else %}
                   <tr>
@@ -114,7 +114,7 @@
                 <thead>
                 <tbody id="group_one">
                   
-                      {% for res in projectobj %}                                 
+                      {% for res in result %}                                 
                   <tr>               
                     <td>{{res.priority}}</td>
                     <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
@@ -177,7 +177,7 @@
             <div class="tab-pane" id="tab2">
               <table id="customers">
                 <thead>
-                  {% if not result1 %}
+                  {% if not projectobj %}
                       <p style="text-align:center;">暂无相关项目</p>
                   {% else %}
                 <tr>
@@ -196,7 +196,7 @@
               </thead>
 
               <tbody id="group_one">
-                {% for pres in result1 %}                                          
+                {% for pres in projectobj %}                                          
                   <tr>                    
                     <td>{{pres.priority}}</td>
                     <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a>
@@ -233,7 +233,7 @@
   </div>
 
   <!--分页-->
-    <div class="pagination" style="text-align:right;margin-right:10px">
+    <div class="pagination" style="text-align:right;margin-right:10px" id="mypage">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
             <a href="?page={{ projectobj.previous_page_number }}"> << </a>
@@ -297,12 +297,8 @@
       </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
-</div>
-
- 
-
-   
-  </body>      
+</div>   
+</body>      
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>

@@ -5,15 +5,9 @@ $(document).ready(function(){
         todayBtn: true,
         pickerPosition: "bottom-left",
         language:"zh-CN",
-        minView:2
+        minView:2 
       });
-	//点设计变更
-    
-    $(".change").on('click',function(){
-    	$("#myModal").modal("show");
-    });
-
-
+	
     $("#smalltable").click(function(){
       console.log("aaaaaaaa");
       $("#mybody").css("width","1100px");
@@ -25,6 +19,18 @@ $(document).ready(function(){
       $("#x-table2").css("width","1500px");
     });
 
+
+
+    $("#finishedpro").click(function(){
+      console.log("hahhtjh");
+      $("#mypage").show();
+    });
+    $("#inpro").click(function(){
+      console.log("hahhtjh");
+      $("#mypage").hide();
+    });
+
+
 });
 function change_p(id){
         $('#changeid').val(id);
@@ -35,5 +41,13 @@ function delay_p(id,time){
         $('#protime').val(time);
         $('#myModal1').modal('show');
       }
+
+(function(){
+                //通过路径获取当前页
+                var url = location.pathname, navg = $('.top_memu li a');
+                if(url == '/personal_homepage/'){
+                    $("#mypage").hide();
+                }
+            })()
 
 
