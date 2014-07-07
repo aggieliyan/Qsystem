@@ -201,7 +201,12 @@
                                         {% endif %}
                                         
                                         {% if m = 1 %}
-                                        <a onclick="delay_p({{p.id}},{{p.expect_launch_date|date:"Ymd"}})">延期<span>|</span></a>
+                                           {% ifequal userid p.leader_p_id %}
+                                        <a onclick="delay_p({{p.id}},{{p.expect_launch_date|date:"Ymd"}})">延期<span>|</span></a>  
+                                         {%endifequal%}
+                                         {% ifnotequal userid p.leader_p_id %}    
+                                                                                                                                                     延期<span>|</span>
+                                         {%endifnotequal%}                     
                                         {% else %}
                                                                                                                                                延期<span>|</span>
                                         {% endif %}

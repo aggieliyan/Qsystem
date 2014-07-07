@@ -272,6 +272,9 @@ def project_list(request):
     if request.user.has_perm('project.change_project'):
         d=1
     #延期申请权限
+    userid=0
+    if request.user.is_authenticated():
+        userid=request.session['id']
     m=0
     if request.user.has_perm('project.add_project_delay'):
         m=1
@@ -356,7 +359,7 @@ def project_list(request):
     return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,\
             'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,\
             "status_p":status_p,"leader_p":leader_p,'notices': notices,\
-            'count':count,'a':a,'c':c,'d':d,'m':m,'n':n,'k':k}))
+            'count':count,'a':a,'c':c,'d':d,'m':m,'n':n,'k':k,'userid':userid}))
 
 def isNone(s):
     if s is None or (isinstance(s,basestring) and len(s.strip()) == 0):
