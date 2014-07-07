@@ -923,3 +923,14 @@ def deletenotice(request):
         lists.append(test.messageid_id)
     return HttpResponseRedirect('/notice/')
 
+#清空历史消息
+def emptyehistory(request):
+    if request.session['id']:
+        useid = request.session['id']
+    tests = project_user_message.objects.filter(userid_id=useid)
+    lists = []
+    if request.method == 'POST':
+        for test in tests:
+            test.delete()
+    return HttpResponseRedirect('/historymessage/')    
+
