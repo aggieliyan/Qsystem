@@ -336,7 +336,7 @@ def project_list(request):
                 projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-id")
             if not isNone(leader_p):
                 #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
-                project_user_list = project_user.objects.filter(username__realname__contains=leader_p.strip())
+                project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
                 projectids = []
                 for p in project_user_list:
                     projectids.append(p.project.id)
@@ -483,7 +483,7 @@ def personal_homepage(request):
         request.session['username']
         projectlist = models.project.objects.filter()
         #print projectlist
-        project_user_list = project_user.objects.filter(username__username__contains = request.session['username'])
+        project_user_list = models.project_user.objects.filter(username__username__contains = request.session['username'])
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
@@ -515,7 +515,7 @@ def personal_homepage(request):
     projectlist = projectlist.filter(pk__in = projectids)
     result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")   
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
-    puser = project_user.objects.all()
+    puser = models.project_user.objects.all()
     """分页"""
     paginator = Paginator(result1, 1)
     page = request.GET.get('page')
