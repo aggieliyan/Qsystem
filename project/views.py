@@ -29,8 +29,7 @@ def register(request):
         uf = UserForm(request.POST)
         if uf.is_valid():
             #返回注册成功页面
-
-            #往Django user表里再插入一条数据
+			#往Django user表里再插入一条数据
             username = uf.cleaned_data['username']
             password = uf.cleaned_data['password']
             realname = uf.cleaned_data['realname']
@@ -162,7 +161,7 @@ def new_project(request, pid=''):
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
             if pid == '':
-                pro = project(priority=priority, \
+                pro = models.project(priority=priority, \
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
                     expect_launch_date=pdate, \
@@ -175,8 +174,8 @@ def new_project(request, pid=''):
                     develop_plan_p=dppath, test_plan_p=tppath, \
                     test_case_p=tcpath, test_report_p=trpath, isactived=1)
             else:
-                rdate = project.objects.get(id=pid).real_launch_date
-                pro = project(id=pid, priority=priority,\
+                rdate = models.project.objects.get(id=pid).real_launch_date
+                pro = models.project(id=pid, priority=priority,\
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
                     expect_launch_date=pdate, \
@@ -194,17 +193,17 @@ def new_project(request, pid=''):
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
                 if pid == '':
-                    pid = project.objects.filter\
+                    pid = models.project.objects.filter\
                     (project=pname).order_by("-id")[0].id
                 else:
-                    project_user.objects.filter(project_id=pid).delete()
+                    models.project_user.objects.filter(project_id=pid).delete()
                 for uid in relateduser:
                     if uid:
                         project_user = models.project_user\
                         (username_id=uid, project_id=pid, isactived=1)
                         project_user.save()
 
-            #给项目负责人添加编辑项目权限
+            #给项目的各负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
             User.objects.get(username=musername).user_permissions.add(26)
             if designer:
@@ -215,6 +214,10 @@ def new_project(request, pid=''):
                 tusername = models.user.objects.get\
                 (id=form.cleaned_data['tester']).username
                 User.objects.get(username=tusername).user_permissions.add(26)
+
+            #给项目负责人添加申请延期权限
+            User.objects.get(username=musername).user_permissions.add(34)
+
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
@@ -229,7 +232,7 @@ def new_project(request, pid=''):
                         return HttpResponseRedirect("/nologin")
                     else:
                         usrid = request.session['id']
-                        project = project.objects.get(id=pid)
+                        project = models.project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
                         content = project.project + u"于"+time+u"已上线"
                         pmessage = public_message(project=pid, \
@@ -248,7 +251,7 @@ def new_project(request, pid=''):
                         else:
                             usrid = request.session['id']
                             print usrid
-                        project = project.objects.get(id=pid)
+                        project = models.project.objects.get(id=pid)
                         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
                         content = project.project + u"于"+time+u"已上线"
                         pmessage = public_message(project=pid, \
@@ -266,32 +269,32 @@ def new_project(request, pid=''):
 
 def project_list(request):
     #设计变更
-    c=0
+    c = 0
     if request.user.has_perm('project.change_public_message'):
-        c=1
+        c = 1
     #编辑
-    d=0
+    d = 0
     if request.user.has_perm('project.change_project'):
-        d=1
+        d = 1
     #延期申请权限
-    userid=0
+    userid = 0
     if request.user.is_authenticated():
-        userid=request.session['id']
-    m=0
+        userid = request.session['id']
+    m = 0
     if request.user.has_perm('project.add_project_delay'):
-        m=1
+        m = 1
     #暂停
-    n=0 
+    n = 0 
     if request.user.has_perm('project.delete_project'):
-        n=1 
+        n = 1 
     #删除
-    k=0
+    k = 0
     if request.user.has_perm('project.delete_project'):
-        k=1   
+        k = 1   
     #notice
-    noticess=public_message.objects.filter(type_p='notice').order_by('-id')
-    count=len(noticess)
-    notices=noticess[:5]
+    noticess = public_message.objects.filter(type_p='notice').order_by('-id')
+    count = len(noticess)
+    notices = noticess[:5]
     a = 0
     if count == 0:
         a = 0
@@ -307,14 +310,14 @@ def project_list(request):
         a = len(noticess)-5    	
     ##
     projectlist = None
-    puser=None
-    project_name=""
-    start_date_s=""
-    end_date_s=""
-    status_p=""
-    leader_p=""
-    project_user_list=None
-    puser=project_user.objects.all()
+    puser = None
+    project_name = ""
+    start_date_s = ""
+    end_date_s = ""
+    status_p = ""
+    leader_p = ""
+    project_user_list = None
+    puser = project_user.objects.all()
     #projectlist = project.objects.all()
     if request.method == 'POST':
         search_form = ProjectSearchForm(request.POST)
@@ -325,7 +328,7 @@ def project_list(request):
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
 
-            projectlist = project.objects.filter().order_by("-id")
+            projectlist = models.project.objects.filter().order_by("-id")
             
             if not isNone(project_name):
                 projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-id")
@@ -337,7 +340,7 @@ def project_list(request):
                 projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-id")
             if not isNone(leader_p):
                 #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
-                project_user_list = project_user.objects.filter(username__realname__contains=leader_p.strip())
+                project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
                 projectids = []
                 for p in project_user_list:
                     projectids.append(p.project.id)
@@ -345,7 +348,7 @@ def project_list(request):
                 projectlist = projectlist.filter(pk__in=projectids).order_by("-id")
 
     else:
-        projectlist = project.objects.all().order_by("-id")
+        projectlist = models.project.objects.all().order_by("-id")
         
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
@@ -358,19 +361,19 @@ def project_list(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
 
-    return render_to_response('projectlist.html',RequestContext(request, {'projectobj': projectobj,\
-            'puser':puser,'project_name':project_name,'start_date_s':start_date_s,'end_date_s':end_date_s,\
-            "status_p":status_p,"leader_p":leader_p,'notices': notices,\
-            'count':count,'a':a,'c':c,'d':d,'m':m,'n':n,'k':k,'userid':userid}))
+    return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
+            'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
+            "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
+            'count':count, 'a':a, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid':userid}))
 
 def isNone(s):
-    if s is None or (isinstance(s,basestring) and len(s.strip()) == 0):
+    if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
         return True
     else:
         return False
     
 def detail(request, pid):
-    pro = project.objects.get(id=int(pid))
+    pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
     qa = {'rel': qas}
@@ -450,7 +453,7 @@ def psearch(request):
         ptype = 0
 
     if ptype == 2:
-        prs = models.user.objects.filter(realname__contains=key, isactived=1, department_id=ptype)
+        prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4))
     else:
         prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
     search_rs = []
@@ -482,41 +485,41 @@ def show_headname(request):
 def personal_homepage(request):
     try:
         request.session['username']
-        projectlist = project.objects.filter()
+        projectlist = models.project.objects.filter()
         #print projectlist
-        project_user_list = project_user.objects.filter(username__username__contains = request.session['username'])
+        project_user_list = models.project_user.objects.filter(username__username__contains = request.session['username'])
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
-    c=0
+    c = 0
     if request.user.has_perm('project.change_public_message'):
-        c=1
+        c = 1
     #编辑
-    d=0
+    d = 0
     if request.user.has_perm('project.change_project'):
-        d=1
+        d = 1
     #延期申请权限
-    userid1=0
+    userid1 = 0
     if request.user.is_authenticated():
-        userid1=request.session['id']
-    m=0
+        userid1 = request.session['id']
+    m = 0
     if request.user.has_perm('project.add_project_delay'):
-        m=1
+        m = 1
     #暂停
-    n=0 
+    n = 0 
     if request.user.has_perm('project.delete_project'):
-        n=1 
+        n = 1 
     #删除
-    k=0
+    k = 0
     if request.user.has_perm('project.delete_project'):
-        k=1 
+        k = 1 
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
     projectlist = projectlist.filter(pk__in = projectids)
     result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")   
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
-    puser = project_user.objects.all()
+    puser = models.project_user.objects.all()
     """分页"""
     paginator = Paginator(result1, 1)
     page = request.GET.get('page')
@@ -529,24 +532,25 @@ def personal_homepage(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
     #message
-    userid=request.session['id']
-    j=0
+    userid = request.session['id']
+    j = 0
     if request.user.has_perm('project.change_project_delay'):
-        j=1
-    i=0
+        j = 1
+    i = 0
     tests= project_user_message.objects.filter(userid_id = userid)
-    lists=[]
-    messagess=[]
+    lists = []
+    messagess = []
     for test in tests:
         lists.append(test.messageid_id)
-    messagess = public_message.objects.filter(pk__in=lists).filter(type_p = "message").order_by('-id')  
-    count1=messagess.count()
+    messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')  
+    count1 = messagess.count()
     for item in messagess:
         i = i + 1 
     count = i
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
-        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, 'count':count1, 'j':j,'c':c,'d':d,'m':m,'n':n,'k':k,'userid1':userid1})
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
+         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid1':userid1})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
@@ -563,7 +567,7 @@ def delayproject(request, url):
             delayid = form.cleaned_data['delayid']
             delay_date = form.cleaned_data['delay_date']
             delay_reason = form.cleaned_data['delay_reason']
-            delpro = project.objects.get(id=delayid)
+            delpro = models.project.objects.get(id=delayid)
             uid = delpro.leader_p
             protitle = delpro.project
             delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
@@ -577,7 +581,7 @@ def changedesign(request, url):
             changeid = form.cleaned_data['changeid']
             cont = form.cleaned_data['cont']
             dpath = form.cleaned_data['dpath']
-            chd = project.objects.get(id = changeid)
+            chd = models.project.objects.get(id = changeid)
             uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
@@ -603,7 +607,7 @@ def judge(request):
             username = request.session['username']
         Position_level = models.user.objects.get(username=\
         username).Position_level
-        if Position_level == '1':
+        if Position_level == '1' or request.user.has_perm('project.change_user'):
             return redirect('/show_user/')
         else:
             return redirect('/show_source/')
@@ -843,7 +847,7 @@ def refuse(request):
             project_id = refusedelay.project_id
             deltitle = refusedelay.title
             string = deltitle+u"申请延期被拒绝，理由"+reason
-            #delpro=project.objects.get(id=delayid)
+            #delpro=models.project.objects.get(id=delayid)
             if request.session['id']:
 
                 useid = request.session['id']
@@ -918,4 +922,15 @@ def deletenotice(request):
     for test in tests:
         lists.append(test.messageid_id)
     return HttpResponseRedirect('/notice/')
+
+#清空历史消息
+def emptyehistory(request):
+    if request.session['id']:
+        useid = request.session['id']
+    tests = project_user_message.objects.filter(userid_id=useid)
+    lists = []
+    if request.method == 'POST':
+        for test in tests:
+            test.delete()
+    return HttpResponseRedirect('/historymessage/')    
 

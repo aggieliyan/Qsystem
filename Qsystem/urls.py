@@ -64,6 +64,7 @@ urlpatterns = patterns('',
     url(r'^historymessage',project.views.historymessage),
     url(r'^refuse',project.views.refuse),
     url(r'^deletehistory',project.views.deletehistory),
+    url(r'^emptyehistory',project.views.emptyehistory),
     url(r'^deletenotice',project.views.deletenotice),
     url(r'^approve',project.views.approve),
 )

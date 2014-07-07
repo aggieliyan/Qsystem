@@ -54,10 +54,8 @@
 						class="input-medium search-query" name="wd"
 						placeholder="请输入您要搜索的消息" style="color:grey">
 					<button type="margin:5px;submit" class="btn btn-success">搜索</button>
-					<!--
 					<button data-toggle="botton" class="btn btn-danger " type="button"
-						style="margin:5px;float:right ;display:inline;">清空</button>
-					-->
+					 style="margin:5px;float:right ;display:inline;" onclick="empty_mes()">清空</button>
 				</form>
 
 
@@ -75,7 +73,7 @@
 
 			<thead>
 				<tr>
-					<th class="thead_th">公告标题</th>
+					<th class="thead_th">消息标题</th>
 					<th class="thead_th">发布时间</th>
 					<th class="thead_th">状态</th>
 					<th class="thead_th">操作</th>
@@ -129,7 +127,7 @@
     </div>
 
 
-	<!-- Modal -->
+	<!-- Modal 删除-->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
 		<div class="modal-dialog">
@@ -144,12 +142,10 @@
 						name="test" class="navbar-form navbar-center">
 						<div class="container-fluid">
 							<div class="row-fluid">
-								<div class="span1"></div>
+								 <div class="span1"></div>
 								<div class="span11">
-
 									<label style="float:left"> <span class="STYLE1">确定删除该内容吗？</span>
 									</label>
-
 								</div>
 								<div class="span9">
 									<input id="messageid" name="messageid" type="hidden">
@@ -165,9 +161,8 @@
 						</div>
 					</form>
 				</div>
-				
-
 			</div>
+			
 			<div class="modal-footer">
 				<div align="center">
 					<form name="mid" method="post" action="del">
@@ -178,11 +173,48 @@
 				</div>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
+	<!-- /.modal-content -->
 	<!-- /.modal-dialog -->
 	<!-- Le javascript ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
+	
+
+	<!-- Modal清空 -->
+	<div class="modal fade" id="empty" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="mymodal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="areempty">确认清空</h4>
+				</div>
+				<div class="modal-body">
+					<form id="empty_form" action="/emptyehistory/" method="post" name="empty" class="navbar-form navbar-center">
+						<div class="container-fluid">
+							<div class="row-fluid">
+								<div class="span1"></div>
+								<div class="span11">
+									<label style="float:left"> <span class="STYLE1">确定清空该内容吗？</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<div align="center">
+					<form name="midempty" method="post" action="del">
+						<button type="button" class="btn mybtn-success" data-dismiss="modal" onclick="do_empty()">确定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal-content -->
+
 	
 
   {% endblock %}
@@ -194,10 +226,17 @@
 				$('#messageid').val(id);
 				$('#myModal').modal('show');
 			}
-			
 			function do_delete(){
 				$('#prousermess_form').submit();
 			}
+			
+			function empty_mes(){
+				$('#empty').modal('show');
+			}
+			function do_empty(){
+				$('#empty_form').submit();
+			}
+		
 	</script>
   {%endblock%}
 	
