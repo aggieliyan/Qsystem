@@ -268,29 +268,26 @@ def new_project(request, pid=''):
     
 
 def project_list(request):
-    #设计变更
-    c = 0
-    if request.user.has_perm('project.change_public_message'):
-        c = 1
-    #编辑
-    d = 0
-    if request.user.has_perm('project.change_project'):
-        d = 1
-    #延期申请权限
-    userid = 0
-    if request.user.is_authenticated():
-        userid = request.session['id']
-    m = 0
-    if request.user.has_perm('project.add_project_delay'):
-        m = 1
-    #暂停
-    n = 0 
-    if request.user.has_perm('project.delete_project'):
-        n = 1 
-    #删除
-    k = 0
-    if request.user.has_perm('project.delete_project'):
-        k = 1   
+    #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
+    logintag = 0
+    changetag = 0
+    delaytag = 0
+    deletetag = 0
+    edittag = 0
+    if  request.user.is_authenticated():
+        logintag = 1
+    if logintag==1:
+
+
+        if request.user.has_perm("project.change_public_message"):
+            changetag = 1
+        if request.user.has_perm('project.change_project'):
+            edittag = 1
+        if request.user.has_perm("project.add_project_delay"):
+            delaytag = 1
+        if request.user.has_perm("project.delete_project"):
+            deletetag = 1
+
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
@@ -364,7 +361,8 @@ def project_list(request):
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
-            'count':count, 'a':a, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid':userid}))
+            'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
+            "edittag":edittag}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
