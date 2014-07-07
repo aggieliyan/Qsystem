@@ -44,6 +44,8 @@ def register(request):
                                           context_instance=RequestContext(request))
             user_new = uf.save()
 
+            #如果是设计部门，加入设计部门权限组
+
             #登录
             uid = models.user.objects.filter(username=username)[0].id
             request.session['username'] = username
@@ -53,6 +55,7 @@ def register(request):
             #Django 认证系统的登录
             user = auth.authenticate(username=username, password=password)
             auth.login(request, user)
+
             return HttpResponseRedirect("/personal_homepage")
     else:
         uf = UserForm()
@@ -206,6 +209,7 @@ def new_project(request, pid=''):
             #给项目的各负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
             User.objects.get(username=musername).user_permissions.add(26)
+            #User.objects.get(username=musername).groups.add()
             if designer:
                 dusername = models.user.objects.get\
                 (id=form.cleaned_data['designer']).username
