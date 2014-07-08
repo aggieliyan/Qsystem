@@ -31,8 +31,7 @@
 								<span id="notwell"><b>踩..</b></span>
 							{% else %}
 								<span id="well"><b>赞!</b></span>
-							{% endif %}
-							
+							{% endif %}							
 						{% endif %}
 						</td>
 					</tr>
@@ -58,9 +57,11 @@
 						<td class="line-name"></td>
 						<td class="line-text">测试: {{res.dt.ttime}}天    ({{res.pro.estimated_test_start_date|date:"Y-m-d"}}至{{res.pro.estimated_test_end_date|date:"Y-m-d"}})</td>
 					</tr>
+				</table>
+				<table>
 					<tr>
-						<td class="line-name">产品人员:</td>
-						<td class="line-text">{% for item in res.reuser.pd.rel %}
+						<td class="line-name2">产品人员:</td>
+						<td class="line-text2">{% for item in res.reuser.pd.rel %}
                        			{% if item.id == res.pro.designer_p_id %}
                        				<b>{{item.realname}}</b>&nbsp;&nbsp;
                        			{% else %}
@@ -70,8 +71,8 @@
                        	</td>
                     </tr>
 					<tr>
-						<td class="line-name">开发人员:</td>
-						<td class="line-text">{% for item in res.reuser.dev.rel %}
+						<td class="line-name2">开发人员:</td>
+						<td class="line-text2">{% for item in res.reuser.dev.rel %}
                        			{{item.realname}}&nbsp;&nbsp;
                        		{% endfor %}
                        	</td>	

@@ -20,7 +20,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 
 #test
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib import auth
 
 
@@ -44,6 +44,11 @@ def register(request):
                                           context_instance=RequestContext(request))
             user_new = uf.save()
 
+            #如果是产品部门，加入产品部门权限组
+            depid = uf.cleaned_data['departmentid']
+            if depid == '3':
+                User.objects.get(username=username).groups.add(3)
+
             #登录
             uid = models.user.objects.filter(username=username)[0].id
             request.session['username'] = username
@@ -53,6 +58,7 @@ def register(request):
             #Django 认证系统的登录
             user = auth.authenticate(username=username, password=password)
             auth.login(request, user)
+
             return HttpResponseRedirect("/personal_homepage")
     else:
         uf = UserForm()
@@ -197,6 +203,7 @@ def new_project(request, pid=''):
                     (project=pname).order_by("-id")[0].id
                 else:
                     models.project_user.objects.filter(project_id=pid).delete()
+                    #
                 for uid in relateduser:
                     if uid:
                         project_user = models.project_user\
@@ -205,19 +212,25 @@ def new_project(request, pid=''):
 
             #给项目的各负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
-            User.objects.get(username=musername).user_permissions.add(26)
+            #User.objects.get(username=musername).user_permissions.add(26)
+            #给项目负责人加入到项目负责人权限组
+            User.objects.get(username=musername).groups.add(4)
             if designer:
                 dusername = models.user.objects.get\
                 (id=form.cleaned_data['designer']).username
-                User.objects.get(username=dusername).user_permissions.add(26)
+                #User.objects.get(username=dusername).user_permissions.add(26)
+                #给产品负责人加入到产品负责人权限组
+                User.objects.get(username=musername).groups.add(5)
             if tester:
                 tusername = models.user.objects.get\
                 (id=form.cleaned_data['tester']).username
-                User.objects.get(username=tusername).user_permissions.add(26)
+                #User.objects.get(username=tusername).user_permissions.add(26)
+                #给测试负责人加入到测试负责人权限组
+                User.objects.get(username=musername).groups.add(6)
+
 
             #给项目负责人添加申请延期权限
-            User.objects.get(username=musername).user_permissions.add(34)
-
+            #User.objects.get(username=musername).user_permissions.add(34)
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
@@ -268,29 +281,26 @@ def new_project(request, pid=''):
     
 
 def project_list(request):
-    #设计变更
-    c = 0
-    if request.user.has_perm('project.change_public_message'):
-        c = 1
-    #编辑
-    d = 0
-    if request.user.has_perm('project.change_project'):
-        d = 1
-    #延期申请权限
-    userid = 0
-    if request.user.is_authenticated():
-        userid = request.session['id']
-    m = 0
-    if request.user.has_perm('project.add_project_delay'):
-        m = 1
-    #暂停
-    n = 0 
-    if request.user.has_perm('project.delete_project'):
-        n = 1 
-    #删除
-    k = 0
-    if request.user.has_perm('project.delete_project'):
-        k = 1   
+    #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
+    logintag = 0
+    changetag = 0
+    delaytag = 0
+    deletetag = 0
+    edittag = 0
+    if  request.user.is_authenticated():
+        logintag = 1
+    if logintag==1:
+
+
+        if request.user.has_perm("project.change_public_message"):
+            changetag = 1
+        if request.user.has_perm('project.change_project'):
+            edittag = 1
+        if request.user.has_perm("project.add_project_delay"):
+            delaytag = 1
+        if request.user.has_perm("project.delete_project"):
+            deletetag = 1
+
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
@@ -328,16 +338,16 @@ def project_list(request):
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
 
-            projectlist = models.project.objects.filter().order_by("-id")
+            projectlist = models.project.objects.filter().order_by("-id").order_by("-status_p")
             
             if not isNone(project_name):
-                projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-id")
+                projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-id").order_by("-status_p")
             if not isNone(start_date_s):
-                projectlist = projectlist.filter(start_date__gte=start_date_s).order_by("-id")
+                projectlist = projectlist.filter(start_date__gte=start_date_s).order_by("-id").order_by("-status_p")
             if not isNone(end_date_s):
-                projectlist = projectlist.filter(start_date__lte=end_date_s).order_by("-id")
+                projectlist = projectlist.filter(start_date__lte=end_date_s).order_by("-id").order_by("-status_p")
             if not isNone(status_p):
-                projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-id")
+                projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-id").order_by("-status_p")
             if not isNone(leader_p):
                 #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
                 project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
@@ -345,10 +355,9 @@ def project_list(request):
                 for p in project_user_list:
                     projectids.append(p.project.id)
 
-                projectlist = projectlist.filter(pk__in=projectids).order_by("-id")
-
+                projectlist = projectlist.filter(pk__in=projectids).order_by("-id").order_by("-status_p")
     else:
-        projectlist = models.project.objects.all().order_by("-id")
+        projectlist = models.project.objects.all().order_by("-id").order_by("-status_p")
         
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
@@ -364,7 +373,8 @@ def project_list(request):
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
-            'count':count, 'a':a, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid':userid}))
+            'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
+            "edittag":edittag}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):

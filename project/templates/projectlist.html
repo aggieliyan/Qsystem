@@ -90,8 +90,9 @@
                     <div class="title">
                 <label class="item-title">项目状态：</label>
               </div>
-                <select style="position:relative;top: -15px;" name="status_p" value="">
-                  <option select="selected" value="">{{status_p}}</option>
+                <select style="position:relative;top: -15px;" name="status_p" >
+                  <option select="selected" value="{{ status_p }}">{{status_p}}</option>
+                  <option value=""> </option>
                   <option value="需求讨论中">需求讨论中</option>
                   <option value="设计中">设计中</option>
                   <option value="设计完成">设计完成</option>
@@ -126,7 +127,7 @@
                 <div class="title">
                     <label class="item-title">项目成员：</label>
                 </div>
-                <input type="text" class="form-control " style="position:relative;top: -15px;" name="leader_p"/>
+                <input type="text" class="form-control " style="position:relative;top: -15px;" name="leader_p" value="{{ leader_p }}"/>
 
             </div>
             <div>
@@ -188,42 +189,40 @@
                                     <td>{{ p.real_launch_date|date:"Y-m-d" }}</td>
                                     <td>{{ p.status_p }}</td>
                                     <td>
-                                        {% if c = 1 %}
-                                        <a onclick="change_p({{p.id}})">设计变更</a><span>|</span>
+                                    {% if logintag == 0 %}
+
+                                        <a href="{% url 'prodetail' p.id %}">查看详情</a>
+
+                                    {% else %}
+                                        {% if p.status_p == "已上线" or p.status_p == "暂停"%}
+                                            <a href="{% url 'prodetail' p.id %}">查看详情</a>
                                         {% else %}
-                                                                                                                                            设计变更<span>|</span>
+                                            {% if changetag == 1 %}
+                                                <a onclick="change_p({{p.id}})">设计变更</a><span>|</span>
+                                            {% else %}
+                                                <a></a>
+                                            {% endif %}
+                                            {% if edittag == 1 %}
+                                                <a href="{% url 'editproject' p.id %}">编辑<span>|</span></a>
+                                            {% else %}
+                                                <a></a>
+                                            {% endif %}
+                                            {% if delaytag == 1 %}
+                                                <a onclick="delay_p({{p.id}})">延期<span>|</span></a>
+                                            {% else %}
+                                                <a></a>
+                                            {% endif %}
+                                            {% if deletetag == 1 %}
+                                                <a href="{% url 'project_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
+                                                <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
+                                            {% else %}
+                                                <a></a>
+                                            {% endif %}
                                         {% endif %}
-                                        
-                                        {% if d = 1 %}
-                                        <a href="{% url 'editproject' p.id %}">编辑<span>|</span></a>
-                                        {% else %}
-                                                                                                                                            编辑<span>|</span>
-                                        {% endif %}
-                                        
-                                        {% if m = 1 %}
-                                           {% ifequal userid p.leader_p_id %}
-                                        <a onclick="delay_p({{p.id}},{{p.expect_launch_date|date:"Ymd"}})">延期<span>|</span></a>  
-                                         {%endifequal%}
-                                         {% ifnotequal userid p.leader_p_id %}    
-                                                                                                                                                     延期<span>|</span>
-                                         {%endifnotequal%}                     
-                                        {% else %}
-                                                                                                                                               延期<span>|</span>
-                                        {% endif %}
-                                        
-                                        {% if n = 1 %}
-                                        <a href="{% url 'pproject_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
-                                        {% else %}
-                                                                                                                                             暂停<span>|</span>
-                                        {% endif %}
-                                        
-                                        {% if k = 1 %}
-                                        <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
-                                        {% else %}
-                                                                                                                                             删除<span></span>
-                                        {% endif %}
-                                        
-                                    </td>
+
+                                    {% endif %}
+
+
                                 </tr>
                                 {% endfor %}
                             </tbody>
