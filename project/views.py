@@ -20,7 +20,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 
 #test
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib import auth
 
 
@@ -200,6 +200,7 @@ def new_project(request, pid=''):
                     (project=pname).order_by("-id")[0].id
                 else:
                     models.project_user.objects.filter(project_id=pid).delete()
+                    #
                 for uid in relateduser:
                     if uid:
                         project_user = models.project_user\
@@ -208,20 +209,25 @@ def new_project(request, pid=''):
 
             #给项目的各负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
-            User.objects.get(username=musername).user_permissions.add(26)
-            #User.objects.get(username=musername).groups.add()
+            #User.objects.get(username=musername).user_permissions.add(26)
+            #给项目负责人加入到项目负责人权限组
+            User.objects.get(username=musername).groups.add(4)
             if designer:
                 dusername = models.user.objects.get\
                 (id=form.cleaned_data['designer']).username
-                User.objects.get(username=dusername).user_permissions.add(26)
+                #User.objects.get(username=dusername).user_permissions.add(26)
+                #给产品负责人加入到产品负责人权限组
+                User.objects.get(username=musername).groups.add(5)
             if tester:
                 tusername = models.user.objects.get\
                 (id=form.cleaned_data['tester']).username
-                User.objects.get(username=tusername).user_permissions.add(26)
+                #User.objects.get(username=tusername).user_permissions.add(26)
+                #给测试负责人加入到测试负责人权限组
+                User.objects.get(username=musername).groups.add(6)
+
 
             #给项目负责人添加申请延期权限
-            User.objects.get(username=musername).user_permissions.add(34)
-
+            #User.objects.get(username=musername).user_permissions.add(34)
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
