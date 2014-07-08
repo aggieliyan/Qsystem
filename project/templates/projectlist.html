@@ -188,13 +188,13 @@
                                     <td>{{ p.expect_launch_date|date:"Y-m-d" }}</td>
                                     <td>{{ p.real_launch_date|date:"Y-m-d" }}</td>
                                     <td>{{ p.status_p }}</td>
+                                    <td>
                                     {% if logintag == 0 %}
-                                        <td>
+
                                         <a href="{% url 'prodetail' p.id %}">查看详情</a>
-                                        </td>
+
                                     {% else %}
-                                        <td>
-                                        {% if p.status == '已上线'   %}
+                                        {% if p.status_p == "已上线" or p.status_p == "暂停"%}
                                             <a href="{% url 'prodetail' p.id %}">查看详情</a>
                                         {% else %}
                                             {% if changetag == 1 %}
@@ -219,7 +219,7 @@
                                                 <a></a>
                                             {% endif %}
                                         {% endif %}
-                                        </td>
+
                                     {% endif %}
 
 
