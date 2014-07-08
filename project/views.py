@@ -44,7 +44,10 @@ def register(request):
                                           context_instance=RequestContext(request))
             user_new = uf.save()
 
-            #如果是设计部门，加入设计部门权限组
+            #如果是产品部门，加入产品部门权限组
+            depid = uf.cleaned_data['departmentid']
+            if depid == '3':
+                User.objects.get(username=username).groups.add(3)
 
             #登录
             uid = models.user.objects.filter(username=username)[0].id
