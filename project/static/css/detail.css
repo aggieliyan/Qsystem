@@ -12,7 +12,6 @@ body {
 
 table {
 	width: 100%;
-	empty-cells: show;
 }
 tr {
 	height: 40px;
@@ -47,14 +46,28 @@ a:hover {
 	margin: 0px 0 -5px 30px;
 }
 .line-name {
-	width: 13%;
+	width: 14%;
 	list-style: none;
 	text-align: right;
 	color: #555;
 
 }
 .line-text {
-	width:37%;
+	width:36%;
+	padding: 0 0 0 20px;
+	font-size: 16px;
+	list-style: none;
+	text-align: left;
+}
+.line-name2 {
+	width: 7%;
+	list-style: none;
+	text-align: right;
+	color: #555;
+
+}
+.line-text2 {
+	width:93%;
 	padding: 0 0 0 20px;
 	font-size: 16px;
 	list-style: none;
