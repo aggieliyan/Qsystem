@@ -1,4 +1,4 @@
-﻿
+
   {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
@@ -91,37 +91,35 @@
             <li><a href="#tab2" data-toggle="tab" style="color:#000" id="finishedpro" onLoad="AutoClick()">已完结的项目</a></li>
           </ul> 
           <div class="tab-content" style="padding:0px">
-            <div class="tab-pane active" id="tab1">
-              
-              <table  id="customers">
+            <div class="tab-pane active" id="tab1">              
+              <table id="customers">
                 <thead>
                   {% if not result %}
                       <p style="text-align:center;">暂无相关项目</p>
                   {% else %}
-                  <tr>
-                    <th style="width:50px;">优先级</th>
-                    <th style="width:137px;">项目名称</th>
-                    <th style="width:76px">项目负责人</th>
-                    <th style="width:69px">产品负责人</th>
-                    <th style="width:70px">测试负责人</th>
-                    <th style="width:134px">项目成员</th>
-                    <th style="width:82px">项目开始时间</th>
-                    <th style="width:82px">计划上线时间</th>
-                    <th style="width:82px">实际上线时间</th>
-                    <th style="width:76px">项目状态</th>
-                    <th style="width:236px">操作</th>
-                  </tr>
-                <thead>
-                <tbody id="group_one">
-                  
-                      {% for res in result %}                                 
-                  <tr>               
+                <tr>
+                  <th style="width:50px;">优先级</th>
+                  <th style="width:137px;">项目名称</th>
+                  <th style="width:76px">项目负责人</th>
+                  <th style="width:69px">产品负责人</th>
+                  <th style="width:70px">测试负责人</th>
+                  <th style="width:134px">项目成员</th>
+                  <th style="width:82px">项目开始时间</th>
+                  <th style="width:82px">计划上线时间</th>
+                  <th style="width:82px">实际上线时间</th>
+                  <th style="width:82px">项目状态</th>
+                  <th style="width:236px">操作</th>
+                </tr>
+              </thead>
+              <tbody id="group_one">
+                {% for res in result %}                                          
+                  <tr>                    
                     <td>{{res.priority}}</td>
                     <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
                     <td>{{res.leader_p.realname}}</td>
                     <td>{{res.designer_p.realname}}</td>
                     <td>{{res.tester_p.realname}}</td>
-                    <td>                       
+                    <td>                                                                
                     
                     {% for u in puser %}
                     {% ifequal res.id u.project_id %}                                                        
@@ -130,12 +128,12 @@
                     {% endfor %}                  
 
                     </td>
-                    <td>{{res.start_date|date:"Y-m-d"}}</td>
+                    <td>{{res.start_date|date:"Y-m-d" }}</td>
                     <td>{{res.expect_launch_date|date:"Y-m-d"}}</td>
                     <td>{{res.real_launch_date|date:"Y-m-d"}}</td>
-                    <td>{{res.status_p}}</td>
-                    <td>
-                      {% if c = 1 %}                           
+                    <td>{{res.status_p}}</td>     
+                  <td>
+                     {% if c = 1 %}                           
                       <a onclick="change_p({{res.id}})">设计变更</a><span>|</span>
                       {% else %}
                       设计变更<span>|</span>
@@ -171,16 +169,16 @@
                       {% else %}
                       删除<span></span>
                       {% endif %}
-                      
-                    </td>                   
-                  </tr>
-                 
+                  </td>
                   {% endfor %}
-                  {% endif %}                 
-                </tbody>
+                  {% endif %} 
+                </tr>
+                
+              </tbody>
               </table>
-              <p></p>
-            </div> 
+              <p> </p>
+            </div>
+               
             <div class="tab-pane" id="tab2">
               <table id="customers">
                 <thead>
@@ -227,7 +225,7 @@
                     <a href="{% url 'prodetail' pres.id %}">查看详情</a>
                   </td>
                   {% endfor %}
-                  {% endif %}
+                  {% endif %} 
                 </tr>
                 
               </tbody>

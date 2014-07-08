@@ -51,6 +51,7 @@ function delay_p(id,time){
             })()
 function AutoClick()
 { 
+    console.log("zidog lianjie a ");
     var myLink = document.getElementById("finshedpro");
     myLink.click();
 
