@@ -1,4 +1,4 @@
-﻿  {% extends "base.html" %}
+  {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -170,40 +170,26 @@ function insert11(id)
 {
 var a2=document.getElementsByName(id)[0]
 id2=a2.value
-if(id2 == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/12/"+id2+"/"+id+"/"
 document.form.submit()
-}
 }
 
 function insert22(id)
 {
 var a2=document.getElementsByName(id)[0]
 id2=a2.value
-if(id2 == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/10/"+id2+"/"+id+"/"
 document.form.submit()
 }
-}
-
+ 
 function insert33(id)
 {
 var a3=document.getElementsByName(id)[0]
 id3=a3.value
-if(id3 == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/11/"+id3+"/"+id+"/"
 document.form.submit()
 }
-}
+
 //逻辑删除人
 function del_logic()
 {
@@ -219,25 +205,16 @@ document.form.submit();
 
 function del_logic2(id)
 {
-if(id.value == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/5/"+id+"/"+"0/"
 document.form.submit()
-}
 }
 
 function del_logic3(id)
 {
-if(id.value == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/6/"+id+"/"+"0/"
 document.form.submit()
 }
-}
+
 function del_logic2a()
 {
 var l1= document.getElementsByName("level_2a")[0];
@@ -264,16 +241,10 @@ document.form.submit()
 //物理删除人员
 function del()
 {
-var l1= document.getElementsByName("level_1")[0];
 if (!confirm("确认要删除？")) { 
             window.event.returnValue = false; 
         } 
 else{
-	if(l1.value == '请选择'){
-	alert('请选择要求删除的人员'); 
-}
-else{
-
 document.form.action="/Insert_user/7/0/0/"
 document.form.submit()
 }
@@ -285,13 +256,8 @@ function del2(id)
             window.event.returnValue = false; 
         } 
 else{
-if(id.value == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/8/"+id+"/"+"0/"
 document.form.submit()
-}
 }
 } 
 
@@ -302,13 +268,8 @@ if (!confirm("确认要删除？")) {
             window.event.returnValue = false; 
         } 
 else{
-	if(id.value == '请选择'){
-	alert('请选择要求删除的人员'); 
-	}
-else{
 document.form.action="/Insert_user/9/"+id+"/"+"0/"
 document.form.submit()
-}
 }
 }
 
