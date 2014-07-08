@@ -1,4 +1,4 @@
-  {% extends "base.html" %}
+﻿  {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,7 +53,7 @@
 
 			<button type="button" class="addsub" id="add2a" > </button>
 			<button type="button" class="minsub" id="min2"  onclick="del_logic2a()"> </button>
-			<button type="button" class="delsub" id="del1" onclick="del2()"> </button>
+			<button type="button" class="delsub" id="del1" onclick="del22()"> </button>
 		
 		</div>
 	
@@ -66,7 +66,7 @@
 		</select>		
 		<button type="button" class="addsub" id="add3a" > </button>
 		<button type="button" class="minsub" id="min3" onclick="del_logic3a()"> </button>
-		<button type="button" class="delsub" id="del1" onclick="del3()"> </button>
+		<button type="button" class="delsub" id="del1" onclick="del33()"> </button>
 		
       </div>
       
@@ -249,6 +249,30 @@ document.form.action="/Insert_user/7/0/0/"
 document.form.submit()
 }
 }
+function del22()
+{
+var l1= document.getElementsByName("level_2a")[0];
+if(l1.value == '请选择'){
+alert('请选择要求删除的人员'); 
+}
+else{
+document.form.action="/Insert_user/8/0/0/"
+document.form.submit()
+}
+}
+
+function del33()
+{
+var l1= document.getElementsByName("level_2a")[0];
+if(l1.value == '请选择'){
+alert('请选择要求删除的人员'); 
+}
+else{
+document.form.action="/Insert_user/8/0/0/"
+document.form.submit()
+}
+}
+
 
 function del2(id)
 {
