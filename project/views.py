@@ -945,8 +945,8 @@ def emptyehistory(request):
     return HttpResponseRedirect('/historymessage/')    
 def initdata(request):
     #没登陆的提示去登录
-    #if not request.user.is_authenticated():
-        #return HttpResponseRedirect("/nologin")
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/nologin")
     #auth_group
     group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理')
     group1.save()
