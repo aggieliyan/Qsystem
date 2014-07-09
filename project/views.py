@@ -374,7 +374,7 @@ def project_list(request):
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
-            "edittag":edittag,"user_id":user_id}))
+            "edittag":edittag,"user_id":user_id,'a':a}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
@@ -945,8 +945,8 @@ def emptyehistory(request):
     return HttpResponseRedirect('/historymessage/')    
 def initdata(request):
     #没登陆的提示去登录
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect("/nologin")
+    #if not request.user.is_authenticated():
+        #return HttpResponseRedirect("/nologin")
     #auth_group
     group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理')
     group1.save()
