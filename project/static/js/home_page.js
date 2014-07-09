@@ -29,8 +29,7 @@ $(document).ready(function(){
       console.log("hahhtjh");
       $("#mypage").hide();
     });
-
-
+    
 });
 function change_p(id){
         $('#changeid').val(id);
@@ -51,10 +50,42 @@ function delay_p(id,time){
             })()
 function AutoClick()
 { 
-    console.log("zidog lianjie a ");
+    
     var myLink = document.getElementById("finshedpro");
     myLink.click();
 
 }
+
+function change_p(id){
+        $('#changeid').val(id);
+        $('#myModal').modal('show');
+      }
+      function delay_p(id,time){
+        $('#delayid').val(id);
+        $('#protime').val(time);
+        $('#myModal1').modal('show');
+      }
+      function chk(){
+        var chcontent = document.test.cont.value;
+        var chdpath = document.test.dpath.value;
+        if(!chcontent||!chdpath){
+          alert('变更内容或设计图路径不能为空');
+        }
+        else{
+          document.test.submit();
+        } 
+      }
+      function chkdelay(){
+        var delaytime = document.test1.delay_date.value;
+        var delayreason = document.test1.delay_reason.value;
+        if(!delaytime||!delayreason){
+          alert('延期日期或者延期理由不能为空');
+        }
+        else{
+          document.test1.submit();
+        } 
+      }
+
+
 
 
