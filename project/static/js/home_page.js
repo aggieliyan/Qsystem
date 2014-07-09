@@ -30,6 +30,21 @@ $(document).ready(function(){
       $("#mypage").hide();
     });
     
+    //超过上线日期时显示橙色
+    for(var i=0; i<2;i++) {
+      var time =document.getElementsBy("datetime")[i].value;
+      //print time;
+      var d=new Date(Date.parse(time.replace(/-/g, "/")));
+      var curDate=new Date();
+      console.log("123");
+      if(d<=curDate){
+        alert("我是第个项目啊");
+        $(".basecolor").css("background-color","#ff9933");
+      }
+    };
+    
+
+
 });
 function change_p(id){
         $('#changeid').val(id);
