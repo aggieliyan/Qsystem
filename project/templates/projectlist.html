@@ -153,22 +153,20 @@
                     <div class="tab-pane active" id="tab1">
                         <table  id="customers">
                             <thead>
-
-                                <tr>
-                                    <th width="64" style="width:50px;">优先级</th>
-                                    <th width="151" style="width:137px;">项目名称</th>
-                                    <th width="90" style="width:76px">项目负责人</th>
-                                    <th width="83" style="width:69px">产品负责人</th>
-                                    <th width="84" style="width:70px">测试负责人</th>
-                                    <th width="148" style="width:134px">项目成员</th>
-                                    <th width="96" style="width:82px">项目开始时间</th>
-                                    <th width="96" style="width:82px">计划上线时间</th>
-                                    <th width="96" style="width:82px">实际上线时间</th>
-                                    <th width="90" style="width:76px">项目状态</th>
-                                    <th width="389" style="width:236px">操作</th>
-                                </tr>
-
-                            <thead>
+                            <tr>
+                                <th width="64" style="width:50px;">优先级</th>
+                                <th width="151" style="width:137px;">项目名称</th>
+                                <th width="90" style="width:76px">项目负责人</th>
+                                <th width="83" style="width:69px">产品负责人</th>
+                                <th width="84" style="width:70px">测试负责人</th>
+                                <th width="148" style="width:134px">项目成员</th>
+                                <th width="96" style="width:82px">项目开始时间</th>
+                                <th width="96" style="width:82px">计划上线时间</th>
+                                <th width="96" style="width:82px">实际上线时间</th>
+                                <th width="90" style="width:76px">项目状态</th>
+                                <th width="389" style="width:236px">操作</th>
+                            </tr>
+                            </thead>
                             <tbody id="group_one">
                                 {% for p in projectobj %}
                                 <tr>
@@ -219,12 +217,10 @@
                                                 <a></a>
                                             {% endif %}
                                         {% endif %}
-
+                                    </td>
                                     {% endif %}
-
-
-                                </tr>
                                 {% endfor %}
+                                </tr>
                             </tbody>
                         </table>
                     </div>
