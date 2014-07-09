@@ -53,7 +53,7 @@
 
 			<button type="button" class="addsub" id="add2a" > </button>
 			<button type="button" class="minsub" id="min2"  onclick="del_logic2a()"> </button>
-			<button type="button" class="delsub" id="del1" onclick="del2()"> </button>
+			<button type="button" class="delsub" id="del1" onclick="del22()"> </button>
 		
 		</div>
 	
@@ -66,7 +66,7 @@
 		</select>		
 		<button type="button" class="addsub" id="add3a" > </button>
 		<button type="button" class="minsub" id="min3" onclick="del_logic3a()"> </button>
-		<button type="button" class="delsub" id="del1" onclick="del3()"> </button>
+		<button type="button" class="delsub" id="del1" onclick="del33()"> </button>
 		
       </div>
       
@@ -170,7 +170,7 @@ function insert11(id)
 {
 var a2=document.getElementsByName(id)[0]
 id2=a2.value
-if(id2 == '请选择'){
+if(id2=='请选择'){
 alert('请选择要求删除的人员'); 
 }
 else{
@@ -183,7 +183,7 @@ function insert22(id)
 {
 var a2=document.getElementsByName(id)[0]
 id2=a2.value
-if(id2 == '请选择'){
+if(id2=='请选择'){
 alert('请选择要求删除的人员'); 
 }
 else{
@@ -191,12 +191,11 @@ document.form.action="/Insert_user/10/"+id2+"/"+id+"/"
 document.form.submit()
 }
 }
-
 function insert33(id)
 {
 var a3=document.getElementsByName(id)[0]
 id3=a3.value
-if(id3 == '请选择'){
+if(id3=='请选择'){
 alert('请选择要求删除的人员'); 
 }
 else{
@@ -219,25 +218,16 @@ document.form.submit();
 
 function del_logic2(id)
 {
-if(id.value == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/5/"+id+"/"+"0/"
 document.form.submit()
-}
 }
 
 function del_logic3(id)
 {
-if(id.value == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/6/"+id+"/"+"0/"
 document.form.submit()
 }
-}
+
 function del_logic2a()
 {
 var l1= document.getElementsByName("level_2a")[0];
@@ -264,20 +254,38 @@ document.form.submit()
 //物理删除人员
 function del()
 {
-var l1= document.getElementsByName("level_1")[0];
 if (!confirm("确认要删除？")) { 
             window.event.returnValue = false; 
         } 
 else{
-	if(l1.value == '请选择'){
-	alert('请选择要求删除的人员'); 
-}
-else{
-
 document.form.action="/Insert_user/7/0/0/"
 document.form.submit()
 }
 }
+function del22()
+{
+var l1= document.getElementsByName("level_2a")[0];
+if(l1.value == '请选择'){
+alert('请选择要求删除的人员'); 
+}
+else{
+document.form.action="/Insert_user/8/0/0/"
+document.form.submit()
+}
+}
+
+function del33()
+{
+var l1= document.getElementsByName("level_2a")[0];
+if(l1.value == '请选择'){
+alert('请选择要求删除的人员'); 
+}
+else{
+document.form.action="/Insert_user/8/0/0/"
+document.form.submit()
+}
+}
+
 
 function del2(id)
 {
@@ -285,13 +293,8 @@ function del2(id)
             window.event.returnValue = false; 
         } 
 else{
-if(id.value == '请选择'){
-alert('请选择要求删除的人员'); 
-}
-else{
 document.form.action="/Insert_user/8/"+id+"/"+"0/"
 document.form.submit()
-}
 }
 } 
 
@@ -302,13 +305,8 @@ if (!confirm("确认要删除？")) {
             window.event.returnValue = false; 
         } 
 else{
-	if(id.value == '请选择'){
-	alert('请选择要求删除的人员'); 
-	}
-else{
 document.form.action="/Insert_user/9/"+id+"/"+"0/"
 document.form.submit()
-}
 }
 }
 
