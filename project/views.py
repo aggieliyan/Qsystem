@@ -980,7 +980,7 @@ def initdata(request):
     depart3.save()
     depart4 = department(id=4,department='客户端开发',isactived=1)
     depart4.save()
-    return render_to_response('initsuccess.html')
+    return HttpResponse("Data has been inited successfully~")
 
   
     
