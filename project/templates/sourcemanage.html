@@ -170,26 +170,39 @@ function insert11(id)
 {
 var a2=document.getElementsByName(id)[0]
 id2=a2.value
+if(id2=='请选择'){
+alert('请选择要求删除的人员'); 
+}
+else{
 document.form.action="/Insert_user/12/"+id2+"/"+id+"/"
 document.form.submit()
+}
 }
 
 function insert22(id)
 {
 var a2=document.getElementsByName(id)[0]
 id2=a2.value
+if(id2=='请选择'){
+alert('请选择要求删除的人员'); 
+}
+else{
 document.form.action="/Insert_user/10/"+id2+"/"+id+"/"
 document.form.submit()
 }
- 
+}
 function insert33(id)
 {
 var a3=document.getElementsByName(id)[0]
 id3=a3.value
+if(id3=='请选择'){
+alert('请选择要求删除的人员'); 
+}
+else{
 document.form.action="/Insert_user/11/"+id3+"/"+id+"/"
 document.form.submit()
 }
-
+}
 //逻辑删除人
 function del_logic()
 {
