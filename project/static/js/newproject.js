@@ -75,8 +75,10 @@ $(document).ready(function(){
       var radioname = Math.floor(Math.random()*9999+1).toString();
       for (var i= jsontester.tester.length-1; i >=0; i--){
         $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'"><input type="radio" name='+radioname+'><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
-      }	
-      
+      }
+
+
+     
       //跟数量调整高度
       pl = $("[title='1']").children("div").length;
       if(pl >= 8){
@@ -122,7 +124,6 @@ $(document).ready(function(){
     
     //点添加，弹出人员选择框展示数据
     $(".roles .btn-success").click(function(){    
-      console.log("选人");  
       $("#select").modal("show");
       $("#skey").attr("value","");
       $(".all input").removeAttr("checked");
