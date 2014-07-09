@@ -10,8 +10,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import socket
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -22,6 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '3oc$^^dt!@ir9)-l27(c3qk10w1=knk$1o7z(w48j30!d)(m0('
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
@@ -30,9 +29,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-if socket.gethostname() == 'test':
-    DEBUG = False
-    INSTALLED_APPS = (
+INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,19 +37,7 @@ if socket.gethostname() == 'test':
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'project',
-    'south',
-     )
-else:
-    DEBUG = True
-    INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'project',
-     )
+)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
