@@ -287,9 +287,13 @@ def project_list(request):
     delaytag = 0
     deletetag = 0
     edittag = 0
+    user_id = 0
+    #判断是否登录
     if  request.user.is_authenticated():
         logintag = 1
+        user_id = request.session['id']
     if logintag==1:
+
 
 
         if request.user.has_perm("project.change_public_message"):
@@ -374,7 +378,7 @@ def project_list(request):
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
-            "edittag":edittag}))
+            "edittag":edittag,"user_id":user_id}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
