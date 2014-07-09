@@ -980,8 +980,7 @@ def initdata(request):
     depart3.save()
     depart4 = department(id=4,department='客户端开发',isactived=1)
     depart4.save()
-    init_data=1
-    return render_to_response('noperm.html', RequestContext(request, {'initdata': init_data}))
+    return render_to_response('initsuccess.html')
 
   
     
