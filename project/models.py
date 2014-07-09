@@ -76,3 +76,4 @@ class project_user_message(models.Model):
     messageid = models.ForeignKey(public_message)
     project = models.ForeignKey(project)
     isactived = models.BooleanField(max_length=1)
+    

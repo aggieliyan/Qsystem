@@ -11,18 +11,14 @@ from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, de
 from models import department, project, project_user, public_message, project_delay, project_user_message
 import models
 import hashlib
-
+import django.contrib.auth.models
 from django.views.decorators.csrf import csrf_exempt
-
 from models import project, project_user, project_delay, public_message, project_user_message
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
 from django.utils.translation import ugettext_lazy as _
-
 #test
 from django.contrib.auth.models import User, Group
 from django.contrib import auth
-
 
 def register(request):
     if request.method == "POST":
@@ -947,4 +943,44 @@ def emptyehistory(request):
         for test in tests:
             test.delete()
     return HttpResponseRedirect('/historymessage/')    
+def initdata(request):
+    #没登陆的提示去登录
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/nologin")
+    #auth_group
+    group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理')
+    group1.save()
+    group2 = Group(id=2,name='资源管理权限--编辑部门人员')
+    group2.save()
+    group3 = Group(id=3,name='产品部门权限--设计变更')
+    group3.save()
+    group4 = Group(id=4,name='项目负责人权限--延期申请、编辑')
+    group4.save()
+    group5 = Group(id=5,name='产品负责人权限--编辑')
+    group5.save()
+    group6 = Group(id=6,name='测试负责人权限--编辑')
+    group6.save()  
+    #auth_group_permissions
+    group1.permissions.add(25)
+    group1.permissions.add(26)
+    group1.permissions.add(27)
+    group1.permissions.add(35)
+    group2.permissions.add(23)
+    group3.permissions.add(32)
+    group4.permissions.add(34)
+    group4.permissions.add(26)
+    group5.permissions.add(26)
+    group6.permissions.add(26)
+    #project_department
+    depart1 = department(id=1,department='测试',isactived=1)
+    depart1.save()
+    depart2 = department(id=2,department='网站开发',isactived=1)
+    depart2.save()
+    depart3 = department(id=3,department='产品',isactived=1)
+    depart3.save()
+    depart4 = department(id=4,department='客户端开发',isactived=1)
+    depart4.save()
+    return render_to_response('personal_homepage.html')
 
+  
+    
