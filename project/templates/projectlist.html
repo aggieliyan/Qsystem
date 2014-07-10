@@ -215,7 +215,7 @@
                                                 <a></a>
                                             {% endif %}
                                             {% if deletetag == 1 or auth_changetag == 1%}
-                                                <a href="{% url 'project_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span> </span></a>
+                                                <a href="{% url 'pproject_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span> </span></a>
                                                 <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span> </span></a>
                                             {% else %}
                                             {% endif %}
