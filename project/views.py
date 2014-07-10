@@ -64,14 +64,20 @@ def register(request):
 
 def logout(request):
     try:
+
+        response = HttpResponseRedirect("/login")
+        response.delete_cookie("username")
+        response.delete_cookie("password")
+
         session_key = request.session.session_key
         Session.objects.get(session_key=session_key).delete()
 
         #认证系统的退出
-        auth.logout()
+        #auth.logout()
+        return response
     except:
         pass
-    return HttpResponseRedirect("/login")
+    return HttpResponseRedirect("/login/")
 
 def no_login(request):
     return render_to_response("nologin.html")
@@ -79,13 +85,17 @@ def no_login(request):
 def no_perm(request):
     return render_to_response("noperm.html")
 def login(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect("/personal_homepage")
+    #try:
+    #    if request.session["id"]:
+    #        return HttpResponseRedirect("/personal_homepage")
+    #except KeyError:
+    #    return HttpResponseRedirect("/noperm.html")
+
     template_var = {}
     if "username" in request.COOKIES and "password" in request.COOKIES:
         username = request.COOKIES["username"]
         password = request.COOKIES["password"]
-        _userset = user.objects.filter(username__exact=username, password__exact=password)
+        _userset = models.user.objects.filter(username__exact=username, password__exact=password)
         if _userset.count() >= 1:
             _user = _userset[0]
             request.session['username'] = _user.username
@@ -114,7 +124,7 @@ def login(request):
                     response = HttpResponseRedirect("/personal_homepage")
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)            
+                        response.set_cookie("password", password, 3600)   
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
@@ -140,7 +150,7 @@ def new_project(request, pid=''):
         else:
             flag = 0
         #如果是项目经理也可以编辑
-        if request.user.has_perm('auth.change_permission'):
+        if request.user.has_perm('auth.`change_permission'):
             flag2 = 1
         else:
             flag2 = 0
