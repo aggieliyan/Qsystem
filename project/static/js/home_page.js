@@ -31,8 +31,9 @@ $(document).ready(function(){
     });
     
     //超过上线日期时显示橙色
-    for(var i=0; i<2;i++) {
-      var time =document.getElementsBy("datetime")[i].value;
+    var cellIndex=parseInt($(".prorealter td").length-1);
+    for(var i=0; i<cellIndex;i++) {
+      var time =document.getElementsByName("datetime")[i].value;
       //print time;
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var curDate=new Date();
@@ -46,15 +47,6 @@ $(document).ready(function(){
 
 
 });
-function change_p(id){
-        $('#changeid').val(id);
-        $('#myModal').modal('show');
-      }
-function delay_p(id,time){
-        $('#delayid').val(id);
-        $('#protime').val(time);
-        $('#myModal1').modal('show');
-      }
 
 (function(){
                 //通过路径获取当前页
@@ -63,6 +55,7 @@ function delay_p(id,time){
                     $("#mypage").hide();
                 }
             })()
+            
 function AutoClick()
 { 
     
@@ -101,6 +94,14 @@ function change_p(id){
         } 
       }
 
-
+$(function(){
+   var cellIndex=parseInt($(".prorealter th").length-1);
+   $(".prorealter tr td").each(function(){
+        if(this.cellIndex = cellIndex){
+            $(this).attr("title",$(this).text());
+            //alert($(this).parent().get(0).rowIndex);输出所在行
+          }
+   });
+});
 
 
