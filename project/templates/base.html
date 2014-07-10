@@ -19,9 +19,15 @@
 		<li><a href="#" class="judge">资源管理</a></li>
 	 </ul>
 	 <ul class="top_bar">
-		  <li><a href="../personal_homepage" class='username'>GUEST</a></li>
+    {% if user.is_authenticated %}
+      <li><a href="../personal_homepage" class='username'>{{ user.first_name }}</a></li>
       <li><i> | </i></li>
       <li><a href="/logout/">退出</a></li>
+    {% else %}
+		  <li><a href="../personal_homepage" class='username'>GUEST</a></li>
+      <li><i> | </i></li>
+      <li><a href="/logout/">登录</a></li>
+    {% endif %}
 		</ul>
 	</div>
 </form>
