@@ -322,20 +322,7 @@ def project_list(request):
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
-    notices = noticess[:5]
-    a = 0
-    if count == 0:
-        a = 0
-    elif count == 1:
-        a = 0
-    elif count == 2:
-        a = 0
-    elif count == 3:
-        a = 0
-    elif count == 4:
-        a = 0
-    else:
-        a = len(noticess)-5    	
+    notices = noticess[:5]   	
     ##
     projectlist = None
     puser = None
@@ -392,7 +379,7 @@ def project_list(request):
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
-            "edittag":edittag,"user_id":user_id,'a':a,"auth_changetag":auth_changetag}))
+            "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
