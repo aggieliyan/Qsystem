@@ -408,19 +408,12 @@ def detail(request, pid):
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4))
     dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
-    print pds
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
     editboolean = False
-    userfromsession = request.session['username']
-    session_user = User.objects.get(username=userfromsession)
-    session_user_group = 0
-    if session_user.groups.all(): 
-        session_user_group = session_user.groups.all()[0].id
-    if (session_user_group==1 or request.session['id']==pro.leader_p_id \
+    if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
         or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
         editboolean = True
-    print editboolean
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
@@ -440,10 +433,10 @@ def detail(request, pid):
     else:
         dt['ttime'] = 0
     if '/detail/' in request.path:
-        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user}
+        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean}
         return render_to_response('detail.html', {'res': res})
     elif '/editproject' in request.path:
-        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1, 'editboolean': editboolean}
+        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
         return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
@@ -562,7 +555,7 @@ def personal_homepage(request):
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
     puser = models.project_user.objects.all()
     """分页"""
-    paginator = Paginator(result1, 1)
+    paginator = Paginator(result1, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -629,7 +622,7 @@ def changedesign(request, url):
             uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
-            string = cont + dpath
+            string = chd.project+u" : "+cont + dpath
             pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()

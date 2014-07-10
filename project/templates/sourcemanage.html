@@ -32,7 +32,7 @@
 	<div class="people">
 	   <div class="def1">
 		 <select name="level_1a" class="section1" id="sec1"  >
-		 <option value="请选择">请选择</option>
+		 <option value="0">请选择</option>
 		 {% for level_1 in level_list %}
 		 <option value="{{level_1.realname}}" {% if level_1 == level %} selected {% endif %} >{{level_1.realname}}</option>
 		 {% endfor %}
@@ -45,7 +45,7 @@
 		
 		<div class="def2">
 		   <select name="level_2a" class="section2" id="sec2" onchange="insert2()">
-			  <option value="请选择">请选择</option>
+			  <option value="0">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1.id}}">{{level_1.realname}}</option>
 		   			{% endfor %}
@@ -59,7 +59,7 @@
 	
 	  <div class="def3">
 		<select name="level_3a" class="section3" id="sec3" onchange="insert3()">
-			<option value="请选择">请选择</option>
+			<option value="0">请选择</option>
 				{% for level_1 in level_list %}
 		    <option value="{{level_1.id}}">{{level_1.realname}}</option>
 		    	{% endfor %}

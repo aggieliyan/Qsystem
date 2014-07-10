@@ -68,13 +68,21 @@
         padding-top:5px;
         padding-bottom:4px;
         color:#ffffff;
-        background-color:#000
+        background-color:#000;
 
       }
+      #customers a{
+        text-decoration: none;
+        cursor:pointer;
+      }
+
       #customers a:link{
-        color: #000;
         text-decoration: none;
       }
+      #customers a:visited{
+        text-decoration: none;
+        
+      }
       #customers a:hover{
-        color: #0099ff
+        color: #0099ff;
       }

@@ -141,7 +141,7 @@
                        
                       {% if d == 1 %}
                       {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id or pm == 1 %}
-                      <a href="{% url 'editproject' res.id %}" target="_blank">编辑</a>&nbsp;
+                      <a href="{% url 'editproject' res.id %}">编辑</a>&nbsp;
                       {%endif%}
 
                       {% else %}                      
@@ -203,7 +203,7 @@
                 {% for pres in projectobj %}                                          
                   <tr>                    
                     <td>{{pres.priority}}</td>
-                    <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a>
+                    <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a></td>
                     <td>{{pres.leader_p.realname}}</td>
                     <td>{{pres.designer_p.realname}}</td>
                     <td>{{pres.tester_p.realname}}</td>
