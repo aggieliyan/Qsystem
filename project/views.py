@@ -31,7 +31,7 @@ def register(request):
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
             try:
-                user = User.objects.create_user(username=username, email=email, password=password)
+                user = User.objects.create_user(username=username, email=email, password=password, first_name=realname)
                 user.save()
             except:
                 uf = UserForm()
@@ -64,14 +64,20 @@ def register(request):
 
 def logout(request):
     try:
+
+        response = HttpResponseRedirect("/login")
+        response.delete_cookie("username")
+        response.delete_cookie("password")
+
         session_key = request.session.session_key
         Session.objects.get(session_key=session_key).delete()
 
         #认证系统的退出
-        auth.logout()
+        #auth.logout()
+        return response
     except:
         pass
-    return HttpResponseRedirect("/login")
+    return HttpResponseRedirect("/login/")
 
 def no_login(request):
     return render_to_response("nologin.html")
@@ -79,13 +85,17 @@ def no_login(request):
 def no_perm(request):
     return render_to_response("noperm.html")
 def login(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect("/personal_homepage")
+    #try:
+    #    if request.session["id"]:
+    #        return HttpResponseRedirect("/personal_homepage")
+    #except KeyError:
+    #    return HttpResponseRedirect("/noperm.html")
+
     template_var = {}
     if "username" in request.COOKIES and "password" in request.COOKIES:
         username = request.COOKIES["username"]
         password = request.COOKIES["password"]
-        _userset = user.objects.filter(username__exact=username, password__exact=password)
+        _userset = models.user.objects.filter(username__exact=username, password__exact=password)
         if _userset.count() >= 1:
             _user = _userset[0]
             request.session['username'] = _user.username
@@ -114,7 +124,7 @@ def login(request):
                     response = HttpResponseRedirect("/personal_homepage")
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)            
+                        response.set_cookie("password", password, 3600)   
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
@@ -322,20 +332,7 @@ def project_list(request):
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
-    notices = noticess[:5]
-    a = 0
-    if count == 0:
-        a = 0
-    elif count == 1:
-        a = 0
-    elif count == 2:
-        a = 0
-    elif count == 3:
-        a = 0
-    elif count == 4:
-        a = 0
-    else:
-        a = len(noticess)-5    	
+    notices = noticess[:5]   	
     ##
     projectlist = None
     puser = None
@@ -392,7 +389,7 @@ def project_list(request):
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
-            "edittag":edittag,"user_id":user_id,'a':a,"auth_changetag":auth_changetag}))
+            "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
