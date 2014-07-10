@@ -140,9 +140,10 @@
                       {% endif %}
                        
                       {% if d == 1 %}
-                      {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id and pm == 1 %}
+                      {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id or pm == 1 %}
                       <a href="{% url 'editproject' res.id %}" target="_blank">编辑</a>&nbsp;
                       {%endif%}
+
                       {% else %}                      
                       {% endif %}
                       
