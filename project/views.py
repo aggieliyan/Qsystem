@@ -284,8 +284,7 @@ def new_project(request, pid=''):
                             isactived=False)
                         pmessage.save()
                         project.real_launch_date = datetime.datetime.now()
-                        project.save()
-                        print 222                    
+                        project.save()                   
             return redirect('/projectlist/')
     return render_to_response('newproject.html', \
         {'form':form}, context_instance=RequestContext(request))
@@ -412,6 +411,16 @@ def detail(request, pid):
     print pds
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
+    editboolean = False
+    userfromsession = request.session['username']
+    session_user = User.objects.get(username=userfromsession)
+    session_user_group = 0
+    if session_user.groups.all(): 
+        session_user_group = session_user.groups.all()[0].id
+    if (session_user_group==1 or request.session['id']==pro.leader_p_id \
+        or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
+        editboolean = True
+    print editboolean
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
@@ -434,7 +443,7 @@ def detail(request, pid):
         res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user}
         return render_to_response('detail.html', {'res': res})
     elif '/editproject' in request.path:
-        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
+        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1, 'editboolean': editboolean}
         return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):

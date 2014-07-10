@@ -14,7 +14,10 @@
 			<div class="content">
 				<div id="name">
 					<div><h2>{{res.pro.project}}</h2></div>
-					<div><a href="/editproject/{{res.pro.id}}">编辑</a></div>
+					<div>{% if res.editboolean %}
+							<a href="/editproject/{{res.pro.id}}">编辑</a>
+						 {% endif %}
+					</div>
 				</div>
 				<table>
 					<tr>
