@@ -49,12 +49,12 @@ $(document).ready(function(){
 });
 
 (function(){
-                //通过路径获取当前页
-                var url = location.pathname, navg = $('.top_memu li a');
-                if(url == '/personal_homepage/'){
-                    $("#mypage").hide();
-                }
-            })()
+  //通过路径获取当前页
+  var url = location.pathname, navg = $('.top_memu li a');
+  if(url == '/personal_homepage/'){
+    $("#mypage").hide();
+    }
+  })()
             
 function AutoClick()
 { 
