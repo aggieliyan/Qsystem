@@ -7,7 +7,7 @@ $(document).ready(function(){
           var item = $(".p-list").eq(i)
           var pl = item.children("div").length;
           if(pl >= 8){
-            w = (pl/4+1)*30;
+            var w = (pl/4+1)*30;
             item.attr("style","height:"+w+"px;");
           }
       }
