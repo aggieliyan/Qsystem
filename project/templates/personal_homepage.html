@@ -103,12 +103,12 @@
                   <th style="width:76px">项目负责人</th>
                   <th style="width:69px">产品负责人</th>
                   <th style="width:70px">测试负责人</th>
-                  <th style="width:134px">项目成员</th>
+                  <th style="width:184px">项目成员</th>
                   <th style="width:82px">项目开始时间</th>
                   <th style="width:82px">计划上线时间</th>
                   <th style="width:82px">实际上线时间</th>
                   <th style="width:82px">项目状态</th>
-                  <th style="width:236px">操作</th>
+                  <th style="width:170px">操作</th>
                 </tr>
               </thead>
               <tbody id="group_one">
@@ -140,7 +140,7 @@
                       {% endif %}
                        
                       {% if d = 1 %}
-                      {% if userid1 = res.leader_p_id or userid1 = res.designer_p or userid1 = res.tester_p %}
+                      {% if userid1 = res.leader_p_id or userid1 = res.designer_p_id or userid1 = res.tester_p_id %}
                       <a href="{% url 'editproject' res.id %}" target="_blank">编辑</a>&nbsp;
                       {%endif%}
                       {% else %}                      
@@ -166,6 +166,11 @@
                       {%if c = 0 and d = 0 and m = 0 and k = 0 %}
                       <a href="{% url 'prodetail' res.id %}">查看详情</a>
                       {% endif %}
+
+                      {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id%}
+                      <a href="{% url 'prodetail' res.id %}">查看详情</a>
+                      {%endif%}
+              
                   </td>
                   {% endfor %}
                   {% endif %} 
@@ -188,12 +193,12 @@
                   <th style="width:76px">项目负责人</th>
                   <th style="width:69px">产品负责人</th>
                   <th style="width:70px">测试负责人</th>
-                  <th style="width:134px">项目成员</th>
+                  <th style="width:184px">项目成员</th>
                   <th style="width:82px">项目开始时间</th>
                   <th style="width:82px">计划上线时间</th>
                   <th style="width:82px">实际上线时间</th>
                   <th style="width:82px">项目状态</th>
-                  <th style="width:236px">操作</th>
+                  <th style="width:170px">操作</th>
                 </tr>
               </thead>
 
