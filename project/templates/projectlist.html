@@ -219,7 +219,7 @@
                                                 <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span> </span></a>
                                             {% else %}
                                             {% endif %}
-                                            {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.leader_p.id and changetag == 0 %}
+                                            {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.leader_p.id and changetag == 0 and auth_changetag == 0 %}
                                                 <a href="{% url 'prodetail' p.id %}">查看详情</a>
                                             {% else %}
                                             {% endif %}
@@ -272,16 +272,7 @@
         language:"zh-CN",
         minView:2
       });
-    function change_p(id){
-        $('#changeid').val(id);
-        $('#myModal').modal('show');
-      }
 
-    function delay_p(id,time){
-        $('#delayid').val(id);
-        $('#protime').val(time);
-        $('#myModal1').modal('show');
-      }
 </script>
 <script src="../static/js/bootstrap.js"></script>
 {% endblock %}
