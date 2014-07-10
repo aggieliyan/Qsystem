@@ -1,6 +1,20 @@
 $(document).ready(function(){
 	count_relateduser();
 
+  function adjust_height (){
+      var num = $(".p-list").length
+      for(var i=0;i<num;i++){
+          var item = $(".p-list").eq(i)
+          var pl = item.children("div").length;
+          if(pl >= 8){
+            var w = (pl/4+1)*30;
+            item.attr("style","height:"+w+"px;");
+          }
+      }
+
+  }
+  
+  adjust_height();
 	function show_staff (person){
       if(person.length > 0){
         $("#testerlist div").remove();
@@ -80,11 +94,14 @@ $(document).ready(function(){
 
      
       //跟数量调整高度
-      pl = $("[title='1']").children("div").length;
-      if(pl >= 8){
-        w = (pl/4+1)*30;
-        $("[title='1']").attr("style","height:"+w+"px;");
-      }
+      adjust_height();
+
+      //pl = $("[title='1']").children("div").length;
+      //if(pl >= 8){
+      //  w = (pl/4+1)*30;
+      //  $("[title='1']").attr("style","height:"+w+"px;");
+      //}
+
       $("[title='1']").attr("title","0");
       //负责人还在的话要选中
       var dv = $("[name='designer']").attr("value")
