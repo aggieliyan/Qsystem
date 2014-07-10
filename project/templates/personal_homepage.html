@@ -66,7 +66,7 @@
  
    {% if j = 1 %}
     <div style="padding:50px 0 15px">
-    <a href="/delay/" style="color:#339666" target="_blank">查看您要处理的延期申请>></a>
+    <a href="/delay/" style="color:#339666" target="_blank">查看您要处理的延期申请({{countdelay}})>></a>
     </div>  
    {% endif %}
   
@@ -148,7 +148,7 @@
                       
                       {% if m = 1 %}
                       {% ifequal userid1 res.leader_p_id %}
-                      <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})">延期</a>&nbsp;
+                      <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})" class="chomdelay">延期</a>&nbsp;
                       {%endifequal%}
                       {% else %}                     
                       {% endif %}

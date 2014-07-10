@@ -128,8 +128,26 @@ def new_project(request, pid=''):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
     #编辑的得有编辑权限
-    if pid and not request.user.has_perm('project.change_project'):
-        return HttpResponseRedirect("/noperm")
+    if pid:
+        uid = request.session['id']
+        cpro = models.project.objects.get(id=pid)
+        #如果是负责人且有编辑权限才可以
+        if uid == cpro.leader_p_id or uid == cpro.designer_p_id or uid == cpro.tester_p_id:
+            if request.user.has_perm('project.change_project'):
+                flag = 1
+            else:
+                flag = 0
+        else:
+            flag = 0
+        #如果是项目经理也可以编辑
+        if request.user.has_perm('auth.change_permission'):
+            flag2 = 1
+        else:
+            flag2 = 0
+
+        if not flag and not flag2:
+            return HttpResponseRedirect("/noperm")
+
     #新建的得有新建权限
     if not pid and not request.user.has_perm('project.add_project'):
         return HttpResponseRedirect("/noperm")
@@ -545,8 +563,11 @@ def personal_homepage(request):
     #message
     userid = request.session['id']
     j = 0
+    countdelay = 0
     if request.user.has_perm('project.change_project_delay'):
         j = 1
+        delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
+        countdelay = delays.count()
     i = 0
     tests= project_user_message.objects.filter(userid_id = userid)
     lists = []
@@ -561,7 +582,7 @@ def personal_homepage(request):
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
-         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid1':userid1})
+         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()

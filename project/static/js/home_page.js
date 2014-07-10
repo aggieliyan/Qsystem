@@ -30,6 +30,11 @@ $(document).ready(function(){
       $("#mypage").hide();
     });
     
+    $("#inpro").click(function(){
+      console.log("hahhtjh");
+      $("#mypage").hide();
+    });
+    
     //超过上线日期时显示橙色
     var cellIndex=parseInt($(".prorealter td").length-1);
     for(var i=0; i<cellIndex;i++) {
@@ -95,7 +100,7 @@ function change_p(id){
       }
 
 $(function(){
-   var cellIndex=parseInt($(".prorealter th").length-1);
+   var cellIndex=parseInt($(".prorealter tr").length-1);
    $(".prorealter tr td").each(function(){
         if(this.cellIndex = cellIndex){
             $(this).attr("title",$(this).text());
