@@ -208,21 +208,18 @@ def new_project(request, pid=''):
 
             #给项目的各负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
-            #User.objects.get(username=musername).user_permissions.add(26)
             #给项目负责人加入到项目负责人权限组
             User.objects.get(username=musername).groups.add(4)
             if designer:
                 dusername = models.user.objects.get\
                 (id=form.cleaned_data['designer']).username
-                #User.objects.get(username=dusername).user_permissions.add(26)
                 #给产品负责人加入到产品负责人权限组
-                User.objects.get(username=musername).groups.add(5)
+                User.objects.get(username=dusername).groups.add(5)
             if tester:
                 tusername = models.user.objects.get\
                 (id=form.cleaned_data['tester']).username
-                #User.objects.get(username=tusername).user_permissions.add(26)
                 #给测试负责人加入到测试负责人权限组
-                User.objects.get(username=musername).groups.add(6)
+                User.objects.get(username=tusername).groups.add(6)
 
 
             #给项目负责人添加申请延期权限
