@@ -962,6 +962,7 @@ def initdata(request):
     group1.permissions.add(26)
     group1.permissions.add(27)
     group1.permissions.add(35)
+    group1.permissions.add(5)
     group2.permissions.add(23)
     group3.permissions.add(32)
     group4.permissions.add(34)
