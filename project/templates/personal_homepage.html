@@ -134,40 +134,37 @@
                     <td>{{res.status_p}}</td> 
                     <input name="datetime" value="{{res.expect_launch_date|date:"Y-m-d"}}" type="hidden">    
                   <td>
-                     {% if c = 1 %}                           
+                     {% if c == 1 %}                           
                       <a onclick="change_p({{res.id}})">设计变更</a>&nbsp;
                       {% else %}
                       {% endif %}
                        
-                      {% if d = 1 %}
-                      {% if userid1 = res.leader_p_id or userid1 = res.designer_p_id or userid1 = res.tester_p_id %}
+                      {% if d == 1 %}
+                      {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id or pm == 1 %}
                       <a href="{% url 'editproject' res.id %}" target="_blank">编辑</a>&nbsp;
                       {%endif%}
+
                       {% else %}                      
                       {% endif %}
                       
-                      {% if m = 1 %}
+                      {% if m == 1 %}
                       {% ifequal userid1 res.leader_p_id %}
                       <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})" class="chomdelay">延期</a>&nbsp;
                       {%endifequal%}
                       {% else %}                     
                       {% endif %}
                       
-                      {% if n = 1 %}
+                      {% if n == 1 or pm == 1 %}
                       <a href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停</a>&nbsp;
                       {% else %}                      
                       {% endif %}
                        
-                      {% if k = 1 %}
+                      {% if k == 1 or pm == 1 %}
                       <a href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')">删除</a>&nbsp;
                       {% else %}                      
                       {% endif %}
 
-                      {%if c = 0 and d = 0 and m = 0 and k = 0 %}
-                      <a href="{% url 'prodetail' res.id %}">查看详情</a>
-                      {% endif %}
-
-                      {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id%}
+                      {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id and c == 0 and pm == 0 %}
                       <a href="{% url 'prodetail' res.id %}">查看详情</a>
                       {%endif%}
               

@@ -111,10 +111,10 @@ def login(request):
                         auth.login(request, user)
                     except:
                         template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
+                    response = HttpResponseRedirect("/personal_homepage")
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)
-                    response = HttpResponseRedirect("/personal_homepage")
+                        response.set_cookie("password", password, 3600)            
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
@@ -284,8 +284,7 @@ def new_project(request, pid=''):
                             isactived=False)
                         pmessage.save()
                         project.real_launch_date = datetime.datetime.now()
-                        project.save()
-                        print 222                    
+                        project.save()                   
             return redirect('/projectlist/')
     return render_to_response('newproject.html', \
         {'form':form}, context_instance=RequestContext(request))
@@ -412,6 +411,16 @@ def detail(request, pid):
     print pds
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
+    editboolean = False
+    userfromsession = request.session['username']
+    session_user = User.objects.get(username=userfromsession)
+    session_user_group = 0
+    if session_user.groups.all(): 
+        session_user_group = session_user.groups.all()[0].id
+    if (session_user_group==1 or request.session['id']==pro.leader_p_id \
+        or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
+        editboolean = True
+    print editboolean
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
@@ -434,7 +443,7 @@ def detail(request, pid):
         res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user}
         return render_to_response('detail.html', {'res': res})
     elif '/editproject' in request.path:
-        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
+        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1, 'editboolean': editboolean}
         return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
@@ -516,7 +525,7 @@ def personal_homepage(request):
         request.session['username']
         projectlist = models.project.objects.filter()
         #print projectlist
-        project_user_list = models.project_user.objects.filter(username__username__contains = request.session['username'])
+        project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
@@ -542,6 +551,9 @@ def personal_homepage(request):
     k = 0
     if request.user.has_perm('project.delete_project'):
         k = 1 
+    pm=0
+    if request.user.has_perm("auth.change_permission"):
+            pm = 1
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
@@ -582,7 +594,7 @@ def personal_homepage(request):
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
-         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid1':userid1,'countdelay':countdelay})
+         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
