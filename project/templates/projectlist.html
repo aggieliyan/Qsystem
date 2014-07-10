@@ -196,25 +196,27 @@
                                             <a href="{% url 'prodetail' p.id %}">查看详情</a>
                                         {% else %}
                                             {% if changetag == 1 %}
-                                                <a onclick="change_p({{p.id}})">设计变更</a><span>|</span>
+                                                <a onclick="change_p({{p.id}})">设计变更</a><span> </span>
                                             {% else %}
                                                 <a></a>
                                             {% endif %}
                                             {% if edittag == 1 %}
-                                                <a href="{% url 'editproject' p.id %}">编辑<span>|</span></a>
+                                            {% ifequal user_id p.leader_p_id  %}
+                                                <a href="{% url 'editproject' p.id %}">编辑<span> </span></a>
+                                            {% endifequal %}
                                             {% else %}
                                                 <a></a>
                                             {% endif %}
                                             {% if delaytag == 1 %}
                                             {% ifequal user_id p.leader_p_id  %}
-                                                <a onclick="delay_p({{p.id}},{{ p.expect_launch_date|date:"Ymd" }})">延期<span>|</span></a>
+                                                <a onclick="delay_p({{p.id}},{{ p.expect_launch_date|date:"Ymd" }})">延期<span> </span></a>
                                             {% endifequal %}
                                             {% else %}
                                                 <a></a>
                                             {% endif %}
                                             {% if deletetag == 1 %}
-                                                <a href="{% url 'project_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span>|</span></a>
-                                                <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span></span></a>
+                                                <a href="{% url 'project_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span> </span></a>
+                                                <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span> </span></a>
                                             {% else %}
                                                 <a></a>
                                             {% endif %}
