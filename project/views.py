@@ -281,6 +281,8 @@ def project_list(request):
     deletetag = 0
     edittag = 0
     user_id = 0
+    #PM的pM的tag
+    auth_changetag = 0
     #判断是否登录
     if  request.user.is_authenticated():
         logintag = 1
@@ -297,6 +299,8 @@ def project_list(request):
             delaytag = 1
         if request.user.has_perm("project.delete_project"):
             deletetag = 1
+        if request.user.has_perm("auth.change_permission"):
+            auth_changetag = 1
 
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
@@ -371,7 +375,7 @@ def project_list(request):
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
-            "edittag":edittag,"user_id":user_id,'a':a}))
+            "edittag":edittag,"user_id":user_id,'a':a,"auth_changetag":auth_changetag}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
