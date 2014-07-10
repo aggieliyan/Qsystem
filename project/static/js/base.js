@@ -23,7 +23,7 @@ $(document).ready(function(){
  (function(){
                 //导航选中
                 var url = location.pathname, navg = $('.top_memu li a');
-                if(url == '/personal_homepage/'||url=='/historymessage/'||url=='/delay/'){
+                if(url == '/personal_homepage/'||url=='/historymessage/'||url=='/delay/'||url=='/notice/'){
                     navg.eq(0).addClass('selected');
                 }else if(!url.indexOf('/projectlist/')||!url.indexOf('/newproject/')||!url.indexOf('/detail/')||!url.indexOf('/editproject/')){
                     navg.eq(1).addClass('selected');
