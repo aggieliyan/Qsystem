@@ -1,11 +1,11 @@
-{% extends "base.html" %}
-
-{% block title %}{% trans 'Page not found' %}{% endblock %}
-
-{% block content %}
-
-<h2>{% trans 'Page not found' %}</h2>
-
-<p>{% trans "We're sorry, but the requested page could not be found." %}</p>
-
-{% endblock %}
+  {% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
+  {% endblock %}
+  {% block content %}
+  <div style="margin-left: 200px;">
+  	<img src="/static/img/guest.jpg">
+  	<span>404,您访问的页面不存在</span>
+  </div>
+  <script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>
+  {% endblock %}
