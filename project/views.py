@@ -111,10 +111,10 @@ def login(request):
                         auth.login(request, user)
                     except:
                         template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
+                    response = HttpResponseRedirect("/personal_homepage")
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)
-                    response = HttpResponseRedirect("/personal_homepage")
+                        response.set_cookie("password", password, 3600)            
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
