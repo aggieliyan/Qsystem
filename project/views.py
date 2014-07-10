@@ -555,7 +555,7 @@ def personal_homepage(request):
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
     puser = models.project_user.objects.all()
     """分页"""
-    paginator = Paginator(result1, 1)
+    paginator = Paginator(result1, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
