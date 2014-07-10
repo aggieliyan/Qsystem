@@ -532,6 +532,7 @@ def personal_homepage(request):
     if request.user.is_authenticated():
         userid1 = request.session['id']
     m = 0
+    countdelay=0
     if request.user.has_perm('project.add_project_delay'):
         m = 1
         delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
