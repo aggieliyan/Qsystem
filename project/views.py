@@ -407,10 +407,6 @@ def detail(request, pid):
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
-    editboolean = False
-    if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
-        or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
-        editboolean = True
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
@@ -429,12 +425,19 @@ def detail(request, pid):
         dt['ttime'] = int(dt_temp['t'].days+1)
     else:
         dt['ttime'] = 0
-    if '/detail/' in request.path:
-        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean}
-        return render_to_response('detail.html', {'res': res})
-    elif '/editproject' in request.path:
-        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
-        return render_to_response('newproject.html', {'res': res})
+    editboolean = False
+    try:
+        request.user             
+        if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
+            or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
+            editboolean = True
+    finally:
+        if '/detail/' in request.path:
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean}
+            return render_to_response('detail.html', {'res': res})
+        elif '/editproject' in request.path:
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
+            return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
     roles = request.GET['role']
