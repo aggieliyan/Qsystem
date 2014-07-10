@@ -305,7 +305,7 @@ def project_list(request):
     if  request.user.is_authenticated():
         logintag = 1
         user_id = request.session['id']
-    if logintag==1:
+    if logintag == 1:
 
 
 
