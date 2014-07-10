@@ -88,7 +88,7 @@
       <!-- Only required for left/right tabs -->
           <ul class="nav nav-tabs" style="display:block;background-color:#339966"> 
             <li class="active"><a href="#tab1" data-toggle="tab" style="color:#000" id="inpro">进行中的项目</a></li>
-            <li><a href="#tab2" data-toggle="tab" style="color:#000" id="finishedpro" onLoad="AutoClick()">已完结的项目</a></li>
+            <li><a href="#tab2" data-toggle="tab" style="color:#000" id="finishedpro">已完结的项目</a></li>
           </ul> 
           <div class="tab-content" style="padding:0px">
             <div class="tab-pane active" id="tab1">              
@@ -140,19 +140,16 @@
                       {% endif %}
                        
                       {% if d = 1 %}
+                      {% if userid1 = res.leader_p_id or userid1 = res.designer_p or userid1 = res.tester_p %}
                       <a href="{% url 'editproject' res.id %}" target="_blank">编辑</a>&nbsp;
-                      {% else %}
-                      
+                      {%endif%}
+                      {% else %}                      
                       {% endif %}
                       
                       {% if m = 1 %}
                       {% ifequal userid1 res.leader_p_id %}
                       <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})">延期</a>&nbsp;
                       {%endifequal%}
-
-                      {% ifnotequal userid1 res.leader_p_id %}                      
-                      {%endifnotequal%}
-
                       {% else %}                     
                       {% endif %}
                       
@@ -241,7 +238,7 @@
     <div class="pagination" style="text-align:right;margin-right:10px" id="mypage">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
-            <a href="?page={{ projectobj.previous_page_number }}"> << </a>
+            <a href="#tab2?page={{ projectobj.previous_page_number }}"> << </a>
         {% endif %}
 
         <span class="current">
@@ -249,7 +246,7 @@
         </span>
 
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}"> >> </a>
+            <a href="#tab2?page={{ projectobj.next_page_number }}"> >> </a>
         {% endif %}
     </span>
     </div>
