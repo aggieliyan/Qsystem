@@ -203,7 +203,7 @@
                 {% for pres in projectobj %}                                          
                   <tr>                    
                     <td>{{pres.priority}}</td>
-                    <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a>
+                    <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a></td>
                     <td>{{pres.leader_p.realname}}</td>
                     <td>{{pres.designer_p.realname}}</td>
                     <td>{{pres.tester_p.realname}}</td>
