@@ -411,11 +411,9 @@ def detail(request, pid):
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
     editboolean = False
-    userfromsession = request.session['username']
-    session_user = User.objects.get(username=userfromsession)
     session_user_group = 0
-    if session_user.groups.all(): 
-        session_user_group = session_user.groups.all()[0].id
+    if request.user.groups.all(): 
+        session_user_group = request.user.groups.all()[0].id
     if (session_user_group==1 or request.session['id']==pro.leader_p_id \
         or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
         editboolean = True
