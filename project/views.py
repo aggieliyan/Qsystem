@@ -111,10 +111,10 @@ def login(request):
                         auth.login(request, user)
                     except:
                         template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
+                    response = HttpResponseRedirect("/personal_homepage")
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)
-                    response = HttpResponseRedirect("/personal_homepage")
+                        response.set_cookie("password", password, 3600)            
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
@@ -408,7 +408,6 @@ def detail(request, pid):
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4))
     dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
-    print pds
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
     editboolean = False
@@ -420,7 +419,6 @@ def detail(request, pid):
     if (session_user_group==1 or request.session['id']==pro.leader_p_id \
         or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
         editboolean = True
-    print editboolean
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
@@ -440,10 +438,10 @@ def detail(request, pid):
     else:
         dt['ttime'] = 0
     if '/detail/' in request.path:
-        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user}
+        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean}
         return render_to_response('detail.html', {'res': res})
     elif '/editproject' in request.path:
-        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1, 'editboolean': editboolean}
+        res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
         return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
