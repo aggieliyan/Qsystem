@@ -31,7 +31,7 @@ def register(request):
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
             try:
-                user = User.objects.create_user(username=username, email=email, password=password)
+                user = User.objects.create_user(username=username, email=email, password=password, first_name=realname)
                 user.save()
             except:
                 uf = UserForm()
