@@ -542,6 +542,9 @@ def personal_homepage(request):
     k = 0
     if request.user.has_perm('project.delete_project'):
         k = 1 
+    pm=0
+    if request.user.has_perm("auth.change_permission"):
+            pm = 1
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
@@ -582,7 +585,7 @@ def personal_homepage(request):
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
-         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'userid1':userid1,'countdelay':countdelay})
+         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
