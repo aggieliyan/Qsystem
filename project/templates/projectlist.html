@@ -201,9 +201,9 @@
                                                 <a></a>
                                             {% endif %}
                                             {% if edittag == 1 %}
-                                            {% ifequal user_id p.leader_p_id  %}
+                                            {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id %}
                                                 <a href="{% url 'editproject' p.id %}">编辑<span> </span></a>
-                                            {% endifequal %}
+                                            {% endif %}
                                             {% else %}
                                                 <a></a>
                                             {% endif %}
