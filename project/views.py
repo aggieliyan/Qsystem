@@ -411,10 +411,7 @@ def detail(request, pid):
     pd = {'rel': pds}
     related_user = {'qa':qa, 'dev': dev, 'pd': pd}
     editboolean = False
-    session_user_group = 0
-    if request.user.groups.all(): 
-        session_user_group = request.user.groups.all()[0].id
-    if (session_user_group==1 or request.session['id']==pro.leader_p_id \
+    if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
         or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
         editboolean = True
     dt_temp = {}
