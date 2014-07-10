@@ -535,7 +535,7 @@ def personal_homepage(request):
     if request.user.has_perm('project.add_project_delay'):
         m = 1
         delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
-        countdelay=delays.count()
+        countdelay = delays.count()
     #暂停
     n = 0 
     if request.user.has_perm('project.delete_project'):
