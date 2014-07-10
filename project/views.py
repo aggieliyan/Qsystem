@@ -128,8 +128,26 @@ def new_project(request, pid=''):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
     #编辑的得有编辑权限
-    if pid and not request.user.has_perm('project.change_project'):
-        return HttpResponseRedirect("/noperm")
+    if pid:
+        uid = request.session['id']
+        cpro = models.project.objects.get(id=pid)
+        #如果是负责人且有编辑权限才可以
+        if uid == cpro.leader_p_id or uid == cpro.designer_p_id or uid == cpro.tester_p_id:
+            if request.user.has_perm('project.change_project'):
+                flag = 1
+            else:
+                flag = 0
+        else:
+            flag = 0
+        #如果是项目经理也可以编辑
+        if request.user.has_perm('auth.change_permission'):
+            flag2 = 1
+        else:
+            flag2 = 0
+
+        if not flag and not flag2:
+            return HttpResponseRedirect("/noperm")
+
     #新建的得有新建权限
     if not pid and not request.user.has_perm('project.add_project'):
         return HttpResponseRedirect("/noperm")
