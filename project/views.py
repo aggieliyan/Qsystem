@@ -516,7 +516,7 @@ def personal_homepage(request):
         request.session['username']
         projectlist = models.project.objects.filter()
         #print projectlist
-        project_user_list = models.project_user.objects.filter(username__username__contains = request.session['username'])
+        project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
