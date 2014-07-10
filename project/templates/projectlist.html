@@ -159,12 +159,12 @@
                                 <th width="90" style="width:76px">项目负责人</th>
                                 <th width="83" style="width:69px">产品负责人</th>
                                 <th width="84" style="width:70px">测试负责人</th>
-                                <th width="148" style="width:134px">项目成员</th>
+                                <th width="184" style="width:184px">项目成员</th>
                                 <th width="96" style="width:82px">项目开始时间</th>
                                 <th width="96" style="width:82px">计划上线时间</th>
                                 <th width="96" style="width:82px">实际上线时间</th>
                                 <th width="90" style="width:76px">项目状态</th>
-                                <th width="389" style="width:236px">操作</th>
+                                <th width="170" style="width:170px">操作</th>
                             </tr>
                             </thead>
                             <tbody id="group_one">
@@ -201,9 +201,9 @@
                                                 <a></a>
                                             {% endif %}
                                             {% if edittag == 1 %}
-                                            {% ifequal user_id p.leader_p_id  %}
+                                            {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id or auth_changetag == 1%}
                                                 <a href="{% url 'editproject' p.id %}">编辑<span> </span></a>
-                                            {% endifequal %}
+                                            {% endif %}
                                             {% else %}
                                                 <a></a>
                                             {% endif %}
@@ -214,11 +214,14 @@
                                             {% else %}
                                                 <a></a>
                                             {% endif %}
-                                            {% if deletetag == 1 %}
+                                            {% if deletetag == 1 or auth_changetag == 1%}
                                                 <a href="{% url 'project_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span> </span></a>
                                                 <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span> </span></a>
                                             {% else %}
-                                                <a></a>
+                                            {% endif %}
+                                            {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.leader_p.id and changetag == 0 %}
+                                                <a href="{% url 'prodetail' p.id %}">查看详情</a>
+                                            {% else %}
                                             {% endif %}
                                         {% endif %}
                                     </td>
