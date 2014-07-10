@@ -32,7 +32,7 @@
     #x-table2{
       width:1500px;
       margin:auto;
-      border:#ddd solid thin;           
+      border:#ddd solid thin;
       background-color:#ffffff;}
     
     .block-option{width:1100px;height:140px;margin-bottom:-40px;margin-left: 0px;}
@@ -58,7 +58,9 @@
             width: 30px;
             text-align:center;
         }
-        
+      #customers td{
+        line-height: 30px;
+        }
     .option-item{
     width:380px;
     margin-top:15px;
