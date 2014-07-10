@@ -150,7 +150,7 @@ def new_project(request, pid=''):
         else:
             flag = 0
         #如果是项目经理也可以编辑
-        if request.user.has_perm('auth.`change_permission'):
+        if request.user.has_perm('auth.change_permission'):
             flag2 = 1
         else:
             flag2 = 0
