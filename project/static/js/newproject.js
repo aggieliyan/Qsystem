@@ -168,7 +168,8 @@ $(document).ready(function(){
         var anum = Math.floor(pnum);
         anum < pnum ? pagenum = anum+1 : pagenum = anum
         $(".pagination ul li").remove()
-        $(".pagination ul").append("<li><a href=\"#\">&laquo;</a></li><li><a href=\"#\">&raquo;</a></li>");
+        $(".pagination ul").append("<li><a>&laquo;</a></li><li><a>&raquo;</a></li>");
+        //$(".pagination ul").append("<li><a href=\"#\"></a></li><li><a href=\"#\"></a></li>");
         for(var i=0; i<pagenum; i++){
           var page = i+1;
           $(".pagination ul li:last").before("<li><a>"+page+"</a></li>");
