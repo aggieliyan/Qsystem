@@ -68,8 +68,8 @@
  		errorMessage="请输入密码";
  		document.getElementById("pwdErrorMsg").innerHTML=errorMessage;
  		flag=false;
- 	}else if(!pwd.match(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,20}$/)){
-		errorMessage="密码为4-20位数字与字母的组合";
+ 	}else if(getByteLen(pwd)<4||getByteLen(pwd)>20){
+		errorMessage="密码长度为4-20位字符";
  		document.getElementById("pwdErrorMsg").innerHTML=errorMessage;
  		flag=false;
 	}
