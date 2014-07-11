@@ -53,10 +53,12 @@ $(document).ready(function(){
       var time =document.getElementsByName("datetime")[i].value;
       var stut = $(".basecolor").eq(i).children().eq(9).text();
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
+      var d=new Date(d.getTime() + 1*24*60*60*1000);
       var curDate=new Date();
+      //var curDate1=curDate.toLocaleDateString(); 
       if(stut !='暂停' && stut != '已上线'){
         if(d){
-          if(d<curDate){
+          if(d < curDate){
             $(".basecolor").eq(i).css("background-color","#ff9933"); }
       }      
     };
