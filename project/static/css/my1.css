@@ -12,10 +12,10 @@
 	    	background: url(../img/top.jpg) repeat-x;
 
 	    }
-	    p,a{
+	    /*.p,a{
 	    	font-size: 12px;
 	    	text-decoration: none;
-	    }
+	    }*/
 	   
 	    .breadcrumb > li {
     		text-shadow: none;
