@@ -51,14 +51,18 @@ $(document).ready(function(){
     var cellIndex=parseInt($(".procolor tr").length);
     for(var i=0; i<cellIndex;i++) {
       var time =document.getElementsByName("datetime")[i].value;
-      //print time;
+      var stut = $(".basecolor").eq(i).children().eq(9).text();
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var curDate=new Date();
-      if(d){
-        if(d<curDate){
-        $(".basecolor").eq(i).css("background-color","#ff9933"); }
+      if(stut !='暂停' && stut != '已上线'){
+        if(d){
+          if(d<curDate){
+            $(".basecolor").eq(i).css("background-color","#ff9933"); }
       }      
     };
+
+      };
+      
 });
 
 (function(){
