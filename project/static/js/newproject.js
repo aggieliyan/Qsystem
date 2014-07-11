@@ -162,7 +162,7 @@ $(document).ready(function(){
         allperson = eval('('+data+')');//全局变量
         allperson = allperson.person;
         var num = allperson.length;
-        pagemaxnum = 45//全局变量
+        pagemaxnum = 32//全局变量
         var pnum = num/pagemaxnum;
         var anum = Math.floor(pnum);
         anum < pnum ? pagenum = anum+1 : pagenum = anum
