@@ -21,24 +21,22 @@
 {% block content %}
 <body id="mybody">
 
-
     
 	{% if notices %}
-	
    {% if count = 1 %}
-	<div style="height:120px;padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:100px;padding-left: 10px; padding-top: 10px;" class="notice">
    {% endif %}   
    {% if count = 2 %}
-	<div style="height:120px;padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:110px;padding-left: 10px; padding-top: 10px;" class="notice">
    {% endif %} 
    {% if count = 3 %}
 	<div style="height:120px;padding-left: 10px; padding-top: 10px;" class="notice">
    {% endif %} 
     {% if count = 4 %}
-	<div style="height:140px;padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:130px;padding-left: 10px; padding-top: 10px;" class="notice">
    {% endif %} 
     {% if count >= 5 %}
-	<div style="height:170px;padding-left: 10px; padding-top: 10px;"  class="notice">
+	<div style="height:160px;padding-left: 10px; padding-top: 10px;"  class="notice">
    {% endif %} 
 
 		<div class="notice_title">
@@ -50,13 +48,13 @@
 		
 	{% for item in notices %}
       
-        <p><a href="/notice/" target="_blank" style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;">{{item.content}}</a></p>
+        <p><a href="/notice/" target="_blank" style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;line-height:15px;margin:0;padding:0;">{{item.content}}</a></p>
     
         {% endfor %}	
 		</div>
 		{% if count > 5 %}
 		<div style="position:absolute;right:10px;bottom:0">
-			<a href="/notice/" style="color:#339666" >未读公告<span style="color:#ffa03e">({{a}})>></span></a>
+			<a href="/notice/" style="color:#339666" >查看所有<span style="color:#ffa03e">>></span></a>
 		</div>	
          {% endif %} 
 	</div>	
@@ -68,9 +66,8 @@
 			</span>
 		</div>
 		
-    <p>暂无公告</p>
+    <p >暂无公告</p>
    </div>	
-
     {% endif %}
 	
 	

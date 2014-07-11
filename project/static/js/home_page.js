@@ -54,7 +54,7 @@ $(document).ready(function(){
     
 
     //超过上线日期时显示橙色
-    var cellIndex=parseInt($(".procolor tr").length);
+    var cellIndex=parseInt($(".aaprocolor tr").length);
     for(var i=0; i<cellIndex;i++) {
       var time =document.getElementsByName("datetime")[i].value;
       alert(time);
