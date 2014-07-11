@@ -227,9 +227,9 @@ $(document).ready(function(){
         //"key="+skey
         $.get(url, para, function(data){
           var person = eval('('+data+')');
-          pperson = person.person;
+          allperson = person.person;
 
-          var num = pperson.length;
+          var num = allperson.length;
           var pnum = num/pagemaxnum;
           var anum = Math.floor(pnum);
           anum < pnum ? pagenum = anum+1 : pagenum = anum
@@ -243,7 +243,7 @@ $(document).ready(function(){
             person = allperson.slice(0,pagemaxnum);
           }
           else{
-          person = pperson;
+          person = allperson;
         }
 
           show_staff(person);
