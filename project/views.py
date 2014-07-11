@@ -825,6 +825,7 @@ def delay(request):
 #公告
 def notice(request):
     if request.method == 'POST':  # 如果是post请求
+
         wds = request.POST
         try:
             noticetext = wds['wd']
