@@ -123,4 +123,26 @@ $(function(){
    });
 });
 
+$(function(){
+   //正在进行中给title赋值
+   var cell=parseInt($(".procolor tr").length);
+   for(var i=0; i<cell;i++){
+    var user = $.trim($(".basecolor").eq(i).children().eq(5).text());
+        user =user.replace(/\s+/g,' ');
+    var project = $.trim($(".basecolor").eq(i).children().eq(1).text());
+    $(".basecolor").eq(i).children().eq(1).attr("title",project);
+    $(".basecolor").eq(i).children().eq(5).attr("title",user);
+   } 
+});
 
+$(function(){
+   //完结项目给title赋值
+   var cell=parseInt($(".procolor1 tr").length);
+   for(var i=0; i<cell;i++){
+    var user = $.trim($(".basecolor1").eq(i).children().eq(5).text());
+        user =user.replace(/\s+/g,' ');
+    var project = $.trim($(".basecolor1").eq(i).children().eq(1).text());
+    $(".basecolor1").eq(i).children().eq(1).attr("title",project);
+    $(".basecolor1").eq(i).children().eq(5).attr("title",user);
+   } 
+});

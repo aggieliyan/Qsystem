@@ -119,15 +119,12 @@
                     <td>{{res.leader_p.realname}}</td>
                     <td>{{res.designer_p.realname}}</td>
                     <td>{{res.tester_p.realname}}</td>
-                    <td>                                                                
-                    
-                    {% for u in puser %}
-                    {% ifequal res.id u.project_id %}                                                        
+                    <td>{% for u in puser %}
+                      {% ifequal res.id u.project_id %}
                     {{u.username.realname}}&nbsp;
                     {% endifequal %}
-                    {% endfor %}                  
-
-                    </td>
+                    {% endfor %}
+                  </td>
                     <td>{{res.start_date|date:"Y-m-d" }}</td>
                     <td >{{res.expect_launch_date|date:"Y-m-d"}}</td>
                     <td>{{res.real_launch_date|date:"Y-m-d"}}</td>
@@ -199,9 +196,9 @@
                 </tr>
               </thead>
 
-              <tbody id="group_one">
+              <tbody id="group_one" class="procolor1">
                 {% for pres in projectobj %}                                          
-                  <tr>                    
+                  <tr class="basecolor1">                    
                     <td>{{pres.priority}}</td>
                     <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a></td>
                     <td>{{pres.leader_p.realname}}</td>
