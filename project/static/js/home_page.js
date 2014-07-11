@@ -55,7 +55,7 @@ $(document).ready(function(){
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var curDate=new Date();
       if(d){
-        if(d<=curDate){
+        if(d<curDate){
         $(".basecolor").eq(i).css("background-color","#ff9933"); }
       }      
     };
