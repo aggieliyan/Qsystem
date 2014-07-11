@@ -19,7 +19,7 @@
 	<form name="form" method="post">
 	   <div class="choose">
 		  <select name="department" id="department" class="section" onchange="showuser()" >
-		  <option value="请选择">请选择</option>
+		  <option value="0">请选择</option>
 		  {% for department in department_list %}
 		  <option value="{{department.department}}" >{{department.department}}</option>
 		   {% endfor %}
@@ -28,9 +28,10 @@
 		<button type="button" class="btn-section" style="display:none;">新建部门</button>
 		<button type="button" class="btn-edit" >编辑</button>
 	</div>
-	<div style="color:red;margin-bottom: 10px;">
+	<div style="color:red;margin-bottom: 10px;margin-top: 10px;">
 	温馨提示：每次只能编辑一个人哦
 	</div>
+	
 	<div class="people">
 	   <div class="def1">
 		 <select name="level_1a" class="section1" id="sec1"  >
@@ -76,7 +77,7 @@
 	  {% if level_1_list %}
 		{% for level in level_1_list %}
 		<select name="{{level.id}}" class="section1" id="sec1" onchange="insert11('{{level.id}}')" >
-		<option value="请选择">请选择</option>
+		<option value="0">请选择</option>
 		{% for level_1 in level_list %}
 		    <option value="{{level_1.id}}" {% if level_1 == level %} selected {% endif %} >{{level_1.realname}}</option>
 		    {% endfor %}
@@ -87,7 +88,7 @@
 		{% endfor %}
 	  {% else %}
 	  		<select name="level_1" class="section1" id="sec1"  onchange="insert1()"  >
-		<option value="请选择">请选择</option>
+		<option value="0">请选择</option>
 		{% for level_1 in level_list %}
 		    <option value="{{level_1.id}}">{{level_1.realname}}</option>
 		    {% endfor %}
@@ -101,7 +102,7 @@
 		{% for level_2 in level_2_list %}
 		 	<div class="s2">
 				<select name="{{level_2.id}}" class="section2" id="sec2"  onchange="insert22('{{level_2.id}}')" >
-				<option value="请选择">请选择</option>
+				<option value="0">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1.id}}" {% if level_1 == level_2 %} selected {% endif %}>{{level_1.realname}}</option>
 		   			{% endfor %}
@@ -118,7 +119,7 @@
 	    {% for level_3 in level_3_list %}
 			<div class="s3">
 				<select name="{{level_3.id}}" class="section3" id="sec3"  onchange="insert33('{{level_3.id}}')" >
-				<option value="请选择">请选择</option>
+				<option value="0">请选择</option>
 					{% for level_1 in level_list %}
 		    		<option value="{{level_1.id}}" {% if level_1 == level_3 %} selected {% endif %}>{{level_1.realname}}</option>
 		    		{% endfor %}
@@ -158,10 +159,10 @@ document.form.submit()
 }
 function insert2()
 {
-document.form.action="/Insert_user/2/0/0/"
-document.form.submit()
+document.form.action="/Insert_user/2/0/0/";
+document.form.submit();
 }
- 
+
 function insert3()
 {
 document.form.action="/Insert_user/3/0/0/"
@@ -172,8 +173,8 @@ function insert11(id)
 {
 var a2=document.getElementsByName(id)[0]
 id2=a2.value
-if(id2=='请选择'){
-alert('请选择要求删除的人员'); 
+if(id2=='0'){
+alert('请选择人员'); 
 }
 else{
 document.form.action="/Insert_user/12/"+id2+"/"+id+"/"
@@ -185,8 +186,8 @@ function insert22(id)
 {
 var a2=document.getElementsByName(id)[0]
 id2=a2.value
-if(id2=='请选择'){
-alert('请选择要求删除的人员'); 
+if(id2=='0'){
+alert('请选择人员'); 
 }
 else{
 document.form.action="/Insert_user/10/"+id2+"/"+id+"/"
@@ -197,8 +198,8 @@ function insert33(id)
 {
 var a3=document.getElementsByName(id)[0]
 id3=a3.value
-if(id3=='请选择'){
-alert('请选择要求删除的人员'); 
+if(id3=='0'){
+alert('请选择人员'); 
 }
 else{
 document.form.action="/Insert_user/11/"+id3+"/"+id+"/"
@@ -209,7 +210,7 @@ document.form.submit()
 function del_logic()
 {
 var l1= document.getElementsByName("level_1")[0];
-if(l1.value == '请选择'){
+if(l1.value == '0'){
 alert('请选择要求删除的人员'); 
 }
 else{
@@ -233,7 +234,7 @@ document.form.submit()
 function del_logic2a()
 {
 var l1= document.getElementsByName("level_2a")[0];
-if(l1.value == '请选择'){
+if(l1.value == '0'){
 alert('请选择要求删除的人员'); 
 }
 else{
@@ -245,7 +246,7 @@ document.form.submit()
 function del_logic3a()
 {
 var l1= document.getElementsByName("level_3a")[0];
-if(l1.value == '请选择'){
+if(l1.value == '0'){
 alert('请选择要求删除的人员'); 
 }
 else{
@@ -267,7 +268,7 @@ document.form.submit()
 function del22()
 {
 var l1= document.getElementsByName("level_2a")[0];
-if(l1.value == '请选择'){
+if(l1.value == '0'){
 alert('请选择要求删除的人员'); 
 }
 else{
@@ -279,7 +280,7 @@ document.form.submit()
 function del33()
 {
 var l1= document.getElementsByName("level_2a")[0];
-if(l1.value == '请选择'){
+if(l1.value == '0'){
 alert('请选择要求删除的人员'); 
 }
 else{
@@ -287,7 +288,6 @@ document.form.action="/Insert_user/8/0/0/"
 document.form.submit()
 }
 }
-
 
 function del2(id)
 {
