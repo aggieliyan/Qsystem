@@ -656,7 +656,7 @@ def judge(request):
         else:
             return redirect('/show_source/')
     except KeyError:
-        return redirect('/login/')
+        return redirect('/nologin/')
 def show_source(request):
     try:
         if request.session['username']:
@@ -675,7 +675,7 @@ def show_source(request):
         department_id, Position_level="3")
         return render_to_response('show_source.html', locals())
     except KeyError:
-        return redirect('/login/')
+        return redirect('/nologin/')
 
 @csrf_exempt
 def show_user2(request):
@@ -730,7 +730,7 @@ def show_user(request):
         department_list = models.department.objects.all()
         return render_to_response('sourcemanage.html', locals())
     except KeyError:
-        return redirect('/login/')
+        return redirect('/nologin/')
 
 @csrf_exempt
 def Insert_user(request, id, id2, id3):
