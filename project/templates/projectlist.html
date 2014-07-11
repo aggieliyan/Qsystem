@@ -21,24 +21,22 @@
 {% block content %}
 <body id="mybody">
 
-
     
 	{% if notices %}
-	
    {% if count = 1 %}
-	<div style="height:120px;padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:120px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %}   
    {% if count = 2 %}
-	<div style="height:120px;padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:120px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %} 
    {% if count = 3 %}
-	<div style="height:120px;padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:120px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %} 
     {% if count = 4 %}
-	<div style="height:140px;padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:140px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %} 
     {% if count >= 5 %}
-	<div style="height:170px;padding-left: 10px; padding-top: 10px;"  class="notice">
+	<div style="height:160px;padding-left: 10px; padding-top: 10px;width:99%"  class="notice">
    {% endif %} 
 
 		<div class="notice_title">
@@ -50,7 +48,7 @@
 		
 	{% for item in notices %}
       
-        <p><a href="/notice/" target="_blank" style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;">{{item.content}}</a></p>
+        <p><a href="/notice/" target="_blank" style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;line-height:15px;margin:0;padding:0;">{{item.content}}</a></p>
     
         {% endfor %}	
 		</div>
@@ -61,16 +59,15 @@
          {% endif %} 
 	</div>	
 	{% else %}
-      <div style="height:25px;padding-left: 10px; padding-top: 10px;" class="notice">
+      <div style="height:25px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    <div class="notice_title">
 			<span>
 				<b>项目公告<span style="color:#ffa03e">(0):</span></b>
 			</span>
 		</div>
 		
-    <p>暂无公告</p>
+    <p >暂无公告</p>
    </div>	
-
     {% endif %}
 	
 	

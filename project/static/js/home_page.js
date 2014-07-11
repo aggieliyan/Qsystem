@@ -34,21 +34,36 @@ $(document).ready(function(){
       console.log("hahhtjh");
       $("#mypage").hide();
     });
-    
+
+    $(".chomdelay").click(function(){
+       timepro=$(this).parent().parent().children().eq(7).text();
+       if (!timepro)
+       {
+        alert("计划上线时间为空不可申请延期");
+        }
+      }); 
+ 
+     $("#changepro").click(function(){
+       content=$("#as").val().trim();
+      // alert(content);
+        $("#changepro").attr("cont",content);
+        //alert($("#changepro").attr("cont"));
+      });    
+
     //超过上线日期时显示橙色
-    var cellIndex=parseInt($(".prorealter td").length-1);
+    var cellIndex=parseInt($(".aaprocolor tr").length);
     for(var i=0; i<cellIndex;i++) {
       var time =document.getElementsByName("datetime")[i].value;
+      alert(time);
       //print time;
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var curDate=new Date();
       console.log("123");
-      if(d<=curDate){
+      if(d>=curDate){
         alert("我是第个项目啊");
         $(".basecolor").css("background-color","#ff9933");
       }
-    };
-    
+    };   
 
 
 });

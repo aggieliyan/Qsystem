@@ -19,17 +19,17 @@
   {% if messages %}
   
    {% if count = 1 %}
-	<div style="height:120px; padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %}   
    {% if count = 2 %}
-	<div style="height:120px; padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %} 
    {% if count = 3 %}
-	<div style="height:120px; padding-left: 10px; padding-top: 10px;" class="notice">
+	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %} 
    
     {% if count >= 4 %}
-	<div style="height:140px; padding-left: 10px; padding-top: 10px;" class="notice" >
+	<div style="height:140px; padding-left: 10px; padding-top: 10px;width:99%" class="notice" >
    {% endif %} 
    
 		<div class="notice_title">
@@ -53,7 +53,7 @@
 		</div>		
 	</div>	
   {% else %}
-  <div style="height:25px; padding-left: 10px; padding-top: 10px;" class="notice">
+  <div style="height:25px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
   <div class="notice_title">
 			<span>
 				<b>消息提醒<span style="color:#ffa03e">(0):</span></b>
@@ -111,9 +111,9 @@
                   <th style="width:170px">操作</th>
                 </tr>
               </thead>
-              <tbody id="group_one">
+              <tbody id="group_one" class="procolor">
                 {% for res in result %}                                          
-                  <tr class="basecolor">                    
+                  <tr class="basecolor">                     
                     <td>{{res.priority}}</td>
                     <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
                     <td>{{res.leader_p.realname}}</td>
@@ -135,7 +135,7 @@
                     <input name="datetime" value="{{res.expect_launch_date|date:"Y-m-d"}}" type="hidden">    
                   <td>
                      {% if c == 1 %}                           
-                      <a onclick="change_p({{res.id}})">设计变更</a>&nbsp;
+                      <a class="changepro" onclick="change_p({{res.id}})">设计变更</a>&nbsp;
                       {% else %}
                       {% endif %}
                        

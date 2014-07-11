@@ -59,14 +59,14 @@ $(document).ready(function(){
 	$("#add1a").click(function() {  
    
 
-    $("div:eq(5)").clone(true).show().appendTo(".people");  
+    $("div:eq(6)").clone(true).show().appendTo(".people");  
 		
 			
         }); 
 	
 	$("#add2a").click(function() {  
        
-        $("div:eq(6)").clone(true).show().appendTo($(this).parent());  
+        $("div:eq(7)").clone(true).show().appendTo($(this).parent());  
 			
         }); 
 	
@@ -78,14 +78,14 @@ $(document).ready(function(){
 	$("#add1").click(function() {  
    
 
-      $("div:eq(5)").clone(true).show().appendTo(".people");  
+      $("div:eq(6)").clone(true).show().appendTo(".people");  
 		
 			
         }); 
 	
 	$(".ad2").click(function() {  
        
-        $("div:eq(6)").clone(true).show().appendTo($(this).parent());  
+        $("div:eq(7)").clone(true).show().appendTo($(this).parent());  
 			
         }); 
 	 $(".ad3").click(function() {  
