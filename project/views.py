@@ -31,7 +31,7 @@ def register(request):
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
             try:
-                user = User.objects.create_user(username=username, email=email, password=password)
+                user = User.objects.create_user(username=username, email=email, password=password, first_name=realname)
                 user.save()
             except:
                 uf = UserForm()
@@ -482,11 +482,18 @@ def psearch(request):
         ptype = 3
     else:
         ptype = 0
-
-    if ptype == 2:
-        prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4))
+    
+    if len(key) == 0:
+        if ptype == 2:
+            prs = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=4))
+        else:
+            prs = models.user.objects.filter(department_id=ptype)
     else:
-        prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
+        if ptype == 2:
+            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4))
+        else:
+            prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
+            
     search_rs = []
     if len(prs) > 0:
         for item in prs:
@@ -622,7 +629,7 @@ def changedesign(request, url):
             uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
-            string = chd.project+u' : '+cont.strip() + dpath
+            string = chd.project+u' : '+cont + dpath
             pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()

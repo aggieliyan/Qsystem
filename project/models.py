@@ -47,7 +47,7 @@ class project_user(models.Model):
 class public_message(models.Model): 
     project = models.IntegerField()  
     publisher=models.IntegerField()
-    content=models.CharField(u'公告内容',max_length=1100)
+    content=models.CharField(u'公告内容',max_length=2500)
     CHOICES = (  
         (u'notice',u'notice'),
         (u'message',u'message'), 
@@ -65,7 +65,7 @@ class project_delay(models.Model):
     delay_to_date=models.DateField()
     apply_date=models.DateField()
     title = models.CharField(u'项目名称',max_length=100, blank=True, null=True)
-    reason =models.CharField(u'拒绝理由',max_length=100, blank=True, null=True)
+    reason =models.CharField(u'拒绝理由',max_length=500, blank=True, null=True)
     result = models.CharField(u'状态',max_length=10,blank=True, null=True)
     review_date = models.DateField(blank=True,null=True)
     isactived = models.IntegerField(max_length=1,blank=True, null=True)

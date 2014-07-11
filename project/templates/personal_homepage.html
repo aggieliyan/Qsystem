@@ -240,7 +240,7 @@
     <div class="pagination" style="text-align:right;margin-right:10px" id="mypage">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
-            <a href="#tab2?page={{ projectobj.previous_page_number }}"> << </a>
+            <a href="?page={{ projectobj.previous_page_number }}"> << </a>
         {% endif %}
 
         <span class="current">
@@ -248,7 +248,7 @@
         </span>
 
         {% if projectobj.has_next %}
-            <a href="#tab2?page={{ projectobj.next_page_number }}"> >> </a>
+            <a href="?page={{ projectobj.next_page_number }}"> >> </a>
         {% endif %}
     </span>
     </div>
