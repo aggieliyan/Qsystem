@@ -45,7 +45,7 @@ urlpatterns = patterns('',
     url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../personal_homepage/'},name="project_delete"),
     url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../personal_homepage/'},name="\'project_delete\'"),
     url(r'^pdeleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../projectlist/'},name="pproject_delete"),
-    url(r'^deleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../personal_homepage/'},name="\'pproject_delete\'"),
+    url(r'^pdeleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../personal_homepage/'},name="\'pproject_delete\'"),
    #sourcemanage
     url(r'^judge/$',project.views.judge),
     url(r'^sourcemanage/$',project.views.show_user),
