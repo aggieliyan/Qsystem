@@ -44,9 +44,9 @@ $(document).ready(function(){
       }); 
  
      $("#changepro").click(function(){
-       content=$("#as").val().trim();
+       $.trim($("#as").val())
       // alert(content);
-        $("#changepro").attr("cont",content);
+        //$("#changepro").attr("cont",content);
         //alert($("#changepro").attr("cont"));
       });    
 

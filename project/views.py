@@ -31,7 +31,7 @@ def register(request):
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
             try:
-                user = User.objects.create_user(username=username, email=email, password=password)
+                user = User.objects.create_user(username=username, email=email, password=password, first_name=realname)
                 user.save()
             except:
                 uf = UserForm()
@@ -622,7 +622,7 @@ def changedesign(request, url):
             uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
-            string = chd.project+u' : '+cont.strip() + dpath
+            string = chd.project+u' : '+cont + dpath
             pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()
