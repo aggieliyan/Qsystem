@@ -19,7 +19,7 @@
 	<form name="form" method="post">
 	   <div class="choose">
 		  <select name="department" id="department" class="section" onchange="showuser()" >
-		  <option value="0">请选择</option>
+		  <option value="请选择">请选择</option>
 		  {% for department in department_list %}
 		  <option value="{{department.department}}" >{{department.department}}</option>
 		   {% endfor %}
