@@ -373,7 +373,7 @@ def project_list(request):
                 projectlist = projectlist.filter(pk__in=projectids).order_by("-id").order_by("-status_p")
     else:
         projectlist = models.project.objects.all().order_by("-id").order_by("-status_p")
-        
+
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
