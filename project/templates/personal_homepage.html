@@ -111,9 +111,9 @@
                   <th style="width:170px">操作</th>
                 </tr>
               </thead>
-              <tbody id="group_one">
+              <tbody id="group_one" class="procolor">
                 {% for res in result %}                                          
-                  <tr class="basecolor">                    
+                  <tr class="basecolor">                     
                     <td>{{res.priority}}</td>
                     <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
                     <td>{{res.leader_p.realname}}</td>
@@ -135,7 +135,7 @@
                     <input name="datetime" value="{{res.expect_launch_date|date:"Y-m-d"}}" type="hidden">    
                   <td>
                      {% if c == 1 %}                           
-                      <a onclick="change_p({{res.id}})">设计变更</a>&nbsp;
+                      <a class="changepro" onclick="change_p({{res.id}})">设计变更</a>&nbsp;
                       {% else %}
                       {% endif %}
                        
