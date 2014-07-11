@@ -845,7 +845,7 @@ def notice(request):
     except EmptyPage:
     #If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-    return render_to_response('notice.html', RequestContext(request, {'projectobj': projectobj, 'wd':wd}))
+    return render_to_response('notice.html', RequestContext(request, {'projectobj': projectobj}))
 
 @csrf_exempt
 
@@ -877,7 +877,7 @@ def historymessage(request):
         projectobj = paginator.page(1)
     except EmptyPage:
         projectobj = paginator.page(paginator.num_pages)
-    return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj, 'wd':wd}))
+    return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
 
 #拒绝
 def refuse(request):
