@@ -161,6 +161,7 @@ $(document).ready(function(){
       $.get(url, para, function(data, status){
         allperson = eval('('+data+')');//全局变量
         allperson = allperson.person;
+
         var num = allperson.length;
         pagemaxnum = 32//全局变量
         var pnum = num/pagemaxnum;
@@ -226,7 +227,25 @@ $(document).ready(function(){
         //"key="+skey
         $.get(url, para, function(data){
           var person = eval('('+data+')');
-          person = person.person;
+          pperson = person.person;
+
+          var num = pperson.length;
+          var pnum = num/pagemaxnum;
+          var anum = Math.floor(pnum);
+          anum < pnum ? pagenum = anum+1 : pagenum = anum
+          $(".pagination ul li").remove()
+          $(".pagination ul").append("<li><a href=\"#\">&laquo;</a></li><li><a href=\"#\">&raquo;</a></li>");
+          for(var i=0; i<pagenum; i++){
+            var page = i+1;
+            $(".pagination ul li:last").before("<li><a>"+page+"</a></li>");
+          }
+          if(pagenum>1){
+            person = allperson.slice(0,pagemaxnum);
+          }
+          else{
+          person = pperson;
+        }
+
           show_staff(person);
         });    
       }
