@@ -46,12 +46,9 @@ $(document).ready(function(){
      $("#changepro").click(function(){
        content=$("#as").val().trim();
       // alert(content);
-        $("#changepro").attr("con",content);
-        alert($("#changepro").attr("con"));
-      });
-
-
-    
+        $("#changepro").attr("cont",content);
+        //alert($("#changepro").attr("cont"));
+      });    
 
     //超过上线日期时显示橙色
     var cellIndex=parseInt($(".aaprocolor tr").length);
