@@ -199,7 +199,6 @@ $(document).ready(function(){
     //console.log(allperson);
     var start = (page-1)*pagemaxnum;
     person = allperson.slice(start, start+pagemaxnum);
-    console.log(person);
     show_staff(person);
   });
   //点全选
@@ -221,12 +220,11 @@ $(document).ready(function(){
   $("#psearch").click(function(){
       var skey = $("#skey").val();//
       var role = $("[title='1']").prev("button").attr("name");
-
-      if(skey.length >0){
-        url = "/psearch"
-        para = {"key":skey, "role":role}
+      
+      url = "/psearch"
+      para = {"key":skey, "role":role}
         //"key="+skey
-        $.get(url, para, function(data){
+      $.get(url, para, function(data){
           var person = eval('('+data+')');
           allperson = person.person;
 
@@ -247,9 +245,9 @@ $(document).ready(function(){
           person = allperson;
         }
 
-          show_staff(person);
-        });    
-      }
+        show_staff(person);
+      });    
+      
 
    });
 
