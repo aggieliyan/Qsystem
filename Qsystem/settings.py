@@ -20,12 +20,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '3oc$^^dt!@ir9)-l27(c3qk10w1=knk$1o7z(w48j30!d)(m0('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import socket
 
-TEMPLATE_DEBUG = True
-
-ALLOWED_HOSTS = []
-
+if socket.gethostname() == 'test':
+    DEBUG = TEMPLATE_DEBUG = False
+    ALLOWED_HOSTS = ['*']
+else:
+    DEBUG = TEMPLATE_DEBUG = True
+    ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -84,3 +86,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'C:\hoveen-dev\workspace\Qsystem\Qsystem\project\static'

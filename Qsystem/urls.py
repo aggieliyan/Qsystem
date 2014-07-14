@@ -8,12 +8,11 @@ import project
 from django.views.generic import TemplateView
 #login
 
-
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'Qsystem.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+   
     #login
     url('^$', 'project.views.project_list',name="index"),
     url('^login', 'project.views.login',name="login"),
@@ -65,3 +64,9 @@ urlpatterns = patterns('',
     url(r'^deletenotice',project.views.deletenotice),
     url(r'^approve',project.views.approve),
 )
+from django.conf import settings 
+if settings.DEBUG is False:
+    urlpatterns += patterns('',
+        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', { 'document_root': settings.STATIC_ROOT,
+        }),
+   )
