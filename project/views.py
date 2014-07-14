@@ -810,7 +810,7 @@ def delay(request):
 
     delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     global  projectobj
-    paginator = Paginator(delays, 18)
+    paginator = Paginator(delays, 2)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -884,7 +884,7 @@ def historymessage(request):
         except Exception:
             messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')
     global  projectobj
-    paginator = Paginator(messages, 18)
+    paginator = Paginator(messages, 2)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
