@@ -353,16 +353,16 @@ def project_list(request):
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
 
-            projectlist = models.project.objects.filter().order_by("-id").order_by("-status_p")
+            projectlist = models.project.objects.filter().order_by("-status_p","-priority")
             
             if not isNone(project_name):
-                projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-id").order_by("-status_p")
+                projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-status_p","-priority")
             if not isNone(start_date_s):
-                projectlist = projectlist.filter(start_date__gte=start_date_s).order_by("-id").order_by("-status_p")
+                projectlist = projectlist.filter(start_date__gte=start_date_s).order_by("-status_p","-priority")
             if not isNone(end_date_s):
-                projectlist = projectlist.filter(start_date__lte=end_date_s).order_by("-id").order_by("-status_p")
+                projectlist = projectlist.filter(start_date__lte=end_date_s).order_by("-status_p","-priority")
             if not isNone(status_p):
-                projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-id").order_by("-status_p")
+                projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-status_p","-priority")
             if not isNone(leader_p):
                 #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
                 project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
@@ -372,7 +372,7 @@ def project_list(request):
 
                 projectlist = projectlist.filter(pk__in=projectids).order_by("-id").order_by("-status_p")
     else:
-        projectlist = models.project.objects.all().order_by("-id").order_by("-status_p")
+        projectlist = models.project.objects.all().order_by("-status_p","-priority")
 
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
