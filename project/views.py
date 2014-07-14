@@ -124,7 +124,7 @@ def login(request):
                     response = HttpResponseRedirect("/personal_homepage")
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)
+                        response.set_cookie("password", password, 3600)   
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
@@ -294,11 +294,11 @@ def new_project(request, pid=''):
                             isactived=False)
                         pmessage.save()
                         project.real_launch_date = datetime.datetime.now()
-                        project.save()
+                        project.save()                   
             return redirect('/projectlist/')
     return render_to_response('newproject.html', \
         {'form':form}, context_instance=RequestContext(request))
-
+    
 
 def project_list(request):
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
@@ -332,7 +332,7 @@ def project_list(request):
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
-    notices = noticess[:5]
+    notices = noticess[:5]   	
     ##
     projectlist = None
     puser = None
@@ -350,11 +350,11 @@ def project_list(request):
             project_name = search_form.cleaned_data['project']
             start_date_s = search_form.cleaned_data['start_date_s']
             end_date_s = search_form.cleaned_data['end_date_s']
-            status_p = request.POST.get['status_p']
+            status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
 
             projectlist = models.project.objects.filter().order_by("-id").order_by("-status_p")
-
+            
             if not isNone(project_name):
                 projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-id").order_by("-status_p")
             if not isNone(start_date_s):
@@ -391,31 +391,12 @@ def project_list(request):
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
             "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag}))
 
-def tuPage(request, prolist, each_page):
-    if not prolist:
-        paginator = Paginator(prolist, each_page)
-        try:
-            page = request.GET.get('page')
-            print(page)
-        except ValueError:
-            page = 1
-        try:
-            projectobj = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            projectobj = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            projectobj = paginator.page(paginator.num_pages)
-        return projectobj
-
-
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
         return True
     else:
         return False
-
+    
 def detail(request, pid):
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
@@ -446,7 +427,7 @@ def detail(request, pid):
         dt['ttime'] = 0
     editboolean = False
     try:
-        request.user
+        request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
             or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
             editboolean = True
@@ -501,7 +482,7 @@ def psearch(request):
         ptype = 3
     else:
         ptype = 0
-
+    
     if len(key) == 0:
         if ptype == 2:
             prs = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=4))
@@ -512,7 +493,7 @@ def psearch(request):
             prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
-
+            
     search_rs = []
     if len(prs) > 0:
         for item in prs:
@@ -531,7 +512,7 @@ def show_headname(request):
         username = request.session['username']
         realname = request.session['realname']
         user['username'] = username
-        user['realname'] = realname
+        user['realname'] = realname      
     except KeyError:
         user['username'] = 'GUEST'
         user['realname'] = 'GUEST'
@@ -563,13 +544,13 @@ def personal_homepage(request):
     if request.user.has_perm('project.add_project_delay'):
         m = 1
     #暂停
-    n = 0
+    n = 0 
     if request.user.has_perm('project.delete_project'):
-        n = 1
+        n = 1 
     #删除
     k = 0
     if request.user.has_perm('project.delete_project'):
-        k = 1
+        k = 1 
     pm=0
     if request.user.has_perm("auth.change_permission"):
             pm = 1
@@ -577,7 +558,7 @@ def personal_homepage(request):
     for p in project_user_list:
         projectids.append(p.project.id)
     projectlist = projectlist.filter(pk__in = projectids)
-    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")
+    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")   
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
     puser = models.project_user.objects.all()
     """分页"""
@@ -605,17 +586,17 @@ def personal_homepage(request):
     messagess = []
     for test in tests:
         lists.append(test.messageid_id)
-    messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')
+    messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')  
     count1 = messagess.count()
     for item in messagess:
-        i = i + 1
+        i = i + 1 
     count = i
-    messages = messagess[:4]
+    messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
          'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
-    delpro=get_object_or_404(project,pk=int(id))
+    delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
     return HttpResponseRedirect(url)
 def pauseproject(request, id, url):
@@ -635,9 +616,9 @@ def delayproject(request, url):
             protitle = delpro.project
             delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
                 apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason)
-            delay_p.save()
+            delay_p.save()                   
     return HttpResponseRedirect(url)
-def changedesign(request, url):
+def changedesign(request, url):          
     if request.method == 'POST':
         form = changedesignForm(request.POST)
         if form.is_valid():
@@ -653,13 +634,13 @@ def changedesign(request, url):
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()
             related_user = models.user.objects.filter(project_user__project_id = changeid)
-            message = public_message.objects.filter(project=changeid).order_by("-id")[0]
+            message = public_message.objects.filter(project=changeid).order_by("-id")[0]            
             for i in related_user:
                 uid = i.id
                 megid = message.id
                 pro_u_message = project_user_message(userid_id = uid, messageid_id = megid, \
                     project_id = changeid, isactived = '1')
-                pro_u_message.save()
+                pro_u_message.save()           
     return HttpResponseRedirect(url)
     #return render_to_response('personal_homepage.html', {'form': form})
 
@@ -995,7 +976,7 @@ def emptyehistory(request):
     if request.method == 'POST':
         for test in tests:
             test.delete()
-    return HttpResponseRedirect('/historymessage/')
+    return HttpResponseRedirect('/historymessage/')    
 def initdata(request):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
@@ -1012,7 +993,7 @@ def initdata(request):
     group5 = Group(id=5,name='产品负责人权限--编辑')
     group5.save()
     group6 = Group(id=6,name='测试负责人权限--编辑')
-    group6.save()
+    group6.save()  
     #auth_group_permissions
     group1.permissions.add(25)
     group1.permissions.add(26)
@@ -1036,4 +1017,5 @@ def initdata(request):
     depart4.save()
     return HttpResponse("恭喜你,初始化数据成功~")
 
-
+  
+    
