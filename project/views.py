@@ -31,7 +31,7 @@ def register(request):
             realname = uf.cleaned_data['realname']
             email = username+"@ablesky.com"
             try:
-                user = User.objects.create_user(username=username, email=email, password=password, first_name=realname)
+                user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
             except:
                 uf = UserForm()
@@ -656,7 +656,7 @@ def judge(request):
         else:
             return redirect('/show_source/')
     except KeyError:
-        return redirect('/login/')
+        return redirect('/nologin/')
 def show_source(request):
     try:
         if request.session['username']:
@@ -675,7 +675,7 @@ def show_source(request):
         department_id, Position_level="3")
         return render_to_response('show_source.html', locals())
     except KeyError:
-        return redirect('/login/')
+        return redirect('/nologin/')
 
 @csrf_exempt
 def show_user2(request):
@@ -730,7 +730,7 @@ def show_user(request):
         department_list = models.department.objects.all()
         return render_to_response('sourcemanage.html', locals())
     except KeyError:
-        return redirect('/login/')
+        return redirect('/nologin/')
 
 @csrf_exempt
 def Insert_user(request, id, id2, id3):
@@ -824,16 +824,24 @@ def delay(request):
 
 #公告
 def notice(request):
+    global search_key
+    search_key=''
     if request.method == 'POST':  # 如果是post请求
         wds = request.POST
         try:
             noticetext = wds['wd']
+            search_key=noticetext
             notices = public_message.objects.filter(content__icontains=noticetext).filter(type_p="notice").order_by("-id")
 
         except Exception:
             notices = public_message.objects.filter(type_p="notice").order_by("-id")
     else:  # Get请求
-        notices = public_message.objects.filter(type_p="notice").order_by("-id")
+        wds = request.GET
+        try:
+            search_key = wds['search_key']
+            notices = public_message.objects.filter(type_p="notice").filter(content__icontains=search_key).order_by("-id")
+        except Exception:
+            notices = public_message.objects.filter(type_p="notice").order_by("-id")
     global  projectobj
     paginator = Paginator(notices, 18)
     page = request.GET.get('page')
@@ -845,12 +853,14 @@ def notice(request):
     except EmptyPage:
     #If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-    return render_to_response('notice.html', RequestContext(request, {'projectobj': projectobj}))
+    return render_to_response('notice.html', RequestContext(request, {'projectobj': projectobj,'search_key':search_key}))
 
 @csrf_exempt
 
 #历史消息
 def historymessage(request):
+    global search_key
+    search_key=''
     # 查询与用户相关的消息
     if request.session['id']:
         useid = request.session['id']
@@ -862,11 +872,17 @@ def historymessage(request):
         wds = request.POST
         try:
             messagetext = wds['wd']
+            search_key= messagetext
             messages = public_message.objects.filter(pk__in=lists).filter(content__icontains=messagetext).filter(type_p="message").order_by('-id')
         except Exception:
             messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')
     else:  # Get请求
-        messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')
+        wds = request.GET
+        try:
+            search_key = wds['search_key']
+            messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").filter(content__icontains=search_key).order_by('-id')
+        except Exception:
+            messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')
     global  projectobj
     paginator = Paginator(messages, 18)
     page = request.GET.get('page')
@@ -877,7 +893,7 @@ def historymessage(request):
         projectobj = paginator.page(1)
     except EmptyPage:
         projectobj = paginator.page(paginator.num_pages)
-    return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj}))
+    return render_to_response('historymessage.html', RequestContext(request, {'projectobj': projectobj,'search_key':search_key}))
 
 #拒绝
 def refuse(request):
