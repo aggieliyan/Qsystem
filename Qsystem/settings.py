@@ -25,6 +25,8 @@ import socket
 if socket.gethostname() == 'test':
     DEBUG = TEMPLATE_DEBUG = False
     ALLOWED_HOSTS = ['*']
+    STATIC_ROOT = '/Django/Qsystem/Qsystem/project/static'
+    
 else:
     DEBUG = TEMPLATE_DEBUG = True
     ALLOWED_HOSTS = []
@@ -86,4 +88,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'C:\hoveen-dev\workspace\Qsystem\Qsystem\project\static'
