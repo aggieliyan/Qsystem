@@ -113,12 +113,7 @@ $(document).ready(function(){
 		  $(this).parent().remove();
 		  
 		   }*/
-		   
-		 else {	         
-		   
-		   alert('该类目有用户，不能直接删除');
-		   }
-		
+		   	
         });  
    
 		
@@ -127,15 +122,7 @@ $(document).ready(function(){
 		 var checkval=$(this).parent().has("#sec3").find("option:selected").val();//获取选择的iption value值
 	     if(checkval=="请选择"){
 		 $(this).parent().remove();
-		  }
-		 else{		 
-		  
-	     
-		   
-		   alert('该类目有用户，不能直接删除');
-		   }
-		   
-		
+		  }		
         }); 
 	
 	//删除用户

@@ -257,12 +257,18 @@ document.form.submit()
 //物理删除人员
 function del()
 {
+var l1= document.getElementsByName("level_1")[0]
 if (!confirm("确认要删除？")) { 
             window.event.returnValue = false; 
         } 
 else{
+if(l1.value == '0'){
+alert('请选择要求删除的人员'); 
+}
+else{
 document.form.action="/Insert_user/7/0/0/"
 document.form.submit()
+}
 }
 }
 function del22()
