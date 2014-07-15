@@ -26,14 +26,21 @@ if socket.gethostname() == 'test':
     DEBUG = TEMPLATE_DEBUG = False
     ALLOWED_HOSTS = ['*']
     STATIC_ROOT = '/Django/Qsystem/Qsystem/project/static'
+    INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'project',
+    'south',
+)
     
 else:
     DEBUG = TEMPLATE_DEBUG = True
     ALLOWED_HOSTS = []
-
-# Application definition
-
-INSTALLED_APPS = (
+    INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +49,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'project',
 )
+
+# Application definition
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
