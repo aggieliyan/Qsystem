@@ -86,12 +86,12 @@
     <div style="margin:3px 0px">
       <div style=""class="tabbable">
       <!-- Only required for left/right tabs -->
-          <ul class="nav nav-tabs" style="display:block;background-color:#339966"> 
-            <li class="active"><a href="#tab1" data-toggle="tab" style="color:#000" id="inpro">进行中的项目</a></li>
-            <li><a href="#tab2" data-toggle="tab" style="color:#000" id="finishedpro">已完结的项目</a></li>
+          <ul class="nav nav-tabs" style="display:block;background-color:#339966" id="myTab1"> 
+            <li class="active"><a href="#mtab1" data-toggle="tab" style="color:#000" id="inpro">进行中的项目</a></li>
+            <li><a href="#mtab2" data-toggle="tab" style="color:#000" id="finishedpro">已完结的项目</a></li>
           </ul> 
           <div class="tab-content" style="padding:0px">
-            <div class="tab-pane active" id="tab1">              
+            <div class="tab-pane active" id="mtab1">              
               <table id="customers">
                 <thead>
                   {% if not result %}
@@ -175,7 +175,7 @@
               <p> </p>
             </div>
                
-            <div class="tab-pane" id="tab2">
+            <div class="tab-pane" id="mtab2">
               <table id="customers">
                 <thead>
                   {% if not projectobj %}
@@ -260,5 +260,6 @@
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript" src="/static/js/home_page.js"></script>         
+    <script type="text/javascript" src="/static/js/home_page.js"></script> 
+    <script type="text/javascript" src="http://yxb.qq.com/js/jquery.cookie.js"></script>        
 {% endblock %}

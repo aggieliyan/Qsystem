@@ -24,6 +24,8 @@ $(document).ready(function(){
     $("#finishedpro").click(function(){
       console.log("hahhtjh");
       $("#mypage").show();
+      document.getElementById("mtab1").style.display = "none";
+      document.getElementById("mtab2").style.display = "block";
     });
     $("#inpro").click(function(){
       console.log("hahhtjh");
@@ -62,9 +64,27 @@ $(document).ready(function(){
             $(".basecolor").eq(i).css("background-color","#ff9933"); }
       }      
     };
+    };
 
-      };
-      
+
+   //已完结项目中，翻页后，默认显示当前tab
+    var tabcookievalue = $.cookie("mytab");
+    //alert("tabcookievalue="+tabcookievalue);
+    $("#myTab1 li").click(function () {
+      $.cookie("mytab", $(this).index());
+    });
+    if (tabcookievalue == 1) {
+      $("#myTab1").children().eq(0).removeClass("active");
+      document.getElementById("mtab1").style.display = "none";
+      $("#myTab1").children().eq(1).addClass("active");      
+      document.getElementById("mtab2").style.display = "block";
+      $("#mypage").show();
+      $("#inpro").click(function () {
+        $.cookie("mytab", " ");
+        document.getElementById("mtab2").style.display = "none";
+        document.getElementById("mtab1").style.display = "block";
+    }); }
+           
 });
 
 (function(){
@@ -146,3 +166,15 @@ $(function(){
     $(".basecolor1").eq(i).children().eq(5).attr("title",user);
    } 
 });
+
+(function(){
+                //导航选中
+                var url = location.pathname, navg = $('.top_memu li a');
+                if(url == '/personal_homepage/?page=/'){
+                    navg.eq(0).addClass('selected');
+                }else if(!url.indexOf('/projectlist/')||!url.indexOf('/newproject/')||!url.indexOf('/detail/')||!url.indexOf('/editproject/')||!url.indexOf('/notice/')){
+                    navg.eq(1).addClass('selected');
+                }else if(!url.indexOf('/show_user/')||!url.indexOf('/sourcemanage/')||!url.indexOf('/show_source/')||!url.indexOf('/show_user2/')){
+                    navg.eq(2).addClass('selected');
+                }
+            })()
