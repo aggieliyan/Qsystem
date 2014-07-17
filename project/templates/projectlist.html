@@ -237,7 +237,7 @@
     <div class="pagination" style="text-align:right;margin-right:10px">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
-            <a href="?page={{ projectobj.previous_page_number }}"> << </a>
+            <a href="?page={{ projectobj.previous_page_number }}&project={{ project_name }}&start_date_s={{start_date_s|date:"Y-m-d"|default:""}}&end_date_s={{ end_date_s|date:"Y-m-d"|default:"" }}&status_p={{ status_p }}&leader_p={{ leader_p }}"> << </a>
         {% endif %}
 
         <span class="current">
@@ -245,7 +245,7 @@
         </span>
 
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}"> >> </a>
+            <a href="?page={{ projectobj.next_page_number }}&project={{ project_name }}&start_date_s={{ start_date_s|date:"Y-m-d"|default:"" }}&end_date_s={{ end_date_s|date:"Y-m-d"|default:"" }}&status_p={{ status_p }}&leader_p={{ leader_p }}"> >> </a>
         {% endif %}
     </span>
     </div>

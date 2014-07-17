@@ -336,11 +336,12 @@ def project_list(request):
     ##
     projectlist = None
     puser = None
-    project_name = ""
-    start_date_s = ""
-    end_date_s = ""
-    status_p = ""
-    leader_p = ""
+    project_name = request.GET.get("project")
+    start_date_s = request.GET.get("start_date_s")
+    end_date_s = request.GET.get("end_date_s")
+    status_p = request.GET.get("status_p")
+    leader_p = request.GET.get("leader_p")
+    print(status_p)
     project_user_list = None
     puser = project_user.objects.all()
     #projectlist = project.objects.all()
@@ -355,26 +356,37 @@ def project_list(request):
 
             projectlist = models.project.objects.filter().order_by("-status_p","-priority")
             
-            if not isNone(project_name):
-                projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-status_p","-priority")
-            if not isNone(start_date_s):
-                projectlist = projectlist.filter(start_date__gte=start_date_s).order_by("-status_p","-priority")
-            if not isNone(end_date_s):
-                projectlist = projectlist.filter(start_date__lte=end_date_s).order_by("-status_p","-priority")
-            if not isNone(status_p):
-                projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-status_p","-priority")
-            if not isNone(leader_p):
-                #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
-                project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
-                projectids = []
-                for p in project_user_list:
-                    projectids.append(p.project.id)
 
-                projectlist = projectlist.filter(pk__in=projectids).order_by("-id").order_by("-status_p")
+
     else:
         projectlist = models.project.objects.all().order_by("-status_p","-priority")
-
-    paginator = Paginator(projectlist, 25)
+    if not isNone(project_name):
+        projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-status_p","-priority")
+    if not isNone(start_date_s):
+        projectlist = projectlist.filter(start_date__gte=start_date_s).order_by("-status_p","-priority")
+    if not isNone(end_date_s):
+        projectlist = projectlist.filter(start_date__lte=end_date_s).order_by("-status_p","-priority")
+    if not isNone(status_p):
+        print(status_p)
+        projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-status_p","-priority")
+    if not isNone(leader_p):
+        #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
+        project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
+        projectids = []
+        for p in project_user_list:
+            projectids.append(p.project.id)
+        projectlist = projectlist.filter(pk__in=projectids).order_by("-id").order_by("-status_p")
+    if isNone(project_name):
+        project_name = ""
+    if isNone(start_date_s):
+        start_date_s = ""
+    if isNone(end_date_s):
+        end_date_s = ""
+    if isNone(status_p):
+        status_p = ""
+    if isNone(leader_p):
+        leader_p = ""
+    paginator = Paginator(projectlist, 2)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -384,7 +396,7 @@ def project_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-
+    print(status_p)
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
