@@ -386,7 +386,7 @@ def project_list(request):
         status_p = ""
     if isNone(leader_p):
         leader_p = ""
-    paginator = Paginator(projectlist, 2)
+    paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
