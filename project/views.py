@@ -452,7 +452,7 @@ def show_person(request):
         key = 0
 
     if key == 2:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4))
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=13))
     else:
         person = models.user.objects.filter(department_id=key)
     person_rs = []
@@ -485,12 +485,12 @@ def psearch(request):
     
     if len(key) == 0:
         if ptype == 2:
-            prs = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=4))
+            prs = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=4) | Q(department_id=13))
         else:
             prs = models.user.objects.filter(department_id=ptype)
     else:
         if ptype == 2:
-            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4))
+            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4)|Q(department_id=13))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
             
