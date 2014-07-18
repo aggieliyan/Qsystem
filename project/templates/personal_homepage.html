@@ -18,15 +18,9 @@
    
   {% if messages %}
   
-   {% if count = 1 %}
+   {% if count = 1 or count = 2 or count = 3 %}
 	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %}   
-   {% if count = 2 %}
-	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %} 
-   {% if count = 3 %}
-	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %} 
    
     {% if count >= 4 %}
 	<div style="height:140px; padding-left: 10px; padding-top: 10px;width:99%" class="notice" >
@@ -64,7 +58,7 @@
    </div>	
   {% endif %}
  
-   {% if j = 1 %}
+   {% if dealdelay = 1 %}
     <div style="padding:50px 0 15px">
     <a href="/delay/" style="color:#339666" target="_blank">查看您要处理的延期申请({{countdelay}})>></a>
     </div>  

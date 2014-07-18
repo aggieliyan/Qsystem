@@ -23,15 +23,9 @@
 
     
 	{% if notices %}
-   {% if count = 1 %}
+   {% if count = 1 or count = 2 or count = 3 %}
 	<div style="height:120px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %}   
-   {% if count = 2 %}
-	<div style="height:120px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %} 
-   {% if count = 3 %}
-	<div style="height:120px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %} 
     {% if count = 4 %}
 	<div style="height:140px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %} 

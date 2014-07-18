@@ -579,10 +579,10 @@ def personal_homepage(request):
         projectobj = paginator.page(paginator.num_pages)
     #message
     userid = request.session['id']
-    j = 0
+    dealdelay = 0
     countdelay = 0
     if request.user.has_perm('project.change_project_delay'):
-        j = 1
+        dealdelay = 1
         delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
         countdelay = delays.count()
     i = 0
@@ -592,14 +592,11 @@ def personal_homepage(request):
     for test in tests:
         lists.append(test.messageid_id)
     messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')  
-    count1 = messagess.count()
-    for item in messagess:
-        i = i + 1 
-    count = i
+    count = messagess.count()
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
-         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
+         'count':count, 'dealdelay':dealdelay, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
