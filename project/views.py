@@ -529,28 +529,28 @@ def personal_homepage(request):
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
-    c = 0
+    changetag = 0
     if request.user.has_perm('project.change_public_message'):
-        c = 1
+        changetag = 1
     #编辑
-    d = 0
+    edittag = 0
     if request.user.has_perm('project.change_project'):
-        d = 1
+        edittag = 1
     #延期申请权限
     userid1 = 0
     if request.user.is_authenticated():
         userid1 = request.session['id']
-    m = 0
+    delaytag = 0
     if request.user.has_perm('project.add_project_delay'):
-        m = 1
+        delaytag = 1
     #暂停
-    n = 0 
+    pausetag = 0 
     if request.user.has_perm('project.delete_project'):
-        n = 1 
+        pausetag = 1  
     #删除
-    k = 0
+    deletetag = 0
     if request.user.has_perm('project.delete_project'):
-        k = 1 
+        deletetag = 1 
     pm=0
     if request.user.has_perm("auth.change_permission"):
             pm = 1
@@ -591,7 +591,7 @@ def personal_homepage(request):
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
-         'count':count, 'dealdelay':dealdelay, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
+         'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
