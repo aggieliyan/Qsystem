@@ -379,7 +379,7 @@ def project_list(request):
             projectids.append(p.project.id)
         projectlist = projectlist.filter(pk__in=projectids)
 
-    paginator = Paginator(projectlist, 2)
+    paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
