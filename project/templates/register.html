@@ -54,7 +54,11 @@
 		errorMessage="账号长度为3-20位字符";
  		document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
  		flag=false;
-	}
+	}else if(!nameId.match(/^[a-zA-Z0-9_]{1,}$/)){
+		errorMessage="帐号格式不正确";
+ 		document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
+ 		flag=false;
+  	}
  	if(!isNull(name)){
  		errorMessage="请输入姓名";
  		document.getElementById("nameErrorMsg").innerHTML=errorMessage;
