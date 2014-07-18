@@ -9,7 +9,7 @@ $(document).ready(function(){
       });
 	
     $("#smalltable").click(function(){
-      console.log("aaaaaaaa");
+      //console.log("aaaaaaaa");
       $("#mybody").css("width","1100px");
       $("#x-table2").css("width","1100px");
     });
@@ -22,13 +22,13 @@ $(document).ready(function(){
 
 
     $("#finishedpro").click(function(){
-      console.log("hahhtjh");
+      //console.log("hahhtjh");
       $("#mypage").show();
       document.getElementById("mtab1").style.display = "none";
       document.getElementById("mtab2").style.display = "block";
     });
     $("#inpro").click(function(){
-      console.log("hahhtjh");
+      
       $("#mypage").hide();
     });
     
