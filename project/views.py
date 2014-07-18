@@ -68,6 +68,7 @@ def logout(request):
         response = HttpResponseRedirect("/login")
         response.delete_cookie("username")
         response.delete_cookie("password")
+        response.delete_cookie("realname")  
 
         session_key = request.session.session_key
         Session.objects.get(session_key=session_key).delete()
@@ -115,16 +116,18 @@ def login(request):
                     request.session['username'] = _user.username
                     request.session['realname'] = _user.realname
                     request.session['id'] = _user.id
+
                     #Django 认证系统的登录
                     try:
                         user = auth.authenticate(username=username, password=form.cleaned_data["password"])
                         auth.login(request, user)
                     except:
                         template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
-                    response = HttpResponseRedirect("/personal_homepage")
+                    response = HttpResponseRedirect("/projectlist")
+                    response.set_cookie("realname", _user.realname.encode("utf-8"), 3600)
                     if isautologin:
                         response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)   
+                        response.set_cookie("password", password, 3600)
                     return response
                 else:
                     template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
