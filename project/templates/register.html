@@ -47,14 +47,18 @@
  //验证所有狂是否为空
  function checkRegIsNull(){	
  	if(!isNull(nameId)){
- 		errorMessage="请输入账号";
+ 		errorMessage="请输入帐号";
  		document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
  		flag=false;
  	}else if(getByteLen(nameId)<3||getByteLen(nameId)>20){
-		errorMessage="账号长度为3-20位字符";
+		errorMessage="帐号长度为3-20位字符";
  		document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
  		flag=false;
-	}
+	}else if(!nameId.match(/^[a-zA-Z0-9_]{1,}$/)){
+		errorMessage="帐号只能输入英文、数字或下划线";
+ 		document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
+ 		flag=false;
+  	}
  	if(!isNull(name)){
  		errorMessage="请输入姓名";
  		document.getElementById("nameErrorMsg").innerHTML=errorMessage;
@@ -63,7 +67,11 @@
 		errorMessage="姓名长度为3-20位字符";
  		document.getElementById("nameErrorMsg").innerHTML=errorMessage;
  		flag=false;
-	}
+	}else if(!name.match(/^[a-zA-Z_\u4e00-\u9fa5]+$/)){
+		errorMessage="姓名只能输入中文、英文或下划线";
+ 		document.getElementById("nameErrorMsg").innerHTML=errorMessage;
+ 		flag=false;
+  	}
  	if(!isNull(pwd)){
  		errorMessage="请输入密码";
  		document.getElementById("pwdErrorMsg").innerHTML=errorMessage;

@@ -18,15 +18,9 @@
    
   {% if messages %}
   
-   {% if count = 1 %}
+   {% if count = 1 or count = 2 or count = 3 %}
 	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %}   
-   {% if count = 2 %}
-	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %} 
-   {% if count = 3 %}
-	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %} 
    
     {% if count >= 4 %}
 	<div style="height:140px; padding-left: 10px; padding-top: 10px;width:99%" class="notice" >
@@ -64,7 +58,7 @@
    </div>	
   {% endif %}
  
-   {% if j = 1 %}
+   {% if dealdelay = 1 %}
     <div style="padding:50px 0 15px">
     <a href="/delay/" style="color:#339666" target="_blank">查看您要处理的延期申请({{countdelay}})>></a>
     </div>  
@@ -131,12 +125,12 @@
                     <td>{{res.status_p}}</td> 
                     <input name="datetime" value="{{res.expect_launch_date|date:"Y-m-d"}}" type="hidden">    
                   <td>
-                     {% if c == 1 %}                           
+                     {% if changetag == 1 %}                           
                       <a class="changepro" onclick="change_p({{res.id}})">设计变更</a>&nbsp;
                       {% else %}
                       {% endif %}
                        
-                      {% if d == 1 %}
+                      {% if edittag == 1 %}
                       {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id or pm == 1 %}
                       <a href="{% url 'editproject' res.id %}">编辑</a>&nbsp;
                       {%endif%}
@@ -144,24 +138,24 @@
                       {% else %}                      
                       {% endif %}
                       
-                      {% if m == 1 %}
+                      {% if delaytag == 1 %}
                       {% ifequal userid1 res.leader_p_id %}
                       <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})" class="chomdelay">延期</a>&nbsp;
                       {%endifequal%}
                       {% else %}                     
                       {% endif %}
                       
-                      {% if n == 1 or pm == 1 %}
+                      {% if pausetag == 1 or pm == 1 %}
                       <a href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停</a>&nbsp;
                       {% else %}                      
                       {% endif %}
                        
-                      {% if k == 1 or pm == 1 %}
+                      {% if deletetag == 1 or pm == 1 %}
                       <a href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')">删除</a>&nbsp;
                       {% else %}                      
                       {% endif %}
 
-                      {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id and c == 0 and pm == 0 %}
+                      {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id and changetag == 0 and pm == 0 %}
                       <a href="{% url 'prodetail' res.id %}">查看详情</a>
                       {%endif%}
               

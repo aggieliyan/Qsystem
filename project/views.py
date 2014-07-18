@@ -142,20 +142,15 @@ def new_project(request, pid=''):
         uid = request.session['id']
         cpro = models.project.objects.get(id=pid)
         #如果是负责人且有编辑权限才可以
-        if uid == cpro.leader_p_id or uid == cpro.designer_p_id or uid == cpro.tester_p_id:
+        if uid == cpro.leader_p_id or uid == cpro.designer_p_id or uid == cpro.tester_p_id or request.user.has_perm('auth.change_permission'):
             if request.user.has_perm('project.change_project'):
                 flag = 1
             else:
                 flag = 0
         else:
             flag = 0
-        #如果是项目经理也可以编辑
-        if request.user.has_perm('auth.change_permission'):
-            flag2 = 1
-        else:
-            flag2 = 0
 
-        if not flag and not flag2:
+        if not flag:
             return HttpResponseRedirect("/noperm")
 
     #新建的得有新建权限
@@ -336,11 +331,14 @@ def project_list(request):
     ##
     projectlist = None
     puser = None
-    project_name = ""
-    start_date_s = ""
-    end_date_s = ""
-    status_p = ""
-    leader_p = ""
+    project_name = ""if isNone(request.GET.get("project"))else request.GET.get("project")
+
+    start_date_s = "" if isNone(request.GET.get("start_date_s")) else request.GET.get("start_date_s")
+
+    end_date_s = "" if isNone(request.GET.get("end_date_s")) else request.GET.get("end_date_s")
+    status_p = "" if isNone(request.GET.get("status_p")) else request.GET.get("status_p")
+    leader_p = "" if isNone(request.GET.get("leader_p")) else request.GET.get("leader_p")
+
     project_user_list = None
     puser = project_user.objects.all()
     #projectlist = project.objects.all()
@@ -349,30 +347,32 @@ def project_list(request):
         if search_form.is_valid():
             project_name = search_form.cleaned_data['project']
             start_date_s = search_form.cleaned_data['start_date_s']
+            print(start_date_s)
             end_date_s = search_form.cleaned_data['end_date_s']
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
 
             projectlist = models.project.objects.filter().order_by("-status_p","-priority")
             
-            if not isNone(project_name):
-                projectlist = projectlist.filter(project__contains=project_name.strip()).order_by("-status_p","-priority")
-            if not isNone(start_date_s):
-                projectlist = projectlist.filter(start_date__gte=start_date_s).order_by("-status_p","-priority")
-            if not isNone(end_date_s):
-                projectlist = projectlist.filter(start_date__lte=end_date_s).order_by("-status_p","-priority")
-            if not isNone(status_p):
-                projectlist = projectlist.filter(status_p=status_p.strip()).order_by("-status_p","-priority")
-            if not isNone(leader_p):
-                #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
-                project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
-                projectids = []
-                for p in project_user_list:
-                    projectids.append(p.project.id)
 
-                projectlist = projectlist.filter(pk__in=projectids).order_by("-id").order_by("-status_p")
+
     else:
         projectlist = models.project.objects.all().order_by("-status_p","-priority")
+    if not isNone(project_name):
+        projectlist = projectlist.filter(project__contains=project_name.strip())
+    if not isNone(start_date_s):
+        projectlist = projectlist.filter(start_date__gte=start_date_s)
+    if not isNone(end_date_s):
+        projectlist = projectlist.filter(start_date__lte=end_date_s)
+    if not isNone(status_p):
+        projectlist = projectlist.filter(status_p=status_p.strip())
+    if not isNone(leader_p):
+        #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
+        project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
+        projectids = []
+        for p in project_user_list:
+            projectids.append(p.project.id)
+        projectlist = projectlist.filter(pk__in=projectids)
 
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
@@ -402,7 +402,7 @@ def detail(request, pid):
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
     qa = {'rel': qas}
-    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4))
+    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4) | Q(department_id=13))
     dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
     pd = {'rel': pds}
@@ -452,7 +452,7 @@ def show_person(request):
         key = 0
 
     if key == 2:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4))
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=13))
     else:
         person = models.user.objects.filter(department_id=key)
     person_rs = []
@@ -485,12 +485,12 @@ def psearch(request):
     
     if len(key) == 0:
         if ptype == 2:
-            prs = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=4))
+            prs = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=4) | Q(department_id=13))
         else:
             prs = models.user.objects.filter(department_id=ptype)
     else:
         if ptype == 2:
-            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4))
+            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4)|Q(department_id=13))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
             
@@ -529,28 +529,28 @@ def personal_homepage(request):
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
-    c = 0
+    changetag = 0
     if request.user.has_perm('project.change_public_message'):
-        c = 1
+        changetag = 1
     #编辑
-    d = 0
+    edittag = 0
     if request.user.has_perm('project.change_project'):
-        d = 1
+        edittag = 1
     #延期申请权限
     userid1 = 0
     if request.user.is_authenticated():
         userid1 = request.session['id']
-    m = 0
+    delaytag = 0
     if request.user.has_perm('project.add_project_delay'):
-        m = 1
+        delaytag = 1
     #暂停
-    n = 0 
+    pausetag = 0 
     if request.user.has_perm('project.delete_project'):
-        n = 1 
+        pausetag = 1  
     #删除
-    k = 0
+    deletetag = 0
     if request.user.has_perm('project.delete_project'):
-        k = 1 
+        deletetag = 1 
     pm=0
     if request.user.has_perm("auth.change_permission"):
             pm = 1
@@ -574,10 +574,10 @@ def personal_homepage(request):
         projectobj = paginator.page(paginator.num_pages)
     #message
     userid = request.session['id']
-    j = 0
+    dealdelay = 0
     countdelay = 0
     if request.user.has_perm('project.change_project_delay'):
-        j = 1
+        dealdelay = 1
         delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
         countdelay = delays.count()
     i = 0
@@ -587,14 +587,11 @@ def personal_homepage(request):
     for test in tests:
         lists.append(test.messageid_id)
     messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')  
-    count1 = messagess.count()
-    for item in messagess:
-        i = i + 1 
-    count = i
+    count = messagess.count()
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
-         'count':count1, 'j':j, 'c':c, 'd':d, 'm':m, 'n':n, 'k':k, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
+         'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
     delpro.delete()
@@ -1025,12 +1022,30 @@ def initdata(request):
     #project_department
     depart1 = department(id=1,department='测试',isactived=1)
     depart1.save()
-    depart2 = department(id=2,department='网站开发',isactived=1)
+    depart2 = department(id=2,department='网站研发',isactived=1)
     depart2.save()
-    depart3 = department(id=3,department='产品',isactived=1)
+    depart3 = department(id=3,department='产品部',isactived=1)
     depart3.save()
-    depart4 = department(id=4,department='客户端开发',isactived=1)
+    depart4 = department(id=4,department='客户端研发',isactived=1)
     depart4.save()
+    depart5 = department(id=5,department='IT',isactived=1)
+    depart5.save()
+    depart6 = department(id=6,department='院校事业',isactived=1)
+    depart6.save()
+    depart7 = department(id=7,department='客服部',isactived=1)
+    depart7.save()
+    depart8 = department(id=8,department='市场部',isactived=1)
+    depart8.save()
+    depart9 = department(id=9,department='中小学事业部',isactived=1)
+    depart9.save()
+    depart10 = department(id=10,department='行政人事财务部',isactived=1)
+    depart10.save()
+    depart11 = department(id=11,department='管理部',isactived=1)
+    depart11.save()
+    depart12 = department(id=12,department='销售部',isactived=1)
+    depart12.save()
+    depart13 = department(id=13,department='项目研发部',isactived=1)
+    depart13.save()   
     return HttpResponse("恭喜你,初始化数据成功~")
 
   
