@@ -47,11 +47,11 @@
  //验证所有狂是否为空
  function checkRegIsNull(){	
  	if(!isNull(nameId)){
- 		errorMessage="请输入账号";
+ 		errorMessage="请输入帐号";
  		document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
  		flag=false;
  	}else if(getByteLen(nameId)<3||getByteLen(nameId)>20){
-		errorMessage="账号长度为3-20位字符";
+		errorMessage="帐号长度为3-20位字符";
  		document.getElementById("nameIdErrorMsg").innerHTML=errorMessage;
  		flag=false;
 	}else if(!nameId.match(/^[a-zA-Z0-9_]{1,}$/)){
