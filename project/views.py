@@ -250,6 +250,7 @@ def new_project(request, pid=''):
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
+                flag = 0
                 prolist = public_message.objects.filter\
                 (project=pid).order_by("isactived")
                 try:
@@ -260,17 +261,7 @@ def new_project(request, pid=''):
                     except KeyError:
                         return HttpResponseRedirect("/nologin")
                     else:
-                        usrid = request.session['id']
-                        project = models.project.objects.get(id=pid)
-                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                        content = project.project + u"于"+time+u"已上线"
-                        pmessage = public_message(project=pid, \
-                            publisher=usrid, content=content, type_p="notice", \
-                            publication_date=datetime.datetime.now(), \
-                            isactived=False)
-                        pmessage.save()
-                        project.real_launch_date = datetime.datetime.now()
-                        project.save()
+                        flag = 1                        
                 else:
                     if prolist[0].isactived != 0:
                         try:
@@ -278,18 +269,19 @@ def new_project(request, pid=''):
                         except KeyError:
                             return HttpResponseRedirect("/nologin")
                         else:
-                            usrid = request.session['id']
-                            print usrid
-                        project = models.project.objects.get(id=pid)
-                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                        content = project.project + u"于"+time+u"已上线"
-                        pmessage = public_message(project=pid, \
-                            publisher=usrid, content=content, type_p="notice", \
-                            publication_date=datetime.datetime.now(), \
-                            isactived=False)
-                        pmessage.save()
-                        project.real_launch_date = datetime.datetime.now()
-                        project.save()                   
+                            flag = 1
+                if flag == 1:        
+                    usrid = request.session['id']
+                    project = models.project.objects.get(id=pid)
+                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                    content = project.project + u"于"+time+u"已上线"
+                    pmessage = public_message(project=pid, \
+                                              publisher=usrid, content=content, type_p="notice", \
+                                              publication_date=datetime.datetime.now(), \
+                                              isactived=False)
+                    pmessage.save()
+                    project.real_launch_date = datetime.datetime.now()
+                    project.save()                   
             return redirect('/projectlist/')
     return render_to_response('newproject.html', \
         {'form':form}, context_instance=RequestContext(request))
