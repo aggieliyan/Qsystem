@@ -133,7 +133,7 @@ def login(request):
     template_var["form"] = form
     return render_to_response("login.html", template_var, context_instance=RequestContext(request))
 
-def new_project(request, pid=''):
+def new_project(request, pid='', nid=''):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
@@ -185,7 +185,8 @@ def new_project(request, pid=''):
             tcpath = form.cleaned_data['tcpath']
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
-            if pid == '':
+
+            if pid == '' or nid == '1':
                 pro = models.project(priority=priority, \
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
@@ -217,7 +218,7 @@ def new_project(request, pid=''):
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
-                if pid == '':
+                if pid == '' or nid =='1':
                     pid = models.project.objects.filter\
                     (project=pname).order_by("-id")[0].id
                 else:
@@ -250,6 +251,7 @@ def new_project(request, pid=''):
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
+                flag = 0
                 prolist = public_message.objects.filter\
                 (project=pid).order_by("isactived")
                 try:
@@ -260,17 +262,7 @@ def new_project(request, pid=''):
                     except KeyError:
                         return HttpResponseRedirect("/nologin")
                     else:
-                        usrid = request.session['id']
-                        project = models.project.objects.get(id=pid)
-                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                        content = project.project + u"于"+time+u"已上线"
-                        pmessage = public_message(project=pid, \
-                            publisher=usrid, content=content, type_p="notice", \
-                            publication_date=datetime.datetime.now(), \
-                            isactived=False)
-                        pmessage.save()
-                        project.real_launch_date = datetime.datetime.now()
-                        project.save()
+                        flag = 1                        
                 else:
                     if prolist[0].isactived != 0:
                         try:
@@ -278,18 +270,19 @@ def new_project(request, pid=''):
                         except KeyError:
                             return HttpResponseRedirect("/nologin")
                         else:
-                            usrid = request.session['id']
-                            print usrid
-                        project = models.project.objects.get(id=pid)
-                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                        content = project.project + u"于"+time+u"已上线"
-                        pmessage = public_message(project=pid, \
-                            publisher=usrid, content=content, type_p="notice", \
-                            publication_date=datetime.datetime.now(), \
-                            isactived=False)
-                        pmessage.save()
-                        project.real_launch_date = datetime.datetime.now()
-                        project.save()                   
+                            flag = 1
+                if flag == 1:        
+                    usrid = request.session['id']
+                    project = models.project.objects.get(id=pid)
+                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                    content = project.project + u"于"+time+u"已上线"
+                    pmessage = public_message(project=pid, \
+                                              publisher=usrid, content=content, type_p="notice", \
+                                              publication_date=datetime.datetime.now(), \
+                                              isactived=False)
+                    pmessage.save()
+                    project.real_launch_date = datetime.datetime.now()
+                    project.save()                   
             return redirect('/projectlist/')
     return render_to_response('newproject.html', \
         {'form':form}, context_instance=RequestContext(request))
@@ -297,6 +290,7 @@ def new_project(request, pid=''):
 
 def project_list(request):
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
+    createtag = 0
     logintag = 0
     changetag = 0
     delaytag = 0
@@ -323,6 +317,8 @@ def project_list(request):
             deletetag = 1
         if request.user.has_perm("auth.change_permission"):
             auth_changetag = 1
+        if  request.user.has_perm('project.add_project'):
+            createtag = 1
 
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
@@ -389,7 +385,7 @@ def project_list(request):
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
-            "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag}))
+            "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag,"createtag":createtag}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
@@ -397,12 +393,12 @@ def isNone(s):
     else:
         return False
     
-def detail(request, pid):
+def detail(request, pid='', nid=''):
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
     qa = {'rel': qas}
-    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4))
+    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4) | Q(department_id=13))
     dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
     pd = {'rel': pds}
@@ -436,7 +432,10 @@ def detail(request, pid):
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
+            edittag = 1
+            if nid == '1':
+                edittag = 0
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid}
             return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
@@ -452,7 +451,7 @@ def show_person(request):
         key = 0
 
     if key == 2:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4))
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=13))
     else:
         person = models.user.objects.filter(department_id=key)
     person_rs = []
@@ -485,12 +484,12 @@ def psearch(request):
     
     if len(key) == 0:
         if ptype == 2:
-            prs = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=4))
+            prs = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=4) | Q(department_id=13))
         else:
             prs = models.user.objects.filter(department_id=ptype)
     else:
         if ptype == 2:
-            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4))
+            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4)|Q(department_id=13))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
             
@@ -807,7 +806,7 @@ def delay(request):
 
     delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     global  projectobj
-    paginator = Paginator(delays, 18)
+    paginator = Paginator(delays, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -840,7 +839,7 @@ def notice(request):
         except Exception:
             notices = public_message.objects.filter(type_p="notice").order_by("-id")
     global  projectobj
-    paginator = Paginator(notices, 18)
+    paginator = Paginator(notices, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -881,7 +880,7 @@ def historymessage(request):
         except Exception:
             messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')
     global  projectobj
-    paginator = Paginator(messages, 18)
+    paginator = Paginator(messages, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)

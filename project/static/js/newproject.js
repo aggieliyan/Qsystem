@@ -163,7 +163,7 @@ $(document).ready(function(){
         allperson = allperson.person;
 
         var num = allperson.length;
-        pagemaxnum = 32//全局变量
+        pagemaxnum = 100//全局变量
         var pnum = num/pagemaxnum;
         var anum = Math.floor(pnum);
         anum < pnum ? pagenum = anum+1 : pagenum = anum
@@ -186,6 +186,7 @@ $(document).ready(function(){
         for(var i=0;i<p.length;i++){
           //选中之前已经选过的
           $("#"+p.eq(i).attr("value")).attr("checked","checked");
+          //$("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
         }
 
       });

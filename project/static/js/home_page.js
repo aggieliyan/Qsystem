@@ -9,7 +9,7 @@ $(document).ready(function(){
       });
 	
     $("#smalltable").click(function(){
-      console.log("aaaaaaaa");
+      //console.log("aaaaaaaa");
       $("#mybody").css("width","1100px");
       $("#x-table2").css("width","1100px");
     });
@@ -22,20 +22,17 @@ $(document).ready(function(){
 
 
     $("#finishedpro").click(function(){
-      console.log("hahhtjh");
+      //console.log("hahhtjh");
       $("#mypage").show();
       document.getElementById("mtab1").style.display = "none";
       document.getElementById("mtab2").style.display = "block";
     });
-    $("#inpro").click(function(){
-      console.log("hahhtjh");
+    $("#inpro").click(function(){      
       $("#mypage").hide();
+      document.getElementById("mtab1").style.display = "block";
+      document.getElementById("mtab2").style.display = "none";
     });
-    
-    $("#inpro").click(function(){
-      console.log("hahhtjh");
-      $("#mypage").hide();
-    });
+       
 
     $(".chomdelay").click(function(){
        timepro=$(this).parent().parent().children().eq(7).text();
@@ -79,11 +76,7 @@ $(document).ready(function(){
       $("#myTab1").children().eq(1).addClass("active");      
       document.getElementById("mtab2").style.display = "block";
       $("#mypage").show();
-      $("#inpro").click(function () {
-        $.cookie("mytab", " ");
-        document.getElementById("mtab2").style.display = "none";
-        document.getElementById("mtab1").style.display = "block";
-    }); }
+       }
            
 });
 
@@ -94,14 +87,6 @@ $(document).ready(function(){
     $("#mypage").hide();
     }
   })()
-            
-function AutoClick()
-{ 
-    
-    var myLink = document.getElementById("finshedpro");
-    myLink.click();
-
-}
 
 function change_p(id){
         $('#changeid').val(id);
