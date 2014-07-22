@@ -97,15 +97,19 @@
                 <div class="title">
                     <label class="item-title">计划上线时间：</label>
                 </div>
+                
+                {% if editdate %}
                 <div class="inputfield input-append date form_datetime">
-                  {% if editdate %}
                   <input name="plandate" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly="">
                   <span class="add-on"><i class="icon-calendar"></i></span>
-                  {% else %}
+                </div>
+                {% else %}
+                <div class="inputfield input-append date">
                   <input name="plandate" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly="readonly" disabled="disabled">
                   <span class="add-on" disabled="disabled"><i class="icon-calendar"></i></span>
-                  {% endif %}     
                 </div>
+                  {% endif %}     
+                
               </div>             
               </div>
             </div>
