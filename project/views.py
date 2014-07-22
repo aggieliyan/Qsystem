@@ -156,6 +156,11 @@ def new_project(request, pid='', nid=''):
     #新建的得有新建权限
     if not pid and not request.user.has_perm('project.add_project'):
         return HttpResponseRedirect("/noperm")
+
+    if request.user.has_perm('auth.change_permission'):
+        editdate = 1
+    else:
+        editdate = 0
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -285,7 +290,7 @@ def new_project(request, pid='', nid=''):
                     project.save()                   
             return redirect('/projectlist/')
     return render_to_response('newproject.html', \
-        {'form':form}, context_instance=RequestContext(request))
+        {'form':form, 'editdate':editdate}, context_instance=RequestContext(request))
     
 
 def project_list(request):
@@ -422,6 +427,7 @@ def detail(request, pid='', nid=''):
     else:
         dt['ttime'] = 0
     editboolean = False
+
     try:
         request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
@@ -435,8 +441,13 @@ def detail(request, pid='', nid=''):
             edittag = 1
             if nid == '1':
                 edittag = 0
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid}
-            return render_to_response('newproject.html', {'res': res})
+
+            if request.user.has_perm('auth.change_permission'):
+                editdate = 1
+            else:
+                editdate = 0
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid,}
+            return render_to_response('newproject.html', {'res': res, 'editdate':editdate})
 
 def show_person(request):
     roles = request.GET['role']
