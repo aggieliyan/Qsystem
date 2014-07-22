@@ -186,6 +186,7 @@ $(document).ready(function(){
         for(var i=0;i<p.length;i++){
           //选中之前已经选过的
           $("#"+p.eq(i).attr("value")).attr("checked","checked");
+          //$("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
         }
 
       });
