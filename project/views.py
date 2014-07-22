@@ -218,7 +218,7 @@ def new_project(request, pid='', nid=''):
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
-                if pid == '':
+                if pid == '' or nid =='1':
                     pid = models.project.objects.filter\
                     (project=pname).order_by("-id")[0].id
                 else:
