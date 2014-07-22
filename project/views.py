@@ -133,7 +133,7 @@ def login(request):
     template_var["form"] = form
     return render_to_response("login.html", template_var, context_instance=RequestContext(request))
 
-def new_project(request, pid='', nid=''):
+def new_project(request, pid=''):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
@@ -185,8 +185,7 @@ def new_project(request, pid='', nid=''):
             tcpath = form.cleaned_data['tcpath']
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
-
-            if pid == '' or nid == '1':
+            if pid == '':
                 pro = models.project(priority=priority, \
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
@@ -251,7 +250,6 @@ def new_project(request, pid='', nid=''):
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
             if status == "已上线":
-                flag = 0
                 prolist = public_message.objects.filter\
                 (project=pid).order_by("isactived")
                 try:
@@ -262,7 +260,17 @@ def new_project(request, pid='', nid=''):
                     except KeyError:
                         return HttpResponseRedirect("/nologin")
                     else:
-                        flag = 1                        
+                        usrid = request.session['id']
+                        project = models.project.objects.get(id=pid)
+                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                        content = project.project + u"于"+time+u"已上线"
+                        pmessage = public_message(project=pid, \
+                            publisher=usrid, content=content, type_p="notice", \
+                            publication_date=datetime.datetime.now(), \
+                            isactived=False)
+                        pmessage.save()
+                        project.real_launch_date = datetime.datetime.now()
+                        project.save()
                 else:
                     if prolist[0].isactived != 0:
                         try:
@@ -270,19 +278,18 @@ def new_project(request, pid='', nid=''):
                         except KeyError:
                             return HttpResponseRedirect("/nologin")
                         else:
-                            flag = 1
-                if flag == 1:        
-                    usrid = request.session['id']
-                    project = models.project.objects.get(id=pid)
-                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                    content = project.project + u"于"+time+u"已上线"
-                    pmessage = public_message(project=pid, \
-                                              publisher=usrid, content=content, type_p="notice", \
-                                              publication_date=datetime.datetime.now(), \
-                                              isactived=False)
-                    pmessage.save()
-                    project.real_launch_date = datetime.datetime.now()
-                    project.save()                   
+                            usrid = request.session['id']
+                            print usrid
+                        project = models.project.objects.get(id=pid)
+                        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                        content = project.project + u"于"+time+u"已上线"
+                        pmessage = public_message(project=pid, \
+                            publisher=usrid, content=content, type_p="notice", \
+                            publication_date=datetime.datetime.now(), \
+                            isactived=False)
+                        pmessage.save()
+                        project.real_launch_date = datetime.datetime.now()
+                        project.save()                   
             return redirect('/projectlist/')
     return render_to_response('newproject.html', \
         {'form':form}, context_instance=RequestContext(request))
@@ -390,7 +397,7 @@ def isNone(s):
     else:
         return False
     
-def detail(request, pid='', nid=''):
+def detail(request, pid):
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
@@ -429,10 +436,7 @@ def detail(request, pid='', nid=''):
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
-            edittag = 1
-            if nid == '1':
-                edittag = 0
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid}
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
             return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
@@ -803,7 +807,7 @@ def delay(request):
 
     delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
     global  projectobj
-    paginator = Paginator(delays, 25)
+    paginator = Paginator(delays, 18)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -836,7 +840,7 @@ def notice(request):
         except Exception:
             notices = public_message.objects.filter(type_p="notice").order_by("-id")
     global  projectobj
-    paginator = Paginator(notices, 25)
+    paginator = Paginator(notices, 18)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -877,7 +881,7 @@ def historymessage(request):
         except Exception:
             messages = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')
     global  projectobj
-    paginator = Paginator(messages, 25)
+    paginator = Paginator(messages, 18)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
