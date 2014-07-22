@@ -30,7 +30,7 @@
 	<div style="height:140px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
    {% endif %} 
     {% if count >= 5 %}
-	<div style="height:160px;padding-left: 10px; padding-top: 10px;width:99%"  class="notice">
+	<div style="height:150px;padding-left: 10px; padding-top: 10px;width:99%"  class="notice">
    {% endif %} 
 
 		<div class="notice_title">
@@ -47,7 +47,7 @@
         {% endfor %}	
 		</div>
 		{% if count > 5 %}
-		<div style="position:absolute;right:10px;bottom:0">
+		<div style="position:absolute;right:10px;height:30px;bottom:0">
 			<a href="/notice/" style="color:#339666" >查看所有<span style="color:#ffa03e">>></span></a>
 		</div>	
          {% endif %} 
@@ -201,7 +201,7 @@
                                             {% endif %}
                                             {% if delaytag == 1 %}
                                             {% ifequal user_id p.leader_p_id  %}
-                                                <a onclick="delay_p({{p.id}},{{ p.expect_launch_date|date:"Ymd" }})">延期<span> </span></a>
+                                                <a onclick="delay_p({{p.id}},{{ p.expect_launch_date|date:"Ymd" }})"class="chomdelay">延期<span> </span></a>
                                             {% endifequal %}
                                             {% else %}
                                                 <a></a>
@@ -258,7 +258,7 @@
 <script type="text/javascript" src="../static/jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="../static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="/static/js/home_page.js"></script>
+<script type="text/javascript" src="../static/js/home_page.js"></script>
 <script type="text/javascript" src="http://yxb.qq.com/js/jquery.cookie.js"></script>
 <script type="text/javascript">
       $(".form_datetime").datetimepicker({
