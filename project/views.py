@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404, Re
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 import json
+import time
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
@@ -334,6 +335,16 @@ def project_list(request):
     end_date_s = "" if isNone(request.GET.get("end_date_s")) else request.GET.get("end_date_s")
     status_p = "" if isNone(request.GET.get("status_p")) else request.GET.get("status_p")
     leader_p = "" if isNone(request.GET.get("leader_p")) else request.GET.get("leader_p")
+    #将get到的日期参数由string类型（实际type的时候显示是unicode，暂时未知）转换成datetime类型。
+    #strptime是将str类型转换为struct_time,然后再用datetime.date将time类型转换为datetime类型
+    if not isNone(start_date_s):
+        start_time = time.strptime(start_date_s ,"%Y-%m-%d")
+        start_date_s = datetime.date(*start_time[:3])
+    if not isNone(end_date_s):
+        end_time = time.strptime(end_date_s ,"%Y-%m-%d")
+        end_date_s = datetime.date(*end_time[:3])
+
+
 
     project_user_list = None
     puser = project_user.objects.all()
@@ -369,7 +380,7 @@ def project_list(request):
         for p in project_user_list:
             projectids.append(p.project.id)
         projectlist = projectlist.filter(pk__in=projectids)
-
+    print(type(start_date_s))
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
