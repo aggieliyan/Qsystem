@@ -218,7 +218,7 @@ def new_project(request, pid='', nid=''):
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
-                if pid == '':
+                if pid == '' or nid =='1':
                     pid = models.project.objects.filter\
                     (project=pname).order_by("-id")[0].id
                 else:
@@ -290,6 +290,7 @@ def new_project(request, pid='', nid=''):
 
 def project_list(request):
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
+    createtag = 0
     logintag = 0
     changetag = 0
     delaytag = 0
@@ -316,6 +317,8 @@ def project_list(request):
             deletetag = 1
         if request.user.has_perm("auth.change_permission"):
             auth_changetag = 1
+        if  request.user.has_perm('project.add_project'):
+            createtag = 1
 
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
@@ -382,7 +385,7 @@ def project_list(request):
             'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
-            "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag}))
+            "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag,"createtag":createtag}))
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
