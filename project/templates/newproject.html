@@ -33,7 +33,7 @@
      
       <div class="row-fluid">
         <div>
-          <form class="navbar-form navbar-left" action="/newproject/{{res.pro.id}}" method="post">
+          <form class="navbar-form navbar-left" action="/newproject/{{res.pro.id}}/{{res.editid}}" method="post">
             {% csrf_token %}
             <div class="span6">
               <div id='short'>

@@ -133,7 +133,7 @@ def login(request):
     template_var["form"] = form
     return render_to_response("login.html", template_var, context_instance=RequestContext(request))
 
-def new_project(request, pid=''):
+def new_project(request, pid='', nid=''):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
@@ -185,7 +185,8 @@ def new_project(request, pid=''):
             tcpath = form.cleaned_data['tcpath']
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
-            if pid == '':
+
+            if pid == '' or nid == '1':
                 pro = models.project(priority=priority, \
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
@@ -389,7 +390,7 @@ def isNone(s):
     else:
         return False
     
-def detail(request, pid):
+def detail(request, pid='', nid=''):
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
@@ -428,7 +429,10 @@ def detail(request, pid):
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': 1}
+            edittag = 1
+            if nid == '1':
+                edittag = 0
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid}
             return render_to_response('newproject.html', {'res': res})
 
 def show_person(request):
