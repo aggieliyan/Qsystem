@@ -293,6 +293,7 @@ def new_project(request, pid='', nid=''):
 
 def project_list(request):
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
+    #以下是权限标记，createtag是发布相似的权限
     createtag = 0
     logintag = 0
     changetag = 0
@@ -339,6 +340,7 @@ def project_list(request):
     leader_p = "" if isNone(request.GET.get("leader_p")) else request.GET.get("leader_p")
     #将get到的日期参数由string类型（实际type的时候显示是unicode，暂时未知）转换成datetime类型。
     #strptime是将str类型转换为struct_time,然后再用datetime.date将time类型转换为datetime类型
+    #"*"表示将列表中的数据作为函数的参数，如果是**则是将字典中的数据作为函数的参数
     if not isNone(start_date_s):
         start_time = time.strptime(start_date_s ,"%Y-%m-%d")
         start_date_s = datetime.date(*start_time[:3])
@@ -382,7 +384,7 @@ def project_list(request):
         for p in project_user_list:
             projectids.append(p.project.id)
         projectlist = projectlist.filter(pk__in=projectids)
-    print(type(start_date_s))
+
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
