@@ -640,13 +640,13 @@ def changedesign(request, url):
         form = changedesignForm(request.POST)
         if form.is_valid():
             changeid = form.cleaned_data['changeid']
-            cont = form.cleaned_data['cont']
-            dpath = form.cleaned_data['dpath']
+            cont = form.cleaned_data['cont'].replace('\r\n','<br/> ')
+            dpath = form.cleaned_data['dpath'].replace('\r\n','<br/> ')
             chd = models.project.objects.get(id = changeid)
             uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
-            string = chd.project+u' : '+cont + dpath
+            string = chd.project+u' : ' + '<br/> ' +cont + '<br/> ' + dpath
             pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()

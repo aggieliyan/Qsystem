@@ -89,7 +89,7 @@
 				{% else %}
 				<tr class="low2">
 
-					<td class="col1">&nbsp;{{message.content}}</td>
+					<td class="col1">&nbsp;{% autoescape off %}{{message.content}}{% endautoescape %}</td>
 					<td>{{message.publication_date}}</td>
 					{% if message.delay_status %}
 					<td class="states_yes">{{message.delay_status}}</td>
