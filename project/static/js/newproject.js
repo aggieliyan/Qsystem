@@ -84,14 +84,19 @@ $(document).ready(function(){
 		      jsontester.tester.push(temp);
 	      }
 	    }
-      $("[title='1']").children("div").remove();
+      //$("[title='1']").children("div").remove();
       //在页面显示已选人员
       var radioname = Math.floor(Math.random()*9999+1).toString();
-      for (var i= jsontester.tester.length-1; i >=0; i--){
-        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'"><input type="radio" name='+radioname+'><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
+      var exsituser = $("[title='1']").children("div");
+      //把已在的用户name都更新一下
+      for(var item=0;item<exsituser.length;item++){
+        exsituser.children('input').eq(item).attr("name", radioname)
       }
 
+      for (var i= jsontester.tester.length-1; i >=0; i--){
 
+        $("[title='1']").append('<div class="role-item" value="' + jsontester.tester[i].value+'"><input type="radio" name='+radioname+'><span>'+jsontester.tester[i].name+'</span><span class="close">x</span></div>');
+      }
      
       //跟数量调整高度
       adjust_height();
@@ -163,7 +168,7 @@ $(document).ready(function(){
         allperson = allperson.person;
 
         var num = allperson.length;
-        pagemaxnum = 100//全局变量
+        pagemaxnum = 30//全局变量
         var pnum = num/pagemaxnum;
         var anum = Math.floor(pnum);
         anum < pnum ? pagenum = anum+1 : pagenum = anum
@@ -184,9 +189,9 @@ $(document).ready(function(){
 
         p = $("[title='1']").children();
         for(var i=0;i<p.length;i++){
-          //选中之前已经选过的
-          $("#"+p.eq(i).attr("value")).attr("checked","checked");
-          //$("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
+          //选中之前已经选过的-改成之前选过的不显示
+          //$("#"+p.eq(i).attr("value")).attr("checked","checked");
+          $("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
         }
 
       });
@@ -201,6 +206,12 @@ $(document).ready(function(){
     var start = (page-1)*pagemaxnum;
     person = allperson.slice(start, start+pagemaxnum);
     show_staff(person);
+    p = $("[title='1']").children();
+    for(var i=0;i<p.length;i++){
+        //选中之前已经选过的-改成之前选过的不显示
+        //$("#"+p.eq(i).attr("value")).attr("checked","checked");
+        $("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
+    }
   });
   //点全选
   $(".all input").click(function(){
