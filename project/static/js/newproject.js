@@ -25,6 +25,12 @@ $(document).ready(function(){
       else{
         $("#testerlist div").remove();
         $("#testerlist table").append("<div>暂无数据<div>");
+      }
+      var p = $("[title='1']").children();
+      for(var i=0;i<p.length;i++){
+        //选中之前已经选过的-改成之前选过的不显示
+        //$("#"+p.eq(i).attr("value")).attr("checked","checked");
+        $("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
       } 
     }
 
@@ -186,14 +192,6 @@ $(document).ready(function(){
           person = allperson;
         }
         show_staff(person);
-
-        p = $("[title='1']").children();
-        for(var i=0;i<p.length;i++){
-          //选中之前已经选过的-改成之前选过的不显示
-          //$("#"+p.eq(i).attr("value")).attr("checked","checked");
-          $("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
-        }
-
       });
     
 
@@ -206,12 +204,6 @@ $(document).ready(function(){
     var start = (page-1)*pagemaxnum;
     person = allperson.slice(start, start+pagemaxnum);
     show_staff(person);
-    p = $("[title='1']").children();
-    for(var i=0;i<p.length;i++){
-        //选中之前已经选过的-改成之前选过的不显示
-        //$("#"+p.eq(i).attr("value")).attr("checked","checked");
-        $("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
-    }
   });
   //点全选
   $(".all input").click(function(){
