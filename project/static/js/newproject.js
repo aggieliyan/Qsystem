@@ -218,6 +218,10 @@ $(document).ready(function(){
     var a = $(".table-list input");
     if($(this).attr("checked")=="checked"){ 
       for(var i=0;i<a.length;i++){
+        //如果是隐藏的-及已在人员列表中则不选中
+        if(a.eq(i).parent().attr("style")=="display:none;"){
+          continue;
+        }
         a.eq(i).attr("checked","checked");
       }
     }else{
