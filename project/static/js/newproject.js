@@ -32,6 +32,8 @@ $(document).ready(function(){
         //$("#"+p.eq(i).attr("value")).attr("checked","checked");
         $("#"+p.eq(i).attr("value")).parent().attr("style","display:none;");
       } 
+      //全选恢复为未选择状态
+      $(".all input").removeAttr("checked");
     }
 
     function findmaster (plist) {
@@ -154,7 +156,6 @@ $(document).ready(function(){
     $(".roles .btn-success").click(function(){    
       $("#select").modal("show");
       $("#skey").attr("value","");
-      $(".all input").removeAttr("checked");
       var roles = $(this).attr("name"); 
       $("#psearch").attr("value",roles)
       var p = $("[title='1']");
@@ -204,6 +205,7 @@ $(document).ready(function(){
     var start = (page-1)*pagemaxnum;
     person = allperson.slice(start, start+pagemaxnum);
     show_staff(person);
+
   });
   //点全选
   $(".all input").click(function(){
