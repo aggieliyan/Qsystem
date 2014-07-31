@@ -401,6 +401,18 @@ def project_list(request):
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
             "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag,"createtag":createtag}))
+def praise(request ,pid):
+    if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+        ip = request.META['HTTP_X_FORWARDED_FOR']
+    else:
+        ip = request.META['REMOTE_ADDR']
+    p = models.project.objects.get(id=int(pid))
+    praisecount = p.praise_p+1
+    p.praise_p = praisecount
+    p.save()
+
+
+    return HttpResponseRedirect("/projectlist/")
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
