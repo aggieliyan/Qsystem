@@ -38,6 +38,7 @@ class project(models.Model):
     test_case_p = models.CharField(max_length=100,blank=True,null=True)
     test_report_p = models.CharField(max_length=100,blank=True,null=True)
     isactived = models.BooleanField(max_length=1)
+    praise_p = models.SmallIntegerField(max_length=8,default=0)
 
 class project_user(models.Model):
     username = models.ForeignKey(user)

@@ -293,6 +293,7 @@ def new_project(request, pid='', nid=''):
 
 def project_list(request):
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
+    #以下是权限标记，createtag是发布相似的权限
     createtag = 0
     logintag = 0
     changetag = 0
@@ -339,6 +340,7 @@ def project_list(request):
     leader_p = "" if isNone(request.GET.get("leader_p")) else request.GET.get("leader_p")
     #将get到的日期参数由string类型（实际type的时候显示是unicode，暂时未知）转换成datetime类型。
     #strptime是将str类型转换为struct_time,然后再用datetime.date将time类型转换为datetime类型
+    #"*"表示将列表中的数据作为函数的参数，如果是**则是将字典中的数据作为函数的参数
     if not isNone(start_date_s):
         start_time = time.strptime(start_date_s ,"%Y-%m-%d")
         start_date_s = datetime.date(*start_time[:3])
@@ -382,7 +384,7 @@ def project_list(request):
         for p in project_user_list:
             projectids.append(p.project.id)
         projectlist = projectlist.filter(pk__in=projectids)
-    print(type(start_date_s))
+
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
@@ -399,6 +401,18 @@ def project_list(request):
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
             "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag,"createtag":createtag}))
+def praise(request ,pid):
+    if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+        ip = request.META['HTTP_X_FORWARDED_FOR']
+    else:
+        ip = request.META['REMOTE_ADDR']
+    p = models.project.objects.get(id=int(pid))
+    praisecount = p.praise_p+1
+    p.praise_p = praisecount
+    p.save()
+
+
+    return HttpResponseRedirect("/projectlist/")
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
@@ -638,13 +652,13 @@ def changedesign(request, url):
         form = changedesignForm(request.POST)
         if form.is_valid():
             changeid = form.cleaned_data['changeid']
-            cont = form.cleaned_data['cont']
-            dpath = form.cleaned_data['dpath']
+            cont = form.cleaned_data['cont'].replace('\r\n','<br/> ')
+            dpath = form.cleaned_data['dpath'].replace('\r\n','<br/> ')
             chd = models.project.objects.get(id = changeid)
             uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
-            string = chd.project+u' : '+cont + dpath
+            string = chd.project+u' : ' + '<br/> ' +cont + '<br/> ' + dpath
             pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()
