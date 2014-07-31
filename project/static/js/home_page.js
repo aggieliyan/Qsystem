@@ -134,7 +134,7 @@ $(function(){
    for(var i=0; i<cell;i++){
     var user = $.trim($(".basecolor").eq(i).children().eq(5).text());
         user =user.replace(/\s+/g,' ');
-    var project = $.trim($(".basecolor").eq(i).children().eq(1).text());
+    var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
     $(".basecolor").eq(i).children().eq(1).attr("title",project);
     $(".basecolor").eq(i).children().eq(5).attr("title",user);
    } 
