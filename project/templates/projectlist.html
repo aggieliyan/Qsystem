@@ -145,8 +145,9 @@
                         <table  id="customers">
                             <thead>
                             <tr>
-                                <th width="64" style="width:50px;">优先级</th>
+                                <th width="64" style="width:50px;">项目编号</th>
                                 <th width="151" style="width:169px;">项目名称</th>
+                                <th width="64" style="width:50px;">优先级</th>
                                 <th width="90" style="width:76px">项目负责人</th>
                                 <th width="83" style="width:69px">产品负责人</th>
                                 <th width="84" style="width:70px">测试负责人</th>
@@ -161,12 +162,13 @@
                             <tbody id="group_one" class="procolor">
                                 {% for p in projectobj %}
                                 <tr class="basecolor">
-                                    <td>{{ p.priority }}</td>
+                                    <td>{{ p.id}}</td>
                                     <td>
                                         <a href="{% url 'prodetail' p.id %}">{{ p.project }}</a>
                                         <a href="{% url 'praise' p.id %}"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">{{ p.praise_p }}</a>
 
                                     </td>
+                                    <td>{{ p.priority }}</td>
                                     <td>{{ p.leader_p.realname}}</td>
                                     <td>{{p.designer_p.realname}}</td>
                                     <td>{{p.tester_p.realname}}</td>
