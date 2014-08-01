@@ -82,12 +82,20 @@ class delayprojectForm(forms.Form):
 
 
 class ProjectSearchForm(forms.Form):
+<<<<<<< HEAD
     id=forms.CharField(required=False)
     project=forms.CharField(required=False)
     start_date_s=forms.DateField(required=False)
     end_date_s=forms.DateField(required=False)
     status_p=forms.CharField(required=False)
     leader_p=forms.CharField(required=False)
+=======
+	project=forms.CharField(required=False)
+	start_date_s=forms.DateField(required=False)
+	end_date_s=forms.DateField(required=False)
+	status_p=forms.CharField(required=False)
+	leader_p=forms.CharField(required=False)
+>>>>>>> parent of f3f990d... 项目管理员加项目编号搜索
 
 class TestForm(forms.Form):
 	delayid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
