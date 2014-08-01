@@ -372,8 +372,9 @@ def project_list(request):
     else:
         projectlist = models.project.objects.all().order_by("-status_p","-priority")
     if not isNone(project_id):
+        project_id=project_id.strip()
         if(project_id.isdigit()):
-            projectlist = projectlist.filter(id=project_id.strip())
+            projectlist = projectlist.filter(id=project_id)
         else:
             projectlist = projectlist.filter(id=0)
     if not isNone(project_name):
