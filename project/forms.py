@@ -82,6 +82,7 @@ class delayprojectForm(forms.Form):
 
 
 class ProjectSearchForm(forms.Form):
+    id=forms.CharField(required=False)
 	project=forms.CharField(required=False)
 	start_date_s=forms.DateField(required=False)
 	end_date_s=forms.DateField(required=False)

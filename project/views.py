@@ -331,6 +331,7 @@ def project_list(request):
     ##
     projectlist = None
     puser = None
+    project_id = ""if isNone(request.GET.get("id"))else request.GET.get("id")
     project_name = ""if isNone(request.GET.get("project"))else request.GET.get("project")
 
     start_date_s = "" if isNone(request.GET.get("start_date_s")) else request.GET.get("start_date_s")
@@ -356,6 +357,7 @@ def project_list(request):
     if request.method == 'POST':
         search_form = ProjectSearchForm(request.POST)
         if search_form.is_valid():
+            project_id = search_form.cleaned_data['id']
             project_name = search_form.cleaned_data['project']
             start_date_s = search_form.cleaned_data['start_date_s']
             print(start_date_s)
@@ -369,6 +371,11 @@ def project_list(request):
 
     else:
         projectlist = models.project.objects.all().order_by("-status_p","-priority")
+    if not isNone(project_id):
+        if(project_id.isdigit()):
+            projectlist = projectlist.filter(id=project_id.strip())
+        else:
+            projectlist = projectlist.filter(id=0)
     if not isNone(project_name):
         projectlist = projectlist.filter(project__contains=project_name.strip())
     if not isNone(start_date_s):
@@ -397,7 +404,7 @@ def project_list(request):
         projectobj = paginator.page(paginator.num_pages)
 
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
-            'puser':puser, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
+            'puser':puser, 'project_id':project_id, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
             'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
             "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag,"createtag":createtag}))
