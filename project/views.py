@@ -1027,7 +1027,7 @@ def initdata(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
     #auth_group
-    group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理')
+    group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理、发布相似')
     group1.save()
     group2 = Group(id=2,name='资源管理权限--编辑部门人员')
     group2.save()
