@@ -134,11 +134,16 @@ $(function(){
    for(var i=0; i<cell;i++){
     var user = $.trim($(".basecolor").eq(i).children().eq(5).text());
         user =user.replace(/\s+/g,' ');
+        user_prolist = $.trim($(".basecolor").eq(i).children().eq(6).text());
+        user_prolist =user_prolist.replace(/\s+/g,' ');
     var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
     var praise = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(1).text());
     $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title","万众期待值:"+praise);
     $(".basecolor").eq(i).children().eq(1).children().eq(0).attr("title",project);
-    $(".basecolor").eq(i).children().eq(5).attr("title",user);
+    if(location.pathname == '/personal_homepage/'){
+      $(".basecolor").eq(i).children().eq(5).attr("title",user);}      
+    if (location.pathname == '/projectlist/'){
+      $(".basecolor").eq(i).children().eq(6).attr("title",user_prolist);}      
    } 
 });
 
