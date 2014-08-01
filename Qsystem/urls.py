@@ -49,6 +49,7 @@ urlpatterns = patterns('',
     url(r'^pdeleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../projectlist/'},name="pproject_delete"),
     url(r'^pdeleteproject-(?P<id>\d+)/$', project.views.deleteproject,{'url':'../personal_homepage/'},name="\'pproject_delete\'"),
     url(r'^praise/(\d+)/$', project.views.praise,name="praise"),
+    url(r'^praise/(\d+)/$', project.views.praise,name="\'praise\'"),
    #sourcemanage
     url(r'^judge/$',project.views.judge),
     url(r'^sourcemanage/$',project.views.show_user),
