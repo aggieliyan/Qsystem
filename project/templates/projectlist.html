@@ -164,9 +164,16 @@
                                 <tr class="basecolor">
                                     <td>{{ p.id}}</td>
                                     <td>
-                                        <a href="{% url 'prodetail' p.id %}">{{ p.project }}</a>
-                                        <a href="{% url 'praise' p.id %}"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">{{ p.praise_p }}</a>
+                                        <div style="width:120px;float:left;overflow:hidden;text-overflow: ellipsis">
+                                        <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
+                                        </div>
+                                        <div style="width:49px;float:right">
+                                            <div style="width:16px;float:left">
+                                                <input id="praise-add" type="image" onclick="update({{ p.id }})" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">
+                                                <span id="p-count" style="color:#339966">({{ p.praise_p }})</span>
 
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>{{ p.priority }}</td>
                                     <td>{{ p.leader_p.realname}}</td>
@@ -275,7 +282,12 @@
         language:"zh-CN",
         minView:2
       });
-
+      function update(id){
+          $.get("/praise/"+id+"/",function(data){
+              //alert(data)
+              $('#p-count').html("("+data+")")
+              });
+      }
 </script>
 <script src="../static/js/bootstrap.js"></script>
 {% endblock %}
