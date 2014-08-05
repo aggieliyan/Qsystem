@@ -406,14 +406,13 @@ def praise(request ,pid):
         ip = request.META['HTTP_X_FORWARDED_FOR']
     else:
         ip = request.META['REMOTE_ADDR']
-
     p = models.project.objects.get(id=int(pid))
     praisecount = p.praise_p+1
     p.praise_p = praisecount
     p.save()
-    print(praisecount)
-    return HttpResponse(praisecount)
 
+
+    return HttpResponseRedirect("/projectlist/")
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
