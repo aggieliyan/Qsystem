@@ -204,6 +204,7 @@ def new_project(request, pid='', nid=''):
                     test_case_p=tcpath, test_report_p=trpath, isactived=1)
             else:
                 rdate = models.project.objects.get(id=pid).real_launch_date
+                pnum = models.project.objects.get(id=pid).praise_p
                 pro = models.project(id=pid, priority=priority,\
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
@@ -216,7 +217,8 @@ def new_project(request, pid='', nid=''):
                     estimated_test_start_date=tsdate, \
                     estimated_test_end_date=tedate, blueprint_p=ppath, \
                     develop_plan_p=dppath, test_plan_p=tppath, \
-                    test_case_p=tcpath, test_report_p=trpath, isactived=1)
+                    test_case_p=tcpath, test_report_p=trpath, \
+                    isactived=1, praise_p=pnum)
             pro.save()
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ", "").split(",")
@@ -1032,9 +1034,6 @@ def emptyehistory(request):
             test.delete()
     return HttpResponseRedirect('/historymessage/')    
 def initdata(request):
-    #没登陆的提示去登录
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect("/nologin")
     #auth_group
     group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理、发布相似')
     group1.save()
