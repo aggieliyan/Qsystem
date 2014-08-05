@@ -60,12 +60,16 @@
 				{% endif %}	
 					<td class="col1" word-wrap="break-all";>&nbsp;{{delay.title}}:申请延期，&nbsp;延期至{{delay.delay_to_date}}，&nbsp;理由：{{delay.reason}}</td>
 					<td>{{delay.apply_date}}</td>
+					{% if delay.isactived = 0 %}
+					<td class="states_yes">{{delay.result}}</td>
+					{%else%}
 					<td>
 						<button style="margin:5px" data-toggle="modal"
 							class="btn btn-success " type="button" onclick="approve_delay({{delay.id}})">批准</button>
 						<button class="btn btn-danger " type="button" data-toggle="modal"
 							onclick="refuse_delay({{delay.id}})">拒绝</button> <!--data-target="#myModal"  </a> --> 
 					</td>
+					{%endif%}
 				</tr>
 
 				

@@ -652,7 +652,7 @@ def delayproject(request, url):
             uid = delpro.leader_p
             protitle = delpro.project
             delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
-                apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason)
+                apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason, isactived = 1)
             delay_p.save()                   
     return HttpResponseRedirect(url)
 def changedesign(request, url):          
@@ -845,7 +845,7 @@ def delay(request):
     if not request.user.has_perm('project.change_project_delay'):
         return HttpResponseRedirect("/noperm")
 
-    delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
+    delays = project_delay.objects.filter(isactived__isnull= False).order_by('apply_date')
     global  projectobj
     paginator = Paginator(delays, 25)
     page = request.GET.get('page')
@@ -951,7 +951,7 @@ def refuse(request):
                 pub_message = public_message(project=project_id, publisher=useid, content=string, \
                     type_p="message", publication_date=datetime.datetime.now(), delay_status="已拒绝", isactived="1")
             #refusedelay.reason = reason
-
+                refusedelay.result = "已拒绝"
                 refusedelay.isactived = 0
                 refusedelay.save()
                 pub_message.save()
@@ -983,7 +983,8 @@ def approve(request):
                 publication_date=datetime.datetime.now(), delay_status="已批准", isactived="1")
             #approvedelay.reason = reason
 
-            approvedelay.isactived = 1
+            approvedelay.isactived = 0
+            approvedelay.result = "已批准"
             approvedelay.save()
             pub_message.save()
     return HttpResponseRedirect('/delay/')
