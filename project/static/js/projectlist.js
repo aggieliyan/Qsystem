@@ -18,7 +18,7 @@ $(document).ready(function(){
     $("#bigtable").click(function(){
       $("#mybody").css("width","1500px");
       $("#x-table2").css("width","1500px");
-      $(".pro-proname").css("width","140px")
+      $(".pro-proname").css("width","150px")
     });
 
 

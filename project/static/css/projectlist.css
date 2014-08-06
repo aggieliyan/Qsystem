@@ -134,7 +134,7 @@ body div{margin:0 auto;}
   border-right: medium none;
 }
 .pro-proname{
-    width:140px;
+    width:150px;
     float:left;
     overflow:hidden;
     text-overflow: ellipsis;
