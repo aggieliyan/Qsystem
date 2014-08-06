@@ -204,6 +204,7 @@ def new_project(request, pid='', nid=''):
                     test_case_p=tcpath, test_report_p=trpath, isactived=1)
             else:
                 rdate = models.project.objects.get(id=pid).real_launch_date
+                pnum = models.project.objects.get(id=pid).praise_p
                 pro = models.project(id=pid, priority=priority,\
                     project=pname, status_p=status, leader_p=leader, \
                     designer_p=designer, tester_p=tester, start_date=sdate, \
@@ -216,7 +217,8 @@ def new_project(request, pid='', nid=''):
                     estimated_test_start_date=tsdate, \
                     estimated_test_end_date=tedate, blueprint_p=ppath, \
                     develop_plan_p=dppath, test_plan_p=tppath, \
-                    test_case_p=tcpath, test_report_p=trpath, isactived=1)
+                    test_case_p=tcpath, test_report_p=trpath, \
+                    isactived=1, praise_p=pnum)
             pro.save()
             #存完项目，存相关产品测试开发人员信息
             relateduser = relateduser.replace(" ", "").split(",")
@@ -618,7 +620,7 @@ def personal_homepage(request):
     countdelay = 0
     if request.user.has_perm('project.change_project_delay'):
         dealdelay = 1
-        delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
+        delays = project_delay.objects.filter(result__isnull=True,).order_by('apply_date')
         countdelay = delays.count()
     i = 0
     tests= project_user_message.objects.filter(userid_id = userid)
@@ -652,7 +654,7 @@ def delayproject(request, url):
             uid = delpro.leader_p
             protitle = delpro.project
             delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
-                apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason)
+                apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason, isactived = 1)
             delay_p.save()                   
     return HttpResponseRedirect(url)
 def changedesign(request, url):          
@@ -845,7 +847,7 @@ def delay(request):
     if not request.user.has_perm('project.change_project_delay'):
         return HttpResponseRedirect("/noperm")
 
-    delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
+    delays = project_delay.objects.filter(isactived__isnull= False).order_by('-id')
     global  projectobj
     paginator = Paginator(delays, 25)
     page = request.GET.get('page')
@@ -951,7 +953,7 @@ def refuse(request):
                 pub_message = public_message(project=project_id, publisher=useid, content=string, \
                     type_p="message", publication_date=datetime.datetime.now(), delay_status="已拒绝", isactived="1")
             #refusedelay.reason = reason
-
+                refusedelay.result = "已拒绝"
                 refusedelay.isactived = 0
                 refusedelay.save()
                 pub_message.save()
@@ -983,7 +985,8 @@ def approve(request):
                 publication_date=datetime.datetime.now(), delay_status="已批准", isactived="1")
             #approvedelay.reason = reason
 
-            approvedelay.isactived = 1
+            approvedelay.isactived = 0
+            approvedelay.result = "已批准"
             approvedelay.save()
             pub_message.save()
     return HttpResponseRedirect('/delay/')
@@ -1031,9 +1034,6 @@ def emptyehistory(request):
             test.delete()
     return HttpResponseRedirect('/historymessage/')    
 def initdata(request):
-    #没登陆的提示去登录
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect("/nologin")
     #auth_group
     group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理、发布相似')
     group1.save()
