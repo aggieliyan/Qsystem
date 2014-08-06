@@ -420,7 +420,7 @@ def praise(request ,pid):
     p.save()
 
 
-    return HttpResponseRedirect("/projectlist/")
+    return HttpResponse(praisecount)
 
 def isNone(s):
     if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
