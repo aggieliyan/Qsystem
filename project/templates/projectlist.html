@@ -72,9 +72,9 @@
         <div class="option-left">
             <div class="option-item">
                     <div class="title">
-                    <label class="item-title">项目名称：</label>
+                    <label class="item-title">项目编号：</label>
                   </div>
-                    <input type="text" class="form-control" style="position:relative;top: -15px;" name="project" value="{{project_name}}">
+                    <input type="text" class="form-control" style="position:relative;top: -15px;" name="id" value="{{project_id}}">
 
             </div>
             <div class="option-item" >
@@ -96,7 +96,22 @@
         </div>
         <div class="option-right">
 
-            <div class="option-item-right">
+            <div class="option-item-middle">
+                        
+                    <div class="title">
+                    <label class="item-title">项目名称：</label>
+                  </div>
+                    <input type="text" class="form-control" style="position:relative;top: -15px;" name="project" value="{{project_name}}">
+            </div>
+            <div class="option-item-middle">
+                     <div class="title">
+                    <label class="item-title">项目成员：</label>
+                
+           </div>
+                <input type="text" class="form-control " style="position:relative;top: -15px;" name="leader_p" value="{{ leader_p }}"/>
+            </div>
+
+            <div class="option-item-right-short">
                   <div class="title">
                     <label class="item-title">时间检索：</label>
                   </div>
@@ -111,20 +126,11 @@
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>
                     </div>
-                </div>
+               
+ 				</div>
             </div>
-
-            <div class="option-item-right-short">
-                <div class="title">
-                    <label class="item-title">项目成员：</label>
-                </div>
-                <input type="text" class="form-control " style="position:relative;top: -15px;" name="leader_p" value="{{ leader_p }}"/>
-
-            </div>
-            <div>
             <button style="margin-left:5px; margin-top:10px;" class="btn btn-primary" type="button" onclick="searchform.submit()">搜索</button>
             <button style="margin-left:5px; margin-top:10px;" class="btn btn-primary" type="button" onclick="javascript:window.location.href='/newproject/'">创建项目</button>
-            </div>
         </div>
     </div>
     </form>
@@ -164,8 +170,18 @@
                                 <tr class="basecolor">
                                     <td>{{ p.id}}</td>
                                     <td>
-                                        <a href="{% url 'prodetail' p.id %}">{{ p.project }}</a>
-                                        <a href="{% url 'praise' p.id %}"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">{{ p.praise_p }}</a>
+                                        <!--a href="{% url 'prodetail' p.id %}">{{ p.project }}</a-->
+                                        <!--a href="javascript:update({{ p.id }})"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px"><span>{{ p.praise_p }}</span></a-->
+                                    <div style="width:120px;float:left;overflow:hidden;text-overflow: ellipsis">
+                                        <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
+                                    </div>
+                                    <div style="width:49px;float:right">
+                                        <div style="width:16px;float:left">
+                                         <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">
+                                         <span class="p-count" style="color:#339966">({{ p.praise_p }})</span>
+
+                                        </div>
+                                    </div>
 
                                     </td>
                                     <td>{{ p.priority }}</td>
@@ -241,7 +257,7 @@
     <div class="pagination" style="text-align:right;margin-right:10px">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
-            <a href="?page={{ projectobj.previous_page_number }}&project={{ project_name }}&start_date_s={{start_date_s|date:"Y-m-d"}}&end_date_s={{ end_date_s|date:"Y-m-d" }}&status_p={{ status_p }}&leader_p={{ leader_p }}"> << </a>
+            <a href="?page={{ projectobj.previous_page_number }}&id={{ project_id }}&project={{ project_name }}&start_date_s={{start_date_s|date:"Y-m-d"}}&end_date_s={{ end_date_s|date:"Y-m-d" }}&status_p={{ status_p }}&leader_p={{ leader_p }}"> << </a>
         {% endif %}
 
         <span class="current">
@@ -249,7 +265,7 @@
         </span>
 
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}&project={{ project_name }}&start_date_s={{ start_date_s|date:"Y-m-d" }}&end_date_s={{ end_date_s|date:"Y-m-d"}}&status_p={{ status_p }}&leader_p={{ leader_p }}"> >> </a>
+            <a href="?page={{ projectobj.next_page_number }}&id={{ project_id }}&project={{ project_name }}&start_date_s={{ start_date_s|date:"Y-m-d" }}&end_date_s={{ end_date_s|date:"Y-m-d"}}&status_p={{ status_p }}&leader_p={{ leader_p }}"> >> </a>
         {% endif %}
     </span>
     </div>
@@ -275,6 +291,31 @@
         language:"zh-CN",
         minView:2
       });
+
+      $('.praise-add').on('click',function(){
+          var $this = $(this);
+          var id = $this.data('id');
+          $.get("/praise/"+id+"/",function(data){
+
+             if(data){
+                $this.siblings('.p-count').html('('+ data + ')');
+             }else{
+                 alert('error');
+             }
+
+
+          });
+      });
+     {% comment %} function update(id){
+          var $this = $(this);
+          $.get("/praise/"+id+"/",function(data){
+
+              $this.siblings('span').html('('+ 1 + ')');
+
+               console.log($this);
+
+              });
+      }{% endcomment %}
 
 </script>
 <script src="../static/js/bootstrap.js"></script>
