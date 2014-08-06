@@ -165,7 +165,7 @@
                                     <td>{{ p.id}}</td>
                                     <td>
                                         <a href="{% url 'prodetail' p.id %}">{{ p.project }}</a>
-                                        <a href="{% url 'praise' p.id %}"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">{{ p.praise_p }}</a>
+                                        <a  style="width:169px;" href="{% url 'praise' p.id %}"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">{{ p.praise_p }}</a>
 
                                     </td>
                                     <td>{{ p.priority }}</td>

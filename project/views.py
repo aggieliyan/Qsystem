@@ -557,7 +557,7 @@ def personal_homepage(request):
         request.session['username']
         projectlist = models.project.objects.filter()
         #print projectlist
-        project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
+        project_user_list = models.project_user.objects.filter(username__username=request.session['username'])
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
@@ -589,9 +589,10 @@ def personal_homepage(request):
     projectids = []
     for p in project_user_list:
         projectids.append(p.project.id)
-    projectlist = projectlist.filter(pk__in = projectids)
-    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")   
-    result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
+    projectlist = projectlist.filter(pk__in=projectids)
+    result = projectlist.exclude(Q(status_p=u'已上线') | Q(status_p=u'暂停')).order_by("-id")   
+    result1 = projectlist.exclude(~Q(status_p=u'已上线')& ~Q(status_p=u'暂停')).order_by("-id")
+    #pro_user = user.objects.filter(project_user__project_id=pid)
     puser = models.project_user.objects.all()
     """分页"""
     paginator = Paginator(result1, 25)
@@ -613,24 +614,25 @@ def personal_homepage(request):
         delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
         countdelay = delays.count()
     i = 0
-    tests= project_user_message.objects.filter(userid_id = userid)
+    tests= project_user_message.objects.filter(userid_id=userid)
     lists = []
     messagess = []
     for test in tests:
         lists.append(test.messageid_id)
-    messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')  
+    messagess = public_message.objects.filter(pk__in=lists).filter(type_p="message").order_by('-id')  
     count = messagess.count()
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
-         'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
-def deleteproject(request,id,url):
-    delpro=get_object_or_404(project,pk=int(id))    
+         'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, \
+         'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
+def deleteproject(request, id, url):
+    delpro=get_object_or_404(project, pk=int(id))    
     delpro.delete()
     return HttpResponseRedirect(url)
 def pauseproject(request, id, url):
-    pausepro = get_object_or_404(project, pk = int(id))
-    pausepro.status_p ='暂停'
+    pausepro = get_object_or_404(project, pk=int(id))
+    pausepro.status_p = '暂停'
     pausepro.save()
     return HttpResponseRedirect(url)
 def delayproject(request, url):
@@ -643,8 +645,8 @@ def delayproject(request, url):
             delpro = models.project.objects.get(id=delayid)
             uid = delpro.leader_p
             protitle = delpro.project
-            delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
-                apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason)
+            delay_p = project_delay(application=uid, project_id=delayid, delay_to_date=delay_date, \
+                apply_date=datetime.datetime.now(), title=protitle, reason=delay_reason)
             delay_p.save()                   
     return HttpResponseRedirect(url)
 def changedesign(request, url):          
@@ -654,21 +656,21 @@ def changedesign(request, url):
             changeid = form.cleaned_data['changeid']
             cont = form.cleaned_data['cont'].replace('\r\n','<br/> ')
             dpath = form.cleaned_data['dpath'].replace('\r\n','<br/> ')
-            chd = models.project.objects.get(id = changeid)
+            chd = models.project.objects.get(id=changeid)
             uid = request.session['id']
             #chd.blueprint_p=dpath
             #chd.save()
             string = chd.project+u' : ' + '<br/> ' +cont + '<br/> ' + dpath
-            pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
-             publication_date = datetime.datetime.now(), isactived = "1")
+            pub_message = public_message(project=changeid, publisher=uid, content=string, type_p="message",\
+             publication_date=datetime.datetime.now(), isactived="1")
             pub_message.save()
-            related_user = models.user.objects.filter(project_user__project_id = changeid)
+            related_user = models.user.objects.filter(project_user__project_id=changeid)
             message = public_message.objects.filter(project=changeid).order_by("-id")[0]            
             for i in related_user:
                 uid = i.id
                 megid = message.id
-                pro_u_message = project_user_message(userid_id = uid, messageid_id = megid, \
-                    project_id = changeid, isactived = '1')
+                pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, \
+                    project_id=changeid, isactived='1')
                 pro_u_message.save()           
     return HttpResponseRedirect(url)
     #return render_to_response('personal_homepage.html', {'form': form})
