@@ -620,7 +620,7 @@ def personal_homepage(request):
     countdelay = 0
     if request.user.has_perm('project.change_project_delay'):
         dealdelay = 1
-        delays = project_delay.objects.filter(isactived__isnull=True).order_by('apply_date')
+        delays = project_delay.objects.filter(result__isnull=True,).order_by('apply_date')
         countdelay = delays.count()
     i = 0
     tests= project_user_message.objects.filter(userid_id = userid)
