@@ -847,7 +847,7 @@ def delay(request):
     if not request.user.has_perm('project.change_project_delay'):
         return HttpResponseRedirect("/noperm")
 
-    delays = project_delay.objects.filter(isactived__isnull= False).order_by('apply_date')
+    delays = project_delay.objects.filter(isactived__isnull= False).order_by('-id')
     global  projectobj
     paginator = Paginator(delays, 25)
     page = request.GET.get('page')
