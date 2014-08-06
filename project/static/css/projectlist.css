@@ -133,7 +133,12 @@ body div{margin:0 auto;}
   width:176px;
   border-right: medium none;
 }
-
+.pro-proname{
+    width:140px;
+    float:left;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
 
 
 

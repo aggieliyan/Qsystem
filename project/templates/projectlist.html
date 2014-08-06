@@ -152,8 +152,8 @@
                             <thead>
                             <tr>
                                 <th width="64" style="width:50px;">项目编号</th>
-                                <th width="151" style="width:169px;">项目名称</th>
-                                <th width="64" style="width:50px;">优先级</th>
+                                <th width="151" style="width:179px;">项目名称</th>
+                                <th width="64" style="width:40px;">优先级</th>
                                 <th width="90" style="width:76px">项目负责人</th>
                                 <th width="83" style="width:69px">产品负责人</th>
                                 <th width="84" style="width:70px">测试负责人</th>
@@ -172,7 +172,7 @@
                                     <td>
                                         <!--a href="{% url 'prodetail' p.id %}">{{ p.project }}</a-->
                                         <!--a href="javascript:update({{ p.id }})"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px"><span>{{ p.praise_p }}</span></a-->
-                                    <div style="width:120px;float:left;overflow:hidden;text-overflow: ellipsis">
+                                    <div class="pro-proname">
                                         <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
                                     </div>
                                     <div style="width:49px;float:right">
