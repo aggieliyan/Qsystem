@@ -170,8 +170,18 @@
                                 <tr class="basecolor">
                                     <td>{{ p.id}}</td>
                                     <td>
-                                        <a href="{% url 'prodetail' p.id %}">{{ p.project }}</a>
-                                        <a href="{% url 'praise' p.id %}"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">{{ p.praise_p }}</a>
+                                        <!--a href="{% url 'prodetail' p.id %}">{{ p.project }}</a-->
+                                        <!--a href="javascript:update({{ p.id }})"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px"><span>{{ p.praise_p }}</span></a-->
+                                    <div style="width:120px;float:left;overflow:hidden;text-overflow: ellipsis">
+                                        <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
+                                    </div>
+                                    <div style="width:59px;float:right">
+                                        <div style="width:16px;float:left">
+                                         <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">
+                                         <span class="p-count" style="color:#339966">({{ p.praise_p }})</span>
+
+                                        </div>
+                                    </div>
 
                                     </td>
                                     <td>{{ p.priority }}</td>
@@ -281,6 +291,31 @@
         language:"zh-CN",
         minView:2
       });
+
+      $('.praise-add').on('click',function(){
+          var $this = $(this);
+          var id = $this.data('id');
+          $.get("/praise/"+id+"/",function(data){
+
+             if(data){
+                $this.siblings('.p-count').html('('+ data + ')');
+             }else{
+                 alert('error');
+             }
+
+
+          });
+      });
+     {% comment %} function update(id){
+          var $this = $(this);
+          $.get("/praise/"+id+"/",function(data){
+
+              $this.siblings('span').html('('+ 1 + ')');
+
+               console.log($this);
+
+              });
+      }{% endcomment %}
 
 </script>
 <script src="../static/js/bootstrap.js"></script>
