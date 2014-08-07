@@ -175,9 +175,10 @@
                                     <div class="pro-proname">
                                         <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
                                     </div>
-                                    <div style="width:49px;float:right">
+                                    <div style="width:54px;float:right">
                                         <div style="width:16px;float:left">
-                                         <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">
+{#                                         <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">#}
+                                         <i class="icon-fire"  data-id="{{ p.id }}" style="cursor:pointer;height: 16px;width: 13px; margin-bottom:5px"></i>
                                          <span class="p-count" style="color:#339966">({{ p.praise_p }})</span>
 
                                         </div>
@@ -292,7 +293,7 @@
         minView:2
       });
 
-      $('.praise-add').on('click',function(){
+      $('.icon-fire').on('click',function(){
           var $this = $(this);
           var id = $this.data('id');
           $.get("/praise/"+id+"/",function(data){
