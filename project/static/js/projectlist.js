@@ -65,21 +65,6 @@ $(document).ready(function(){
     };
     };
 
-
-   //已完结项目中，翻页后，默认显示当前tab
-    var tabcookievalue = $.cookie("mytab");
-    //alert("tabcookievalue="+tabcookievalue);
-    $("#myTab1 li").click(function () {
-      $.cookie("mytab", $(this).index());
-    });
-    if (tabcookievalue == 1) {
-      $("#myTab1").children().eq(0).removeClass("active");
-      document.getElementById("mtab1").style.display = "none";
-      $("#myTab1").children().eq(1).addClass("active");      
-      document.getElementById("mtab2").style.display = "block";
-      $("#mypage").show();
-       }
-           
 });
 
 (function(){
@@ -120,46 +105,25 @@ function change_p(id){
         } 
       }
 
-$(function(){
-   var cellIndex=parseInt($(".prorealter tr").length-1);
-   $(".prorealter tr td").each(function(){
-        if(this.cellIndex = cellIndex){
-            $(this).attr("title",$(this).text());
-            //alert($(this).parent().get(0).rowIndex);输出所在行
-          }
-   });
-});
+
 
 $(function(){
    //正在进行中给title赋值
    var cell=parseInt($(".procolor tr").length);
    for(var i=0; i<cell;i++){
-    var user = $.trim($(".basecolor").eq(i).children().eq(5).text());
-        user =user.replace(/\s+/g,' ');
+
         user_prolist = $.trim($(".basecolor").eq(i).children().eq(6).text());
         user_prolist =user_prolist.replace(/\s+/g,' ');
     var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
     var praise = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(1).text());
     $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title","万众期待值:"+praise);
     $(".basecolor").eq(i).children().eq(1).children().eq(0).attr("title",project);
-    if(location.pathname == '/personal_homepage/'){
-      $(".basecolor").eq(i).children().eq(5).attr("title",user);}      
-    if (location.pathname == '/projectlist/'){
-      $(".basecolor").eq(i).children().eq(6).attr("title",user_prolist);}      
-   } 
+
+    $(".basecolor").eq(i).children().eq(6).attr("title",user_prolist);}
+
 });
 
-$(function(){
-   //完结项目给title赋值
-   var cell=parseInt($(".procolor1 tr").length);
-   for(var i=0; i<cell;i++){
-    var user = $.trim($(".basecolor1").eq(i).children().eq(5).text());
-        user =user.replace(/\s+/g,' ');
-    var project = $.trim($(".basecolor1").eq(i).children().eq(1).text());
-    $(".basecolor1").eq(i).children().eq(1).attr("title",project);
-    $(".basecolor1").eq(i).children().eq(5).attr("title",user);
-   } 
-});
+
 
 (function(){
                 //导航选中
