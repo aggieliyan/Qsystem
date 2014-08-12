@@ -209,25 +209,26 @@
                                     {% else %}
                                         {% if p.status_p == "已上线" or p.status_p == "暂停"%}
                                             <a href="{% url 'prodetail' p.id %}">查看详情</a>
+                                            {% if createtag == 1 %}
+                                                <a href="{% url 'similarpro' p.id  1 %}">发布相似</a>
+                                            {% else %}
+                                            {% endif %}
                                         {% else %}
                                             {% if changetag == 1 %}
                                                 <a onclick="change_p({{p.id}})">设计变更</a><span> </span>
                                             {% else %}
-                                                <a></a>
                                             {% endif %}
                                             {% if edittag == 1 %}
                                             {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id or auth_changetag == 1%}
                                                 <a href="{% url 'editproject' p.id %}">编辑<span> </span></a>
                                             {% endif %}
                                             {% else %}
-                                                <a></a>
                                             {% endif %}
                                             {% if delaytag == 1 %}
                                             {% ifequal user_id p.leader_p_id  %}
                                                 <a onclick="delay_p({{p.id}},{{ p.expect_launch_date|date:"Ymd" }})"class="chomdelay">延期<span> </span></a>
                                             {% endifequal %}
                                             {% else %}
-                                                <a></a>
                                             {% endif %}
                                             {% if deletetag == 1 or auth_changetag == 1%}
                                                 <a href="{% url 'pproject_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span> </span></a>
