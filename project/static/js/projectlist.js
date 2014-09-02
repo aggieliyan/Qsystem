@@ -102,6 +102,8 @@ function change_p(id){
         }
         else{
           document.test1.submit();
+          $('#myModal1').modal('hide');
+        alert("您的申请已发送,请等待审批");
         } 
       }
 
