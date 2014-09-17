@@ -115,7 +115,7 @@ $(document).ready(function(){
       //  $("[title='1']").attr("style","height:"+w+"px;");
       //}
 
-      $("[title='1']").attr("title","0");
+/*      $("[title='1']").attr("title","0");
       //负责人还在的话要选中
       var dv = $("[name='designer']").attr("value")
       var tv = $("[name='tester']").attr("value")
@@ -124,7 +124,7 @@ $(document).ready(function(){
       }
       if(tv){
         $("[value='"+tv+"'] input").attr("checked","checked");
-      }
+      }*/
 
       //设置项目参与人员
       count_relateduser()
