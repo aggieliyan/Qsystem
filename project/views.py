@@ -21,6 +21,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User, Group
 from django.contrib import auth
 
+import datetime
+
 def register(request):
     if request.method == "POST":
         uf = UserForm(request.POST)
@@ -289,6 +291,79 @@ def new_project(request, pid='', nid=''):
                     project.real_launch_date = datetime.datetime.now()
                     project.save()                   
             return redirect('/projectlist/')
+        else:
+            dateloop = ['psdate', 'pedate', 'dsdate', 'dedate', 'tsdate', 'tedate', 'startdate', 'plandate']
+            prodate = []
+            for item in dateloop:
+                cdate = request.POST[item]
+                print cdate
+                if cdate:
+                    idate = datetime.datetime.strptime(cdate, "%Y-%m-%d")
+                else:
+                    idate = None
+                prodate.append(idate)
+            if request.POST['leader']:
+                luser = models.user.objects.get(id=request.POST['leader'])
+            else:
+                luser = None
+            relateduser = request.POST['relateduser']
+            relateduser = relateduser.replace(" ", "").split(",")
+            pd = []
+            dev = []
+            qa = []           
+            for uid in relateduser:
+                if uid:
+                    tuser = models.user.objects.get(id=int(uid))
+                    if tuser.department_id == 1:
+                        qa.append(tuser)
+                    elif tuser.department_id == 3:
+                        pd.append(tuser)
+                    else:
+                        dev.append(tuser)
+            related_user = {'qa':qa, 'dev': dev, 'pd': pd}
+            pro = {'priority':request.POST['priority'],
+                   'project':request.POST['pname'],
+                   'status_p':request.POST['status'],
+                   'leader_p_id':request.POST['leader'],
+                   'designer_p_id':request.POST['designer'],
+                   'tester_p_id':request.POST['tester'],
+                   'start_date':prodate[6],
+                   'expect_launch_date':prodate[7],
+                   'estimated_product_start_date':prodate[0],
+                   'estimated_product_end_date':prodate[1],
+                   'estimated_develop_start_date':prodate[2],
+                   'estimated_develop_end_date':prodate[3],
+                   'estimated_test_start_date':prodate[4],
+                   'estimated_test_end_date':prodate[5],
+                   'blueprint_p':request.POST['ppath'],
+                   'develop_plan_p':request.POST['dppath'],
+                   'test_plan_p':request.POST['tppath'],
+                   'test_case_p':request.POST['tcpath'],
+                   'test_report_p':request.POST['trpath'],}
+
+            dt_temp = {}
+            dt = {}
+            #处理时间为空,无法计算时间差
+            if (pro['estimated_product_end_date'] != None) & (pro['estimated_product_start_date'] != None):
+                dt_temp['p'] = pro['estimated_product_end_date'] - pro['estimated_product_start_date']
+                dt['ptime'] = int(dt_temp['p'].days+1)
+            else:
+                dt['ptime'] = 0
+            if (pro['estimated_develop_end_date'] != None) & (pro['estimated_develop_start_date'] != None):
+                dt_temp['d'] = pro['estimated_develop_end_date'] - pro['estimated_develop_start_date']
+                dt['dtime'] = int(dt_temp['d'].days+1)
+            else:
+               dt['dtime'] = 0
+            if (pro['estimated_test_end_date'] != None) & (pro['estimated_test_start_date'] != None):
+                dt_temp['t'] = pro['estimated_test_end_date'] - pro['estimated_test_start_date']
+                dt['ttime'] = int(dt_temp['t'].days+1)
+            else:
+                dt['ttime'] = 0
+
+            res = {'pro':pro, 'user':luser, 'reuser':related_user, 'dt': dt}
+            return render_to_response('newproject.html', \
+                {'res':res, 'form':form,'editdate':editdate}, context_instance=RequestContext(request))
+
     return render_to_response('newproject.html', \
         {'form':form, 'editdate':editdate}, context_instance=RequestContext(request))
     
@@ -434,12 +509,12 @@ def detail(request, pid='', nid=''):
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
-    qa = {'rel': qas}
+    #qa = {'rel': qas}
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4) | Q(department_id=13))
-    dev = {'rel': devs}
+    #dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
-    pd = {'rel': pds}
-    related_user = {'qa':qa, 'dev': dev, 'pd': pd}
+    #pd = {'rel': pds}
+    related_user = {'qa':qas, 'dev': devs, 'pd': pds}
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
