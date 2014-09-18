@@ -300,8 +300,8 @@ $(document).ready(function(){
       
         if(temp){
           var startime = temp.split("-", 3);
-          var stime = Date.UTC(startime[0], startime[1], startime[2]);
-          var etime = Date.UTC(endtime[0], endtime[1], endtime[2]);
+          var stime = Date.UTC(parseInt(startime[0]), parseInt(startime[1]) - 1, parseInt(startime[2]));
+          var etime = Date.UTC(parseInt(endtime[0]), parseInt(endtime[1]) - 1, parseInt(endtime[2]));
           var diff = etime - stime; 
           var days = diff/1000/60/60/24 + 1;
           $(this).parent().siblings('div').children('span').text(days);
