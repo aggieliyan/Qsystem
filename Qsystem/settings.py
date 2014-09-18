@@ -77,7 +77,15 @@ DATABASES = {
         'PASSWORD':'mysqlpwd1',
         'HOST':'localhost',
         'PORT':'3306',
-    }
+    },
+    'beta': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ajaxableskydb',
+        'USER':'root',
+        'PASSWORD':'mysqlpwd1',
+        'HOST':'192.168.120.201',
+        'PORT':'3306',   
+             }
 }
 
 # Internationalization
