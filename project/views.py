@@ -296,7 +296,6 @@ def new_project(request, pid='', nid=''):
             prodate = []
             for item in dateloop:
                 cdate = request.POST[item]
-                print cdate
                 if cdate:
                     idate = datetime.datetime.strptime(cdate, "%Y-%m-%d")
                 else:

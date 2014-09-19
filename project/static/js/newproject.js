@@ -278,7 +278,6 @@ $(document).ready(function(){
     });
     
     $("#master").blur(function(){
-      console.log("hahahah");
       var p = $('#master option:selected').val();
       //console.log(typeof(p));
       $("[name='leader']").attr("value",p);
