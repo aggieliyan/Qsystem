@@ -478,16 +478,16 @@ def project_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-         
+    # 项目使用量统计    
     cursor = connections['as'].cursor()
-    f = open('C:\hoveen-dev\workspace\Qsystem\Qsystem\project\statistics.ini')
+    f = open('./Qsystem/Qsystem/project/statistics.ini')
     pcount = models.project_statistics.objects.all()
-    pcount.delete()
+    pcount.delete()    #先把之前的数据全删除再插入
     for line in f.readlines():
-        pro_id = line.split(',')[0]
+        pro_id = int(line.split(',')[0])
         sql = line.split(',')[1]
         cursor.execute(sql)
-        total = cursor.fetchall()[0][0]
+        total = int(cursor.fetchall()[0][0])
         p = project_statistics(project_id=pro_id, total=total)
         p.save()
     cursor.close()

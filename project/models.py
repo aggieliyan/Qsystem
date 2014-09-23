@@ -80,5 +80,5 @@ class project_user_message(models.Model):
     
 
 class project_statistics(models.Model):
-    project = models.ForeignKey(project)
+    project_id = models.IntegerField(max_length=999999999,blank=False, null=False)
     total = models.IntegerField(max_length=999999999,blank=True, null=True)   
