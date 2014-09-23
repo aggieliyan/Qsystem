@@ -14,13 +14,14 @@ import models
 import hashlib
 import django.contrib.auth.models
 from django.views.decorators.csrf import csrf_exempt
-from models import project, project_user, project_delay, public_message, project_user_message
+from models import project, project_user, project_delay, public_message, project_user_message, project_statistics
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 #test
 from django.contrib.auth.models import User, Group
 from django.contrib import auth
 
+from django.db import connections
 import datetime
 
 def register(request):
@@ -385,8 +386,6 @@ def project_list(request):
         user_id = request.session['id']
     if logintag == 1:
 
-
-
         if request.user.has_perm("project.change_public_message"):
             changetag = 1
         if request.user.has_perm('project.change_project'):
@@ -479,12 +478,26 @@ def project_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-
+         
+    cursor = connections['beta'].cursor()
+    f = open('C:\hoveen-dev\workspace\Qsystem\Qsystem\project\statistics.ini')
+    pcount = models.project_statistics.objects.all()
+    pcount.delete()
+    for line in f.readlines():
+        pro_id = line.split(',')[0]
+        sql = line.split(',')[1]
+        cursor.execute(sql)
+        total = cursor.fetchall()[0][0]
+        p = project_statistics(project_id=pro_id, total=total)
+        p.save()
+    cursor.close()
+    
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
-            'puser':puser, 'project_id':project_id, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
+            'puser':puser, 'pcount':pcount, 'project_id':project_id, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
-            'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
-            "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag,"createtag":createtag}))
+            'count':count, "logintag":logintag, "changetag":changetag, "delaytag":delaytag, "deletetag":deletetag,\
+            "edittag":edittag, "user_id":user_id, "auth_changetag":auth_changetag, "createtag":createtag}))
+    
 def praise(request ,pid):
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):
         ip = request.META['HTTP_X_FORWARDED_FOR']

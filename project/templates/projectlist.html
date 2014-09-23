@@ -178,9 +178,12 @@
                                     <div style="width:54px;float:right">
                                         <div style="width:16px;float:left">
 {#                                         <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">#}
-                                         <i class="icon-fire"  data-id="{{ p.id }}" style="cursor:pointer;height: 16px;width: 13px; margin-bottom:5px"></i>
-                                         <span class="p-count" style="color:#339966">({{ p.praise_p }})</span>
-
+                                         <i class="icon-fire"  data-id="{{ p.id }}" style="cursor:pointer;height: 16px;width: 13px; margin-bottom:5px"></i>                                
+                                         {% for c in pcount %}
+                                          {% if c.project_id = p.id %}
+                                            <span class="p-count" style="color:#339966">({{ c.total }})</span>
+                                          {% endif %}
+                                         {% endfor %}
                                         </div>
                                     </div>
 

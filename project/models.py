@@ -15,7 +15,7 @@ class user(models.Model):
     department = models.ForeignKey(department)
     Position_level = models.CharField(max_length=1,blank=True,default=0)
     isactived = models.BooleanField(max_length=1)
-   
+       
 class project(models.Model):
     priority = models.SmallIntegerField(u'优先级',max_length=8)
     project = models.CharField(u'项目名称',max_length=100)
@@ -78,3 +78,7 @@ class project_user_message(models.Model):
     project = models.ForeignKey(project)
     isactived = models.BooleanField(max_length=1)
     
+
+class project_statistics(models.Model):
+    project = models.ForeignKey(project)
+    total = models.IntegerField(max_length=999999999,blank=True, null=True)   
