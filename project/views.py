@@ -479,7 +479,7 @@ def project_list(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
          
-    cursor = connections['beta'].cursor()
+    cursor = connections['as'].cursor()
     f = open('C:\hoveen-dev\workspace\Qsystem\Qsystem\project\statistics.ini')
     pcount = models.project_statistics.objects.all()
     pcount.delete()

@@ -69,23 +69,43 @@ WSGI_APPLICATION = 'Qsystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'qsystem',
-        'USER':'root',
-        'PASSWORD':'mysqlpwd1',
-        'HOST':'localhost',
-        'PORT':'3306',
-    },
-    'beta': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ajaxableskydb',
-        'USER':'root',
-        'PASSWORD':'mysqlpwd1',
-        'HOST':'192.168.120.201',
-        'PORT':'3306',   
-             }
+if socket.gethostname() == 'test':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'qsystem',
+            'USER':'root',
+            'PASSWORD':'mysqlpwd1',
+            'HOST':'localhost',
+            'PORT':'3306',
+                },
+        'as': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': 'ajaxableskydb',
+                'USER':'qa',
+                'PASSWORD':'as-qa',
+                'HOST':'192.168.3.91',
+                'PORT':'3306',
+             },
+                }          
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'qsystem',
+            'USER':'root',
+            'PASSWORD':'mysqlpwd1',
+            'HOST':'localhost',
+            'PORT':'3306',
+                },
+        'as': {           
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'ajaxableskydb',
+            'USER':'root',
+            'PASSWORD':'mysqlpwd1',
+            'HOST':'192.168.120.201',
+            'PORT':'3306',
+                },       
 }
 
 # Internationalization
