@@ -205,9 +205,8 @@ def new_project(request, pid='', nid=''):
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
             countsql = form.cleaned_data['countsql']
-#            print countsql
             countsql = strQ2B(countsql)
-            print countsql
+
             if pid == '' or nid == '1':
                 pro = models.project(priority=priority, \
                     project=pname, status_p=status, leader_p=leader, \
@@ -256,7 +255,6 @@ def new_project(request, pid='', nid=''):
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
-            print psql
             if pid == '' or nid =='1':
                 pid = models.project.objects.filter\
                     (project=pname).order_by("-id")[0].id
