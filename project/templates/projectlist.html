@@ -178,13 +178,21 @@
                                     <div style="width:54px;float:right">
                                         <div style="width:16px;float:left">
 {#                                         <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">#}
-                                         <i class="icon-fire"  data-id="{{ p.id }}" style="cursor:pointer;height: 16px;width: 13px; margin-bottom:5px"></i>                                
-                                         {% for c in pcount %}
-                                          {% if c.project_id = p.id %}
+                                         <i class="icon-fire"  data-id="{{ p.id }}" style="cursor:pointer;height: 16px;width: 13px; margin-bottom:5px"></i> 
+                                                                   
+                                         {% for c in fproject %}                                        
+                                          {% if c.project_id == p.id %}
                                             <span class="p-count" style="color:#339966">({{ c.total }})</span>
                                           {% endif %}
                                          {% endfor %}
                                         </div>
+                                    </div>
+                                    <div>
+                                      {% for c in pcount %}                                        
+                                          {% if c.project_id == p.id %}
+                                            <p class="p-count" style="color:#339966; display: none">{{c.item}}:&nbsp{{ c.total }}</p>
+                                          {% endif %}
+                                         {% endfor %}     
                                     </div>
 
                                     </td>
@@ -297,20 +305,20 @@
         minView:2
       });
 
-      $('.icon-fire').on('click',function(){
-          var $this = $(this);
-          var id = $this.data('id');
-          $.get("/praise/"+id+"/",function(data){
+      // $('.icon-fire').on('click',function(){
+      //     var $this = $(this);
+      //     var id = $this.data('id');
+      //     $.get("/praise/"+id+"/",function(data){
 
-             if(data){
-                $this.siblings('.p-count').html('('+ data + ')');
-             }else{
-                 alert('error');
-             }
+      //        if(data){
+      //           $this.siblings('.p-count').html('('+ data + ')');
+      //        }else{
+      //            alert('error');
+      //        }
 
 
-          });
-      });
+      //     });
+      // });
      {% comment %} function update(id){
           var $this = $(this);
           $.get("/praise/"+id+"/",function(data){

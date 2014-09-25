@@ -117,8 +117,9 @@ $(function(){
         user_prolist = $.trim($(".basecolor").eq(i).children().eq(6).text());
         user_prolist =user_prolist.replace(/\s+/g,' ');
     var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
-    var praise = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(1).text());
-    $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title","该项目使用量: "+praise);
+    var praise = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(2).text());
+    praise = praise.replace(/\s+/g,'\r');
+    $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title",praise);
     $(".basecolor").eq(i).children().eq(1).children().eq(0).attr("title",project);
     $(".basecolor").eq(i).children().eq(6).attr("title",user_prolist);}
 
