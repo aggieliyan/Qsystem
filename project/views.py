@@ -14,14 +14,13 @@ import models
 import hashlib
 import django.contrib.auth.models
 from django.views.decorators.csrf import csrf_exempt
-from models import project, project_user, project_delay, public_message, project_user_message, project_statistics
+from models import project, project_user, project_delay, public_message, project_user_message
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 #test
 from django.contrib.auth.models import User, Group
 from django.contrib import auth
 
-from django.db import connections
 import datetime
 
 def register(request):
@@ -137,19 +136,6 @@ def login(request):
     template_var["form"] = form
     return render_to_response("login.html", template_var, context_instance=RequestContext(request))
 
-def strQ2B(ustring):
-    """全角转半角"""
-    rstring = ""
-    for uchar in ustring:
-        inside_code=ord(uchar)
-        if inside_code == 12288:                              #全角空格直接转换            
-            inside_code = 32 
-        elif (inside_code >= 65281 and inside_code <= 65374): #全角字符（除空格）根据关系转化
-            inside_code -= 65248
-
-        rstring += unichr(inside_code)
-    return rstring
-
 def new_project(request, pid='', nid=''):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
@@ -204,8 +190,6 @@ def new_project(request, pid='', nid=''):
             tcpath = form.cleaned_data['tcpath']
             trpath = form.cleaned_data['trpath']
             relateduser = form.cleaned_data['relateduser']
-            countsql = form.cleaned_data['countsql']
-            countsql = strQ2B(countsql)
 
             if pid == '' or nid == '1':
                 pro = models.project(priority=priority, \
@@ -246,27 +230,13 @@ def new_project(request, pid='', nid=''):
                     (project=pname).order_by("-id")[0].id
                 else:
                     models.project_user.objects.filter(project_id=pid).delete()
-    
+                    #
                 for uid in relateduser:
                     if uid:
                         project_user = models.project_user\
                         (username_id=uid, project_id=pid, isactived=1)
                         project_user.save()
 
-            #存完人员,存统计查询语句
-            psql = countsql.split(";")
-            if pid == '' or nid =='1':
-                pid = models.project.objects.filter\
-                    (project=pname).order_by("-id")[0].id
-            else:
-                models.project_statistics.objects.filter(project_id=pid).delete()
-            for sql in psql:
-                if ":" in sql:
-                    item = sql.split(":")[0]
-                    sql = sql.split(":")[1]
-                    project_statistics = models.project_statistics(
-                                        project_id=pid, item=item, sql=sql)
-                    project_statistics.save()
             #给项目的各负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
             #给项目负责人加入到项目负责人权限组
@@ -287,7 +257,7 @@ def new_project(request, pid='', nid=''):
             #User.objects.get(username=musername).user_permissions.add(34)
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
-            if status == "已上线":
+            if status == u"已上线":
                 flag = 0
                 prolist = public_message.objects.filter\
                 (project=pid).order_by("isactived")
@@ -326,6 +296,7 @@ def new_project(request, pid='', nid=''):
             prodate = []
             for item in dateloop:
                 cdate = request.POST[item]
+                print cdate  
                 if cdate:
                     idate = datetime.datetime.strptime(cdate, "%Y-%m-%d")
                 else:
@@ -396,6 +367,7 @@ def new_project(request, pid='', nid=''):
     return render_to_response('newproject.html', \
         {'form':form, 'editdate':editdate}, context_instance=RequestContext(request))
     
+
 def project_list(request):
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
     #以下是权限标记，createtag是发布相似的权限
@@ -413,6 +385,8 @@ def project_list(request):
         logintag = 1
         user_id = request.session['id']
     if logintag == 1:
+
+
 
         if request.user.has_perm("project.change_public_message"):
             changetag = 1
@@ -506,32 +480,12 @@ def project_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-    # 项目使用量统计    
-    cursor = connections['as'].cursor()
-    pcount = models.project_statistics.objects.all()
-    for c in pcount:
-        sql = c.sql
-        try:
-            cursor.execute(sql)
-            total = int(cursor.fetchall()[0][0])
-            c.total = total
-            c.save()
-        except:
-            pass
-    cursor.close()
-    
-    p1 = models.project_statistics.objects.distinct().values('project_id')
-    filter_project =[] #每个项目只返回一组统计值最大的记录,方便页面显示
-    for x in p1:
-        filter_project.append(pcount.filter(project_id=x['project_id']).order_by("-total")[0])
-    
+
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
-            'puser':puser, 'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
-            'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
+            'puser':puser, 'project_id':project_id, 'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
-            'count':count, "logintag":logintag, "changetag":changetag, "delaytag":delaytag, "deletetag":deletetag,\
-            "edittag":edittag, "user_id":user_id, "auth_changetag":auth_changetag, "createtag":createtag}))
-    
+            'count':count,"logintag":logintag,"changetag":changetag,"delaytag":delaytag,"deletetag":deletetag,\
+            "edittag":edittag,"user_id":user_id,"auth_changetag":auth_changetag,"createtag":createtag}))
 def praise(request ,pid):
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):
         ip = request.META['HTTP_X_FORWARDED_FOR']
@@ -580,11 +534,7 @@ def detail(request, pid='', nid=''):
     else:
         dt['ttime'] = 0
     editboolean = False
-    pro_sql = models.project_statistics.objects.filter(project_id=pid)
-    sql = ''
-    for p in pro_sql:
-        sql = sql + p.item + ':' + p.sql + ';' 
- 
+
     try:
         request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
@@ -592,7 +542,7 @@ def detail(request, pid='', nid=''):
             editboolean = True
     finally:
         if '/detail/' in request.path:
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 'sql': sql}
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
             edittag = 1
@@ -603,7 +553,7 @@ def detail(request, pid='', nid=''):
                 editdate = 1
             else:
                 editdate = 0
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': sql}
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid,}
             return render_to_response('newproject.html', {'res': res, 'editdate':editdate})
 
 def show_person(request):
