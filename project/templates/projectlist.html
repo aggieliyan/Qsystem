@@ -267,7 +267,7 @@
         </div>
     </div>
     <!--分页-->
-    <div class="pagination" style="text-align:right;margin-right:750px">
+    <div class="pagination" style="text-align:center;margin-right:10px">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
             <a href="?page={{ projectobj.previous_page_number }}&id={{ project_id }}&project={{ project_name }}&start_date_s={{start_date_s|date:"Y-m-d"}}&end_date_s={{ end_date_s|date:"Y-m-d" }}&status_p={{ status_p }}&leader_p={{ leader_p }}"> << </a>
