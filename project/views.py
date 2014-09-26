@@ -287,7 +287,7 @@ def new_project(request, pid='', nid=''):
             #User.objects.get(username=musername).user_permissions.add(34)
 
             #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
-            if status == "已上线":
+            if status == u"已上线":
                 flag = 0
                 prolist = public_message.objects.filter\
                 (project=pid).order_by("isactived")
