@@ -79,7 +79,7 @@ if socket.gethostname() == 'test':
             'HOST':'localhost',
             'PORT':'3306',
                 },
-        'as': {
+        'ajaxableskydb': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ajaxableskydb',
                 'USER':'qa',
@@ -87,6 +87,14 @@ if socket.gethostname() == 'test':
                 'HOST':'192.168.3.91',
                 'PORT':'3306',
              },
+        'ablesky_examsystem': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': 'ablesky_examsystem',
+                'USER':'qa',
+                'PASSWORD':'as-qa',
+                'HOST':'192.168.3.91',
+                'PORT':'3306',                      
+                 },
                 }          
 else:
     DATABASES = {
@@ -98,14 +106,22 @@ else:
             'HOST':'localhost',
             'PORT':'3306',
                 },
-        'as': {           
+        'ajaxableskydb': {           
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'ajaxableskydb',
             'USER':'root',
             'PASSWORD':'mysqlpwd1',
             'HOST':'192.168.120.201',
             'PORT':'3306',
-                },       
+                },   
+        'ablesky_examsystem': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': 'ablesky_examsystem',
+                'USER':'root',
+                'PASSWORD':'mysqlpwd1',
+                'HOST':'192.168.120.201',
+                'PORT':'3306',                      
+                 },    
 }
 
 # Internationalization

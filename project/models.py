@@ -82,5 +82,6 @@ class project_user_message(models.Model):
 class project_statistics(models.Model):
     project_id = models.IntegerField(max_length=9999999,blank=False, null=False)
     item = models.CharField(u'统计项', max_length=1000)
+    db = models.CharField(u'使用哪个库',max_length=50)
     sql = models.TextField(u'查询语句', max_length=21000)
     total = models.IntegerField(max_length=9999999,blank=True, null=True)   

@@ -263,9 +263,10 @@ def new_project(request, pid='', nid=''):
             for sql in psql:
                 if ":" in sql:
                     item = sql.split(":")[0]
-                    sql = sql.split(":")[1]
+                    db = sql.split(":")[1]
+                    sql = sql.split(":")[2]
                     project_statistics = models.project_statistics(
-                                        project_id=pid, item=item, sql=sql)
+                                        project_id=pid, item=item, db=db, sql=sql)
                     project_statistics.save()
             #给项目的各负责人添加编辑项目权限
             musername = models.user.objects.get(id=leaderid).username
@@ -507,19 +508,20 @@ def project_list(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
     # 项目使用量统计    
-    cursor = connections['as'].cursor()
     pcount = models.project_statistics.objects.all()
     for c in pcount:
         sql = c.sql
+        db = c.db
         try:
+            cursor = connections[db].cursor()
             cursor.execute(sql)
             total = int(cursor.fetchall()[0][0])
             c.total = total
             c.save()
+            cursor.close()
         except:
             pass
-    cursor.close()
-    
+                
     p1 = models.project_statistics.objects.distinct().values('project_id')
     filter_project =[] #每个项目只返回一组统计值最大的记录,方便页面显示
     for x in p1:
@@ -583,7 +585,11 @@ def detail(request, pid='', nid=''):
     pro_sql = models.project_statistics.objects.filter(project_id=pid)
     sql = ''
     for p in pro_sql:
-        sql = sql + p.item + ':' + p.sql + ';' 
+        sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 
+    if sql=='':
+        status = '未填写'
+    else:
+        status = '已填写'
  
     try:
         request.user             
@@ -592,7 +598,7 @@ def detail(request, pid='', nid=''):
             editboolean = True
     finally:
         if '/detail/' in request.path:
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 'sql': sql}
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 'sql': status}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
             edittag = 1
