@@ -118,7 +118,7 @@ $(function(){
         user_prolist =user_prolist.replace(/\s+/g,' ');
     var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
     var praise = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(2).text());
-    praise = praise.replace(/\s+/g,'\r');
+    praise = praise.replace(/\s+/g,'\t\t\r');
     $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title",praise);
     $(".basecolor").eq(i).children().eq(1).children().eq(0).attr("title",project);
     $(".basecolor").eq(i).children().eq(6).attr("title",user_prolist);}
