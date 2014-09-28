@@ -516,6 +516,7 @@ def project_list(request):
             cursor = connections[db].cursor()
             cursor.execute(sql)
             total = int(cursor.fetchall()[0][0])
+            print total
             c.total = total
             c.save()
             cursor.close()
