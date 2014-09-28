@@ -92,7 +92,7 @@ if socket.gethostname() == 'test':
                 'NAME': 'ablesky_examsystem',
                 'USER':'qa',
                 'PASSWORD':'as-qa',
-                'HOST':'192.168.3.91',
+                'HOST':'192.168.3.90',
                 'PORT':'3306',                      
                  },
                 }          
