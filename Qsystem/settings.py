@@ -7,7 +7,26 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
+#LDAP configuration
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+# Baseline configuration.
+AUTH_LDAP_SERVER_URI = "ldap://192.168.3.13:389"
+AUTH_LDAP_BIND_DN = "cn=manager,dc=ablesky,dc=com"
+AUTH_LDAP_BIND_PASSWORD = "ASdiyi"
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=People,dc=ablesky,dc=com",
+        ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
 
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "uid",    
+#    "last_name": "sn",
+#    "email": "mail"    
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    )
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -142,3 +161,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+

@@ -14,7 +14,7 @@ import models
 import hashlib
 import django.contrib.auth.models
 from django.views.decorators.csrf import csrf_exempt
-from models import project, project_user, project_delay, public_message, project_user_message, project_statistics
+from models import project, user, project_user, project_delay, public_message, project_user_message, project_statistics
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 #test
@@ -89,12 +89,6 @@ def no_login(request):
 def no_perm(request):
     return render_to_response("noperm.html")
 def login(request):
-    #try:
-    #    if request.session["id"]:
-    #        return HttpResponseRedirect("/personal_homepage")
-    #except KeyError:
-    #    return HttpResponseRedirect("/noperm.html")
-
     template_var = {}
     if "username" in request.COOKIES and "password" in request.COOKIES:
         username = request.COOKIES["username"]
@@ -102,9 +96,9 @@ def login(request):
         _userset = models.user.objects.filter(username__exact=username, password__exact=password)
         if _userset.count() >= 1:
             _user = _userset[0]
-            request.session['username'] = _user.username
-            request.session['realname'] = _user.realname
-            return HttpResponseRedirect("/personal_homepage")
+            request.session['username'] = username
+            request.session['realname'] = realname
+        return HttpResponseRedirect("/personal_homepage")
     form = LoginForm()
     if request.method == 'POST':
         form = LoginForm(request.POST.copy())
@@ -112,30 +106,44 @@ def login(request):
             username = form.cleaned_data["username"]
             password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
-            _userset = models.user.objects.filter(username__exact=username, password__exact=password)
-            if _userset.count() >= 1:
-                _user = _userset[0]
-                if _user.isactived:
-                    request.session['username'] = _user.username
-                    request.session['realname'] = _user.realname
-                    request.session['id'] = _user.id
-                    #Django 认证系统的登录
-                    try:
-                        user = auth.authenticate(username=username, password=form.cleaned_data["password"])
-                        auth.login(request, user)
-                    except:
-                        template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
-                    response = HttpResponseRedirect("/personal_homepage")
-                    if isautologin:
-                        response.set_cookie("username", username, 3600)
-                        response.set_cookie("password", password, 3600)   
-                    return response
+            try:                
+                user = auth.authenticate(username=username, password=form.cleaned_data["password"])
+                if user != None:                    
+                    isldap = models.user.objects.filter(username__exact=username)
+                    if len(isldap) == 0: #说明该用户通过ldap登录,数据库尚未存储该用户
+                        newrealname = User.objects.filter(username=username)[0].first_name
+                        newuser = models.user(username=username, password=password, realname=newrealname, create_time=datetime.datetime.now(), department_id='100', isactived=1)
+                        newuser.save()
+                    
+                    _userset = models.user.objects.filter(username__exact=username, password__exact=password)
+                    if _userset.count() >= 1:
+                        _user = _userset[0]
+                        if _user.isactived:
+                            request.session['username'] = _user.username
+                            request.session['realname'] = _user.realname
+                            request.session['id'] = _user.id
+                            auth.login(request, user)
+                        else:
+                            template_var["error"] = _(u'您输入的帐号未激活，请联系管理员') 
+                            template_var["form"] = form
+                            return render_to_response("login.html", template_var, context_instance=RequestContext(request))  
                 else:
-                    template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
-            else:
+                    template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')  
+                    template_var["form"] = form
+                    return render_to_response("login.html", template_var, context_instance=RequestContext(request))                          
+            except:
                 template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
+                template_var["form"] = form
+                return render_to_response("login.html", template_var, context_instance=RequestContext(request))    
+            
+            response = HttpResponseRedirect("/personal_homepage")           
+            if isautologin:
+                response.set_cookie("username", username, 3600)
+                response.set_cookie("password", password, 3600)   
+            return response
+        
     template_var["form"] = form
-    return render_to_response("login.html", template_var, context_instance=RequestContext(request))
+    return render_to_response("login.html", template_var, context_instance=RequestContext(request))  
 
 def strQ2B(ustring):
     """全角转半角"""
