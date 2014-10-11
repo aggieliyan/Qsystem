@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from project.views import detail, new_project
+from project.views import detail, new_project, register
 from django.contrib import admin
 admin.autodiscover()
 import project
@@ -16,7 +16,9 @@ urlpatterns = patterns('',
     #login
     url('^$', 'project.views.project_list',name="index"),
     url('^login', 'project.views.login',name="login"),
-    url('^register', 'project.views.register',name="register"),
+#    url('^register', 'project.views.register',name="register"),
+    ('^register/$',register),
+    ('^register/([^/]+)/$',register),
     url('^logout','project.views.logout'),
     url('^nologin','project.views.no_login'),
     url('^noperm/', 'project.views.no_perm'),

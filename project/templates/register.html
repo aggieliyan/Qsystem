@@ -76,8 +76,8 @@
  		errorMessage="请输入密码";
  		document.getElementById("pwdErrorMsg").innerHTML=errorMessage;
  		flag=false;
- 	}else if(getByteLen(pwd)<4||getByteLen(pwd)>20){
-		errorMessage="密码长度为4-20位字符";
+ 	}else if(getByteLen(pwd)<4||getByteLen(pwd)>32){
+		errorMessage="密码长度为4-32位字符";
  		document.getElementById("pwdErrorMsg").innerHTML=errorMessage;
  		flag=false;
 	}
@@ -143,10 +143,17 @@ function getByteLen(val) {
 	                     	</td>
 	             		<tr>
 	                 		<td class="table">
-	                     		<input id="Text_nameid" name="username" type="text" placeholder="请输入您的帐号" onblur="Validation();"/><span id="nameIdErrorMsg" style="color: red"></span>
-	                     		<div style="color:red;">
-	                     		{{ error}}
-	                     	    </div>
+	                 			{% if info.username %}
+		                     		<input id="Text_nameid" name="username" type="text" value="{{info.username}}" onblur="Validation();"><span id="nameIdErrorMsg" style="color: red"></span>
+		                     		<div style="color:red;">
+		                     		{{ error}}
+		                     	    </div>
+		                     	{% else %}
+		                     		<input id="Text_nameid" name="username" type="text" placeholder="请输入您的帐号" onblur="Validation();"/><span id="nameIdErrorMsg" style="color: red"></span>
+		                     		<div style="color:red;">
+		                     		{{ error}}
+		                     	    </div>
+		                   		{% endif %}
 	                     	</td>
 	                 		<td class="table">
 	                     	</td>
@@ -155,7 +162,7 @@ function getByteLen(val) {
 	             		</tr>
 	             		<tr>
 	                 		<td class="table">
-	                    		<input id="Text_name" name="realname" type="text" placeholder="请输入您的真实姓名" onblur="Validation();"/><span id="nameErrorMsg" style="color: red"></span>
+	                    		<input id="Text_name" name="realname" type="text" placeholder="请输入您的中文真实姓名" onblur="Validation();"/><span id="nameErrorMsg" style="color: red"></span>
 	                    	</td>
 	                 		<td class="table">
 	                     	</td>
@@ -163,22 +170,42 @@ function getByteLen(val) {
 	                     	</td>
 	             		</tr>
 	             		<tr>
-	                 		<td class="table">
-	                     		<input id="Text_password" name="password" type="password" placeholder="请输入您的密码" onblur="Validation();"/><span id="pwdErrorMsg" style="color: red"></span>
-	                     	</td>
-	                 		<td class="table">
-	                     	</td>
-	                 		<td class="table">
-	                     	</td>
+	             			{% if info.password %}
+		                 		<td class="table">
+		                     		<input id="Text_password" name="password" type="password" value="{{info.password}}" onblur="Validation();"/><span id="pwdErrorMsg" style="color: red"></span>
+		                     	</td>
+		                 		<td class="table">
+		                     	</td>
+		                 		<td class="table">
+		                     	</td>
+	                     	{% else %}
+		                     	<td class="table">
+		                     		<input id="Text_password" name="password" type="password" placeholder="请输入您的密码" onblur="Validation();"/><span id="pwdErrorMsg" style="color: red"></span>
+		                     	</td>
+		                 		<td class="table">
+		                     	</td>
+		                 		<td class="table">
+		                     	</td>
+		                    {% endif %}
 	             		</tr>
 	             		<tr>
-	                 		<td class="table">
-	                     		<input id="Text_repeatpassword" name="confirmpassword" type="password" placeholder="请再次输入您的密码"  onblur="Validation();" style="width:266px;height: 29px; "/><span id="repeatpwdErrorMsg" style="color: red"></span>
-	                     	</td>
-	                 		<td class="table">
-	                     	</td>
-	                 		<td class="table">
-	                     	</td>
+	             			{% if info.password %}
+		                 		<td class="table">
+		                     		<input id="Text_repeatpassword" name="confirmpassword" type="password" value="{{info.password}}"  onblur="Validation();" style="width:266px;height: 29px; "/><span id="repeatpwdErrorMsg" style="color: red"></span>
+		                     	</td>
+		                 		<td class="table">
+		                     	</td>
+		                 		<td class="table">
+		                     	</td>
+		                     {% else %}
+		                     	<td class="table">
+		                     		<input id="Text_repeatpassword" name="confirmpassword" type="password" placeholder="请再次输入您的密码"  onblur="Validation();" style="width:266px;height: 29px; "/><span id="repeatpwdErrorMsg" style="color: red"></span>
+		                     	</td>
+		                 		<td class="table">
+		                     	</td>
+		                 		<td class="table">
+		                     	</td>
+		                     {% endif %}
 	             		</tr>
 	             		<tr>
 	                 		<td class="table">

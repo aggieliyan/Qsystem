@@ -24,47 +24,85 @@ from django.contrib import auth
 from django.db import connections
 import datetime
 
-def register(request):
-    if request.method == "POST":
-        uf = UserForm(request.POST)
-        if uf.is_valid():
-            #返回注册成功页面
-			#往Django user表里再插入一条数据
-            username = uf.cleaned_data['username']
-            password = uf.cleaned_data['password']
-            realname = uf.cleaned_data['realname']
-            email = username+"@ablesky.com"
-            try:
-                user = User.objects.create_user(username=username, email=email, password=password)
-                user.save()
-            except:
-                uf = UserForm()
-                return render_to_response('register.html', {'list':department.objects.all(),
-                                                            'error':'注册的用户名已存在'},
-                                          context_instance=RequestContext(request))
-            user_new = uf.save()
-
-            #如果是产品部门，加入产品部门权限组
-            depid = uf.cleaned_data['departmentid']
-            if depid == '3':
-                User.objects.get(username=username).groups.add(3)
-
-            #登录
-            uid = models.user.objects.filter(username=username)[0].id
-            request.session['username'] = username
-            request.session['realname'] = realname
-            request.session['id'] = uid
-
-            #Django 认证系统的登录
-            user = auth.authenticate(username=username, password=password)
-            auth.login(request, user)
-
-            return HttpResponseRedirect("/personal_homepage")
+def register(request,uname=''):
+    if uname =='':
+        if request.method == "POST":
+            uf = UserForm(request.POST)
+            if uf.is_valid():
+                #返回注册成功页面
+    			#往Django user表里再插入一条数据
+                username = uf.cleaned_data['username']
+                password = uf.cleaned_data['password']
+                realname = uf.cleaned_data['realname']
+                email = username+"@ablesky.com"
+                try:
+                    user = User.objects.create_user(username=username, email=email, password=password)
+                    user.save()
+                except:
+                    uf = UserForm()
+                    return render_to_response('register.html', {'list':department.objects.all(),
+                                                                'error':'注册的用户名已存在'},
+                                              context_instance=RequestContext(request))
+                user_new = uf.save()
+    
+                #如果是产品部门，加入产品部门权限组
+                depid = uf.cleaned_data['departmentid']
+                if depid == '3':
+                    User.objects.get(username=username).groups.add(3)
+    
+                #登录
+                uid = models.user.objects.filter(username=username)[0].id
+                request.session['username'] = username
+                request.session['realname'] = realname
+                request.session['id'] = uid
+    
+                #Django 认证系统的登录
+                user = auth.authenticate(username=username, password=password)
+                auth.login(request, user)
+    
+                return HttpResponseRedirect("/personal_homepage")
+        else:
+            uf = UserForm()
+    
+        return render_to_response('register.html', {'list':department.objects.all()},
+                                  context_instance=RequestContext(request))
     else:
-        uf = UserForm()
-
-    return render_to_response('register.html', {'list':department.objects.all()},
-                              context_instance=RequestContext(request))
+        if request.method == "POST":
+            uf = UserForm(request.POST)
+            if uf.is_valid():
+                #返回注册成功页面
+                #往Django user表里再插入一条数据
+                username = uf.cleaned_data['username']
+                password = uf.cleaned_data['password']
+                realname = uf.cleaned_data['realname']
+                email = username+"@ablesky.com"    
+                #如果是产品部门，加入产品部门权限组
+                depid = int(uf.cleaned_data['departmentid'])
+                if depid == 3:
+                    User.objects.get(username=username).groups.add(3)
+                uid = models.user.objects.filter(username=username)[0].id
+                u = models.user(id=uid, username=username,
+                                       realname=realname,
+                                       password=password,
+                                       create_time=datetime.datetime.now(),
+                                       department=department.objects.get(id=depid),
+                                       isactived=1)
+                u.save()
+                request.session['username'] = username
+                request.session['realname'] = realname
+                request.session['id'] = uid
+    
+                #Django 认证系统的登录
+                print username
+                user = auth.authenticate(username=username, password=models.user.objects.filter(username=username)[0].password)
+                print user
+                auth.login(request, user)
+    
+                return HttpResponseRedirect("/personal_homepage")
+        
+        userinfo = models.user.objects.filter(username=uname)[0]
+        return render_to_response('register.html', {'list':department.objects.all(),
+                                                    'info': userinfo})
 
 def logout(request):
     try:
@@ -108,14 +146,18 @@ def login(request):
             isautologin = form.cleaned_data["isautologin"]
             try:                
                 user = auth.authenticate(username=username, password=form.cleaned_data["password"])
-                if user != None:                    
+                if user != None:                   
                     isldap = models.user.objects.filter(username__exact=username)
-                    if len(isldap) == 0: #说明该用户通过ldap登录,数据库尚未存储该用户
-                        newrealname = User.objects.filter(username=username)[0].first_name
-                        newuser = models.user(username=username, password=password, realname=newrealname, create_time=datetime.datetime.now(), department_id='100', isactived=1)
+                    if len(isldap) == 0: #说明该用户通过ldap第一次登录,数据库尚未存储该用户
+                        newUser = User.objects.filter(username=username)[0]       #django User表
+                        newuser = models.user(username=username, password='1234', realname=newUser.first_name, create_time=datetime.datetime.now(), department_id='100', isactived=1)
                         newuser.save()
+                        newUser.password = '81dc9bdb52d04dc20036dbd8313ed055'
+                        newUser.save()
+                        link = str("/register/" + username)
+                        return HttpResponseRedirect(link)
                     
-                    _userset = models.user.objects.filter(username__exact=username, password__exact=password)
+                    _userset = models.user.objects.filter(username__exact=username)
                     if _userset.count() >= 1:
                         _user = _userset[0]
                         if _user.isactived:
@@ -562,6 +604,7 @@ def isNone(s):
         return False
     
 def detail(request, pid='', nid=''):
+    print pid
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
