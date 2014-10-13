@@ -143,14 +143,14 @@ def login(request):
             password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
             try:                
-                user = auth.authenticate(username=username, password=form.cleaned_data["password"])
+                user = auth.authenticate(username=username, password=form.cleaned_data["password"]) #先去ldap验证,如果没有再去django的User表里验证,一旦验证成功,返回用户名,不成功,返回None
                 if user != None:                   
                     isldap = models.user.objects.filter(username__exact=username)
                     if len(isldap) == 0: #说明该用户通过ldap第一次登录,数据库尚未存储该用户
                         newUser = User.objects.filter(username=username)[0]       #django User表
                         newuser = models.user(username=username, password='1234', realname=newUser.first_name, create_time=datetime.datetime.now(), department_id='100', isactived=1)
                         newuser.save()
-                        newUser.password = '81dc9bdb52d04dc20036dbd8313ed055'
+                        newUser.password = '81dc9bdb52d04dc20036dbd8313ed055'       #设置django的User表密码为1234,否则注册后登录无法通过authenticate()验证.
                         newUser.save()
                         link = str("/register/" + username)
                         return HttpResponseRedirect(link)
