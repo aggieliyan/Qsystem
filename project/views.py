@@ -25,12 +25,12 @@ from django.db import connections
 import datetime
 
 def register(request,uname=''):
-    if uname =='':
+    if uname =='':      #若是直接Q系统注册为空,以ldap第一次登录则会传来用户名
         if request.method == "POST":
             uf = UserForm(request.POST)
             if uf.is_valid():
                 #返回注册成功页面
-    			#往Django user表里再插入一条数据
+                #往Django user表里再插入一条数据
                 username = uf.cleaned_data['username']
                 password = uf.cleaned_data['password']
                 realname = uf.cleaned_data['realname']
@@ -93,9 +93,7 @@ def register(request,uname=''):
                 request.session['id'] = uid
     
                 #Django 认证系统的登录
-                print username
                 user = auth.authenticate(username=username, password=models.user.objects.filter(username=username)[0].password)
-                print user
                 auth.login(request, user)
     
                 return HttpResponseRedirect("/personal_homepage")
@@ -157,7 +155,7 @@ def login(request):
                         link = str("/register/" + username)
                         return HttpResponseRedirect(link)
                     
-                    _userset = models.user.objects.filter(username__exact=username)
+                    _userset = models.user.objects.filter(username__exact=username)    
                     if _userset.count() >= 1:
                         _user = _userset[0]
                         if _user.isactived:
