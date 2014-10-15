@@ -563,8 +563,15 @@ def project_list(request):
         try:
             cursor = connections[db].cursor()
             cursor.execute(sql)
-            total = int(cursor.fetchall()[0][0])
-            c.total = total
+            total = cursor.fetchall()
+            total_list = ''       
+            for a in total:         #适合显示1列数据，若要多显示，则需要对a继续循环
+                    if len(total) == 1:         #此处if, else为了调整样式好看
+                        total_list = str(a[0])
+                    else:
+                        total_list = total_list + str(a[0]) + '\r'
+                  
+            c.total = total_list
             c.save()
             cursor.close()
         except:
@@ -1265,7 +1272,9 @@ def initdata(request):
     depart12 = department(id=12,department='销售部',isactived=1)
     depart12.save()
     depart13 = department(id=13,department='项目研发部',isactived=1)
-    depart13.save()   
+    depart13.save()
+    depart100 = department(id=100,department='blank',isactived=1)
+    depart100.save()   
     return HttpResponse("恭喜你,初始化数据成功~")
 
   
