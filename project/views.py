@@ -399,12 +399,19 @@ def new_project(request, pid='', nid=''):
                     else:
                         dev.append(tuser)
             related_user = {'qa':qa, 'dev': dev, 'pd': pd}
+            dpid = request.POST['designer']
+            tpid = request.POST['tester']
+            if dpid:
+                dpid = int(dpid)
+            if tpid:
+                tpid = int(tpid)
+
             pro = {'priority':request.POST['priority'],
                    'project':request.POST['pname'],
                    'status_p':request.POST['status'],
                    'leader_p_id':request.POST['leader'],
-                   'designer_p_id':int(request.POST['designer']),
-                   'tester_p_id':int(request.POST['tester']),
+                   'designer_p_id':dpid,
+                   'tester_p_id':tpid,
                    'start_date':prodate[6],
                    'expect_launch_date':prodate[7],
                    'estimated_product_start_date':prodate[0],
