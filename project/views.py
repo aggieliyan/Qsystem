@@ -607,7 +607,7 @@ def detail(request, pid='', nid=''):
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
     #qa = {'rel': qas}
-    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4) | Q(department_id=13))
+    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
     #dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
     #pd = {'rel': pds}

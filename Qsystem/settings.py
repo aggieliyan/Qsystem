@@ -113,8 +113,16 @@ if socket.gethostname() == 'test':
                 'PASSWORD':'as-qa',
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                      
-                 },
-                }          
+                 },    
+        'eduadministration': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': 'eduadministration',
+                'USER':'qa',
+                'PASSWORD':'as-qa',
+                'HOST':'192.168.3.90',
+                'PORT':'3306',                      
+                 },              
+            }      
 else:
     DATABASES = {
         'default': {
