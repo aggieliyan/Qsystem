@@ -587,7 +587,7 @@ def project_list(request):
     p1 = models.project_statistics.objects.distinct().values('project_id')
     filter_project =[] #每个项目只返回一组统计值最大的记录,方便页面显示
     for x in p1:
-        filter_project.append(pcount.filter(project_id=x['project_id']).order_by("-total")[0])
+        filter_project.append(pcount.filter(project_id=x['project_id']).order_by("total")[0])
     
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
             'puser':puser, 'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
