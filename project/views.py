@@ -688,9 +688,9 @@ def show_person(request):
         key = 0
 
     if key == 2:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
     else:
-        person = models.user.objects.filter(department_id=key)
+        person = models.user.objects.filter(department_id=key, isactived=1)
     person_rs = []
     num = len(person)
     if num == 0:
@@ -721,9 +721,9 @@ def psearch(request):
     
     if len(key) == 0:
         if ptype == 2:
-            prs = models.user.objects.filter(Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+            prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
         else:
-            prs = models.user.objects.filter(department_id=ptype)
+            prs = models.user.objects.filter(department_id=ptype, isactived=1)
     else:
         if ptype == 2:
             prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
