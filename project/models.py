@@ -21,11 +21,14 @@ class project(models.Model):
     project = models.CharField(u'项目名称',max_length=100)
     status_p = models.CharField(u'项目状态',max_length=20)
     leader_p = models.ForeignKey(user)
-    designer_p=models.ForeignKey(user, related_name="designer_p",blank=True,null=True)
-    tester_p=models.ForeignKey(user, related_name="tester_p",blank=True,null=True)
+    designer_p = models.ForeignKey(user, related_name="designer_p",blank=True,null=True)
+    tester_p = models.ForeignKey(user, related_name="tester_p",blank=True,null=True)
+    business_man = models.ForeignKey(user, related_name="business_man",blank=True,null=True)
+    operator_p = models.ForeignKey(user, related_name="operator_p",blank=True,null=True)
+    customer_service = models.ForeignKey(user, related_name="customer_service",blank=True,null=True)
     start_date = models.DateField(blank=True,null=True)
-    expect_launch_date=models.DateField(blank=True,null=True)
-    real_launch_date=models.DateField(blank=True,null=True)
+    expect_launch_date = models.DateField(blank=True,null=True)
+    real_launch_date = models.DateField(blank=True,null=True)
     estimated_product_start_date = models.DateField(blank=True,null=True)
     estimated_product_end_date = models.DateField(blank=True,null=True)
     estimated_develop_start_date = models.DateField(blank=True,null=True)
@@ -39,6 +42,7 @@ class project(models.Model):
     test_report_p = models.CharField(max_length=100,blank=True,null=True)
     isactived = models.BooleanField(max_length=1)
     praise_p = models.SmallIntegerField(max_length=8,default=0)
+    remark_p = models.TextField(u'备注', max_length=10000)
 
 class project_user(models.Model):
     username = models.ForeignKey(user)
@@ -85,3 +89,20 @@ class project_statistics(models.Model):
     db = models.CharField(u'使用哪个库',max_length=50)
     sql = models.TextField(u'查询语句', max_length=21000)
     total = models.TextField(max_length=9999999,blank=True, null=True)   
+
+class project_feedback(models.Model):
+    feedback_member = models.ForeignKey(user)
+    project= models.ForeignKey(project)
+    content = models.CharField(u'反馈内容', max_length=700)
+    feedback_date = models.DateField(blank=True,null=True)
+
+class project_operator_bussniess_message(models.Model):
+    userid = models.ForeignKey(user)
+    project = models.ForeignKey(project)
+    user_type = models.CharField(u'人员类型',max_length=20)
+    title = models.CharField(u'项目名称',max_length=100, blank=True, null=True)
+    status = models.CharField(u'状态',max_length=10,blank=True, null=True)
+    publication_date = models.DateField()    
+    confirm_design_date = models.DateField()
+    check_date = models.DateField()
+    isactived = models.IntegerField(max_length=1,blank=True, null=True) 
