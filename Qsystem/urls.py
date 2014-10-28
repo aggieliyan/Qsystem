@@ -36,6 +36,8 @@ urlpatterns = patterns('',
     url(r'^detail/(\d+)/$', project.views.detail,name="prodetail"),
     url(r'^detail/(\d+)/$', project.views.detail, name="\'prodetail\'"),
     url(r'^showuser', project.views.show_headname),
+    url(r'^newproject/(\d+)/$', new_project),
+    url(r'^newproject/(\d+)/(\d+)$', new_project),
     #homepage url added 'p' is projectlist's url
     url(r'^personal_homepage/$', project.views.personal_homepage,name="homepage"),
     url(r'^changedesign/', project.views.changedesign,{'url':'../personal_homepage/'},name="design_change"),

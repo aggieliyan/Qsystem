@@ -18,6 +18,20 @@ $(document).ready(function(){
 	document.form1.action="/judge/";
 	document.form1.submit();
 	});
+	      
+    $(function(){
+        var url1 = "/show_pronum";
+        $.get(url1,function(data){
+        $(".mesage_right").text("("+data+")");
+        });
+     });       
+    $(function(){
+        var url2 = "/show_messagenum";
+        $.get(url2,function(data){
+        $("#message-num").text(data);
+        });
+           
+    });
 
 });
  (function(){
@@ -31,3 +45,5 @@ $(document).ready(function(){
                     navg.eq(2).addClass('selected');
                 }
             })()
+
+           

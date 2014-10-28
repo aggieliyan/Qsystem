@@ -876,7 +876,33 @@ def changedesign(request, url):
                 pro_u_message.save()           
     return HttpResponseRedirect(url)
     #return render_to_response('personal_homepage.html', {'form': form})
-
+#通用头
+def pro_num(request):
+    try:
+        if request.session['username']:
+            projectlist = models.project.objects.filter()
+            project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
+            projectids = []
+            for p in project_user_list:
+                projectids.append(p.project.id) 
+            projectlist = projectlist.filter(pk__in = projectids)       
+            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")
+            num=res.count()
+            return HttpResponse(num)
+    except KeyError:
+        num=0
+        return HttpResponse(num)   
+def message_num(request):
+    try:
+        if request.session['id']:
+            userid = request.session['id']
+            messsage = project_user_message.objects.filter(userid_id = userid)
+            message_num = messsage.count()
+            print message_num
+            return HttpResponse(message_num)
+    except KeyError:
+        message_num=0
+        return HttpResponse(message_num)  
 #资源管理
 def judge(request):
     try:
