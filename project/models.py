@@ -19,8 +19,8 @@ class user(models.Model):
 class project(models.Model):
     priority = models.SmallIntegerField(u'优先级',max_length=8)
     project = models.CharField(u'项目名称',max_length=100)
-    project_type = models.CharField(u'项目类型',max_length=20)
-    project_description = models.CharField(u'项目说明',max_length=1000,blank=True,null=True)
+    type_p = models.CharField(u'项目类型',max_length=20)
+    description = models.CharField(u'项目说明',max_length=1000,blank=True,null=True)
     status_p = models.CharField(u'项目状态',max_length=20)
     leader_p = models.ForeignKey(user)
     designer_p = models.ForeignKey(user, related_name="designer_p",blank=True,null=True)
