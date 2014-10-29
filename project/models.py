@@ -91,10 +91,16 @@ class project_statistics(models.Model):
     total = models.TextField(max_length=9999999,blank=True, null=True)   
 
 class project_feedback(models.Model):
-    feedback_member = models.ForeignKey(user)
     project= models.ForeignKey(project)
+    feedback_member = models.ForeignKey(user)
     content = models.CharField(u'反馈内容', max_length=700)
     feedback_date = models.DateField(blank=True,null=True)
+
+class project_feedback_comment(models.Model):
+    feedbackid = models.ForeignKey(project_feedback)
+    feedback_member_c = models.ForeignKey(user)
+    comment = models.CharField(u'回复内容', max_length=700)
+    feedback_date_c = models.DateField(blank=True,null=True)
 
 class project_operator_bussniess_message(models.Model):
     userid = models.ForeignKey(user)
