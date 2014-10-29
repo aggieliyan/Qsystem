@@ -108,11 +108,28 @@
                   <input name="plandate" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly="">
                   <span class="add-on" disabled="disabled"><i class="icon-calendar"></i></span>
                 </div>
-                {% endif %}     
-                
-              </div>             
-              </div>
+                {% endif %}                  
+              </div> 
+              <div id="long">
+                  <div class="title">
+                    <label class="item-title">预估时间：</label>
+                  </div>
+                  <div class="range">
+                    <div><label>产品：</label><span class="days">{{res.dt.ptime}}</span>天</div>
+                    <span class="input-append date form_datetime">   
+                      <input name='psdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_product_start_date|date:"Y-m-d"}}"> 
+                      <span class="add-on"><i class="icon-calendar"></i></span>
+                    </span>
+                    <span class="word">至</span>
+                    <span class="input-append date form_datetime">   
+                      <input name='pedate' class="dateinput" size="16"  type="text" value="{{res.pro.estimated_product_end_date|date:"Y-m-d"}}">
+                      <span class="add-on"><i class="icon-calendar"></i></span>
+                    </span>
+                  </div>            
+                </div>
+
             </div>
+          </div>
             <div  class="span6">
               <div>
                 <div class="roles">
@@ -158,45 +175,7 @@
                 </div>
               </div>
             </div> 
-            <div class="span2">
-              <span style="margin-left: 38px;">预估时间：
-              </span>
-            </div>
-            <div id="long" class="span8" style="margin-left:-22px;">
-              <div class="range">
-                <div><label>产品：</label><span class="days">{{res.dt.ptime}}</span>天</div>
-                <span class="input-append date form_datetime">   
-                  <input name='psdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_product_start_date|date:"Y-m-d"}}"> 
-                  <span class="add-on"><i class="icon-calendar"></i></span>
-                </span><span class="word">至</span>
-                <span class="input-append date form_datetime">   
-                  <input name='pedate' class="dateinput" size="16"  type="text" value="{{res.pro.estimated_product_end_date|date:"Y-m-d"}}">
-                  <span class="add-on"><i class="icon-calendar"></i></span>
-                </span>
-              </div>
-              <div class="range">
-                <div><label>开发：</label><span class="days">{{res.dt.dtime}}</span>天</div>
-                <span class="input-append date form_datetime">   
-                  <input name='dsdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_start_date|date:"Y-m-d"}}">
-                  <span class="add-on"><i class="icon-calendar"></i></span>
-                </span><span class="word">至</span>
-                <span class="input-append date form_datetime">   
-                  <input name='dedate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_end_date|date:"Y-m-d"}}">
-                  <span class="add-on"><i class="icon-calendar"></i></span>
-                </span>
-              </div class="range">
-              <div class="range">
-                <div><label>测试：</label><span class="days">{{res.dt.ttime}}</span>天</div>
-                <span class="input-append date form_datetime">   
-                  <input name='tsdate' class="dateinput" ="16" type="text" value="{{res.pro.estimated_test_start_date|date:"Y-m-d"}}" readonly>
-                  <span class="add-on"><i class="icon-calendar"></i></span>
-                </span><span class="word">至</span>
-                <span class="input-append date form_datetime">   
-                  <input name='tedate' class="dateinput"size="16" type="text" value="{{res.pro.estimated_test_end_date|date:"Y-m-d"}}" readonly>
-                  <span class="add-on"><i class="icon-calendar"></i></span>
-                </span>
-              </div>
-            </div>
+            
             <div id='filepath' class="span12">
               <div>
                 <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}">

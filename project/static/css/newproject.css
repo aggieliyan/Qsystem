@@ -139,10 +139,21 @@ position:relative;
    margin-right: 140px;
 }
 
-#short .dateinput, #long .dateinput{
+#short .dateinput{
   background-color:white;
   width:176px;
   border-right: medium none;
+}
+
+#long .dateinput{
+  background-color:white;
+  width:100px;
+  border-right: medium none; 
+}
+
+#long .range{
+  float: left;
+
 }
 
 .title{
