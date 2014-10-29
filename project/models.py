@@ -100,7 +100,7 @@ class project_feedback(models.Model):
 
 class project_feedback_comment(models.Model):
     feedbackid = models.ForeignKey(project_feedback)
-    feedback_member_c = model s.ForeignKey(user)
+    feedback_member_c = models.ForeignKey(user)
     comment = models.CharField(u'回复内容', max_length=700)
     feedback_date_c = models.DateField(blank=True,null=True)
 
