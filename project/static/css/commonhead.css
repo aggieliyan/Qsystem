@@ -98,11 +98,9 @@ body{
            line-height: 16px;
            margin-top: 36px;
            padding: 0 12px;
-           position: relative;
+           position: absolute;
     }
-		.link{
-		color:#ddd
-		}
+
 		.notify-tip{
 			position:absolute;
 			display:block;
