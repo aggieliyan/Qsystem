@@ -1,4 +1,4 @@
-﻿# coding=utf-8
+# coding=utf-8
 from django.db import models
 
 # Create your models here.
@@ -109,6 +109,6 @@ class project_operator_bussniess_message(models.Model):
     title = models.CharField(u'项目名称',max_length=100, blank=True, null=True)
     status = models.CharField(u'状态',max_length=10,blank=True, null=True)
     publication_date = models.DateField()    
-    confirm_design_date = models.DateField()
-    check_date = models.DateField()
+    confirm_design_date = models.DateField(blank=True, null=True)
+    check_date = models.DateField(blank=True, null=True)
     isactived = models.IntegerField(max_length=1,blank=True, null=True) 
