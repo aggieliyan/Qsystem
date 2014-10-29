@@ -60,6 +60,7 @@ body{
     		font-size: 17px;
 
 	    }
+
 	    .top_memu a:active{
 	    	color: #339966
 	    }
@@ -96,15 +97,14 @@ body{
            display: block;
            height: 18px;
            line-height: 16px;
-           margin-top: 36px;
+           margin-top: 37px;
            padding: 0 12px;
-           position: absolute;
+		   position:absolute;
     }
-
 		.notify-tip{
 			position:absolute;
 			display:block;
-			margin-top: 41px;
+			margin-top: 40px;
 			width:32px;
 			height:11px;
 			float:left;
