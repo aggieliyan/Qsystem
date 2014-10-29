@@ -6,8 +6,8 @@ $(document).ready(function(){
       for(var i=0;i<num;i++){
           var item = $(".p-list").eq(i)
           var pl = item.children("div").length;
-          if(pl >= 8){
-            var w = (pl/4+1)*30;
+          if(pl >= 4){
+            var w = (pl/4+1)*25;
             item.attr("style","height:"+w+"px;");
           }
       }
