@@ -1,4 +1,4 @@
-
+ 
 body{
 	width: 1100px;
   margin-left: auto;
@@ -147,7 +147,7 @@ position:relative;
 
 #long .dateinput{
   background-color:white;
-  width:80px;
+  width:100px;
   border-right: medium none; 
 }
 
