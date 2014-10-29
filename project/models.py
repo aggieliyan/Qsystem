@@ -19,6 +19,8 @@ class user(models.Model):
 class project(models.Model):
     priority = models.SmallIntegerField(u'优先级',max_length=8)
     project = models.CharField(u'项目名称',max_length=100)
+    project_type = models.CharField(u'项目类型',max_length=20)
+    project_description = models.CharField(u'项目说明',max_length=1000,blank=True,null=True)
     status_p = models.CharField(u'项目状态',max_length=20)
     leader_p = models.ForeignKey(user)
     designer_p = models.ForeignKey(user, related_name="designer_p",blank=True,null=True)
@@ -98,7 +100,7 @@ class project_feedback(models.Model):
 
 class project_feedback_comment(models.Model):
     feedbackid = models.ForeignKey(project_feedback)
-    feedback_member_c = models.ForeignKey(user)
+    feedback_member_c = model s.ForeignKey(user)
     comment = models.CharField(u'回复内容', max_length=700)
     feedback_date_c = models.DateField(blank=True,null=True)
 
