@@ -72,22 +72,16 @@
         <div class="option-left">
             <div class="option-item">
                     <div class="title">
-                    <label class="item-title">编号：</label>
+                    <label class="item-title">项目编号：</label>
                   </div>
-                    <select style="position:relative;top: -15px;width:165px;" name="type_p" id="protype" >
-                      <option select="selected" value="{{ status_p }}">{{ status_p }}</option>
-                      <option value="全部"> </option>
-                      <option value="业务">业务</option>
-                      <option value="产品">产品</option>
-
-                    </select>
+                    <input type="text" class="form-control" style="position:relative;top: -15px;" name="id" value="{{project_id}}">
 
             </div>
             <div class="option-item" >
                     <div class="title">
-                <label class="item-title">状态：</label>
+                <label class="item-title">项目状态：</label>
               </div>
-                <select style="position:relative;top: -15px;width:165px;" name="status_p" id="prostatus" >
+                <select style="position:relative;top: -15px;" name="status_p" id="prostatus" >
                   <option select="selected" value="{{ status_p }}">{{ status_p }}</option>
                   <option value=""> </option>
                   <option value="需求讨论中">需求讨论中</option>
@@ -105,47 +99,38 @@
             <div class="option-item-middle">
                         
                     <div class="title">
-                    <label class="item-title">编号：</label>
+                    <label class="item-title">项目名称：</label>
                   </div>
-                    <input type="text" class="form-control" style="position:relative;top: -15px;width:150px;" name="id" value="{{project_id}}">
-            </div>
-            <div class="option-item-middle">
-
-                    <div class="title">
-                    <label class="item-title">名称：</label>
-                  </div>
-                    <input type="text" class="form-control" style="position:relative;top: -15px;width:150px;" name="project" value="{{project_name}}">
+                    <input type="text" class="form-control" style="position:relative;top: -15px;" name="project" value="{{project_name}}">
             </div>
             <div class="option-item-middle">
                      <div class="title">
-                    <label class="item-title">成员：</label>
+                    <label class="item-title">项目成员：</label>
 
            </div>
-                <input type="text" class="form-control " style="position:relative;top: -15px;width:150px;" name="leader_p" value="{{ leader_p }}"/>
+                <input type="text" class="form-control " style="position:relative;top: -15px;" name="leader_p" value="{{ leader_p }}"/>
             </div>
 
             <div class="option-item-right-short">
                   <div class="title">
-                    <label class="item-title">检索：</label>
+                    <label class="item-title">时间检索：</label>
                   </div>
                 <div style="display: inline-block;">
                     <div style="position:relative;top:-15px;">
                         <span class="input-append date form_datetime">
-                          <input class="start_date_s" size="16" type="text" value="{{start_date_s|date:"Y-m-d"|default:""}}" name="start_date_s" readonly="" style="background-color: #FFFFFF;width:150px;">
+                          <input class="start_date_s" size="16" type="text" value="{{start_date_s|date:"Y-m-d"|default:""}}" name="start_date_s" readonly="" style="background-color: #FFFFFF">
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>至
                         <span class="input-append date form_datetime">
-                          <input class="end_date_s" size="16" type="text" value="{{end_date_s|date:"Y-m-d"|default:""}}" name="end_date_s" readonly="" style="background-color: #FFFFFF;width:150px;">
+                          <input class="end_date_s" size="16" type="text" value="{{end_date_s|date:"Y-m-d"|default:""}}" name="end_date_s" readonly="" style="background-color: #FFFFFF">
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>
                     </div>
                
  				</div>
             </div>
-            <div class="option-item-middle">
-                <button style="margin-left:25px; margin-top:5px;" class="btn btn-primary" type="button" onclick="searchform.submit()">搜索</button>
-                <button style="margin-left:25px;margin-top:5px; " class="btn btn-primary" type="button" onclick="javascript:window.location.href='/newproject/'">创建项目</button>
-            </div>
+            <button style="margin-left:5px; margin-top:10px;" class="btn btn-primary" type="button" onclick="searchform.submit()">搜索</button>
+            <button style="margin-left:5px; margin-top:10px;" class="btn btn-primary" type="button" onclick="javascript:window.location.href='/newproject/'">创建项目</button>
         </div>
     </div>
     </form>
@@ -230,11 +215,11 @@
                                     <td>
                                     {% if logintag == 0 %}
 
-                                        <a href="{% url 'prodetail' p.id %}">去反馈</a>
+                                        <a href="{% url 'prodetail' p.id %}">查看详情</a>
 
                                     {% else %}
                                         {% if p.status_p == "已上线" or p.status_p == "暂停"%}
-                                            <a href="{% url 'prodetail' p.id %}">去反馈</a>
+                                            <a href="{% url 'prodetail' p.id %}">查看详情</a>
                                             {% if createtag == 1 %}
                                                 <a href="{% url 'similarpro' p.id  1 %}">发布相似</a>
                                             {% else %}
@@ -262,7 +247,7 @@
                                             {% else %}
                                             {% endif %}
                                             {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and changetag == 0 and auth_changetag == 0 %}
-                                                <a href="{% url 'prodetail' p.id %}">去反馈</a>
+                                                <a href="{% url 'prodetail' p.id %}">查看详情</a>
                                             {% else %}
                                             {% endif %}
                                             {% if createtag == 1 %}
