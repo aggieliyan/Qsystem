@@ -243,8 +243,6 @@ def new_project(request, pid='', nid=''):
             for i in range(len(roles)):
                 if roles[i]:
                     roles[i] = models.user.objects.get(id=roles[i])
-
-
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
