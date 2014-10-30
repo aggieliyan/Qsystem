@@ -52,6 +52,7 @@ class ProjectForm(forms.Form):
     type_p = forms.CharField(required=True, error_messages={'required':u'项目类型不能为空'})
     description = forms.CharField(required=False)
     pname = forms.CharField(required=True, error_messages={'required':u'项目名称不能为空'})
+    description = forms.CharField(required=False)
     status = forms.CharField(required=True, error_messages={'required':u'项目状态不能为空'})
     leader = forms.IntegerField(required=True, error_messages={'required':u'负责人不能为空'})
     designer = forms.IntegerField(required=False)

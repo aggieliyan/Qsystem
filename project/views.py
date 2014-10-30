@@ -230,7 +230,7 @@ def new_project(request, pid='', nid=''):
             type_p = form.cleaned_data['type_p']
             priority = form.cleaned_data['priority']
             pname = form.cleaned_data['pname']
-            pdescription = form.cleaned_data['description']
+            description = form.cleaned_data['description']
             status = form.cleaned_data['status']
             leaderid = form.cleaned_data['leader']
             leader = models.user.objects.get(id=leaderid)
@@ -259,10 +259,12 @@ def new_project(request, pid='', nid=''):
             relateduser = form.cleaned_data['relateduser']
             countsql = form.cleaned_data['countsql']
             countsql = strQ2B(countsql)
+            remark_p = form.cleaned_data['remark_p']
 
             if pid == '' or nid == '1':
                 pro = models.project(type_p=type_p, priority=priority, \
-                    project=pname, status_p=status, leader_p=leader, \
+                    project=pname, description=description, \
+                    status_p=status, leader_p=leader, \
                     designer_p=roles[0], tester_p=roles[1], start_date=sdate, \
                     business_man =roles[2], operator_p = roles[3],\
                     customer_service = roles[4],\
@@ -274,12 +276,14 @@ def new_project(request, pid='', nid=''):
                     estimated_test_start_date=tsdate, \
                     estimated_test_end_date=tedate, blueprint_p=ppath, \
                     develop_plan_p=dppath, test_plan_p=tppath, \
-                    test_case_p=tcpath, test_report_p=trpath, isactived=1)
+                    test_case_p=tcpath, test_report_p=trpath, \
+                    remark_p =remark_p, isactived=1)
             else:
                 rdate = models.project.objects.get(id=pid).real_launch_date
                 pnum = models.project.objects.get(id=pid).praise_p
                 pro = models.project(id=pid, type_p=type_p, \
                     priority=priority,project=pname, \
+                    description=description, \
                     status_p=status, leader_p=leader, \
                     designer_p=roles[0], tester_p=roles[1], \
                     business_man = roles[2], \
@@ -296,7 +300,7 @@ def new_project(request, pid='', nid=''):
                     estimated_test_end_date=tedate, blueprint_p=ppath, \
                     develop_plan_p=dppath, test_plan_p=tppath, \
                     test_case_p=tcpath, test_report_p=trpath, \
-                    isactived=1, praise_p=pnum)
+                    remark_p=remark_p,isactived=1, praise_p=pnum)
             pro.save()
             #存完项目，存相关产品测试开发等人员信息
             relateduser = relateduser.replace(" ", "").split(",")
@@ -328,10 +332,12 @@ def new_project(request, pid='', nid=''):
                     project_statistics = models.project_statistics(
                                         project_id=pid, item=item, db=db, sql=sql)
                     project_statistics.save()
-            #给项目的各负责人添加编辑项目权限
+            
             musername = models.user.objects.get(id=leaderid).username
             #给项目负责人加入到项目负责人权限组
             User.objects.get(username=musername).groups.add(4)
+
+            #给其他负责人加入到相应负责人权限组
             if designer:
                 dusername = models.user.objects.get\
                 (id=form.cleaned_data['designer']).username
