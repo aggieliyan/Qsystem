@@ -42,8 +42,8 @@ body{
 	    .top_memu li{
 	    	float: left;
 	    	line-height: 85px;
-	    	padding-right: 90px;
-	    	margin-left: 50px;
+	    	padding-right: 80px;
+	    	margin-left:40px;
             margin-top: 5px;
 
 	    }
@@ -53,6 +53,14 @@ body{
 	    	font-weight:bold;
 
 	    }
+	    .mesage_right{
+    		color: #ffa03e;
+    		font-style: normal;
+    		margin-left: 5px;
+    		font-size: 17px;
+
+	    }
+
 	    .top_memu a:active{
 	    	color: #339966
 	    }
@@ -66,7 +74,7 @@ body{
 	   
 	    .top_bar{
 	    	float: right;
-	    	padding-right: 28px;
+	    	padding-right: 18px;
 	    }
 	    .top_bar li {
 	    	float: left;
@@ -74,6 +82,40 @@ body{
 	    	color: #fff;
 	    	margin-top: 5px;
 	    }
+
+        .notify-icon {
+           background: url("http://img.ablesky.cn/stata/images/market/nav/notification_8277f5ef.png") no-repeat scroll center 4px rgba(0, 0, 0, 0);
+    	   width: 15px;
+}
+        .notify-icon:hover{
+           color:#3b3b3b;
+           background: url("http://img.ablesky.cn/stata/images/market/nav/notification_8277f5ef.png") no-repeat scroll center -22px rgba(0, 0, 0, 0);;
+}
+
+		.nav-link {
+    	   border: 1px solid #3b3b3b;
+           display: block;
+           height: 18px;
+           line-height: 16px;
+           margin-top: 37px;
+           padding: 0 12px;
+		   position:absolute;
+    }
+		.notify-tip{
+			position:absolute;
+			display:block;
+			margin-top: 40px;
+			width:32px;
+			height:11px;
+			float:left;
+			margin-left:28px;
+			line-height:11px;
+			text-align:center;
+			font-size:10px;
+			color:#FFF;
+			text-indent:4px;
+			background:url(http://img.ablesky.cn/stata/images/market/nav/notification-tip_49cbec37.png)no-repeat;
+		}
 	    .top_bar a{
 	    	color: #fff;
 	    	font-size: 18px;
@@ -91,6 +133,7 @@ body{
 	    	width: 100px;
 	    	text-align:right;
 	    }
+
 
 	    form[name='form1'] {
 	    	margin-bottom: 0px;

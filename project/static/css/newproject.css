@@ -91,7 +91,7 @@ body div{margin:0 auto;}
   border-radius: 2px; 
   border-width: 1px;
   border-color:#DDDDDD;
-  height:55px;
+  height:30px;
   width:480px;
   margin-left: 0;
 }
@@ -118,7 +118,7 @@ body div{margin:0 auto;}
   margin-left: 20px;
 }
 #short div{
-height:45px;
+height:60px;
 overflow:hidden;
 position:relative;
 }
