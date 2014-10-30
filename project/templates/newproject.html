@@ -41,8 +41,8 @@
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目类型：</label>
                 </div>
-                <select name = "type_p" class="inputfield" selected="">
-                  <option select = 'selected'>{{res.pro.status_p}}</option>
+                <select name = "type_p" class="inputfield" selected="{{res.pro.type_p}}">
+                  <option select = 'selected'>{{res.pro.type_p}}</option>
                   <option>业务运营型</option>
                   <option>产品运营型</option>
                 </select>
@@ -59,11 +59,11 @@
                 </div>
                 <input type="text" name="pname" class="form-control inputfield" maxlength=100 value="{{res.pro.project}}">
               </div>
-              <div>
+              <div style="height:100px;">
                 <div class="title">
-                  <label class="item-title"><span class="must">*</span>项目说明：</label>
+                  <label class="item-title">项目说明：</label>
                 </div>
-                <textarea type="text" name="" class="form-control inputfield" maxlength=500 value=""></textarea>
+                <textarea rows="3" type="text" name="" class="form-control inputfield" maxlength=500 value=""></textarea>
               </div>
               <div >
                 <div class="title">
@@ -94,7 +94,26 @@
                 	<input name="tester" style="display:none;" value={{res.pro.tester_p_id}}> 
                 {% else %}                	
                 	<input name="tester" style="display:none;" value=''>  
-                {% endif %}              
+                {% endif %} 
+                {% if res.pro.business_man_id %}
+                  <input name="business_man" style="display:none;" value={{res.pro.business_man_id}}> 
+                {% else %}                  
+                  <input name="business_man" style="display:none;" value=''>  
+                {% endif %}   
+                {% if res.pro.operator_p_id %}
+                  <input name="operator_p" style="display:none;" value={{res.pro.operator_p_id}}> 
+                {% else %}                  
+                  <input name="operator_p" style="display:none;" value=''>  
+                {% endif %}   
+                {% if res.pro.customer_service_id %}
+                  <input name="customer_service" style="display:none;" value={{res.pro.customer_service_id }}> 
+                {% else %}                  
+                  <input name="customer_service" style="display:none;" value=''>  
+                {% endif %}   
+
+
+
+
                 <select id="master"  class="inputfield" >
                 	<option select='selected'>{{res.user.realname}}</option>
                 </select>
@@ -173,14 +192,14 @@
                 </div>
                 <div class="roles">
                   <input style="display:none;">
-                  <label class="item-title" style="float:left;">业务人员：</label><button type="button" class="btn btn-success" name="pro">添加</button>
+                  <label class="item-title" style="float:left;">业务人员：</label><button type="button" class="btn btn-success" name="sal">添加</button>
                     <div class="p-list">
-                        {% if res.reuser.pd %}
-                          {% for item in res.reuser.pd %}
-                            {% if item.id == res.pro.designer_p_id %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                        {% if res.reuser.sal %}
+                          {% for item in res.reuser.sal %}
+                            {% if item.id == res.pro.business_man_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-sal' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% else %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro'><span>{{item.realname}}</span><span class="close">x</span></div>
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-sal'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% endif %}
                           {% endfor %}
                         {% endif %}
@@ -188,14 +207,14 @@
                 </div>
                 <div class="roles">
                   <input style="display:none;">
-                  <label class="item-title" style="float:left;">运营人员：</label><button type="button" class="btn btn-success" name="pro">添加</button>
+                  <label class="item-title" style="float:left;">运营人员：</label><button type="button" class="btn btn-success" name="ope">添加</button>
                     <div class="p-list">
-                        {% if res.reuser.pd %}
-                          {% for item in res.reuser.pd %}
-                            {% if item.id == res.pro.designer_p_id %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                        {% if res.reuser.ope %}
+                          {% for item in res.reuser.ope %}
+                            {% if item.id == res.pro.operator_p_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-ope' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% else %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro'><span>{{item.realname}}</span><span class="close">x</span></div>
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-ope'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% endif %}
                           {% endfor %}
                         {% endif %}
@@ -203,14 +222,14 @@
                 </div>
                 <div class="roles">
                   <input style="display:none;">
-                  <label class="item-title" style="float:left;">客服人员：</label><button type="button" class="btn btn-success" name="pro">添加</button>
+                  <label class="item-title" style="float:left;">客服人员：</label><button type="button" class="btn btn-success" name="com">添加</button>
                     <div class="p-list">
-                        {% if res.reuser.pd %}
-                          {% for item in res.reuser.pd %}
-                            {% if item.id == res.pro.designer_p_id %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                        {% if res.reuser.com %}
+                          {% for item in res.reuser.com %}
+                            {% if item.id == res.pro.customer_service_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-com' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% else %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro'><span>{{item.realname}}</span><span class="close">x</span></div>
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-com'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% endif %}
                           {% endfor %}
                         {% endif %}
@@ -275,6 +294,10 @@
               </div>
               <div>
                 <div><label class="item-title">统计sql：</label></div><input type="text" name="countsql" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}">
+              </div>
+              <div>
+                <div><label class="item-title">备注：</label></div>
+                <textarea rows="3" type="text" name="remark_p" maxlength=10000 value=""></textarea>
               </div>
             </div>
             <div class="span12">

@@ -227,17 +227,24 @@ def new_project(request, pid='', nid=''):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
+            type_p = form.cleaned_data['type_p']
             priority = form.cleaned_data['priority']
             pname = form.cleaned_data['pname']
+            pdescription = form.cleaned_data['description']
             status = form.cleaned_data['status']
             leaderid = form.cleaned_data['leader']
             leader = models.user.objects.get(id=leaderid)
             designer = form.cleaned_data['designer']
-            if designer:
-                designer = models.user.objects.get(id=designer)
             tester = form.cleaned_data['tester']
-            if tester:
-                tester = models.user.objects.get(id=tester)
+            business_man = form.cleaned_data['business_man']
+            operator_p = form.cleaned_data['operator_p']
+            customer_service = form.cleaned_data['customer_service']
+            roles = [designer, tester, business_man, operator_p, customer_service]
+            for i in range(len(roles)):
+                if roles[i]:
+                    roles[i] = models.user.objects.get(id=roles[i])
+
+
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
@@ -256,9 +263,11 @@ def new_project(request, pid='', nid=''):
             countsql = strQ2B(countsql)
 
             if pid == '' or nid == '1':
-                pro = models.project(priority=priority, \
+                pro = models.project(type_p=type_p, priority=priority, \
                     project=pname, status_p=status, leader_p=leader, \
-                    designer_p=designer, tester_p=tester, start_date=sdate, \
+                    designer_p=roles[0], tester_p=roles[1], start_date=sdate, \
+                    business_man =roles[2], operator_p = roles[3],\
+                    customer_service = roles[4],\
                     expect_launch_date=pdate, \
                     estimated_product_start_date=psdate, \
                     estimated_product_end_date=pedate, \
@@ -271,9 +280,14 @@ def new_project(request, pid='', nid=''):
             else:
                 rdate = models.project.objects.get(id=pid).real_launch_date
                 pnum = models.project.objects.get(id=pid).praise_p
-                pro = models.project(id=pid, priority=priority,\
-                    project=pname, status_p=status, leader_p=leader, \
-                    designer_p=designer, tester_p=tester, start_date=sdate, \
+                pro = models.project(id=pid, type_p=type_p, \
+                    priority=priority,project=pname, \
+                    status_p=status, leader_p=leader, \
+                    designer_p=roles[0], tester_p=roles[1], \
+                    business_man = roles[2], \
+                    operator_p = roles[3],\
+                    customer_service = roles[4],\
+                    start_date=sdate, \
                     expect_launch_date=pdate, \
                     real_launch_date=rdate, \
                     estimated_product_start_date=psdate, \
@@ -286,7 +300,7 @@ def new_project(request, pid='', nid=''):
                     test_case_p=tcpath, test_report_p=trpath, \
                     isactived=1, praise_p=pnum)
             pro.save()
-            #存完项目，存相关产品测试开发人员信息
+            #存完项目，存相关产品测试开发等人员信息
             relateduser = relateduser.replace(" ", "").split(",")
             if len(relateduser):
                 if pid == '' or nid =='1':
@@ -616,16 +630,21 @@ def isNone(s):
         return False
     
 def detail(request, pid='', nid=''):
-    print pid
+    #print pid
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
-    qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
-    #qa = {'rel': qas}
-    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
-    #dev = {'rel': devs}
-    pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
-    #pd = {'rel': pds}
-    related_user = {'qa':qas, 'dev': devs, 'pd': pds}
+
+    #开发
+    devs = models.user.objects.filter(Q(project_user__project_id=pid), \
+        Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))   
+    #这个列表用来存测试产品销售客服
+    p_role = []
+    #这个列表用来存测试产品销售客服的部门id
+    dep_id = [1, 3, 12, 8, 7]
+    for item_id in dep_id:
+        p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id))
+
+    related_user = {'qa':p_role[0], 'dev': devs, 'pd': p_role[1], 'sal':p_role[2], 'ope':p_role[3], 'com':p_role[4]}
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
@@ -684,6 +703,12 @@ def show_person(request):
         key = 2
     elif roles == "pro":
         key = 3
+    elif roles =="sal":
+        key = 12
+    elif roles =="ope":
+        key = 8
+    elif roles == "com":
+        key = 7
     else:
         key = 0
 
@@ -706,6 +731,7 @@ def show_person(request):
     rrs = {"person":person_rs}
     person_rs = json.dumps(rrs)
     return HttpResponse(person_rs)
+
 def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
@@ -716,6 +742,12 @@ def psearch(request):
         ptype = 2
     elif role == "pro":
         ptype = 3
+    elif role =="sal":
+        ptype = 12
+    elif role =="ope":
+        ptype = 8
+    elif role == "com":
+        ptype = 7
     else:
         ptype = 0
     

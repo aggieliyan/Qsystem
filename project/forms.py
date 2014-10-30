@@ -49,10 +49,15 @@ class LoginForm(forms.Form):
 
 class ProjectForm(forms.Form):
     priority = forms.IntegerField(required=True, error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
+    type_p = forms.CharField(required=True, error_messages={'required':u'项目类型不能为空'})
+    description = forms.CharField(required=False)
     pname = forms.CharField(required=True, error_messages={'required':u'项目名称不能为空'})
     status = forms.CharField(required=True, error_messages={'required':u'项目状态不能为空'})
     leader = forms.IntegerField(required=True, error_messages={'required':u'负责人不能为空'})
     designer = forms.IntegerField(required=False)
+    business_man = forms.IntegerField(required=False)
+    operator_p = forms.IntegerField(required=False)
+    customer_service = forms.IntegerField(required=False)
     tester = forms.IntegerField(required=False)
     startdate = forms.DateField(required=False)
     plandate=forms.DateField(required=False)
@@ -69,6 +74,7 @@ class ProjectForm(forms.Form):
     trpath = forms.CharField(required=False)
     relateduser = forms.CharField(required=False)
     countsql = forms.CharField(required=False)
+    remark_p = forms.CharField(required=False)
 
 class changedesignForm(forms.Form):
 	cont=forms.CharField(required=True,error_messages={'required': u'变更内容不能为空'})
