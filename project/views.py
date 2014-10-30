@@ -453,6 +453,13 @@ def new_project(request, pid='', nid=''):
         {'form':form, 'editdate':editdate}, context_instance=RequestContext(request))
     
 def project_list(request):
+    try:
+        request.session['username']
+        projectlist = models.project.objects.filter()
+        #print projectlist
+        project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
+    except KeyError:
+        return HttpResponseRedirect("/nologin")
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
     #以下是权限标记，createtag是发布相似的权限
     createtag = 0
