@@ -91,15 +91,27 @@
 
 					<td class="col1">&nbsp;{% autoescape off %}{{message.content}}{% endautoescape %}</td>
 					<td>{{message.publication_date}}</td>
-					{% if message.delay_status %}
+					{% if message.delay_status = "已拒绝"%}
 					<td class="states_yes">{{message.delay_status}}</td>
-					{% else %}
-					<td class="states_yes"></td>
-					{% endif %}
 					<td>
 						<button class="btn btn-danger " type="button" data-toggle="modal"
 							onclick="delete_mes({{message.id}})">删除</button>
 					</td>
+					{% endif %}
+					{% if message.delay_status = "未确认" %}
+					<td class="states_yes">{{message.delay_status}}</td>
+					<td>
+						<button class="btn btn-danger " type="button" data-toggle="modal"
+							onclick="confirm_mes({{message.id}})">确认</button>
+					</td>
+					{% endif %}
+					{% if message.delay_status = "已确认" %}
+					<td class="states_yes">{{message.delay_status}}</td>
+					<td>
+						<button class="btn btn-danger " type="button" data-toggle="modal"
+							onclick="delete_mes({{message.id}})">删除</button>
+					</td>
+					{% endif %}
 				</tr>
 				{% endif %} 
 				{% endfor %}
@@ -214,8 +226,18 @@
 		</div>
 	</div>
 	<!-- /.modal-content -->
-
 	
+	
+	
+	<!-- Modal确认消息 -->
+	<form id="conf_form" action="/confirmmessage/" method="post" name="test" class="navbar-form navbar-center">
+		<input id="conmessageid" name="conmessageid" type="hidden">
+	</form>
+	
+	<!-- /.modal-content -->
+
+
+
 
   {% endblock %}
   {%block js%}
@@ -235,6 +257,10 @@
 			}
 			function do_empty(){
 				$('#empty_form').submit();
+			}
+			function confirm_mes(id){
+				$('#conmessageid').val(id);
+				$('#conf_form').submit();
 			}
 		
 	</script>
