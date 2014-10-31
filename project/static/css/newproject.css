@@ -91,7 +91,7 @@ body div{margin:0 auto;}
   border-radius: 2px; 
   border-width: 1px;
   border-color:#DDDDDD;
-  height:55px;
+  height:30px;
   width:480px;
   margin-left: 0;
 }
@@ -118,7 +118,7 @@ body div{margin:0 auto;}
   margin-left: 20px;
 }
 #short div{
-height:45px;
+height:60px;
 overflow:hidden;
 position:relative;
 }
@@ -139,22 +139,12 @@ position:relative;
    margin-right: 140px;
 }
 
-#short .dateinput{
+#short .dateinput, #long .dateinput{
   background-color:white;
   width:176px;
   border-right: medium none;
 }
 
-#long .dateinput{
-  background-color:white;
-  width:100px;
-  border-right: medium none; 
-}
-
-#long .range{
-  float: left;
-
-}
 
 .title{
   display:inline-block; 
@@ -164,7 +154,7 @@ position:relative;
 
 .item-title {
     display:inline;  
-    line-height:39px;
+    line-height:30px;
     float:right;
 }
 
@@ -172,7 +162,7 @@ position:relative;
   display: inline;
 }
 
-#filepath input{
+#filepath input, #filepath textarea{
   width:610px;
   float: right;
 }
