@@ -8,8 +8,8 @@ import time
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm
-from models import department, project, project_user, public_message, project_delay, project_user_message
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm
+from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
 import models
 import hashlib
 import django.contrib.auth.models
@@ -348,6 +348,84 @@ def new_project(request, pid='', nid=''):
                 (id=form.cleaned_data['tester']).username
                 #给测试负责人加入到测试负责人权限组
                 User.objects.get(username=tusername).groups.add(6)
+
+
+
+            #项目设计完成需要给业务负责人和产品负责人发消息，project_operator_bussniess_message和public_message
+            #project_user_message这三个表
+            #--杜
+            if status == u"设计完成":
+                flag = 0
+                prolist = public_message.objects.filter\
+                (project=pid).order_by("isactived")
+                try:
+                    prolist[0].isactived
+                except IndexError:
+                    try:
+                        request.session['id']
+                    except KeyError:
+                        return HttpResponseRedirect("/nologin")
+                    else:
+                        flag = 1                        
+                else:
+                    if prolist[0].isactived != 0:
+                        try:
+                            request.session['id']
+                        except KeyError:
+                            return HttpResponseRedirect("/nologin")
+                        else:
+                            flag = 1
+                if flag == 1:        
+                    usrid = request.session['id']
+                    project = models.project.objects.get(id=pid)
+                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                    content = project.project + u"于"+time+u"设计完成，请立即查看设计图并确认！"    
+                    uids = []
+                    if project.business_man_id > 0 :
+                        uids.append(project.business_man_id)
+                    if project.operator_p_id > 0 :
+                        uids.append(project.operator_p_id)
+                    if project.customer_service_id > 0 :
+                        uids.append(project.customer_service_id)
+                    for uid in uids :
+                        #存表public_message
+                        pmessage = public_message(project=pid, \
+                                              publisher=uid, content=content, type_p="message", \
+                                              publication_date=datetime.datetime.now(), \
+                                              delay_status = "未确认" ,\
+                                              isactived=False)
+                        pmessage.save()
+                        #存表project_user_message
+                        #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦 
+                        messageid = public_message.objects.filter(publisher = uid).order_by("-id")[0]
+                        ppmessage = project_user_message(userid_id = uid , messageid_id = messageid.id ,\
+                                                        project_id = pid , isactived = True )
+                        ppmessage.save()
+                    #存表project_operator_bussniess_message
+                    #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦
+                    if project.business_man_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.business_man_id , project_id = pid ,\
+                                                                  user_type = "业务" ,\
+                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
+                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save()
+                    if project.operator_p_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.operator_p_id , project_id = pid ,\
+                                                                  user_type = "运营" ,\
+                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
+                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save()
+                    if project.customer_service_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.customer_service_id , project_id = pid ,\
+                                                                  user_type = "客服" ,\
+                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
+                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save() 
+                                                
+            
 
 
             #给项目负责人添加申请延期权限
@@ -1246,6 +1324,37 @@ def approve(request):
             approvedelay.save()
             pub_message.save()
     return HttpResponseRedirect('/delay/')
+
+
+#负责人确认消息
+def confirmmessage(request):
+    if request.session['id']:
+        useid = request.session['id']
+    if request.method == 'POST':
+        form = ConmessageForm(request.POST)
+        if form.is_valid(): 
+            #public_message修改状态已确认
+            messageid = form.cleaned_data['conmessageid']
+            conmessage = public_message.objects.get(publisher=useid, id=messageid)
+            conmessage.delay_status = "已确认"
+            reconmessage = conmessage
+            conmessage.save()
+            #project_operator_bussniess_message修改状态、插入确认时间
+            #如果public_message的isactived为0，就是设计需要确认
+            #如果public_message的isactived为1，就是已发测试版本需要确认
+            if  reconmessage.isactived:
+                pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
+                                                                  status = "项目未验收" )
+                pmessage.check_date = datetime.datetime.now()
+                pmessage.status = "项目已验收"
+            else:
+                pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
+                                                                  status = "未确认设计" )
+                pmessage.confirm_design_date = datetime.datetime.now()
+                pmessage.status = "已确认设计"
+            pmessage.save()
+    return HttpResponseRedirect('/historymessage/')
+
 
 #删除历史消息
 def deletehistory(request):

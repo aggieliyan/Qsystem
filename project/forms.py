@@ -106,6 +106,9 @@ class ProusermessForm(forms.Form):
 	
 class MessageForm(forms.Form):
 	messageid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
+
+class ConmessageForm(forms.Form):
+    conmessageid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
 	
 class NoticeForm(forms.Form):
 	noticeid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
