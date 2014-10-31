@@ -50,7 +50,7 @@ $(document).ready(function(){
     var cellIndex=parseInt($(".procolor tr").length);
     for(var i=0; i<cellIndex;i++) {
       var time =document.getElementsByName("datetime")[i].value;
-      var stut = $(".basecolor").eq(i).children().eq(10).text();
+      var stut = $(".basecolor").eq(i).children().eq(13).text();
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var d=new Date(d.getTime() + 1*24*60*60*1000);
       var curDate=new Date();
@@ -61,6 +61,15 @@ $(document).ready(function(){
             $(".basecolor").eq(i).css("background-color","#ff9933"); }
       }      
     };
+    var project_type = $(".basecolor").eq(i).children().eq(2).text();
+    if(project_type == '产品'){
+      var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+    }
+    else{
+      var list = {'需求讨论中':7,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+    }     
+
+    $(".basecolor").eq(i).children().eq(list[stut]).css('border', "2px solid #339966");
     };
 
 
@@ -77,6 +86,10 @@ $(document).ready(function(){
       document.getElementById("mtab2").style.display = "block";
       $("#mypage").show();
        }
+
+    //相应阶段负责人添加选中标志
+
+
            
 });
 
@@ -134,19 +147,12 @@ $(function(){
    //正在进行中给title赋值
    var cell=parseInt($(".procolor tr").length);
    for(var i=0; i<cell;i++){
-    var user = $.trim($(".basecolor").eq(i).children().eq(5).text());
+    var user = $.trim($(".basecolor").eq(i).children().eq(9).text());
         user =user.replace(/\s+/g,' ');
-        user_prolist = $.trim($(".basecolor").eq(i).children().eq(6).text());
-        user_prolist =user_prolist.replace(/\s+/g,' ');
-    var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
-    var praise = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(1).text());
-    $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title","万众期待值:"+praise);
-    $(".basecolor").eq(i).children().eq(1).children().eq(0).attr("title",project);
-    if(location.pathname == '/personal_homepage/'){
-      $(".basecolor").eq(i).children().eq(5).attr("title",user);}      
-    if (location.pathname == '/projectlist/'){
-      $(".basecolor").eq(i).children().eq(6).attr("title",user_prolist);}      
-   } 
+    var project = $.trim($(".basecolor").eq(i).children().eq(1).text());
+    $(".basecolor").eq(i).children().eq(1).attr("title",project);
+    $(".basecolor").eq(i).children().eq(9).attr("title",user);
+  }      
 });
 
 $(function(){
