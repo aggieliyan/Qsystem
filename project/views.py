@@ -616,7 +616,6 @@ def isNone(s):
         return False
     
 def detail(request, pid='', nid=''):
-    print pid
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
@@ -625,7 +624,10 @@ def detail(request, pid='', nid=''):
     #dev = {'rel': devs}
     pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
     #pd = {'rel': pds}
-    related_user = {'qa':qas, 'dev': devs, 'pd': pds}
+    bms = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=12) | Q(department_id=9) | Q(department_id=7))
+    ops = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=3) | Q(department_id=8) | Q(department_id=12)| Q(department_id=9) | Q(department_id=7))
+    cs = models.user.objects.filter(project_user__project_id=pid, department_id=7)
+    related_user = {'qa':qas, 'dev': devs, 'pd': pds, 'bm': bms, 'cs': cs, 'op': ops}
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
@@ -653,7 +655,73 @@ def detail(request, pid='', nid=''):
         status = '未填写'
     else:
         status = '已填写'
- 
+#各部门负责人确认状态  
+    confirmation = {}
+    bm_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='bm').order_by("id")
+    a = 0
+    if bm_status:
+        bm_check = None
+        for item in bm_status:            
+            if item.confirm_design_date:
+                bm_design_date = item.confirm_design_date
+                bm_design = bm_design_date.strftime("%Y-%m-%d %H:%I") + item.status
+            else:
+                if item.check_date:
+                    bm_check_date = item.check_date
+                    bm_check = bm_check_date.strftime("%Y-%m-%d %H:%I") + item.status
+                else:
+                    print item.confirm_design_date
+                    if a == 0:
+                        bm_design = item.status
+                    else:
+                        bm_check = item.status
+            a = a + 1
+        confirmation['bm_design'] = bm_design
+        if bm_check:
+            confirmation['bm_check'] = bm_check
+    op_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='op')
+    a = 0
+    if op_status:
+        op_check = None
+        for item in op_status:            
+            if item.confirm_design_date:
+                    op_design_date = item.confirm_design_date
+                    op_design = op_design_date.strftime("%Y-%m-%d %H:%I") + item.status
+            else:
+                if item.check_date:
+                    op_check_date = item.check_date
+                    op_check = op_check_date.strftime("%Y-%m-%d %H:%I") + item.status
+                else:
+                    if a == 0:
+                        op_design = item.status
+                    else:
+                        op_check = item.status
+            a = a + 1
+        confirmation['op_design'] = op_design
+        if op_check:
+            confirmation['op_check'] = op_check
+    cs_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='cs')
+    a = 0
+    if cs_status:
+        cs_check = None
+        for item in cs_status:            
+            if item.confirm_design_date:
+                cs_design_date = item.confirm_design_date
+                cs_design = cs_design_date.strftime("%Y-%m-%d %H:%I") + item.status
+            else:
+                if item.check_date:
+                    cs_check_date = item.check_date
+                    cs_check = cs_check_date.strftime("%Y-%m-%d %H:%I") + item.status
+                else:
+                    if a == 0:
+                        cs_design = item.status
+                    else:
+                        cs_check = item.status
+            a = a + 1
+        confirmation['cs_design'] = cs_design
+        if cs_check:
+            confirmation['cs_check'] = cs_check
+    
     try:
         request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
@@ -661,7 +729,8 @@ def detail(request, pid='', nid=''):
             editboolean = True
     finally:
         if '/detail/' in request.path:
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 'sql': status}
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
+                   'sql': status, 'confirmation': confirmation}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
             edittag = 1
@@ -1290,8 +1359,8 @@ def initdata(request):
     depart4.save()
     depart5 = department(id=5,department='IT',isactived=1)
     depart5.save()
-    depart6 = department(id=6,department='院校事业',isactived=1)
-    depart6.save()
+#    depart6 = department(id=6,department='院校事业',isactived=1)
+#    depart6.save()
     depart7 = department(id=7,department='客服部',isactived=1)
     depart7.save()
     depart8 = department(id=8,department='市场部',isactived=1)

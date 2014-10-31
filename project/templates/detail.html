@@ -21,49 +21,96 @@
 				</div>
 				<table>
 					<tr>
-						<td class="line-name">优先级:</td>
+						<td class="line-name">项目类型：</td>
+						<td class="line-text">{{res.pro.type_p}}</td>
+					</tr>
+					<tr>
+						<td class="line-name">优先级：</td>
 						<td class="line-text">{{res.pro.priority}}</td>
 					</tr>
+					<tr>
+						<td class="line-name">项目说明：</td>
+						<td class="line-text">{{res.pro.description}}</td>
+					</tr>
 					<tr>	
-						<td class="line-name">项目状态:</td>
+						<td class="line-name">项目状态：</td>
 						<td class="line-text">{{res.pro.status_p}}</td>
 						{% if res.pro.real_launch_date %}
-							<td class="line-name">实际上线时间:</td>
+							<td class="line-name">实际上线时间：</td>
 							<td class="line-text">{{res.pro.real_launch_date|date:"Y-m-d"}}&nbsp&nbsp
 							{% if res.pro.real_launch_date > res.pro.expect_launch_date %}
 								<span id="notwell"><b>踩..</b></span>
 							{% else %}
-								<span id="well"><b>赞!</b></span>
+								<span id="well"><b>赞！</b></span>
 							{% endif %}							
 						{% endif %}
 						</td>
 					</tr>
 					<tr>
-						<td class="line-name">项目负责人:</td>
+						<td class="line-name">PM：</td>
 						<td class="line-text"><b>{{res.user.realname}}</b></td>
 					</tr>
 					<tr>
-						<td class="line-name">项目开始日期:</td>
+						<td class="line-name">项目开始日期：</td>
 						<td class="line-text">{{res.pro.start_date|date:"Y-m-d"}}</td>
-						<td class="line-name">计划上线时间:</td>
+						<td class="line-name">计划上线时间：</td>
 						<td class="line-text">{{res.pro.expect_launch_date|date:"Y-m-d"}}</td>
 					</tr>
 					<tr>
-						<td class="line-name">预估时间:</td>
-						<td class="line-text">产品: {{res.dt.ptime}}天    ({{res.pro.estimated_product_start_date|date:"Y-m-d"}}至{{res.pro.estimated_product_end_date|date:"Y-m-d"}})</td>
+						<td class="line-name">预估时间：</td>
+						<td class="line-text">产品： {{res.dt.ptime}}天    ({{res.pro.estimated_product_start_date|date:"Y-m-d"}}至{{res.pro.estimated_product_end_date|date:"Y-m-d"}})</td>
 					</tr>
 					<tr>
 						<td class="line-name"></td>
-						<td class="line-text">开发: {{res.dt.dtime}}天    ({{res.pro.estimated_develop_start_date|date:"Y-m-d"}}至{{res.pro.estimated_develop_end_date|date:"Y-m-d"}})</td>
+						<td class="line-text">开发： {{res.dt.dtime}}天    ({{res.pro.estimated_develop_start_date|date:"Y-m-d"}}至{{res.pro.estimated_develop_end_date|date:"Y-m-d"}})</td>
 					</tr>
 					<tr>
 						<td class="line-name"></td>
-						<td class="line-text">测试: {{res.dt.ttime}}天    ({{res.pro.estimated_test_start_date|date:"Y-m-d"}}至{{res.pro.estimated_test_end_date|date:"Y-m-d"}})</td>
+						<td class="line-text">测试： {{res.dt.ttime}}天    ({{res.pro.estimated_test_start_date|date:"Y-m-d"}}至{{res.pro.estimated_test_end_date|date:"Y-m-d"}})</td>
 					</tr>
+					<tr>
+						<td class="line-name">业务人员：</td>
+						<td class="line-text">{% for item in res.reuser.bm %}
+                       			{% if item.id == res.pro.business_man_id %}
+                       				<b>{{item.realname}}</b>&nbsp;&nbsp;
+                       			{% else %}
+                       				{{item.realname}}&nbsp;&nbsp;
+                       			{% endif %}
+                       		{% endfor %}
+                       	</td> 
+                       	<td class="line-name"></td>               
+                       	<td class="line-text">{{res.confirmation.bm_design}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.bm_check}}</td>
+                    </tr>
+                    <tr>
+						<td class="line-name">运营人员：</td>
+						<td class="line-text">{% for item in res.reuser.op %}
+                       			{% if item.id == res.pro.operator_p_id %}
+                       				<b>{{item.realname}}</b>&nbsp;&nbsp;
+                       			{% else %}
+                       				{{item.realname}}&nbsp;&nbsp;
+                       			{% endif %}
+                       		{% endfor %}
+                       	</td> 
+                       	<td class="line-name"></td>               
+                       	<td class="line-text">{{res.confirmation.op_design}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.op_check}}</td>
+                    </tr>
+                    <tr>
+						<td class="line-name">客服人员：</td>
+						<td class="line-text">{% for item in res.reuser.bm %}
+                       			{% if item.id == res.pro.customer_service_id %}
+                       				<b>{{item.realname}}</b>&nbsp;&nbsp;
+                       			{% else %}
+                       				{{item.realname}}&nbsp;&nbsp;
+                       			{% endif %}
+                       		{% endfor %}
+                       	</td> 
+                       	<td class="line-name"></td>               
+                       	<td class="line-text">{{res.confirmation.cs_design}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.cs_check}}</td>
+                    </tr>
 				</table>
-				<table>
+				<table>					
 					<tr>
-						<td class="line-name2">产品人员:</td>
+						<td class="line-name2">产品人员：</td>
 						<td class="line-text2">{% for item in res.reuser.pd %}
                        			{% if item.id == res.pro.designer_p_id %}
                        				<b>{{item.realname}}</b>&nbsp;&nbsp;
@@ -74,15 +121,15 @@
                        	</td>
                     </tr>
 					<tr>
-						<td class="line-name2">开发人员:</td>
+						<td class="line-name2">开发人员：</td>
 						<td class="line-text2">{% for item in res.reuser.dev %}
                        			{{item.realname}}&nbsp;&nbsp;
                        		{% endfor %}
                        	</td>	
 					</tr>
 					<tr>
-						<td class="line-name">测试人员:</td>
-						<td class="line-text">{% for item in res.reuser.qa %}
+						<td class="line-name2">测试人员：</td>
+						<td class="line-text2">{% for item in res.reuser.qa %}
 								{% if item.id == res.pro.tester_p_id %}
                        				<b>{{item.realname}}</b>&nbsp;&nbsp;
                        			{% else %}
@@ -92,28 +139,32 @@
                        	</td>                       	
 					</tr>
 					<tr>
-						<td class="line-name">设计图:</td>
+						<td class="line-name">设计图：</td>
 						<td class="line-text">{{res.pro.blueprint_p}}</td>
 					</tr>
 					<tr>
-						<td class="line-name">开发计划:</td>
+						<td class="line-name">开发计划：</td>
 						<td class="line-text">{{res.pro.develop_plan_p}}</td>
 					</tr>
 					<tr>
-						<td class="line-name">测试计划:</td>
+						<td class="line-name">测试计划：</td>
 						<td class="line-text">{{res.pro.test_plan_p}}</td>
 					</tr>
 					<tr>
-						<td class="line-name">测试用例:</td>
+						<td class="line-name">测试用例：</td>
 						<td class="line-text">{{res.pro.test_case_p}}</td>
 					</tr>
 					<tr>
-						<td class="line-name">测试报告:</td>
+						<td class="line-name">测试报告：</td>
 						<td class="line-text">{{res.pro.test_report_p}}</td>
 					</tr>
 					<tr>
-						<td class="line-name">统计sql:</td>
+						<td class="line-name">统计sql：</td>
 						<td class="line-text">{{res.sql}}</td>
+					</tr>
+					<tr>
+						<td class="line-name">备注：</td>
+						<td class="line-text">{{res.pro.remark_p}}</td>
 					</tr>
 				</table>			
 			</div>
