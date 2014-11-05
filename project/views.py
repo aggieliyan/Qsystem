@@ -925,19 +925,37 @@ def psearch(request):
         search_rs = json.dumps(rrs)
     return HttpResponse(search_rs)
 
-def show_headname(request):
-    user = {}
+#通用头
+def user_info(request):
+    result={}
     try:
-        username = request.session['username']
-        realname = request.session['realname']
-        user['username'] = username
-        user['realname'] = realname      
+        if request.session['username']:
+            projectlist = models.project.objects.filter()
+            project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
+            projectids = []
+            for p in project_user_list:
+                projectids.append(p.project.id) 
+            projectlist = projectlist.filter(pk__in = projectids)       
+            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")
+            pro_num=res.count()
+            result['pro_num']=pro_num
+   
+            userid = request.session['id']
+            messsage = project_user_message.objects.filter(userid_id = userid)
+            message_num = messsage.count()
+            result['message_num'] = message_num
+                       
+            username = request.session['username']
+            realname = request.session['realname']
+            result['username'] = username
+            result['realname'] = realname      
     except KeyError:
-        user['username'] = 'GUEST'
-        user['realname'] = 'GUEST'
-    rs = json.dumps(user)
+            result['pro_num'] = 0
+            result['message_num'] = 0
+            result['username'] = 'GUEST'
+            result['realname'] = 'GUEST' 
+    rs = json.dumps(result)
     return HttpResponse(rs)
-
 #homepage
 def personal_homepage(request):
     try:
@@ -1059,33 +1077,7 @@ def changedesign(request, url):
                 pro_u_message.save()           
     return HttpResponseRedirect(url)
     #return render_to_response('personal_homepage.html', {'form': form})
-#通用头
-def pro_num(request):
-    try:
-        if request.session['username']:
-            projectlist = models.project.objects.filter()
-            project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
-            projectids = []
-            for p in project_user_list:
-                projectids.append(p.project.id) 
-            projectlist = projectlist.filter(pk__in = projectids)       
-            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")
-            num=res.count()
-            return HttpResponse(num)
-    except KeyError:
-        num=0
-        return HttpResponse(num)   
-def message_num(request):
-    try:
-        if request.session['id']:
-            userid = request.session['id']
-            messsage = project_user_message.objects.filter(userid_id = userid)
-            message_num = messsage.count()
-            print message_num
-            return HttpResponse(message_num)
-    except KeyError:
-        message_num=0
-        return HttpResponse(message_num)  
+
 #资源管理
 def judge(request):
     try:
