@@ -256,7 +256,12 @@ def new_project(request, pid='', nid=''):
             tppath = form.cleaned_data['tppath']
             tcpath = form.cleaned_data['tcpath']
             trpath = form.cleaned_data['trpath']
-            relateduser = form.cleaned_data['relateduser']
+            relateduser0 = form.cleaned_data['relateduser0']
+            relateduser1 = form.cleaned_data['relateduser1']
+            relateduser2 = form.cleaned_data['relateduser2']
+            relateduser3 = form.cleaned_data['relateduser3']
+            relateduser4 = form.cleaned_data['relateduser4']
+            relateduser5 = form.cleaned_data['relateduser5']
             countsql = form.cleaned_data['countsql']
             countsql = strQ2B(countsql)
             remark_p = form.cleaned_data['remark_p']
@@ -303,19 +308,25 @@ def new_project(request, pid='', nid=''):
                     remark_p=remark_p,isactived=1, praise_p=pnum)
             pro.save()
             #存完项目，存相关产品测试开发等人员信息
-            relateduser = relateduser.replace(" ", "").split(",")
-            if len(relateduser):
-                if pid == '' or nid =='1':
-                    pid = models.project.objects.filter\
-                    (project=pname).order_by("-id")[0].id
-                else:
-                    models.project_user.objects.filter(project_id=pid).delete()
-    
-                for uid in relateduser:
-                    if uid:
-                        project_user = models.project_user\
-                        (username_id=uid, project_id=pid, isactived=1)
-                        project_user.save()
+            
+            #如果是新建就取出刚才存在的项目id,否则是编辑则删掉此前的用户与项目的关系
+            if pid == '' or nid =='1':
+                pid = models.project.objects.filter\
+                (project=pname).order_by("-id")[0].id
+            else:
+                models.project_user.objects.filter(project_id=pid).delete()
+
+            relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
+            for i in range(len(relateduser)):
+                #把相关人员的id存入列表中
+                relateduser[i] = relateduser[i].replace(" ", "").split(",")
+                if len(relateduser[i]):          
+                    #存用户与项目的关系
+                    for uid in relateduser[i]:
+                        if uid:
+                            project_user = models.project_user\
+                            (username_id=uid, project_id=pid, roles=i, isactived=1)
+                            project_user.save()
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
@@ -480,21 +491,34 @@ def new_project(request, pid='', nid=''):
                 luser = models.user.objects.get(id=request.POST['leader'])
             else:
                 luser = None
-            relateduser = request.POST['relateduser']
-            relateduser = relateduser.replace(" ", "").split(",")
-            pd = []
-            dev = []
-            qa = []           
-            for uid in relateduser:
-                if uid:
-                    tuser = models.user.objects.get(id=int(uid))
-                    if tuser.department_id == 1:
-                        qa.append(tuser)
-                    elif tuser.department_id == 3:
-                        pd.append(tuser)
-                    else:
-                        dev.append(tuser)
-            related_user = {'qa':qa, 'dev': dev, 'pd': pd}
+            relateduser0 = request.POST['relateduser0']
+            relateduser1 = request.POST['relateduser1']
+            relateduser2 = request.POST['relateduser2']
+            relateduser3 = request.POST['relateduser3']
+            relateduser4 = request.POST['relateduser4']
+            relateduser5 = request.POST['relateduser5']
+            
+            relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
+            people = []
+            allpeople = []
+            for i in range(len(relateduser)):
+                relateduser[i] = relateduser[i].replace(" ", "").split(",")
+            # pd = []
+            # dev = []
+            # qa = []           
+                for uid in relateduser[i]:
+                    if uid:
+                        tuser = models.user.objects.get(id=int(uid))
+                        people.append(tuser)
+                allpeople.append(people)
+                        # if tuser.department_id == 1:
+                        #     qa.append(tuser)
+                        # elif tuser.department_id == 3:
+                        #     pd.append(tuser)
+                        # else:
+                        #     dev.append(tuser)
+            related_user = {'pd':allpeople[0], 'dev': allpeople[1], 'dev': allpeople[2], \
+            'bm': allpeople[3], 'cs': allpeople[4], 'op': allpeople[5]}
             dpid = request.POST['designer']
             tpid = request.POST['tester']
             if dpid:
@@ -714,18 +738,15 @@ def isNone(s):
 def detail(request, pid='', nid=''):
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
-    #qa = {'rel': qas}
-    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
-    #dev = {'rel': devs}
-    #pd = {'rel': pds}
-    bms = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=12) | Q(department_id=9) | Q(department_id=7))
-    ops = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=3) | Q(department_id=8) | Q(department_id=12)| Q(department_id=9) | Q(department_id=7))
+    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
+    bms = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=3), Q(department_id=12) | Q(department_id=9) | Q(department_id=7))
+    ops = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=4),Q(department_id=3) | Q(department_id=8) | Q(department_id=12)| Q(department_id=9) | Q(department_id=7))
     #这个列表用来存测试产品销售客服
     p_role = []
-    #这个列表用来存测试产品销售客服的部门id
-    dep_id = [1, 3, 7]
+    #这个列表用来存测试产品销售客服的部门id和roles值
+    dep_id = [[1,2], [3,0], [7,5]]
     for item_id in dep_id:
-        p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id))
+        p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id[0], project_user__roles=item_id[1]))
 
     related_user = {'qa':p_role[0], 'dev': devs, 'pd': p_role[1], 'bm': bms, 'cs': p_role[2], 'op': ops}
 
@@ -865,6 +886,11 @@ def show_person(request):
 
     if key == 2:
         person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
+    elif key == 12:
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+    elif key == 8:
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=3) | Q(department_id=12)| \
+            Q(department_id=9) | Q(department_id=7), Q(isactived=1))
     else:
         person = models.user.objects.filter(department_id=key, isactived=1)
     person_rs = []
@@ -905,11 +931,21 @@ def psearch(request):
     if len(key) == 0:
         if ptype == 2:
             prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+        elif ptype == 12:
+            person = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+        elif ptype == 8:
+            person = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=3) | Q(department_id=12)| \
+                Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
             prs = models.user.objects.filter(department_id=ptype, isactived=1)
     else:
         if ptype == 2:
             prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+        elif ptype == 12:
+            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptype) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+        elif ptype == 8:
+            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptype) | Q(department_id=3) | Q(department_id=12)| \
+                Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
             

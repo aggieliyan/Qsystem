@@ -151,7 +151,13 @@
             <div  class="span6">
               <div>
                 <div class="roles">
-                  <input name="relateduser" style="display:none;">
+                  <input name="relateduser0" style="display:none;">
+                  <input name="relateduser1" style="display:none;">
+                  <input name="relateduser2" style="display:none;">
+                  <input name="relateduser3" style="display:none;">
+                  <input name="relateduser4" style="display:none;">
+                  <input name="relateduser5" style="display:none;">
+
                   <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro">添加</button>
                     <div class="p-list">
 						            {% if res.reuser.pd %}
@@ -194,8 +200,8 @@
                   <input style="display:none;">
                   <label class="item-title" style="float:left;">业务人员：</label><button type="button" class="btn btn-success" name="sal">添加</button>
                     <div class="p-list">
-                        {% if res.reuser.sal %}
-                          {% for item in res.reuser.sal %}
+                        {% if res.reuser.bm %}
+                          {% for item in res.reuser.bm %}
                             {% if item.id == res.pro.business_man_id %}
                               <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-sal' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% else %}
@@ -209,8 +215,8 @@
                   <input style="display:none;">
                   <label class="item-title" style="float:left;">运营人员：</label><button type="button" class="btn btn-success" name="ope">添加</button>
                     <div class="p-list">
-                        {% if res.reuser.ope %}
-                          {% for item in res.reuser.ope %}
+                        {% if res.reuser.op %}
+                          {% for item in res.reuser.op %}
                             {% if item.id == res.pro.operator_p_id %}
                               <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-ope' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% else %}
@@ -224,8 +230,8 @@
                   <input style="display:none;">
                   <label class="item-title" style="float:left;">客服人员：</label><button type="button" class="btn btn-success" name="com">添加</button>
                     <div class="p-list">
-                        {% if res.reuser.com %}
-                          {% for item in res.reuser.com %}
+                        {% if res.reuser.cs %}
+                          {% for item in res.reuser.cs %}
                             {% if item.id == res.pro.customer_service_id %}
                               <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-com' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% else %}

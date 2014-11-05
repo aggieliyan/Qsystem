@@ -73,7 +73,13 @@ class ProjectForm(forms.Form):
     tppath = forms.CharField(required=False)
     tcpath = forms.CharField(required=False)
     trpath = forms.CharField(required=False)
-    relateduser = forms.CharField(required=False)
+    relateduser0 = forms.CharField(required=False)
+    relateduser1 = forms.CharField(required=False)
+    relateduser2 = forms.CharField(required=False)
+    relateduser3 = forms.CharField(required=False)
+    relateduser4 = forms.CharField(required=False)
+    relateduser5 = forms.CharField(required=False)
+
     countsql = forms.CharField(required=False)
     remark_p = forms.CharField(required=False)
 

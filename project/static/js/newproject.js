@@ -66,13 +66,24 @@ $(document).ready(function(){
 
 
     function count_relateduser(){
-      var p = $(".role-item");  
+/*      var p = $(".role-item");  
       var idlist =" ";
       for(var i=p.length-1; i >=0; i--){
         var item = p.eq(i);
         idlist = idlist + item.attr("value") + ","
       } 
-      $("[name='relateduser']").attr("value",idlist);
+      $("[name='relateduser']").attr("value",idlist);*/
+      var plist = $(".p-list");
+      for(var i=0; i<plist.length;i++){
+        var p = plist.eq(i).children();
+        var idlist = " "
+        for(var j=0; j<p.length;j++){
+          var item = p.eq(j);
+          idlist = idlist + item.attr("value") + ",";
+        }
+        $("[name='relateduser"+i+"']").attr("value",idlist);
+      }
+
     }
     
     $("input:first").blur(function(){

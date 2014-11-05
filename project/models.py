@@ -49,6 +49,13 @@ class project(models.Model):
 class project_user(models.Model):
     username = models.ForeignKey(user)
     project= models.ForeignKey(project)
+    roles = models.IntegerField()
+    #roles 0 产品
+    #      1 开发
+    #      2 测试
+    #      3 业务
+    #      4 运营
+    #      5 客服
     isactived = models.BooleanField(max_length=1)
     
 class public_message(models.Model): 
