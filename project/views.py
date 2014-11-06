@@ -208,7 +208,8 @@ def new_project(request, pid='', nid=''):
         cpro = models.project.objects.get(id=pid)
         #如果是负责人且有编辑权限才可以
         flag = 0
-        if uid == cpro.leader_p_id or uid == cpro.designer_p_id or uid == cpro.tester_p_id or request.user.has_perm('auth.change_permission'):
+        mid = [cpro.leader_p_id, cpro.designer_p_id, cpro.tester_p_id, cpro.business_man_id, cpro.operator_p_id, cpro.customer_service_id]
+        if uid not in mid or request.user.has_perm('auth.change_permission'):
             if request.user.has_perm('project.change_project'):
                 flag = 1
 
@@ -324,6 +325,7 @@ def new_project(request, pid='', nid=''):
                     #存用户与项目的关系
                     for uid in relateduser[i]:
                         if uid:
+                            #Django bulk_create
                             project_user = models.project_user\
                             (username_id=uid, project_id=pid, roles=i, isactived=1)
                             project_user.save()
@@ -349,16 +351,24 @@ def new_project(request, pid='', nid=''):
             User.objects.get(username=musername).groups.add(4)
 
             #给其他负责人加入到相应负责人权限组
-            if designer:
-                dusername = models.user.objects.get\
-                (id=form.cleaned_data['designer']).username
-                #给产品负责人加入到产品负责人权限组
-                User.objects.get(username=dusername).groups.add(5)
-            if tester:
-                tusername = models.user.objects.get\
-                (id=form.cleaned_data['tester']).username
-                #给测试负责人加入到测试负责人权限组
-                User.objects.get(username=tusername).groups.add(6)
+            allmasters = [[designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
+            for m in allmasters:
+                if m[0]:
+                    print m[0]
+                    mname = models.user.objects.get(id=m[0]).username
+                    print "mmmmmmmmmmmmmmmmm"
+                    print mname
+                    User.objects.get(username=mname).groups.add(m[1])
+            # if designer:
+            #     dusername = models.user.objects.get\
+            #     (id=form.cleaned_data['designer']).username
+            #     #给产品负责人加入到产品负责人权限组
+            #     User.objects.get(username=dusername).groups.add(5)
+            # if tester:
+            #     tusername = models.user.objects.get\
+            #     (id=form.cleaned_data['tester']).username
+            #     #给测试负责人加入到测试负责人权限组
+            #     User.objects.get(username=tusername).groups.add(6)
 
 
 
@@ -550,6 +560,30 @@ def new_project(request, pid='', nid=''):
                                               publication_date=datetime.datetime.now(), \
                                               isactived=False)
                     pmessage.save()
+                    
+                    ###
+                    #先判断在项目上线之前有没有留言的人
+                    try:
+                        related_user = models.project_feedback.objects.filter(project_id=pid)
+                    except:
+                        None
+                    else:
+                        #项目上线，给留言者发的消息存在消息表中
+                        string = project.project + u"已上线，您可以去体验并跟踪反馈机构的体验效果啦"
+                        pub_message = public_message(project=pid, publisher=usrid, content=string, \
+                            type_p="message", publication_date=datetime.datetime.now(), delay_status="已上线", isactived=1)
+                        pub_message.save()
+                        #先判断在项目上线之前有没有留言的人
+                        #从留言表中把此项目相关的留言数据读取出来（留言者id）
+                        message = public_message.objects.filter(project=pid).order_by("-id")[0]
+                        #给项目和消息创建关系
+                        for i in related_user:
+                            uid = i.feedback_member_id
+                            megid = message.id
+                            pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=pid, isactived='1')
+                            pro_u_message.save()   
+                    ### 
+                    
                     project.real_launch_date = datetime.datetime.now()
                     project.save()                   
             return redirect('/projectlist/')
@@ -821,6 +855,10 @@ def isNone(s):
         return False
     
 def detail(request, pid='', nid=''):
+    """
+    pid是项目id
+    nid为1时,表示发布与项目pid相似的项目
+    """
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
@@ -940,16 +978,31 @@ def detail(request, pid='', nid=''):
                    'sql': status, 'confirmation': confirmation}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
+            
             edittag = 1
+            editdate = 1
+            isdevs = 1
+            isbs = 1
             if nid == '1':
+                #此时是在发布相似项目
                 edittag = 0
-
-            if request.user.has_perm('auth.change_permission'):
-                editdate = 1
             else:
-                editdate = 0
+                #在编辑项目
+                user_id = request.session['id']
+                dep_id = models.user.objects.filter(id=user_id)[0].department_id
+
+                #isdevs标记当前登陆者是不是技术人员      
+                if dep_id not in [1,2,3,4,5,13]:
+                    isdevs = 0
+                    bs_id = models.project.objects.get(id=pid).business_man_id
+                    if user_id != bs_id:
+                        isbs = 0
+
+                if not request.user.has_perm('auth.change_permission'):
+                    editdate = 0
+
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': sql}
-            return render_to_response('newproject.html', {'res': res, 'editdate':editdate})
+            return render_to_response('newproject.html', {'res': res, 'editdate':editdate, 'isdevs':isdevs, 'isbs':isbs})
 
 def show_person(request):
     roles = request.GET['role']
@@ -1594,6 +1647,12 @@ def initdata(request):
     group5.save()
     group6 = Group(id=6,name='测试负责人权限--编辑')
     group6.save()  
+    group7 = Group(id=7,name='业务负责人权限--编辑')
+    group7.save() 
+    group8 = Group(id=8,name='运营负责人权限--编辑')
+    group8.save() 
+    group9 = Group(id=9,name='客服负责人权限--编辑')
+    group9.save() 
     #auth_group_permissions
     group1.permissions.add(25)
     group1.permissions.add(26)
@@ -1606,6 +1665,9 @@ def initdata(request):
     group4.permissions.add(26)
     group5.permissions.add(26)
     group6.permissions.add(26)
+    group7.permissions.add(26)
+    group8.permissions.add(26)
+    group9.permissions.add(26)
     #project_department
     depart1 = department(id=1,department='测试',isactived=1)
     depart1.save()
