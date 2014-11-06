@@ -339,7 +339,12 @@
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目状态：</label>
                 </div>
+                {% if isbs %}
                 <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}" readonly>
+                  <option select = 'selected'>{{res.pro.status_p}}</option>
+                </select>
+                {% else %}
+                 <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
                   <option select = 'selected'>{{res.pro.status_p}}</option>
                   <option>需求讨论中</option>
                   <option>设计中</option>
@@ -348,7 +353,8 @@
                   <option>测试中</option>
                   <option>暂停</option>
                   <option>已上线</option>
-                </select>
+                </select>               
+                {% endif %}
               </div>
               <div>
                 <div class="title">
