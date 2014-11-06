@@ -18,7 +18,7 @@ $(document).ready(function(){
     $("#bigtable").click(function(){
       $("#mybody").css("width","1500px");
       $("#x-table2").css("width","1500px");
-      $(".pro-proname").css("width","145px")
+      $(".pro-proname").css("width","125px")
     });
 
 
@@ -114,14 +114,14 @@ $(function(){
    var cell=parseInt($(".procolor tr").length);
    for(var i=0; i<cell;i++){
 
-        user_prolist = $.trim($(".basecolor").eq(i).children().eq(6).text());
+        user_prolist = $.trim($(".basecolor").eq(i).children().eq(10).text());
         user_prolist =user_prolist.replace(/\s+/g,' ');
     var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
     var ptotal = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(2).text());
     ptotal = ptotal.replace(/\s+/g,'\t\t\r');
     $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title",ptotal);
     $(".basecolor").eq(i).children().eq(1).children().eq(0).attr("title",project);
-    $(".basecolor").eq(i).children().eq(6).attr("title",user_prolist);}
+    $(".basecolor").eq(i).children().eq(10).attr("title",user_prolist);}
 
 });
 

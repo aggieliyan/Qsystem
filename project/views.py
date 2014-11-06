@@ -453,6 +453,9 @@ def new_project(request, pid='', nid=''):
         {'form':form, 'editdate':editdate}, context_instance=RequestContext(request))
     
 def project_list(request):
+    #没登陆的提示去登录
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/nologin")
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
     #以下是权限标记，createtag是发布相似的权限
     createtag = 0
@@ -498,6 +501,8 @@ def project_list(request):
     end_date_s = "" if isNone(request.GET.get("end_date_s")) else request.GET.get("end_date_s")
     status_p = "" if isNone(request.GET.get("status_p")) else request.GET.get("status_p")
     leader_p = "" if isNone(request.GET.get("leader_p")) else request.GET.get("leader_p")
+    type_p = "" if isNone(request.GET.get("type_p")) else request.GET.get("type_p")
+
     #将get到的日期参数由string类型（实际type的时候显示是unicode，暂时未知）转换成datetime类型。
     #strptime是将str类型转换为struct_time,然后再用datetime.date将time类型转换为datetime类型
     #"*"表示将列表中的数据作为函数的参数，如果是**则是将字典中的数据作为函数的参数
@@ -523,6 +528,7 @@ def project_list(request):
             end_date_s = search_form.cleaned_data['end_date_s']
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
+            type_p = search_form.cleaned_data['type_p']
 
             projectlist = models.project.objects.filter().order_by("-status_p","-priority")
             
@@ -544,6 +550,9 @@ def project_list(request):
         projectlist = projectlist.filter(start_date__lte=end_date_s)
     if not isNone(status_p):
         projectlist = projectlist.filter(status_p=status_p.strip())
+    #新增的筛选项，类型
+    if not isNone(type_p):
+        projectlist = projectlist.filter(type_p=type_p.strip())
     if not isNone(leader_p):
         #projectlist = projectlist.filter(leader_p__username__contains=leader_p.strip())
         project_user_list = models.project_user.objects.filter(username__realname__contains=leader_p.strip())
@@ -592,7 +601,7 @@ def project_list(request):
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
             'puser':puser, 'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
             'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
-            "status_p":status_p, "leader_p":leader_p, 'notices':notices, \
+            "status_p":status_p, "leader_p":leader_p,"type_p":type_p, 'notices':notices, \
             'count':count, "logintag":logintag, "changetag":changetag, "delaytag":delaytag, "deletetag":deletetag,\
             "edittag":edittag, "user_id":user_id, "auth_changetag":auth_changetag, "createtag":createtag}))
     
