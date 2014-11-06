@@ -70,7 +70,7 @@ class public_message(models.Model):
     type_p = models.CharField(max_length=30,choices=CHOICES)
     publication_date = models.DateField()
     delay_status = models.CharField(u'批准状态',max_length=10,null=True,blank=True)
-    isactived = models.BooleanField(max_length=1)
+    isactived = models.IntegerField(max_length=1)
         
 
 class project_delay(models.Model):

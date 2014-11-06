@@ -364,11 +364,12 @@ def new_project(request, pid='', nid=''):
 
             #项目设计完成需要给业务负责人和产品负责人发消息，project_operator_bussniess_message和public_message
             #project_user_message这三个表
+            #设计完成isactived存2，测试中isactived存3，上线给留言发消息isactived存1，上线发公告isactived存0
             #--杜
             if status == u"设计完成":
                 flag = 0
                 prolist = public_message.objects.filter\
-                (project=pid).order_by("isactived")
+                (project=pid).filter(isactived=2).order_by("-id")
                 try:
                     prolist[0].isactived
                 except IndexError:
@@ -379,7 +380,7 @@ def new_project(request, pid='', nid=''):
                     else:
                         flag = 1                        
                 else:
-                    if prolist[0].isactived != 0:
+                    if prolist[0].isactived != 2:
                         try:
                             request.session['id']
                         except KeyError:
@@ -404,7 +405,7 @@ def new_project(request, pid='', nid=''):
                                               publisher=uid, content=content, type_p="message", \
                                               publication_date=datetime.datetime.now(), \
                                               delay_status = "未确认" ,\
-                                              isactived=False)
+                                              isactived=2)
                         pmessage.save()
                         #存表project_user_message
                         #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦 
@@ -435,6 +436,81 @@ def new_project(request, pid='', nid=''):
                                                                   status = "未确认设计" , publication_date = datetime.datetime.now(), \
                                                                   isactived=False)
                         pmessage.save() 
+                                                
+
+
+
+
+            if status == u"测试中":
+                flag = 0
+                prolist = public_message.objects.filter\
+                (project=pid).filter(isactived=3).order_by("-id")
+                try:
+                    prolist[0].isactived
+                except IndexError:
+                    try:
+                        request.session['id']
+                    except KeyError:
+                        return HttpResponseRedirect("/nologin")
+                    else:
+                        flag = 1                        
+                else:
+                    if prolist[0].isactived != 3:
+                        try:
+                            request.session['id']
+                        except KeyError:
+                            return HttpResponseRedirect("/nologin")
+                        else:
+                            flag = 1
+                if flag == 1:        
+                    usrid = request.session['id']
+                    project = models.project.objects.get(id=pid)
+                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                    content = project.project + u"于"+time+u"已发测试版，请在上线前联系项目负责人并确认验收！"    
+                    uids = []
+                    if project.business_man_id > 0 :
+                        uids.append(project.business_man_id)
+                    if project.operator_p_id > 0 :
+                        uids.append(project.operator_p_id)
+                    if project.customer_service_id > 0 :
+                        uids.append(project.customer_service_id)
+                    for uid in uids :
+                        #存表public_message
+                        pmessage = public_message(project=pid, \
+                                              publisher=uid, content=content, type_p="message", \
+                                              publication_date=datetime.datetime.now(), \
+                                              delay_status = "未确认" ,\
+                                              isactived=3)
+                        pmessage.save()
+                        #存表project_user_message
+                        #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦 
+                        messageid = public_message.objects.filter(publisher = uid).order_by("-id")[0]
+                        ppmessage = project_user_message(userid_id = uid , messageid_id = messageid.id ,\
+                                                        project_id = pid , isactived = True )
+                        ppmessage.save()
+                    #存表project_operator_bussniess_message
+                    #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦
+                    if project.business_man_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.business_man_id , project_id = pid ,\
+                                                                  user_type = "业务" ,\
+                                                                  title = "已发测试版，请在上线前联系项目负责人并确认验收！" ,\
+                                                                  status = "项目未验收" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save()
+                    if project.operator_p_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.operator_p_id , project_id = pid ,\
+                                                                  user_type = "运营" ,\
+                                                                  title = "已发测试版，请在上线前联系项目负责人并确认验收！" ,\
+                                                                  status = "项目未验收" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save()
+                    if project.customer_service_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.customer_service_id , project_id = pid ,\
+                                                                  user_type = "客服" ,\
+                                                                  title = "已发测试版，请在上线前联系项目负责人并确认验收！" ,\
+                                                                  status = "项目未验收" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save()
                                                 
             
 
@@ -1446,14 +1522,14 @@ def confirmmessage(request):
             reconmessage = conmessage
             conmessage.save()
             #project_operator_bussniess_message修改状态、插入确认时间
-            #如果public_message的isactived为0，就是设计需要确认
-            #如果public_message的isactived为1，就是已发测试版本需要确认
-            if  reconmessage.isactived:
+            #如果public_message的isactived为2，就是设计需要确认
+            #如果public_message的isactived为3，就是已发测试版本需要确认
+            if  reconmessage.isactived==3:
                 pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
                                                                   status = "项目未验收" )
                 pmessage.check_date = datetime.datetime.now()
                 pmessage.status = "项目已验收"
-            else:
+            if reconmessage.isactived==2:
                 pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
                                                                   status = "未确认设计" )
                 pmessage.confirm_design_date = datetime.datetime.now()
