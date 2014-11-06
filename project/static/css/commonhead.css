@@ -84,12 +84,12 @@ body{
 	    }
 
         .notify-icon {
-           background: url("http://img.ablesky.cn/stata/images/market/nav/notification_8277f5ef.png") no-repeat scroll center 4px rgba(0, 0, 0, 0);
+           background: url(/static/img/notify-icon.png) no-repeat scroll center 4px rgba(0, 0, 0, 0);
     	   width: 15px;
 }
         .notify-icon:hover{
            color:#3b3b3b;
-           background: url("http://img.ablesky.cn/stata/images/market/nav/notification_8277f5ef.png") no-repeat scroll center -22px rgba(0, 0, 0, 0);;
+           background: url(/static/img/notify-icon.png) no-repeat scroll center -22px rgba(0, 0, 0, 0);;
 }
 
 		.nav-link {
@@ -114,7 +114,7 @@ body{
 			font-size:10px;
 			color:#FFF;
 			text-indent:4px;
-			background:url(http://img.ablesky.cn/stata/images/market/nav/notification-tip_49cbec37.png)no-repeat;
+			background:url(/static/img/notify-tip.png)no-repeat;
 		}
 	    .top_bar a{
 	    	color: #fff;

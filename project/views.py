@@ -8,8 +8,8 @@ import time
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm
-from models import department, project, project_user, public_message, project_delay, project_user_message
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm
+from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
 import models
 import hashlib
 import django.contrib.auth.models
@@ -227,17 +227,22 @@ def new_project(request, pid='', nid=''):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
+            type_p = form.cleaned_data['type_p']
             priority = form.cleaned_data['priority']
             pname = form.cleaned_data['pname']
+            description = form.cleaned_data['description']
             status = form.cleaned_data['status']
             leaderid = form.cleaned_data['leader']
             leader = models.user.objects.get(id=leaderid)
             designer = form.cleaned_data['designer']
-            if designer:
-                designer = models.user.objects.get(id=designer)
             tester = form.cleaned_data['tester']
-            if tester:
-                tester = models.user.objects.get(id=tester)
+            business_man = form.cleaned_data['business_man']
+            operator_p = form.cleaned_data['operator_p']
+            customer_service = form.cleaned_data['customer_service']
+            roles = [designer, tester, business_man, operator_p, customer_service]
+            for i in range(len(roles)):
+                if roles[i]:
+                    roles[i] = models.user.objects.get(id=roles[i])
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
@@ -251,14 +256,23 @@ def new_project(request, pid='', nid=''):
             tppath = form.cleaned_data['tppath']
             tcpath = form.cleaned_data['tcpath']
             trpath = form.cleaned_data['trpath']
-            relateduser = form.cleaned_data['relateduser']
+            relateduser0 = form.cleaned_data['relateduser0']
+            relateduser1 = form.cleaned_data['relateduser1']
+            relateduser2 = form.cleaned_data['relateduser2']
+            relateduser3 = form.cleaned_data['relateduser3']
+            relateduser4 = form.cleaned_data['relateduser4']
+            relateduser5 = form.cleaned_data['relateduser5']
             countsql = form.cleaned_data['countsql']
             countsql = strQ2B(countsql)
+            remark_p = form.cleaned_data['remark_p']
 
             if pid == '' or nid == '1':
-                pro = models.project(priority=priority, \
-                    project=pname, status_p=status, leader_p=leader, \
-                    designer_p=designer, tester_p=tester, start_date=sdate, \
+                pro = models.project(type_p=type_p, priority=priority, \
+                    project=pname, description=description, \
+                    status_p=status, leader_p=leader, \
+                    designer_p=roles[0], tester_p=roles[1], start_date=sdate, \
+                    business_man =roles[2], operator_p = roles[3],\
+                    customer_service = roles[4],\
                     expect_launch_date=pdate, \
                     estimated_product_start_date=psdate, \
                     estimated_product_end_date=pedate, \
@@ -267,13 +281,20 @@ def new_project(request, pid='', nid=''):
                     estimated_test_start_date=tsdate, \
                     estimated_test_end_date=tedate, blueprint_p=ppath, \
                     develop_plan_p=dppath, test_plan_p=tppath, \
-                    test_case_p=tcpath, test_report_p=trpath, isactived=1)
+                    test_case_p=tcpath, test_report_p=trpath, \
+                    remark_p =remark_p, isactived=1)
             else:
                 rdate = models.project.objects.get(id=pid).real_launch_date
                 pnum = models.project.objects.get(id=pid).praise_p
-                pro = models.project(id=pid, priority=priority,\
-                    project=pname, status_p=status, leader_p=leader, \
-                    designer_p=designer, tester_p=tester, start_date=sdate, \
+                pro = models.project(id=pid, type_p=type_p, \
+                    priority=priority,project=pname, \
+                    description=description, \
+                    status_p=status, leader_p=leader, \
+                    designer_p=roles[0], tester_p=roles[1], \
+                    business_man = roles[2], \
+                    operator_p = roles[3],\
+                    customer_service = roles[4],\
+                    start_date=sdate, \
                     expect_launch_date=pdate, \
                     real_launch_date=rdate, \
                     estimated_product_start_date=psdate, \
@@ -284,22 +305,28 @@ def new_project(request, pid='', nid=''):
                     estimated_test_end_date=tedate, blueprint_p=ppath, \
                     develop_plan_p=dppath, test_plan_p=tppath, \
                     test_case_p=tcpath, test_report_p=trpath, \
-                    isactived=1, praise_p=pnum)
+                    remark_p=remark_p,isactived=1, praise_p=pnum)
             pro.save()
-            #存完项目，存相关产品测试开发人员信息
-            relateduser = relateduser.replace(" ", "").split(",")
-            if len(relateduser):
-                if pid == '' or nid =='1':
-                    pid = models.project.objects.filter\
-                    (project=pname).order_by("-id")[0].id
-                else:
-                    models.project_user.objects.filter(project_id=pid).delete()
-    
-                for uid in relateduser:
-                    if uid:
-                        project_user = models.project_user\
-                        (username_id=uid, project_id=pid, isactived=1)
-                        project_user.save()
+            #存完项目，存相关产品测试开发等人员信息
+            
+            #如果是新建就取出刚才存在的项目id,否则是编辑则删掉此前的用户与项目的关系
+            if pid == '' or nid =='1':
+                pid = models.project.objects.filter\
+                (project=pname).order_by("-id")[0].id
+            else:
+                models.project_user.objects.filter(project_id=pid).delete()
+
+            relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
+            for i in range(len(relateduser)):
+                #把相关人员的id存入列表中
+                relateduser[i] = relateduser[i].replace(" ", "").split(",")
+                if len(relateduser[i]):          
+                    #存用户与项目的关系
+                    for uid in relateduser[i]:
+                        if uid:
+                            project_user = models.project_user\
+                            (username_id=uid, project_id=pid, roles=i, isactived=1)
+                            project_user.save()
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
@@ -316,10 +343,12 @@ def new_project(request, pid='', nid=''):
                     project_statistics = models.project_statistics(
                                         project_id=pid, item=item, db=db, sql=sql)
                     project_statistics.save()
-            #给项目的各负责人添加编辑项目权限
+            
             musername = models.user.objects.get(id=leaderid).username
             #给项目负责人加入到项目负责人权限组
             User.objects.get(username=musername).groups.add(4)
+
+            #给其他负责人加入到相应负责人权限组
             if designer:
                 dusername = models.user.objects.get\
                 (id=form.cleaned_data['designer']).username
@@ -330,6 +359,84 @@ def new_project(request, pid='', nid=''):
                 (id=form.cleaned_data['tester']).username
                 #给测试负责人加入到测试负责人权限组
                 User.objects.get(username=tusername).groups.add(6)
+
+
+
+            #项目设计完成需要给业务负责人和产品负责人发消息，project_operator_bussniess_message和public_message
+            #project_user_message这三个表
+            #--杜
+            if status == u"设计完成":
+                flag = 0
+                prolist = public_message.objects.filter\
+                (project=pid).order_by("isactived")
+                try:
+                    prolist[0].isactived
+                except IndexError:
+                    try:
+                        request.session['id']
+                    except KeyError:
+                        return HttpResponseRedirect("/nologin")
+                    else:
+                        flag = 1                        
+                else:
+                    if prolist[0].isactived != 0:
+                        try:
+                            request.session['id']
+                        except KeyError:
+                            return HttpResponseRedirect("/nologin")
+                        else:
+                            flag = 1
+                if flag == 1:        
+                    usrid = request.session['id']
+                    project = models.project.objects.get(id=pid)
+                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+                    content = project.project + u"于"+time+u"设计完成，请立即查看设计图并确认！"    
+                    uids = []
+                    if project.business_man_id > 0 :
+                        uids.append(project.business_man_id)
+                    if project.operator_p_id > 0 :
+                        uids.append(project.operator_p_id)
+                    if project.customer_service_id > 0 :
+                        uids.append(project.customer_service_id)
+                    for uid in uids :
+                        #存表public_message
+                        pmessage = public_message(project=pid, \
+                                              publisher=uid, content=content, type_p="message", \
+                                              publication_date=datetime.datetime.now(), \
+                                              delay_status = "未确认" ,\
+                                              isactived=False)
+                        pmessage.save()
+                        #存表project_user_message
+                        #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦 
+                        messageid = public_message.objects.filter(publisher = uid).order_by("-id")[0]
+                        ppmessage = project_user_message(userid_id = uid , messageid_id = messageid.id ,\
+                                                        project_id = pid , isactived = True )
+                        ppmessage.save()
+                    #存表project_operator_bussniess_message
+                    #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦
+                    if project.business_man_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.business_man_id , project_id = pid ,\
+                                                                  user_type = "业务" ,\
+                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
+                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save()
+                    if project.operator_p_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.operator_p_id , project_id = pid ,\
+                                                                  user_type = "运营" ,\
+                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
+                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save()
+                    if project.customer_service_id > 0 :
+                        pmessage = project_operator_bussniess_message(userid_id=project.customer_service_id , project_id = pid ,\
+                                                                  user_type = "客服" ,\
+                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
+                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
+                                                                  isactived=False)
+                        pmessage.save() 
+                                                
+            
 
 
             #给项目负责人添加申请延期权限
@@ -384,21 +491,34 @@ def new_project(request, pid='', nid=''):
                 luser = models.user.objects.get(id=request.POST['leader'])
             else:
                 luser = None
-            relateduser = request.POST['relateduser']
-            relateduser = relateduser.replace(" ", "").split(",")
-            pd = []
-            dev = []
-            qa = []           
-            for uid in relateduser:
-                if uid:
-                    tuser = models.user.objects.get(id=int(uid))
-                    if tuser.department_id == 1:
-                        qa.append(tuser)
-                    elif tuser.department_id == 3:
-                        pd.append(tuser)
-                    else:
-                        dev.append(tuser)
-            related_user = {'qa':qa, 'dev': dev, 'pd': pd}
+            relateduser0 = request.POST['relateduser0']
+            relateduser1 = request.POST['relateduser1']
+            relateduser2 = request.POST['relateduser2']
+            relateduser3 = request.POST['relateduser3']
+            relateduser4 = request.POST['relateduser4']
+            relateduser5 = request.POST['relateduser5']
+            
+            relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
+            people = []
+            allpeople = []
+            for i in range(len(relateduser)):
+                relateduser[i] = relateduser[i].replace(" ", "").split(",")
+            # pd = []
+            # dev = []
+            # qa = []           
+                for uid in relateduser[i]:
+                    if uid:
+                        tuser = models.user.objects.get(id=int(uid))
+                        people.append(tuser)
+                allpeople.append(people)
+                        # if tuser.department_id == 1:
+                        #     qa.append(tuser)
+                        # elif tuser.department_id == 3:
+                        #     pd.append(tuser)
+                        # else:
+                        #     dev.append(tuser)
+            related_user = {'pd':allpeople[0], 'dev': allpeople[1], 'dev': allpeople[2], \
+            'bm': allpeople[3], 'cs': allpeople[4], 'op': allpeople[5]}
             dpid = request.POST['designer']
             tpid = request.POST['tester']
             if dpid:
@@ -625,16 +745,20 @@ def isNone(s):
         return False
     
 def detail(request, pid='', nid=''):
-    print pid
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
-    qas = models.user.objects.filter(project_user__project_id=pid, department_id=1)
-    #qa = {'rel': qas}
-    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
-    #dev = {'rel': devs}
-    pds = models.user.objects.filter(project_user__project_id=pid, department_id=3)
-    #pd = {'rel': pds}
-    related_user = {'qa':qas, 'dev': devs, 'pd': pds}
+    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
+    bms = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=3), Q(department_id=12) | Q(department_id=9) | Q(department_id=7))
+    ops = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=4),Q(department_id=3) | Q(department_id=8) | Q(department_id=12)| Q(department_id=9) | Q(department_id=7))
+    #这个列表用来存测试产品销售客服
+    p_role = []
+    #这个列表用来存测试产品销售客服的部门id和roles值
+    dep_id = [[1,2], [3,0], [7,5]]
+    for item_id in dep_id:
+        p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id[0], project_user__roles=item_id[1]))
+
+    related_user = {'qa':p_role[0], 'dev': devs, 'pd': p_role[1], 'bm': bms, 'cs': p_role[2], 'op': ops}
+
     dt_temp = {}
     dt = {}
     #处理时间为空,无法计算时间差
@@ -662,7 +786,73 @@ def detail(request, pid='', nid=''):
         status = '未填写'
     else:
         status = '已填写'
- 
+#各部门负责人确认状态  
+    confirmation = {}
+    bm_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='bm').order_by("id")
+    a = 0
+    if bm_status:
+        bm_check = None
+        for item in bm_status:            
+            if item.confirm_design_date:
+                bm_design_date = item.confirm_design_date
+                bm_design = bm_design_date.strftime("%Y-%m-%d %H:%I") + item.status
+            else:
+                if item.check_date:
+                    bm_check_date = item.check_date
+                    bm_check = bm_check_date.strftime("%Y-%m-%d %H:%I") + item.status
+                else:
+                    print item.confirm_design_date
+                    if a == 0:
+                        bm_design = item.status
+                    else:
+                        bm_check = item.status
+            a = a + 1
+        confirmation['bm_design'] = bm_design
+        if bm_check:
+            confirmation['bm_check'] = bm_check
+    op_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='op')
+    a = 0
+    if op_status:
+        op_check = None
+        for item in op_status:            
+            if item.confirm_design_date:
+                    op_design_date = item.confirm_design_date
+                    op_design = op_design_date.strftime("%Y-%m-%d %H:%I") + item.status
+            else:
+                if item.check_date:
+                    op_check_date = item.check_date
+                    op_check = op_check_date.strftime("%Y-%m-%d %H:%I") + item.status
+                else:
+                    if a == 0:
+                        op_design = item.status
+                    else:
+                        op_check = item.status
+            a = a + 1
+        confirmation['op_design'] = op_design
+        if op_check:
+            confirmation['op_check'] = op_check
+    cs_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='cs')
+    a = 0
+    if cs_status:
+        cs_check = None
+        for item in cs_status:            
+            if item.confirm_design_date:
+                cs_design_date = item.confirm_design_date
+                cs_design = cs_design_date.strftime("%Y-%m-%d %H:%I") + item.status
+            else:
+                if item.check_date:
+                    cs_check_date = item.check_date
+                    cs_check = cs_check_date.strftime("%Y-%m-%d %H:%I") + item.status
+                else:
+                    if a == 0:
+                        cs_design = item.status
+                    else:
+                        cs_check = item.status
+            a = a + 1
+        confirmation['cs_design'] = cs_design
+        if cs_check:
+            confirmation['cs_check'] = cs_check
+    
     try:
         request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
@@ -670,7 +860,8 @@ def detail(request, pid='', nid=''):
             editboolean = True
     finally:
         if '/detail/' in request.path:
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 'sql': status}
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
+                   'sql': status, 'confirmation': confirmation}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
             edittag = 1
@@ -693,11 +884,22 @@ def show_person(request):
         key = 2
     elif roles == "pro":
         key = 3
+    elif roles =="sal":
+        key = 12
+    elif roles =="ope":
+        key = 8
+    elif roles == "com":
+        key = 7
     else:
         key = 0
 
     if key == 2:
         person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
+    elif key == 12:
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+    elif key == 8:
+        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=3) | Q(department_id=12)| \
+            Q(department_id=9) | Q(department_id=7), Q(isactived=1))
     else:
         person = models.user.objects.filter(department_id=key, isactived=1)
     person_rs = []
@@ -715,6 +917,7 @@ def show_person(request):
     rrs = {"person":person_rs}
     person_rs = json.dumps(rrs)
     return HttpResponse(person_rs)
+
 def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
@@ -725,17 +928,33 @@ def psearch(request):
         ptype = 2
     elif role == "pro":
         ptype = 3
+    elif role =="sal":
+        ptype = 12
+    elif role =="ope":
+        ptype = 8
+    elif role == "com":
+        ptype = 7
     else:
         ptype = 0
     
     if len(key) == 0:
         if ptype == 2:
             prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+        elif ptype == 12:
+            person = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+        elif ptype == 8:
+            person = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=3) | Q(department_id=12)| \
+                Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
             prs = models.user.objects.filter(department_id=ptype, isactived=1)
     else:
         if ptype == 2:
             prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+        elif ptype == 12:
+            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptype) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+        elif ptype == 8:
+            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptype) | Q(department_id=3) | Q(department_id=12)| \
+                Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
             
@@ -751,19 +970,37 @@ def psearch(request):
         search_rs = json.dumps(rrs)
     return HttpResponse(search_rs)
 
-def show_headname(request):
-    user = {}
+#通用头
+def user_info(request):
+    result={}
     try:
-        username = request.session['username']
-        realname = request.session['realname']
-        user['username'] = username
-        user['realname'] = realname      
+        if request.session['username']:
+            projectlist = models.project.objects.filter()
+            project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
+            projectids = []
+            for p in project_user_list:
+                projectids.append(p.project.id) 
+            projectlist = projectlist.filter(pk__in = projectids)       
+            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")
+            pro_num=res.count()
+            result['pro_num']=pro_num
+   
+            userid = request.session['id']
+            messsage = project_user_message.objects.filter(userid_id = userid)
+            message_num = messsage.count()
+            result['message_num'] = message_num
+                       
+            username = request.session['username']
+            realname = request.session['realname']
+            result['username'] = username
+            result['realname'] = realname      
     except KeyError:
-        user['username'] = 'GUEST'
-        user['realname'] = 'GUEST'
-    rs = json.dumps(user)
+            result['pro_num'] = 0
+            result['message_num'] = 0
+            result['username'] = 'GUEST'
+            result['realname'] = 'GUEST' 
+    rs = json.dumps(result)
     return HttpResponse(rs)
-
 #homepage
 def personal_homepage(request):
     try:
@@ -885,33 +1122,7 @@ def changedesign(request, url):
                 pro_u_message.save()           
     return HttpResponseRedirect(url)
     #return render_to_response('personal_homepage.html', {'form': form})
-#通用头
-def pro_num(request):
-    try:
-        if request.session['username']:
-            projectlist = models.project.objects.filter()
-            project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
-            projectids = []
-            for p in project_user_list:
-                projectids.append(p.project.id) 
-            projectlist = projectlist.filter(pk__in = projectids)       
-            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")
-            num=res.count()
-            return HttpResponse(num)
-    except KeyError:
-        num=0
-        return HttpResponse(num)   
-def message_num(request):
-    try:
-        if request.session['id']:
-            userid = request.session['id']
-            messsage = project_user_message.objects.filter(userid_id = userid)
-            message_num = messsage.count()
-            print message_num
-            return HttpResponse(message_num)
-    except KeyError:
-        message_num=0
-        return HttpResponse(message_num)  
+
 #资源管理
 def judge(request):
     try:
@@ -1220,6 +1431,37 @@ def approve(request):
             pub_message.save()
     return HttpResponseRedirect('/delay/')
 
+
+#负责人确认消息
+def confirmmessage(request):
+    if request.session['id']:
+        useid = request.session['id']
+    if request.method == 'POST':
+        form = ConmessageForm(request.POST)
+        if form.is_valid(): 
+            #public_message修改状态已确认
+            messageid = form.cleaned_data['conmessageid']
+            conmessage = public_message.objects.get(publisher=useid, id=messageid)
+            conmessage.delay_status = "已确认"
+            reconmessage = conmessage
+            conmessage.save()
+            #project_operator_bussniess_message修改状态、插入确认时间
+            #如果public_message的isactived为0，就是设计需要确认
+            #如果public_message的isactived为1，就是已发测试版本需要确认
+            if  reconmessage.isactived:
+                pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
+                                                                  status = "项目未验收" )
+                pmessage.check_date = datetime.datetime.now()
+                pmessage.status = "项目已验收"
+            else:
+                pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
+                                                                  status = "未确认设计" )
+                pmessage.confirm_design_date = datetime.datetime.now()
+                pmessage.status = "已确认设计"
+            pmessage.save()
+    return HttpResponseRedirect('/historymessage/')
+
+
 #删除历史消息
 def deletehistory(request):
     if request.session['id']:
@@ -1299,8 +1541,8 @@ def initdata(request):
     depart4.save()
     depart5 = department(id=5,department='IT',isactived=1)
     depart5.save()
-    depart6 = department(id=6,department='院校事业',isactived=1)
-    depart6.save()
+#    depart6 = department(id=6,department='院校事业',isactived=1)
+#    depart6.save()
     depart7 = department(id=7,department='客服部',isactived=1)
     depart7.save()
     depart8 = department(id=8,department='市场部',isactived=1)

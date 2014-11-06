@@ -145,6 +145,7 @@ position:relative;
   border-right: medium none;
 }
 
+
 .title{
   display:inline-block; 
   width:110px
@@ -153,7 +154,7 @@ position:relative;
 
 .item-title {
     display:inline;  
-    line-height:39px;
+    line-height:30px;
     float:right;
 }
 
@@ -161,7 +162,7 @@ position:relative;
   display: inline;
 }
 
-#filepath input{
+#filepath input, #filepath textarea{
   width:610px;
   float: right;
 }

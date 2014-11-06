@@ -94,9 +94,13 @@
                 <tr>
                   <th style="width:50px;">优先级</th>
                   <th style="width:137px;">项目名称</th>
-                  <th style="width:76px">项目负责人</th>
-                  <th style="width:69px">产品负责人</th>
-                  <th style="width:70px">测试负责人</th>
+                  <th style="width:38px;">类型</th>
+                  <th style="width:48px;">业务</th>
+                  <th style="width:48px">产品</th>
+                  <th style="width:48px">PM</th>
+                  <th style="width:48px">测试</th>
+                  <th style="width:48px">运营</th>
+                  <th style="width:48px">客服</th>
                   <th style="width:184px">项目成员</th>
                   <th style="width:82px">项目开始时间</th>
                   <th style="width:82px">计划上线时间</th>
@@ -110,9 +114,13 @@
                   <tr class="basecolor">                     
                     <td>{{res.priority}}</td>
                     <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
-                    <td>{{res.leader_p.realname}}</td>
+                    <td>{{res.type_p}}</td>
+                    <td>{{res.business_man.realname}}</td>
                     <td>{{res.designer_p.realname}}</td>
+                    <td>{{res.leader_p.realname}}</td>                    
                     <td>{{res.tester_p.realname}}</td>
+                    <td>{{res.operator_p.realname}}</td>
+                    <td>{{res.customer_service.realname}}</td>
                     <td>{% for u in puser %}
                       {% ifequal res.id u.project_id %}
                     {{u.username.realname}}&nbsp;
@@ -132,7 +140,7 @@
                        
                       {% if edittag == 1 %}
                       {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id or pm == 1 %}
-                      <a href="{% url 'editproject' res.id %}">编辑</a>&nbsp;
+                      <a class="icon-edit" href="{% url 'editproject' res.id %}" title='编辑'></a>&nbsp;
                       {%endif%}
 
                       {% else %}                      
@@ -146,17 +154,17 @@
                       {% endif %}
                       
                       {% if pausetag == 1 or pm == 1 %}
-                      <a href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停</a>&nbsp;
+                      <a class="icon-pause" title='暂停' href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')"></a>&nbsp;
                       {% else %}                      
                       {% endif %}
                        
                       {% if deletetag == 1 or pm == 1 %}
-                      <a href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')">删除</a>&nbsp;
+                      <a class="icon-trash" title='删除' href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')"></a>&nbsp;
                       {% else %}                      
                       {% endif %}
 
                       {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id and changetag == 0 and pm == 0 %}
-                      <a href="{% url 'prodetail' res.id %}">查看详情</a>
+                      <a href="{% url 'prodetail' res.id %}">去反馈</a>
                       {%endif%}
               
                   </td>
@@ -178,9 +186,13 @@
                 <tr>
                   <th style="width:50px;">优先级</th>
                   <th style="width:137px;">项目名称</th>
-                  <th style="width:76px">项目负责人</th>
-                  <th style="width:69px">产品负责人</th>
-                  <th style="width:70px">测试负责人</th>
+                  <th style="width:34px;">类型</th>
+                  <th style="width:48px;">业务</th>
+                  <th style="width:48px">产品</th>
+                  <th style="width:48px">PM</th>                  
+                  <th style="width:48px">测试</th>
+                  <th style="width:48px">运营</th>
+                  <th style="width:48px">客服</th>
                   <th style="width:184px">项目成员</th>
                   <th style="width:82px">项目开始时间</th>
                   <th style="width:82px">计划上线时间</th>
@@ -195,9 +207,13 @@
                   <tr class="basecolor1">                    
                     <td>{{pres.priority}}</td>
                     <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a></td>
-                    <td>{{pres.leader_p.realname}}</td>
+                    <td>{{pres.type_p}}</td>
+                    <td>{{pres.business_man.realname}}</td>
                     <td>{{pres.designer_p.realname}}</td>
+                    <td>{{pres.leader_p.realname}}</td>
                     <td>{{pres.tester_p.realname}}</td>
+                    <td>{{pres.operator_p.realname}}</td>
+                    <td>{{pres.customer_service.realname}}</td>
                     <td>                                                                
                     
                     {% for us in puser %}
@@ -212,7 +228,7 @@
                     <td>{{pres.real_launch_date|date:"Y-m-d"}}</td>
                     <td>{{pres.status_p}}</td>     
                   <td>
-                    <a href="{% url 'prodetail' pres.id %}">查看详情</a>
+                    <a href="{% url 'prodetail' pres.id %}">去反馈</a>
                   </td>
                   {% endfor %}
                   {% endif %} 
@@ -255,5 +271,5 @@
     <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="/static/js/home_page.js"></script> 
-    <script type="text/javascript" src="http://yxb.qq.com/js/jquery.cookie.js"></script>        
+    <script type="text/javascript" src="/static/jquery/jquery.cookie.js"></script>        
 {% endblock %}

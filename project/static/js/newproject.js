@@ -50,22 +50,40 @@ $(document).ready(function(){
     function set_other_master(){
       var pm = $(".p-list").eq(0).children();
       var tm = $(".p-list").eq(2).children();
-      var d = findmaster(pm);
-      var t = findmaster(tm);
+      var sm = $(".p-list").eq(3).children();
+      var om = $(".p-list").eq(4).children();
+      var cm = $(".p-list").eq(5).children();
 
-      $("[name='designer']").attr("value",d); 
-      $("[name='tester']").attr("value",t);   
+/*      var d = findmaster(pm);
+      var t = findmaster(tm);*/
+
+      $("[name='designer']").attr("value",findmaster(pm)); 
+      $("[name='tester']").attr("value",findmaster(tm));
+      $("[name='business_man']").attr("value",findmaster(sm));   
+      $("[name='operator_p']").attr("value",findmaster(om));   
+      $("[name='customer_service']").attr("value",findmaster(cm));     
     } 
 
 
     function count_relateduser(){
-      var p = $(".role-item");  
+/*      var p = $(".role-item");  
       var idlist =" ";
       for(var i=p.length-1; i >=0; i--){
         var item = p.eq(i);
         idlist = idlist + item.attr("value") + ","
       } 
-      $("[name='relateduser']").attr("value",idlist);
+      $("[name='relateduser']").attr("value",idlist);*/
+      var plist = $(".p-list");
+      for(var i=0; i<plist.length;i++){
+        var p = plist.eq(i).children();
+        var idlist = " "
+        for(var j=0; j<p.length;j++){
+          var item = p.eq(j);
+          idlist = idlist + item.attr("value") + ",";
+        }
+        $("[name='relateduser"+i+"']").attr("value",idlist);
+      }
+
     }
     
     $("input:first").blur(function(){
@@ -109,13 +127,6 @@ $(document).ready(function(){
       //跟数量调整高度
       adjust_height();
 
-      //pl = $("[title='1']").children("div").length;
-      //if(pl >= 8){
-      //  w = (pl/4+1)*30;
-      //  $("[title='1']").attr("style","height:"+w+"px;");
-      //}
-
-/*      $("[title='1']").attr("title","0");
       //负责人还在的话要选中
       var dv = $("[name='designer']").attr("value")
       var tv = $("[name='tester']").attr("value")
@@ -124,7 +135,7 @@ $(document).ready(function(){
       }
       if(tv){
         $("[value='"+tv+"'] input").attr("checked","checked");
-      }*/
+      }
 
       //设置项目参与人员
       count_relateduser()

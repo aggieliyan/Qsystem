@@ -44,11 +44,18 @@ class project(models.Model):
     test_report_p = models.CharField(max_length=100,blank=True,null=True)
     isactived = models.BooleanField(max_length=1)
     praise_p = models.SmallIntegerField(max_length=8,default=0)
-    remark_p = models.TextField(u'备注', max_length=10000)
+    remark_p = models.TextField(u'备注', max_length=10000,blank=True,null=True)
 
 class project_user(models.Model):
     username = models.ForeignKey(user)
     project= models.ForeignKey(project)
+    roles = models.IntegerField()
+    #roles 0 产品
+    #      1 开发
+    #      2 测试
+    #      3 业务
+    #      4 运营
+    #      5 客服
     isactived = models.BooleanField(max_length=1)
     
 class public_message(models.Model): 
