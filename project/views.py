@@ -974,7 +974,7 @@ def detail(request, pid='', nid=''):
             else:
                 editdate = 0
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': sql}
-            return render_to_response('newproject.html', {'res': res, 'editdate':editdate})
+            return render_to_response('newproject.html', {'res': res, 'editdate':editdate, 'isdevs':1})
 
 def show_person(request):
     roles = request.GET['role']
@@ -1619,6 +1619,12 @@ def initdata(request):
     group5.save()
     group6 = Group(id=6,name='测试负责人权限--编辑')
     group6.save()  
+    group7 = Group(id=6,name='业务负责人权限--编辑')
+    group7.save() 
+    group8 = Group(id=6,name='运营负责人权限--编辑')
+    group8.save() 
+    group9 = Group(id=6,name='客服负责人权限--编辑')
+    group9.save() 
     #auth_group_permissions
     group1.permissions.add(25)
     group1.permissions.add(26)
@@ -1631,6 +1637,9 @@ def initdata(request):
     group4.permissions.add(26)
     group5.permissions.add(26)
     group6.permissions.add(26)
+    group7.permissions.add(26)
+    group8.permissions.add(26)
+    group9.permissions.add(26)
     #project_department
     depart1 = department(id=1,department='测试',isactived=1)
     depart1.save()
