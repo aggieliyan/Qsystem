@@ -550,6 +550,30 @@ def new_project(request, pid='', nid=''):
                                               publication_date=datetime.datetime.now(), \
                                               isactived=False)
                     pmessage.save()
+                    
+                    ###
+                    #先判断在项目上线之前有没有留言的人
+                    try:
+                        related_user = models.project_feedback.objects.filter(project_id=pid)
+                    except:
+                        None
+                    else:
+                        #项目上线，给留言者发的消息存在消息表中
+                        string = project.project + u"已上线，您可以去体验并跟踪反馈机构的体验效果啦"
+                        pub_message = public_message(project=pid, publisher=usrid, content=string, \
+                            type_p="message", publication_date=datetime.datetime.now(), delay_status="已上线", isactived=1)
+                        pub_message.save()
+                        #先判断在项目上线之前有没有留言的人
+                        #从留言表中把此项目相关的留言数据读取出来（留言者id）
+                        message = public_message.objects.filter(project=pid).order_by("-id")[0]
+                        #给项目和消息创建关系
+                        for i in related_user:
+                            uid = i.feedback_member_id
+                            megid = message.id
+                            pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=pid, isactived='1')
+                            pro_u_message.save()   
+                    ### 
+                    
                     project.real_launch_date = datetime.datetime.now()
                     project.save()                   
             return redirect('/projectlist/')
