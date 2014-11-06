@@ -324,6 +324,7 @@ def new_project(request, pid='', nid=''):
                     #存用户与项目的关系
                     for uid in relateduser[i]:
                         if uid:
+                            #Django bulk_create
                             project_user = models.project_user\
                             (username_id=uid, project_id=pid, roles=i, isactived=1)
                             project_user.save()
