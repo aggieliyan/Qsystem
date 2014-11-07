@@ -335,13 +335,10 @@
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目状态：</label>
                 </div>
-                {% if isbs %}
-                <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}" readonly>
+                
+                <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
                   <option select = 'selected'>{{res.pro.status_p}}</option>
-                </select>
-                {% else %}
-                 <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
-                  <option select = 'selected'>{{res.pro.status_p}}</option>
+                  {% if isope %}
                   <option>需求讨论中</option>
                   <option>设计中</option>
                   <option>设计完成</option>
@@ -349,14 +346,15 @@
                   <option>测试中</option>
                   <option>暂停</option>
                   <option>已上线</option>
-                </select>               
-                {% endif %}
+                  {% endif %}
+                </select>
+
               </div>
               <div>
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目负责人：</label>
                 </div>
-                <input name="leader" style="display:none;" value={{res.user.id}}>
+                <input name="leader" style="display:none;" value={{res.user.id}} readonly>
                 {% if res.pro.designer_p_id %}
                   <input name="designer" style="display:none;" value={{res.pro.designer_p_id}}>
                 {% else %}
@@ -382,7 +380,7 @@
                 {% else %}                  
                   <input name="customer_service" style="display:none;" value=''>  
                 {% endif %}
-                <select id="master"  class="inputfield" >
+                <select class="inputfield" >
                   <option select='selected' readonly>{{res.user.realname}}</option>
                 </select>
                   
@@ -522,7 +520,7 @@
               <div class="range">
                 <div><label>开发：</label><span class="days">{{res.dt.dtime}}</span>天</div>
                 <span class="input-append date">   
-                  <input name='dsdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_start_date|date:"Y-m-d"}}">
+                  <input name='dsdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_start_date|date:"Y-m-d"}}"readonly>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                 </span><span class="word">至</span>
                 <span class="input-append date">   
