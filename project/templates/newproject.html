@@ -154,7 +154,7 @@
                   <input name="relateduser4" style="display:none;">
                   <input name="relateduser5" style="display:none;">
 
-                  <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro">添加</button>
+                  <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro" >添加</button>
                     <div class="p-list">
 						            {% if res.reuser.pd %}
                        		{% for item in res.reuser.pd %}
@@ -418,37 +418,37 @@
                   <input name="relateduser4" style="display:none;">
                   <input name="relateduser5" style="display:none;">
 
-                  <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro">添加</button>
+                  <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro" disabled="false">添加</button>
                     <div class="p-list">
                         {% if res.reuser.pd %}
                           {% for item in res.reuser.pd %}
                             {% if item.id == res.pro.designer_p_id %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked'disabled="false"><span>{{item.realname}}</span><span class="close">x</span></div>
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked' disabled="false"><span>{{item.realname}}</span></div>
                             {% else %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' disabled="false"><span>{{item.realname}}</span><span class="close">x</span></div>
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' disabled="false"><span>{{item.realname}}</span></div>
                             {% endif %}
                           {% endfor %}
                         {% endif %}
                     </div>
                 </div>
                 <div  class="roles">
-                  <label class="item-title" style="float:left;">开发人员：</label><button type="button" class="btn btn-success" name="dev">添加</button>
+                  <label class="item-title" style="float:left;">开发人员：</label><button type="button" class="btn btn-success" name="dev" disabled="false">添加</button>
                     <div id="roles-dev" class="p-list">
                       {% if res.reuser.dev %}
                           {% for item in res.reuser.dev %}
-                            <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-dev' disabled="false"><span>{{item.realname}}</span><span class="close">x</span></div>  
+                            <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-dev' disabled="false"><span>{{item.realname}}</span></div>  
                           {% endfor %}
                         {% endif %}
                       </div>
                     </div>
                 </div>
                 <div  class="roles">
-                  <label class="item-title" style="float:left;">测试人员：</label><button type="button" class="btn btn-success" name="tes">添加</button>
+                  <label class="item-title" style="float:left;">测试人员：</label><button type="button" class="btn btn-success" name="tes" disabled="false">添加</button>
                     <div id="testarea" class="p-list">
                        {% if res.reuser.qa %}
                           {% for item in res.reuser.qa %}
                             {% if item.id == res.pro.tester_p_id %}
-                              <div class="role-item" value="{{item.id}}" type="radio" ><input type="radio" name='role-qa' checked = 'checked' disabled="false"><span>{{item.realname}}</span><span class="close">x</span></div>
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' checked = 'checked' disabled="false"><span>{{item.realname}}</span></div>
                             {% else %}
                               <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' disabled="false"><span>{{item.realname}}</span><span class="close">x</span></div>
                             {% endif %}
