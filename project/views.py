@@ -209,7 +209,7 @@ def new_project(request, pid='', nid=''):
         #如果是负责人且有编辑权限才可以
         flag = 0
         mid = [cpro.leader_p_id, cpro.designer_p_id, cpro.tester_p_id, cpro.business_man_id, cpro.operator_p_id, cpro.customer_service_id]
-        if uid not in mid or request.user.has_perm('auth.change_permission'):
+        if uid in mid or request.user.has_perm('auth.change_permission'):
             if request.user.has_perm('project.change_project'):
                 flag = 1
 
