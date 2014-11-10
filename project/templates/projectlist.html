@@ -249,7 +249,7 @@
                                             {% else %}
                                             {% endif %}
                                             {% if edittag == 1 %}
-                                            {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id or auth_changetag == 1%}
+                                            {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id or user_id == p.business_man.id or user_id == p.operator_p.id or user_id == p.customer_service.id or auth_changetag == 1%}
                                                 <a class="icon-edit" href="{% url 'editproject' p.id %}"> <span> </span></a>
                                             {% endif %}
                                             {% else %}
@@ -265,7 +265,7 @@
                                                 <a class="icon-trash" href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')"><span> </span></a>
                                             {% else %}
                                             {% endif %}
-                                            {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and changetag == 0 and auth_changetag == 0 %}
+                                            {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and user_id != p.business_man.id and user_id != p.operator_p.id and user_id != p.customer_service.id and changetag == 0 and auth_changetag == 0 %}
                                                 <a  href="{% url 'prodetail' p.id %}">去反馈</a>
                                             {% else %}
                                             {% endif %}
