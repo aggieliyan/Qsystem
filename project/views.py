@@ -700,7 +700,7 @@ def project_list(request):
     #判断是否登录
     if  request.user.is_authenticated():
         logintag = 1
-        user_id = request.session['id']
+        #user_id = request.session['id']
     if logintag == 1:
 
         if request.user.has_perm("project.change_public_message"):
@@ -1547,6 +1547,9 @@ def approve(request):
             delaydate= approvedelay.delay_to_date
             del_to_date = str(delaydate)
             string = deltitle + u"延期至：" + del_to_date
+            pro = project.objects.get(id=project_id)
+            pro.expect_launch_date = delaydate
+            pro.save()
             #delpro=project_delay.objects.get(id=delayid1)
         if request.session['id']:
             useid = request.session['id']
