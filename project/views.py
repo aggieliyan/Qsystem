@@ -318,6 +318,7 @@ def new_project(request, pid='', nid=''):
                 models.project_user.objects.filter(project_id=pid).delete()
 
             relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
+            all_p_user = []
             for i in range(len(relateduser)):
                 #把相关人员的id存入列表中
                 relateduser[i] = relateduser[i].replace(" ", "").split(",")
@@ -325,10 +326,13 @@ def new_project(request, pid='', nid=''):
                     #存用户与项目的关系
                     for uid in relateduser[i]:
                         if uid:
-                            #Django bulk_create
+                            #先把要存的人都放入列表all_p_user中
                             project_user = models.project_user\
                             (username_id=uid, project_id=pid, roles=i, isactived=1)
-                            project_user.save()
+                            all_p_user.append(project_user);
+
+            #最后再一起插入数据库
+            models.project_user.objects.bulk_create(all_p_user);
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
@@ -354,22 +358,8 @@ def new_project(request, pid='', nid=''):
             allmasters = [[designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
             for m in allmasters:
                 if m[0]:
-                    print m[0]
                     mname = models.user.objects.get(id=m[0]).username
-                    print "mmmmmmmmmmmmmmmmm"
-                    print mname
                     User.objects.get(username=mname).groups.add(m[1])
-            # if designer:
-            #     dusername = models.user.objects.get\
-            #     (id=form.cleaned_data['designer']).username
-            #     #给产品负责人加入到产品负责人权限组
-            #     User.objects.get(username=dusername).groups.add(5)
-            # if tester:
-            #     tusername = models.user.objects.get\
-            #     (id=form.cleaned_data['tester']).username
-            #     #给测试负责人加入到测试负责人权限组
-            #     User.objects.get(username=tusername).groups.add(6)
-
 
 
             #项目设计完成需要给业务负责人和产品负责人发消息，project_operator_bussniess_message和public_message
@@ -621,13 +611,15 @@ def new_project(request, pid='', nid=''):
                         tuser = models.user.objects.get(id=int(uid))
                         people.append(tuser)
                 allpeople.append(people)
+                people = []
+
                         # if tuser.department_id == 1:
                         #     qa.append(tuser)
                         # elif tuser.department_id == 3:
                         #     pd.append(tuser)
                         # else:
                         #     dev.append(tuser)
-            related_user = {'pd':allpeople[0], 'dev': allpeople[1], 'dev': allpeople[2], \
+            related_user = {'pd':allpeople[0], 'dev': allpeople[1], 'qa': allpeople[2], \
             'bm': allpeople[3], 'cs': allpeople[4], 'op': allpeople[5]}
             dpid = request.POST['designer']
             tpid = request.POST['tester']
@@ -636,8 +628,10 @@ def new_project(request, pid='', nid=''):
             if tpid:
                 tpid = int(tpid)
 
-            pro = {'priority':request.POST['priority'],
+            pro = {'type_p':request.POST['type_p'],
+                   'priority':request.POST['priority'],
                    'project':request.POST['pname'],
+                   'description':request.POST['description'],
                    'status_p':request.POST['status'],
                    'leader_p_id':request.POST['leader'],
                    'designer_p_id':dpid,
@@ -654,7 +648,8 @@ def new_project(request, pid='', nid=''):
                    'develop_plan_p':request.POST['dppath'],
                    'test_plan_p':request.POST['tppath'],
                    'test_case_p':request.POST['tcpath'],
-                   'test_report_p':request.POST['trpath'],}
+                   'test_report_p':request.POST['trpath'],
+                   'remark_p':request.POST['remark_p'],}
 
             dt_temp = {}
             dt = {}
@@ -675,7 +670,7 @@ def new_project(request, pid='', nid=''):
             else:
                 dt['ttime'] = 0
 
-            res = {'pro':pro, 'user':luser, 'reuser':related_user, 'dt': dt}
+            res = {'pro':pro, 'user':luser, 'reuser':related_user, 'dt': dt, 'sql':request.POST['countsql']}
             return render_to_response('newproject.html', \
                 {'res':res, 'form':form,'editdate':editdate}, context_instance=RequestContext(request))
 
@@ -754,7 +749,7 @@ def project_list(request):
             project_id = search_form.cleaned_data['id']
             project_name = search_form.cleaned_data['project']
             start_date_s = search_form.cleaned_data['start_date_s']
-            print(start_date_s)
+            #print(start_date_s)
             end_date_s = search_form.cleaned_data['end_date_s']
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
@@ -915,7 +910,7 @@ def detail(request, pid='', nid=''):
                     bm_check_date = item.check_date
                     bm_check = bm_check_date.strftime("%Y-%m-%d %H:%I") + item.status
                 else:
-                    print item.confirm_design_date
+                    #print item.confirm_design_date
                     if a == 0:
                         bm_design = item.status
                     else:
