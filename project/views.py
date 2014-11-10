@@ -318,6 +318,7 @@ def new_project(request, pid='', nid=''):
                 models.project_user.objects.filter(project_id=pid).delete()
 
             relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
+            all_p_user = []
             for i in range(len(relateduser)):
                 #把相关人员的id存入列表中
                 relateduser[i] = relateduser[i].replace(" ", "").split(",")
@@ -325,10 +326,13 @@ def new_project(request, pid='', nid=''):
                     #存用户与项目的关系
                     for uid in relateduser[i]:
                         if uid:
-                            #Django bulk_create
+                            #先把要存的人都放入列表all_p_user中
                             project_user = models.project_user\
                             (username_id=uid, project_id=pid, roles=i, isactived=1)
-                            project_user.save()
+                            all_p_user.append(project_user);
+
+            #最后再一起插入数据库
+            models.project_user.objects.bulk_create(all_p_user);
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
