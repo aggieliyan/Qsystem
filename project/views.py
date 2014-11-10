@@ -209,7 +209,7 @@ def new_project(request, pid='', nid=''):
         #如果是负责人且有编辑权限才可以
         flag = 0
         mid = [cpro.leader_p_id, cpro.designer_p_id, cpro.tester_p_id, cpro.business_man_id, cpro.operator_p_id, cpro.customer_service_id]
-        if uid not in mid or request.user.has_perm('auth.change_permission'):
+        if uid in mid or request.user.has_perm('auth.change_permission'):
             if request.user.has_perm('project.change_project'):
                 flag = 1
 
@@ -982,7 +982,7 @@ def detail(request, pid='', nid=''):
             edittag = 1
             editdate = 1
             isdevs = 1
-            isbs = 1
+            isope = 0
             if nid == '1':
                 #此时是在发布相似项目
                 edittag = 0
@@ -994,15 +994,15 @@ def detail(request, pid='', nid=''):
                 #isdevs标记当前登陆者是不是技术人员      
                 if dep_id not in [1,2,3,4,5,13]:
                     isdevs = 0
-                    bs_id = models.project.objects.get(id=pid).business_man_id
-                    if user_id != bs_id:
-                        isbs = 0
+                    bs_id = models.project.objects.get(id=pid).operator_p_id
+                    if user_id == bs_id:
+                        isope = 1
 
                 if not request.user.has_perm('auth.change_permission'):
                     editdate = 0
 
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': sql}
-            return render_to_response('newproject.html', {'res': res, 'editdate':editdate, 'isdevs':isdevs, 'isbs':isbs})
+            return render_to_response('newproject.html', {'res': res, 'editdate':editdate, 'isdevs':isdevs, 'isope':isope})
 
 def show_person(request):
     roles = request.GET['role']
