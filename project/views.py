@@ -358,7 +358,6 @@ def new_project(request, pid='', nid=''):
             allmasters = [[designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
             for m in allmasters:
                 if m[0]:
-                    print m[0]
                     mname = models.user.objects.get(id=m[0]).username
                     User.objects.get(username=mname).groups.add(m[1])
 
@@ -750,7 +749,7 @@ def project_list(request):
             project_id = search_form.cleaned_data['id']
             project_name = search_form.cleaned_data['project']
             start_date_s = search_form.cleaned_data['start_date_s']
-            print(start_date_s)
+            #print(start_date_s)
             end_date_s = search_form.cleaned_data['end_date_s']
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
@@ -911,7 +910,7 @@ def detail(request, pid='', nid=''):
                     bm_check_date = item.check_date
                     bm_check = bm_check_date.strftime("%Y-%m-%d %H:%I") + item.status
                 else:
-                    print item.confirm_design_date
+                    #print item.confirm_design_date
                     if a == 0:
                         bm_design = item.status
                     else:
