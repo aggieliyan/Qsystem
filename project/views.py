@@ -356,20 +356,7 @@ def new_project(request, pid='', nid=''):
                 if m[0]:
                     print m[0]
                     mname = models.user.objects.get(id=m[0]).username
-                    print "mmmmmmmmmmmmmmmmm"
-                    print mname
                     User.objects.get(username=mname).groups.add(m[1])
-            # if designer:
-            #     dusername = models.user.objects.get\
-            #     (id=form.cleaned_data['designer']).username
-            #     #给产品负责人加入到产品负责人权限组
-            #     User.objects.get(username=dusername).groups.add(5)
-            # if tester:
-            #     tusername = models.user.objects.get\
-            #     (id=form.cleaned_data['tester']).username
-            #     #给测试负责人加入到测试负责人权限组
-            #     User.objects.get(username=tusername).groups.add(6)
-
 
 
             #项目设计完成需要给业务负责人和产品负责人发消息，project_operator_bussniess_message和public_message
@@ -621,13 +608,15 @@ def new_project(request, pid='', nid=''):
                         tuser = models.user.objects.get(id=int(uid))
                         people.append(tuser)
                 allpeople.append(people)
+                people = []
+
                         # if tuser.department_id == 1:
                         #     qa.append(tuser)
                         # elif tuser.department_id == 3:
                         #     pd.append(tuser)
                         # else:
                         #     dev.append(tuser)
-            related_user = {'pd':allpeople[0], 'dev': allpeople[1], 'dev': allpeople[2], \
+            related_user = {'pd':allpeople[0], 'dev': allpeople[1], 'qa': allpeople[2], \
             'bm': allpeople[3], 'cs': allpeople[4], 'op': allpeople[5]}
             dpid = request.POST['designer']
             tpid = request.POST['tester']
@@ -636,8 +625,10 @@ def new_project(request, pid='', nid=''):
             if tpid:
                 tpid = int(tpid)
 
-            pro = {'priority':request.POST['priority'],
+            pro = {'type_p':request.POST['type_p'],
+                   'priority':request.POST['priority'],
                    'project':request.POST['pname'],
+                   'description':request.POST['description'],
                    'status_p':request.POST['status'],
                    'leader_p_id':request.POST['leader'],
                    'designer_p_id':dpid,
@@ -654,7 +645,8 @@ def new_project(request, pid='', nid=''):
                    'develop_plan_p':request.POST['dppath'],
                    'test_plan_p':request.POST['tppath'],
                    'test_case_p':request.POST['tcpath'],
-                   'test_report_p':request.POST['trpath'],}
+                   'test_report_p':request.POST['trpath'],
+                   'remark_p':request.POST['remark_p'],}
 
             dt_temp = {}
             dt = {}
@@ -675,7 +667,7 @@ def new_project(request, pid='', nid=''):
             else:
                 dt['ttime'] = 0
 
-            res = {'pro':pro, 'user':luser, 'reuser':related_user, 'dt': dt}
+            res = {'pro':pro, 'user':luser, 'reuser':related_user, 'dt': dt, 'sql':request.POST['countsql']}
             return render_to_response('newproject.html', \
                 {'res':res, 'form':form,'editdate':editdate}, context_instance=RequestContext(request))
 
