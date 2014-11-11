@@ -1001,31 +1001,17 @@ def detail(request, pid='', nid=''):
 
 def show_person(request):
     roles = request.GET['role']
-    key = 0
-    if roles == "tes":
-        key = 1
-    elif roles == "dev":
-        key = 2
-    elif roles == "pro":
-        key = 3
-    elif roles =="sal":
-        key = 12
-    elif roles =="ope":
-        key = 8
-    elif roles == "com":
-        key = 7
-    else:
-        key = 0
+    keys = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
 
-    if key == 2:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
-    elif key == 12:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-    elif key == 8:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=3) | Q(department_id=12)| \
+    if roles == 'dev':
+        person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
+    elif roles == 'sal':
+        person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+    elif roles == 'ope':
+        person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=3) | Q(department_id=12)| \
             Q(department_id=9) | Q(department_id=7), Q(isactived=1))
     else:
-        person = models.user.objects.filter(department_id=key, isactived=1)
+        person = models.user.objects.filter(department_id=keys[roles], isactived=1)
     person_rs = []
     num = len(person)
     if num == 0:
@@ -1046,41 +1032,28 @@ def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
     ptype = 0
-    if role == "tes":
-        ptype = 1
-    elif role == "dev":
-        ptype = 2
-    elif role == "pro":
-        ptype = 3
-    elif role =="sal":
-        ptype = 12
-    elif role =="ope":
-        ptype = 8
-    elif role == "com":
-        ptype = 7
-    else:
-        ptype = 0
+    ptypes = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
     
     if len(key) == 0:
-        if ptype == 2:
-            prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
-        elif ptype == 12:
-            person = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-        elif ptype == 8:
-            person = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=3) | Q(department_id=12)| \
+        if role == 'dev':
+            prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+        elif role == 'sal':
+            person = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+        elif role == 'ope':
+            person = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
                 Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
-            prs = models.user.objects.filter(department_id=ptype, isactived=1)
+            prs = models.user.objects.filter(department_id=ptypes[role], isactived=1)
     else:
-        if ptype == 2:
-            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
-        elif ptype == 12:
-            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptype) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-        elif ptype == 8:
-            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptype) | Q(department_id=3) | Q(department_id=12)| \
+        if role == 'dev':
+            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+        elif role == 'sal':
+            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+        elif role == 'ope':
+            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
                 Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
-            prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
+            prs = models.user.objects.filter(realname__contains=key, department_id=ptypes[role], isactived=1)
             
     search_rs = []
     if len(prs) > 0:
