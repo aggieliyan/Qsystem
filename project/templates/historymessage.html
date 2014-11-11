@@ -119,6 +119,13 @@
 							onclick="delete_mes({{message.id}})">删除</button>
 					</td>
 					{% endif %}
+					{% if message.delay_status = Null %}
+					<td class="states_yes"></td>
+					<td>
+						<button class="btn btn-danger " type="button" data-toggle="modal"
+							onclick="delete_mes({{message.id}})">删除</button>
+					</td>
+					{% endif %}
 				</tr>
 				{% endif %} 
 				{% endfor %}
