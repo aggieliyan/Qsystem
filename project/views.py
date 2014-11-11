@@ -8,7 +8,7 @@ import time
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
 from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
 import models
 import hashlib
@@ -712,6 +712,10 @@ def isNone(s):
         return False
     
 def detail(request, pid='', nid=''):
+    try:
+        request.session['id']
+    except:
+        return HttpResponseRedirect('/login')
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     #qa = {'rel': qas}
@@ -728,6 +732,7 @@ def detail(request, pid='', nid=''):
         p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id))
 
     related_user = {'qa':p_role[0], 'dev': devs, 'pd': p_role[1], 'bm': bms, 'cs': p_role[2], 'op': ops}
+   
 
     dt_temp = {}
     dt = {}
@@ -822,7 +827,14 @@ def detail(request, pid='', nid=''):
         confirmation['cs_design'] = cs_design
         if cs_check:
             confirmation['cs_check'] = cs_check
-    
+
+    current_uid = request.session['id'] #把当前登录用户的id传给页面，方便记录反馈人ID
+    pro_feedback = models.project_feedback.objects.filter(project_id=pid).order_by("-feedback_date")
+    fc = {}
+    for item in pro_feedback:
+        feedback_comment = models.project_feedback_comment.objects.filter(feedbackid_id=item.id).order_by("-feedback_date_c")
+        fc[item] = feedback_comment
+            
     try:
         request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
@@ -831,7 +843,7 @@ def detail(request, pid='', nid=''):
     finally:
         if '/detail/' in request.path:
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
-                   'sql': status, 'confirmation': confirmation}
+                   'sql': status, 'confirmation': confirmation, 'curuid': current_uid, 'feedback': [len(pro_feedback), fc]}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
             edittag = 1
@@ -845,6 +857,48 @@ def detail(request, pid='', nid=''):
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': sql}
             return render_to_response('newproject.html', {'res': res, 'editdate':editdate})
 
+def project_feedback(request):  #也可以写在detail里，这样更清晰
+    try:
+        request.session['id']
+    except:
+        return HttpResponseRedirect('/login')
+    if request.method == 'POST':
+        form = feedbackForm(request.POST)
+        if form.is_valid():
+            pid = form.cleaned_data['pid']
+            mid = form.cleaned_data['mid']
+            content = form.cleaned_data['content']
+        else:
+            pid = form.cleaned_data['pid']
+            link = '/detail/' + str(pid)
+            return HttpResponseRedirect(link)
+        f = models.project_feedback(project_id=pid, feedback_member_id=mid, content=content, feedback_date=datetime.datetime.now())
+        f.save()
+        link = '/detail/' + str(pid)
+        return HttpResponseRedirect(link)
+        
+            
+def feedback_comment(request):
+    try:
+        request.session['id']
+    except:
+        return HttpResponseRedirect('/login')
+    if request.method == 'POST':
+        form = feedbackCommentForm(request.POST)
+        if form.is_valid():
+            pid = form.cleaned_data['pid']
+            feedbackid = form.cleaned_data['feedbackid']
+            replymid = form.cleaned_data['replymid']
+            comment = form.cleaned_data['comment']
+        else:
+            link = '/detail/' + str(pid)
+            return HttpResponseRedirect(link)
+        fc = models.project_feedback_comment(feedbackid_id=feedbackid, feedback_member_c_id=replymid, comment=comment, 
+                                             feedback_date_c=datetime.datetime.now())
+        fc.save()
+        link = '/detail/' + str(pid)
+        return HttpResponseRedirect(link)
+        
 def show_person(request):
     roles = request.GET['role']
     key = 0

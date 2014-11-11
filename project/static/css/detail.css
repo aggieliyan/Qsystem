@@ -16,6 +16,7 @@ table {
 tr {
 	height: 40px;
 }
+
 a {
 	text-decoration: none;
 	color: #09f;
@@ -84,3 +85,69 @@ span {
 	color: blue;
 	font-size: 20px;
 }
+.feed-background {
+	width: 100%;
+	background: none repeat scroll 0 0 #f4f4f4;
+}
+
+.f-form div{
+	width: 100%;
+	margin: -100px, 0, -5px, 0;
+}
+.message-area {
+	border-color: -moz-use-text-color #ddd #ddd;
+    border: 1px solid #ddd;
+	border-style: solid;
+    border-width: 1px 1px 1px;
+    margin-top: 20px;
+}
+.message-total {
+	border-bottom: 1px solid #ddd;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 100px;
+}
+.emptyText {
+	color: #555;
+    display: block;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+.item-message {
+	border-bottom: 1px dotted #b4b4b4;
+    padding-bottom: 15px;
+    padding-top: 20px;
+    position: relative;
+    padding-left: 120px;
+}
+.item-feedback{
+	padding-bottom: 25px;
+}
+.fc-form div{
+	width: 50%;
+}
+.item-comment{
+	margin-top: -10px;
+}
+.reply-pup {
+	margin-top: -35px;
+	margin-left: -100px;
+}
+.action-btn {
+    margin: -10px 5px 0 0;
+    width: 98%;
+    float: right;
+    position: relative;
+}
+.cancle-reply {
+	padding-left: 10px;
+}
+.item-reply {
+	padding-left: 50px;
+	padding-bottom: 5px;
+}
+ul {
+	list-style: outside none none;
+}
+

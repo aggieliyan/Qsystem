@@ -2,6 +2,7 @@
   {% block title %}Q系统{% endblock %}
   {% block head %}
 	<link rel=stylesheet type="text/css" href="/static/css/detail.css" />
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<META http-equiv="content-type" content="text/html; charset=utf-8">
   {% endblock %}
   {% block content %}
@@ -166,8 +167,103 @@
 						<td class="line-name">备注：</td>
 						<td class="line-text">{{res.pro.remark_p}}</td>
 					</tr>
-				</table>			
+				</table>
+				<div class="feedback-area">
+					<div class="feed-background">
+						<form name="feedbackForm" class="f-form" action="/feedback/" method="post" style="margin-left:150px;">	
+							{% csrf_token %}
+							<div class="send_feedback">
+								<textarea class="feedback" name="content" defaultval="请输入您想要反馈的问题" style="width:700px; margin-top:20px; margin-bottom:20px;"></textarea>
+								<input id="pro_id" name="pid" type="hidden" value="{{res.pro.id}}"/>
+								<input id="member_id" name="mid" type="hidden" value="{{res.curuid}}"/>
+								<button id="sendfeedbacbtn" class="btn btn-success" style="margin-left:43px;" onclick="return feedbacktext();">提交反馈</button>									
+							</div>
+						</form>					
+					</div>
+					<div class="message-area">
+						<div class="message-total">共<span>{{res.feedback.0}}</span>条</div>
+						<ul>{% if res.feedback.0 > 0 %}
+								{% for key, value in res.feedback.1.items %}														
+									<li class="item-message" itemid="{{key.id}}">
+										<div class="item-feedback">
+											<span class="member-name"><b>{{key.feedback_member.realname}}</b>:</span>
+											{{key.content}}
+											<span class="date">({{key.feedback_date|date:"Y-m-d"}})</span>
+											<a id={{key.id}} class="reply-btn" href="javascript:void(0)" hidefocus="true">回复</a>
+										</div>
+										<div class="item-comment">
+											<div class="reply-pup" id=rp{{key.id}} style="display:none;">
+												<form name="commentForm" class="fc-form" action="/comment/" method="post" style="margin-left:150px;">
+													{% csrf_token %}
+													<div>
+														<textarea class="feedback-reply" name="comment" style="width:600px; margin-top:20px; margin-bottom:20px;"></textarea>
+														<script type="text/javascript"></script>
+														<input id="pro_id" name="pid" type="hidden" value="{{res.pro.id}}"/>
+														<input name="feedbackid" type="hidden" value="{{key.id}}"/>
+														<input name="replymid" type="hidden" value="{{res.curuid}}"/>														
+													</div>
+													<div class="action-btn">									
+														<button onclick="return commenttext();" class="btn btn-success" style="margin-left:43px;" hidefocus="true">
+															回复
+														</button>
+														<a class="cancle-reply" id = {{key.id}} href="javascript:void(0)" hidefocus="true">
+															<span>取消</span>
+														</a>
+													</div>																								
+												</form>
+										</div>
+										<div class="reply-area">									
+											{% for c in value %}
+												<div class="item-reply">
+													<span class="member-name"><b>{{c.feedback_member_c.realname}}</b></span>
+													<b style="font-weight:normal;padding:0 3px">回复：</b>
+													{{c.comment}}
+													<span class="date">({{c.feedback_date_c|date:"Y-m-d"}})</span>
+												</div>											
+											{% endfor %}											
+										</div>
+									</li>
+								{% endfor %}
+							{% else %}
+								<li class="emptyText"> 还没人反馈，来抢沙发吧！  </li>
+							{% endif %}
+						</ul>				
+				</div>
 			</div>
 		</div>
 	</div>
+{% endblock %}
+{% block js %}
+	<script type="text/javascript">
+		$(".reply-btn").bind("click",function(){
+		 	var i = $(this).attr('id');
+		 	var rpid = "#rp" + i;	 			
+		 	$(rpid).attr("style","display:block");
+		});
+		$(".cancle-reply").click(function(){
+			var i = $(this).attr('id');
+		 	var rpid = "#rp" + i;		 				 			
+		 	$(rpid).attr("style","display:none");
+		});
+		function feedbacktext(){
+	        var text = document.feedbackForm.content.value;
+	        if(!text){
+	        	alert("反馈内容或回复内容不能为空！")
+	          	return false;
+	        }
+	        else{
+	          document.feedbackForm.submit();
+	        } 
+        }	
+        function commenttext(){
+	        var text = document.commentForm.comment.value;
+	        if(!text){
+	        	alert("反馈内容或回复内容不能为空！")
+	        	return false;	          
+	        }
+	        else{
+	          document.commentForm.submit();
+	        } 
+        }						
+	 </script>
 {% endblock %}
