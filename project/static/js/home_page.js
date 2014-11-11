@@ -35,7 +35,7 @@ $(document).ready(function(){
        
 
     $(".chomdelay").click(function(){
-       timepro=$(this).parent().parent().children().eq(7).text();
+       timepro=$(this).parent().parent().children().eq(11).text();
        if (!timepro)
        {
         alert("计划上线时间为空不可申请延期");
