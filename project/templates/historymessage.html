@@ -90,7 +90,7 @@
 				<tr class="low2">
 
 					<td class="col1">&nbsp;{% autoescape off %}{{message.content}}{% endautoescape %}</td>
-					<td>{{message.publication_date}}</td>
+					<td>{{message.publication_date|date:"Y-m-d"}}</td>
 					{% if message.delay_status = "已拒绝"%}
 					<td class="states_yes">{{message.delay_status}}</td>
 					<td>
