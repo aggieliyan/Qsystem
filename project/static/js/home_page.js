@@ -20,7 +20,6 @@ $(document).ready(function(){
     });
 
 
-
     $("#finishedpro").click(function(){
       //console.log("hahhtjh");
       $("#mypage").show();
@@ -32,10 +31,13 @@ $(document).ready(function(){
       document.getElementById("mtab1").style.display = "block";
       document.getElementById("mtab2").style.display = "none";
     });
+
+    var table_list = {'优先级':0,'项目名称':1,'类型':2,'业务':3,'产品':4,'PM':5,'测试':6,'运营':7,'客服':8,
+                      '项目成员':9,'项目开始时间':10,'计划上线时间':11,'实际上线时间':12,'项目状态':13,'操作':14 };
        
 
     $(".chomdelay").click(function(){
-       timepro=$(this).parent().parent().children().eq(11).text();
+       timepro=$(this).parent().parent().children().eq(table_list['计划上线时间']).text();
        if (!timepro)
        {
         alert("计划上线时间为空不可申请延期");
@@ -50,7 +52,7 @@ $(document).ready(function(){
     var cellIndex=parseInt($(".procolor tr").length);
     for(var i=0; i<cellIndex;i++) {
       var time =document.getElementsByName("datetime")[i].value;
-      var stut = $(".basecolor").eq(i).children().eq(13).text();
+      var stut = $(".basecolor").eq(i).children().eq(table_list['项目状态']).text();
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var d=new Date(d.getTime() + 1*24*60*60*1000);
       var curDate=new Date();
@@ -61,7 +63,7 @@ $(document).ready(function(){
             $(".basecolor").eq(i).css("background-color","#ff9933"); }
       }      
     };
-    var project_type = $(".basecolor").eq(i).children().eq(2).text();
+    var project_type = $(".basecolor").eq(i).children().eq(table_list['类型']).text();
     if(project_type == '产品'){
       var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
     }
@@ -87,21 +89,63 @@ $(document).ready(function(){
       $("#mypage").show();
        }
 
-    //相应阶段负责人添加选中标志
-
-
-           
-});
-
-(function(){
-  //通过路径获取当前页
-  var url = location.pathname, navg = $('.top_memu li a');
-  if(url == '/personal_homepage/'){
+    (function(){
+    //通过路径获取当前页
+   var url = location.pathname, navg = $('.top_memu li a');
+   if(url == '/personal_homepage/'){
     $("#mypage").hide();
     }
-  })()
+    })()
 
-function change_p(id){
+$(function(){
+   var cellIndex=parseInt($(".prorealter tr").length-1);
+   $(".prorealter tr td").each(function(){
+        if(this.cellIndex = cellIndex){
+            $(this).attr("title",$(this).text());
+            //alert($(this).parent().get(0).rowIndex);输出所在行
+          }
+   });
+});
+
+$(function(){
+   //正在进行中给title赋值
+   var cell=parseInt($(".procolor tr").length);
+   for(var i=0; i<cell;i++){
+    var user = $.trim($(".basecolor").eq(i).children().eq(table_list['项目成员']).text());
+        user =user.replace(/\s+/g,' ');
+    var project = $.trim($(".basecolor").eq(i).children().eq(table_list['项目名称']).text());
+    $(".basecolor").eq(i).children().eq(table_list['项目名称']).attr("title",project);
+    $(".basecolor").eq(i).children().eq(table_list['项目成员']).attr("title",user);
+  }      
+});
+
+$(function(){
+   //完结项目给title赋值
+   var cell=parseInt($(".procolor1 tr").length);
+   for(var i=0; i<cell;i++){
+    var user = $.trim($(".basecolor1").eq(i).children().eq(table_list['项目成员']).text());
+        user =user.replace(/\s+/g,' ');
+    var project = $.trim($(".basecolor1").eq(i).children().eq(table_list['项目名称']).text());
+    $(".basecolor1").eq(i).children().eq(table_list['项目名称']).attr("title",project);
+    $(".basecolor1").eq(i).children().eq(table_list['项目成员']).attr("title",user);
+   } 
+});
+
+ (function(){
+                //导航选中
+                var url = location.pathname, navg = $('.top_memu li a');
+                if(url == '/personal_homepage/?page=/'){
+                    navg.eq(0).addClass('selected');
+                }else if(!url.indexOf('/projectlist/')||!url.indexOf('/newproject/')||!url.indexOf('/detail/')||!url.indexOf('/editproject/')||!url.indexOf('/notice/')){
+                    navg.eq(1).addClass('selected');
+                }else if(!url.indexOf('/show_user/')||!url.indexOf('/sourcemanage/')||!url.indexOf('/show_source/')||!url.indexOf('/show_user2/')){
+                    navg.eq(2).addClass('selected');
+                }
+            })()
+ 
+});
+
+     function change_p(id){
         $('#changeid').val(id);
         $('#myModal').modal('show');
       }
@@ -133,48 +177,3 @@ function change_p(id){
         } 
       }
 
-$(function(){
-   var cellIndex=parseInt($(".prorealter tr").length-1);
-   $(".prorealter tr td").each(function(){
-        if(this.cellIndex = cellIndex){
-            $(this).attr("title",$(this).text());
-            //alert($(this).parent().get(0).rowIndex);输出所在行
-          }
-   });
-});
-
-$(function(){
-   //正在进行中给title赋值
-   var cell=parseInt($(".procolor tr").length);
-   for(var i=0; i<cell;i++){
-    var user = $.trim($(".basecolor").eq(i).children().eq(9).text());
-        user =user.replace(/\s+/g,' ');
-    var project = $.trim($(".basecolor").eq(i).children().eq(1).text());
-    $(".basecolor").eq(i).children().eq(1).attr("title",project);
-    $(".basecolor").eq(i).children().eq(9).attr("title",user);
-  }      
-});
-
-$(function(){
-   //完结项目给title赋值
-   var cell=parseInt($(".procolor1 tr").length);
-   for(var i=0; i<cell;i++){
-    var user = $.trim($(".basecolor1").eq(i).children().eq(5).text());
-        user =user.replace(/\s+/g,' ');
-    var project = $.trim($(".basecolor1").eq(i).children().eq(1).text());
-    $(".basecolor1").eq(i).children().eq(1).attr("title",project);
-    $(".basecolor1").eq(i).children().eq(5).attr("title",user);
-   } 
-});
-
-(function(){
-                //导航选中
-                var url = location.pathname, navg = $('.top_memu li a');
-                if(url == '/personal_homepage/?page=/'){
-                    navg.eq(0).addClass('selected');
-                }else if(!url.indexOf('/projectlist/')||!url.indexOf('/newproject/')||!url.indexOf('/detail/')||!url.indexOf('/editproject/')||!url.indexOf('/notice/')){
-                    navg.eq(1).addClass('selected');
-                }else if(!url.indexOf('/show_user/')||!url.indexOf('/sourcemanage/')||!url.indexOf('/show_source/')||!url.indexOf('/show_user2/')){
-                    navg.eq(2).addClass('selected');
-                }
-            })()
