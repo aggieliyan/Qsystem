@@ -1,9 +1,15 @@
-$(document).ready(function(){
+﻿$(document).ready(function(){
 
-	var url = "/showuser";
+	var url = "/user_info";
 	$.get(url, function(data){
-		var user = eval("\("+data+"\)");
-		var name = user.realname;
+		var result = eval("\("+data+"\)");
+		var name = result.realname;
+		var pro_num = result.pro_num;
+		var message_num = result.message_num;
+		
+		$(".mesage_right").text("("+pro_num+")");
+		$("#message-num").text(message_num);
+		
 	    $(".top_bar a").eq(0).text(name);
 	    if(name == "GUEST"){
 	    	var bar = $(".top_bar a").eq(1)
@@ -19,19 +25,6 @@ $(document).ready(function(){
 	document.form1.submit();
 	});
 	      
-    $(function(){
-        var url1 = "/show_pronum";
-        $.get(url1,function(data){
-        $(".mesage_right").text("("+data+")");
-        });
-     });       
-    $(function(){
-        var url2 = "/show_messagenum";
-        $.get(url2,function(data){
-        $("#message-num").text(data);
-        });
-           
-    });
 
 });
  (function(){

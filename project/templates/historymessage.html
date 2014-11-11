@@ -90,7 +90,7 @@
 				<tr class="low2">
 
 					<td class="col1">&nbsp;{% autoescape off %}{{message.content}}{% endautoescape %}</td>
-					<td>{{message.publication_date}}</td>
+					<td>{{message.publication_date|date:"Y-m-d"}}</td>
 					{% if message.delay_status = "已拒绝"%}
 					<td class="states_yes">{{message.delay_status}}</td>
 					<td>
@@ -107,6 +107,20 @@
 					{% endif %}
 					{% if message.delay_status = "已确认" %}
 					<td class="states_yes">{{message.delay_status}}</td>
+					<td>
+						<button class="btn btn-danger " type="button" data-toggle="modal"
+							onclick="delete_mes({{message.id}})">删除</button>
+					</td>
+					{% endif %}
+					{% if message.delay_status = "已上线" %}
+					<td class="states_yes">{{message.delay_status}}</td>
+					<td>
+						<button class="btn btn-danger " type="button" data-toggle="modal"
+							onclick="delete_mes({{message.id}})">删除</button>
+					</td>
+					{% endif %}
+					{% if message.delay_status = Null %}
+					<td class="states_yes"></td>
 					<td>
 						<button class="btn btn-danger " type="button" data-toggle="modal"
 							onclick="delete_mes({{message.id}})">删除</button>

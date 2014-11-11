@@ -139,7 +139,7 @@
                       {% endif %}
                        
                       {% if edittag == 1 %}
-                      {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id or pm == 1 %}
+                      {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id or userid1 == res.business_man.id or userid1 == res.operator_p.id or userid1 == res.customer_service.id or pm == 1 %}
                       <a class="icon-edit" href="{% url 'editproject' res.id %}" title='编辑'></a>&nbsp;
                       {%endif%}
 
@@ -156,14 +156,14 @@
                       {% if pausetag == 1 or pm == 1 %}
                       <a class="icon-pause" title='暂停' href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')"></a>&nbsp;
                       {% else %}                      
-                      {% endif %}
+                      {% endif %} 
                        
                       {% if deletetag == 1 or pm == 1 %}
                       <a class="icon-trash" title='删除' href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')"></a>&nbsp;
                       {% else %}                      
                       {% endif %}
 
-                      {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id and changetag == 0 and pm == 0 %}
+                      {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id and changetag == 0 and userid1 != res.business_man.id and userid1 != res.operator_p.id and userid1 != res.customer_service.id and pm == 0 %}
                       <a href="{% url 'prodetail' res.id %}">去反馈</a>
                       {%endif%}
               

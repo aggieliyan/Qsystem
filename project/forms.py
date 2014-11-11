@@ -73,7 +73,13 @@ class ProjectForm(forms.Form):
     tppath = forms.CharField(required=False)
     tcpath = forms.CharField(required=False)
     trpath = forms.CharField(required=False)
-    relateduser = forms.CharField(required=False)
+    relateduser0 = forms.CharField(required=False)
+    relateduser1 = forms.CharField(required=False)
+    relateduser2 = forms.CharField(required=False)
+    relateduser3 = forms.CharField(required=False)
+    relateduser4 = forms.CharField(required=False)
+    relateduser5 = forms.CharField(required=False)
+
     countsql = forms.CharField(required=False)
     remark_p = forms.CharField(required=False)
 
@@ -96,6 +102,7 @@ class ProjectSearchForm(forms.Form):
     end_date_s=forms.DateField(required=False)
     status_p=forms.CharField(required=False)
     leader_p=forms.CharField(required=False)
+    type_p=forms.CharField(required=False)
 
 class TestForm(forms.Form):
 	delayid = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})

@@ -18,7 +18,7 @@ $(document).ready(function(){
     $("#bigtable").click(function(){
       $("#mybody").css("width","1500px");
       $("#x-table2").css("width","1500px");
-      $(".pro-proname").css("width","145px")
+      $(".pro-proname").css("width","125px")
     });
 
 
@@ -37,7 +37,7 @@ $(document).ready(function(){
        
 
     $(".chomdelay").click(function(){
-       timepro=$(this).parent().parent().children().eq(8).text();
+       timepro=$(this).parent().parent().children().eq(12).text();
        if (!timepro)
        {
         alert("计划上线时间为空不可申请延期");
@@ -52,7 +52,7 @@ $(document).ready(function(){
     var cellIndex=parseInt($(".procolor tr").length);
     for(var i=0; i<cellIndex;i++) {
       var time =document.getElementsByName("datetime")[i].value;
-      var stut = $(".basecolor").eq(i).children().eq(10).text();
+      var stut = $(".basecolor").eq(i).children().eq(14).text();
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var d=new Date(d.getTime() + 1*24*60*60*1000);
       var curDate=new Date();
@@ -63,6 +63,18 @@ $(document).ready(function(){
             $(".basecolor").eq(i).css("background-color","#ff9933"); }
       }      
     };
+
+    var project_type = $(".basecolor").eq(i).children().eq(2).text();
+        console.log(project_type)
+    if(project_type == '产品'){
+      var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+    }
+    else{
+      var list = {'需求讨论中':7,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+    }
+
+    $(".basecolor").eq(i).children().eq(list[stut]+1).css('border', "2px solid #339966");
+
     };
 
 });
@@ -114,14 +126,14 @@ $(function(){
    var cell=parseInt($(".procolor tr").length);
    for(var i=0; i<cell;i++){
 
-        user_prolist = $.trim($(".basecolor").eq(i).children().eq(6).text());
+        user_prolist = $.trim($(".basecolor").eq(i).children().eq(10).text());
         user_prolist =user_prolist.replace(/\s+/g,' ');
     var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
     var ptotal = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(2).text());
     ptotal = ptotal.replace(/\s+/g,'\t\t\r');
     $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title",ptotal);
     $(".basecolor").eq(i).children().eq(1).children().eq(0).attr("title",project);
-    $(".basecolor").eq(i).children().eq(6).attr("title",user_prolist);}
+    $(".basecolor").eq(i).children().eq(10).attr("title",user_prolist);}
 
 });
 

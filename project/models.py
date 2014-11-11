@@ -49,6 +49,13 @@ class project(models.Model):
 class project_user(models.Model):
     username = models.ForeignKey(user)
     project= models.ForeignKey(project)
+    roles = models.IntegerField()
+    #roles 0 产品
+    #      1 开发
+    #      2 测试
+    #      3 业务
+    #      4 运营
+    #      5 客服
     isactived = models.BooleanField(max_length=1)
     
 class public_message(models.Model): 
@@ -63,7 +70,7 @@ class public_message(models.Model):
     type_p = models.CharField(max_length=30,choices=CHOICES)
     publication_date = models.DateField()
     delay_status = models.CharField(u'批准状态',max_length=10,null=True,blank=True)
-    isactived = models.BooleanField(max_length=1)
+    isactived = models.IntegerField(max_length=1)
         
 
 class project_delay(models.Model):

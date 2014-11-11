@@ -72,16 +72,22 @@
         <div class="option-left">
             <div class="option-item">
                     <div class="title">
-                    <label class="item-title">项目编号：</label>
+                    <label class="item-title">类型：</label>
                   </div>
-                    <input type="text" class="form-control" style="position:relative;top: -15px;" name="id" value="{{project_id}}">
+                   {#  <input type="text" class="form-control" style="position:relative;top: -15px;" name="id" value="{{project_id}}"> #}
+                  <select  style="position:relative;top: -15px;width:165px;" name="type_p" id="protype" >
+                      <option select="selected" value="{{ type_p }}">{{ type_p }}</option>
+                      <option value=""> </option>
+                      <option value="产品">产品</option>
+                      <option value="业务">业务</option>
+                  </select>
 
             </div>
             <div class="option-item" >
-                    <div class="title">
-                <label class="item-title">项目状态：</label>
+              <div class="title">
+                <label class="item-title">状态：</label>
               </div>
-                <select style="position:relative;top: -15px;" name="status_p" id="prostatus" >
+                <select  style="position:relative;top: -15px;width:165px;" name="status_p" id="prostatus" >
                   <option select="selected" value="{{ status_p }}">{{ status_p }}</option>
                   <option value=""> </option>
                   <option value="需求讨论中">需求讨论中</option>
@@ -92,20 +98,26 @@
                   <option value="暂停">暂停</option>
                   <option value="已上线">已上线</option>
                 </select>
-              </div>
+            </div>
         </div>
         <div class="option-right">
+            <div class="option-item">
+                    <div class="title">
+                    <label class="item-title">编号：</label>
+                  </div>
+                    <input type="text" class="form-control" style="position:relative;top: -15px;" name="id" value="{{project_id}}">
+            </div>
 
             <div class="option-item-middle">
-                        
                     <div class="title">
-                    <label class="item-title">项目名称：</label>
+                    <label class="item-title">名称：</label>
                   </div>
                     <input type="text" class="form-control" style="position:relative;top: -15px;" name="project" value="{{project_name}}">
             </div>
+
             <div class="option-item-middle">
                      <div class="title">
-                    <label class="item-title">项目成员：</label>
+                    <label class="item-title">成员：</label>
 
            </div>
                 <input type="text" class="form-control " style="position:relative;top: -15px;" name="leader_p" value="{{ leader_p }}"/>
@@ -113,7 +125,7 @@
 
             <div class="option-item-right-short">
                   <div class="title">
-                    <label class="item-title">时间检索：</label>
+                    <label class="item-title">检索：</label>
                   </div>
                 <div style="display: inline-block;">
                     <div style="position:relative;top:-15px;">
@@ -151,18 +163,22 @@
                         <table  id="customers">
                             <thead>
                             <tr>
-                                <th width="64" style="width:50px;">项目编号</th>
-                                <th width="151" style="width:179px;">项目名称</th>
-                                <th width="64" style="width:40px;">优先级</th>
-                                <th width="90" style="width:76px">项目负责人</th>
-                                <th width="83" style="width:69px">产品负责人</th>
-                                <th width="84" style="width:70px">测试负责人</th>
-                                <th width="184" style="width:184px">项目成员</th>
-                                <th width="96" style="width:82px">项目开始时间</th>
-                                <th width="96" style="width:82px">计划上线时间</th>
-                                <th width="96" style="width:82px">实际上线时间</th>
-                                <th width="90" style="width:76px">项目状态</th>
-                                <th width="170" style="width:180px">操作</th>
+                                <th width="25" style="width:25px;">编号</th>
+                                <th width="150" style="width:180px;">项目名称</th>
+                                <th width="30" style="width:25px;">类型</th>
+                                <th width="64" style="width:42px;">优先级</th>
+                                <th width="90" style="width:42px">业务</th>
+                                <th width="83" style="width:42px">产品</th>
+                                <th width="90" style="width:42px">PM</th>
+                                <th width="84" style="width:42px">测试</th>
+                                <th width="84" style="width:42px">运营</th>
+                                <th width="84" style="width:42px">客服</th>
+                                <th width="184" style="width:155px">项目成员</th>
+                                <th width="96" style="width:78px">项目开始</th>
+                                <th width="96" style="width:78px">计划上线</th>
+                                <th width="96" style="width:78px">实际上线</th>
+                                <th width="90" style="width:70px">项目状态</th>
+                                <th width="170" style="width:155px">操作</th>
                             </tr>
                             </thead>
                             <tbody id="group_one" class="procolor">
@@ -172,34 +188,37 @@
                                     <td>
                                         <!--a href="{% url 'prodetail' p.id %}">{{ p.project }}</a-->
                                         <!--a href="javascript:update({{ p.id }})"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px"><span>{{ p.praise_p }}</span></a-->
-                                    <div class="pro-proname">
-                                        <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
-                                    </div>
-                                    <div style="width:54px;float:right">
-                                        <div style="width:16px;float:left">
-{#                                         <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">#}
-                                         <i class="icon-fire"  data-id="{{ p.id }}" style="cursor:pointer;height: 16px;width: 13px; margin-bottom:5px"></i> 
-                                                                   
-                                         {% for c in fproject %}                                        
-                                          {% if c.project_id == p.id %}
-                                            <span class="p-count" style="color:#339966">({{ c.total }})</span>
-                                          {% endif %}
-                                         {% endfor %}
+                                        <div class="pro-proname">
+                                            <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
                                         </div>
-                                    </div>
-                                    <div>
-                                      {% for c in pcount %}                                        
+                                        <div style="width:54px;float:right">
+                                            <div style="width:16px;float:left">
+{#                                          <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">#}
+                                             <i class="icon-fire"  data-id="{{ p.id }}" style="cursor:pointer;height: 16px;width: 13px; margin-bottom:5px"></i>
+                                                                   
+                                                {% for c in fproject %}
+                                                {% if c.project_id == p.id %}
+                                                    <span class="p-count" style="color:#339966">({{ c.total }})</span>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div>
+                                        {% for c in pcount %}
                                           {% if c.project_id == p.id %}
                                             <p class="p-count" style="color:#339966; display: none">{{c.item}}：&nbsp{{ c.total }}</p>
                                           {% endif %}
                                          {% endfor %}     
-                                    </div>
-
+                                        </div>
                                     </td>
+                                    <td>{{ p.type_p}}</td>
                                     <td>{{ p.priority }}</td>
+                                    <td>{{ p.business_man.realname}}</td>
+                                    <td>{{ p.designer_p.realname}}</td>
                                     <td>{{ p.leader_p.realname}}</td>
-                                    <td>{{p.designer_p.realname}}</td>
-                                    <td>{{p.tester_p.realname}}</td>
+                                    <td>{{ p.tester_p.realname}}</td>
+                                    <td>{{ p.operator_p.realname}}</td>
+                                    <td>{{ p.customer_service.realname }}</td>
                                     <td>
                                     {% for u in puser%}
                                     {% ifequal p.id u.project_id %}
@@ -215,11 +234,11 @@
                                     <td>
                                     {% if logintag == 0 %}
 
-                                        <a href="{% url 'prodetail' p.id %}">查看详情</a>
+                                        <a href="{% url 'prodetail' p.id %}">去反馈</a>
 
                                     {% else %}
                                         {% if p.status_p == "已上线" or p.status_p == "暂停"%}
-                                            <a href="{% url 'prodetail' p.id %}">查看详情</a>
+                                            <a href="{% url 'prodetail' p.id %}"></a>
                                             {% if createtag == 1 %}
                                                 <a href="{% url 'similarpro' p.id  1 %}">发布相似</a>
                                             {% else %}
@@ -230,8 +249,8 @@
                                             {% else %}
                                             {% endif %}
                                             {% if edittag == 1 %}
-                                            {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id or auth_changetag == 1%}
-                                                <a href="{% url 'editproject' p.id %}">编辑<span> </span></a>
+                                            {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id or user_id == p.business_man.id or user_id == p.operator_p.id or user_id == p.customer_service.id or auth_changetag == 1%}
+                                                <a class="icon-edit" href="{% url 'editproject' p.id %}"> <span> </span></a>
                                             {% endif %}
                                             {% else %}
                                             {% endif %}
@@ -242,12 +261,12 @@
                                             {% else %}
                                             {% endif %}
                                             {% if deletetag == 1 or auth_changetag == 1%}
-                                                <a href="{% url 'pproject_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')">暂停<span> </span></a>
-                                                <a href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')">删除<span> </span></a>
+                                                <a class="icon-pause" href="{% url 'pproject_pause' p.id %}" onclick="return confirm('你确定要暂停项目吗?')"> <span> </span></a>
+                                                <a class="icon-trash" href="{% url 'pproject_delete' p.id %}" onclick="return confirm('你确认要删除吗?')"><span> </span></a>
                                             {% else %}
                                             {% endif %}
-                                            {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and changetag == 0 and auth_changetag == 0 %}
-                                                <a href="{% url 'prodetail' p.id %}">查看详情</a>
+                                            {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and user_id != p.business_man.id and user_id != p.operator_p.id and user_id != p.customer_service.id and changetag == 0 and auth_changetag == 0 %}
+                                                <a  href="{% url 'prodetail' p.id %}">去反馈</a>
                                             {% else %}
                                             {% endif %}
                                             {% if createtag == 1 %}
@@ -270,7 +289,7 @@
     <div class="pagination" style="text-align:center;margin-right:10px">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
-            <a href="?page={{ projectobj.previous_page_number }}&id={{ project_id }}&project={{ project_name }}&start_date_s={{start_date_s|date:"Y-m-d"}}&end_date_s={{ end_date_s|date:"Y-m-d" }}&status_p={{ status_p }}&leader_p={{ leader_p }}"> << </a>
+            <a href="?page={{ projectobj.previous_page_number }}&type_p={{ type_p }}&id={{ project_id }}&project={{ project_name }}&start_date_s={{start_date_s|date:"Y-m-d"}}&end_date_s={{ end_date_s|date:"Y-m-d" }}&status_p={{ status_p }}&leader_p={{ leader_p }}"> << </a>
         {% endif %}
 
         <span class="current">
@@ -278,7 +297,7 @@
         </span>
 
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}&id={{ project_id }}&project={{ project_name }}&start_date_s={{ start_date_s|date:"Y-m-d" }}&end_date_s={{ end_date_s|date:"Y-m-d"}}&status_p={{ status_p }}&leader_p={{ leader_p }}"> >> </a>
+            <a href="?page={{ projectobj.next_page_number }}&type_p={{ type_p }}&id={{ project_id }}&project={{ project_name }}&start_date_s={{ start_date_s|date:"Y-m-d" }}&end_date_s={{ end_date_s|date:"Y-m-d"}}&status_p={{ status_p }}&leader_p={{ leader_p }}"> >> </a>
         {% endif %}
     </span>
     </div>
@@ -294,7 +313,7 @@
 <script type="text/javascript" src="../static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="../static/js/projectlist.js"></script>
-<script type="text/javascript" src="http://yxb.qq.com/js/jquery.cookie.js"></script>
+
 <script type="text/javascript">
       $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
