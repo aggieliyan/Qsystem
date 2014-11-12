@@ -111,9 +111,6 @@ def logout(request):
 
         session_key = request.session.session_key
         Session.objects.get(session_key=session_key).delete()
-
-        #认证系统的退出
-        #auth.logout()
         return response
     except:
         pass
