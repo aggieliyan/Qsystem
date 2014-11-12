@@ -551,7 +551,6 @@ def new_project(request, pid='', nid=''):
                                               isactived=False)
                     pmessage.save()
                     
-                    ###
                     #先判断在项目上线之前有没有留言的人
                     try:
                         related_user = models.project_feedback.objects.filter(project_id=pid)
@@ -567,11 +566,13 @@ def new_project(request, pid='', nid=''):
                         #从留言表中把此项目相关的留言数据读取出来（留言者id）
                         message = public_message.objects.filter(project=pid).order_by("-id")[0]
                         #给项目和消息创建关系
+                        pro_u_messages = []
                         for i in related_user:
                             uid = i.feedback_member_id
                             megid = message.id
                             pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=pid, isactived='1')
-                            pro_u_message.save()   
+                            pro_u_messages.append(pro_u_message)
+                        models.project_user_message.objects.bulk_create(pro_u_messages)  
                     ### 
                     
                     project.real_launch_date = datetime.datetime.now()
