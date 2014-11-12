@@ -179,8 +179,10 @@ $(document).ready(function(){
  
       $(this).next().attr("title","1");
 
-      var url="/showperson";
-      var para="role=" + roles;
+/*      var url="/showperson";
+      var para="role=" + roles;*/
+      var url="/psearch";
+      var para = {"key":"", "role":roles}
       $.get(url, para, function(data, status){
         allperson = eval('('+data+')');//全局变量
         allperson = allperson.person;

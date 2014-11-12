@@ -332,7 +332,7 @@ def new_project(request, pid='', nid=''):
                             #先把要存的人都放入列表all_p_user中
                             project_user = models.project_user\
                             (username_id=uid, project_id=pid, roles=i, isactived=1)
-                            all_p_user.append(project_user);
+                            all_p_user.append(project_user)
 
             #最后再一起插入数据库
             models.project_user.objects.bulk_create(all_p_user);
@@ -1060,34 +1060,34 @@ def feedback_comment(request):
         link = '/detail/' + str(pid)
         return HttpResponseRedirect(link)
         
-def show_person(request):
-    roles = request.GET['role']
-    keys = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
+# def show_person(request):
+#     roles = request.GET['role']
+#     keys = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
 
-    if roles == 'dev':
-        person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
-    elif roles == 'sal':
-        person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-    elif roles == 'ope':
-        person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=3) | Q(department_id=12)| \
-            Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-    else:
-        person = models.user.objects.filter(department_id=keys[roles], isactived=1)
-    person_rs = []
-    num = len(person)
-    if num == 0:
-        rrs = {"person":person_rs}
-        person_rs = json.dumps(rrs)
-        return HttpResponse(person_rs)
-    for item in person:
-        uid = item.id
-        realname = item.realname
-        dic = {'id':int(uid), 'realname':realname}
-        person_rs.append(dic)
+#     if roles == 'dev':
+#         person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
+#     elif roles == 'sal':
+#         person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+#     elif roles == 'ope':
+#         person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=3) | Q(department_id=12)| \
+#             Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+#     else:
+#         person = models.user.objects.filter(department_id=keys[roles], isactived=1)
+#     person_rs = []
+#     num = len(person)
+#     if num == 0:
+#         rrs = {"person":person_rs}
+#         person_rs = json.dumps(rrs)
+#         return HttpResponse(person_rs)
+#     for item in person:
+#         uid = item.id
+#         realname = item.realname
+#         dic = {'id':int(uid), 'realname':realname}
+#         person_rs.append(dic)
 
-    rrs = {"person":person_rs}
-    person_rs = json.dumps(rrs)
-    return HttpResponse(person_rs)
+#     rrs = {"person":person_rs}
+#     person_rs = json.dumps(rrs)
+#     return HttpResponse(person_rs)
 
 def psearch(request):
     key = request.GET['key']
@@ -1096,12 +1096,13 @@ def psearch(request):
     ptypes = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
     
     if len(key) == 0:
+        print "0000000"
         if role == 'dev':
             prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
         elif role == 'sal':
-            person = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+            prs = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         elif role == 'ope':
-            person = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
+            prs = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
                 Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
             prs = models.user.objects.filter(department_id=ptypes[role], isactived=1)
@@ -1109,9 +1110,9 @@ def psearch(request):
         if role == 'dev':
             prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
         elif role == 'sal':
-            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+            prs = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         elif role == 'ope':
-            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
+            prs = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
                 Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptypes[role], isactived=1)
