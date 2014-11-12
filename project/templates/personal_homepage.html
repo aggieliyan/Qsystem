@@ -164,7 +164,7 @@
                       {% endif %}
 
                       {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id and changetag == 0 and userid1 != res.business_man.id and userid1 != res.operator_p.id and userid1 != res.customer_service.id and pm == 0 %}
-                      <a href="{% url 'prodetail' res.id %}">去反馈</a>
+                      <a href="{% url 'feedback' res.id %}">去反馈</a>
                       {%endif%}
               
                   </td>
@@ -228,7 +228,7 @@
                     <td>{{pres.real_launch_date|date:"Y-m-d"}}</td>
                     <td>{{pres.status_p}}</td>     
                   <td>
-                    <a href="{% url 'prodetail' pres.id %}">去反馈</a>
+                    <a href="{% url 'feedback' pres.id %}">去反馈</a>
                   </td>
                   {% endfor %}
                   {% endif %} 
