@@ -353,26 +353,19 @@ def new_project(request, pid='', nid=''):
                                         project_id=pid, item=item, db=db, sql=sql)
                     project_statistics.save()
             
-            musername = models.user.objects.get(id=leaderid).username
-            #给项目负责人加入到项目负责人权限组
-            User.objects.get(username=musername).groups.add(4)
+            # musername = models.user.objects.get(id=leaderid).username
+            # #给项目负责人加入到项目负责人权限组
+            # User.objects.get(username=musername).groups.add(4)
 
-            #给其他负责人加入到相应负责人权限组
-            allmasters = [[designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
+            #将各负责人加入到相应负责人权限组
+            allmasters = [[leaderid, 4], [designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
             for m in allmasters:
                 if m[0]:
                     mname = models.user.objects.get(id=m[0]).username
                     User.objects.get(username=mname).groups.add(m[1])
-
-
-            
-                                                
-            
-
+      
+            #发消息
             sendmessage(request,status,pid)
-            #给项目负责人添加申请延期权限
-            #User.objects.get(username=musername).user_permissions.add(34)
-
                            
             return redirect('/projectlist/')
         else:
