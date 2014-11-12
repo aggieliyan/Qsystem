@@ -1555,11 +1555,13 @@ def refuse(request):
                 pub_message.save()
                 related_user = models.user.objects.filter(project_user__project_id=project_id).distinct()
                 message = public_message.objects.filter(project=project_id).order_by("-id")[0]
+            all_uesr_message = []
             for i in related_user:
                 uid = i.id
                 megid = message.id
                 pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=project_id, isactived='1')
-                pro_u_message.save()
+                all_uesr_message.append(pro_u_message)
+            project_user_message.objects.bulk_create(all_uesr_message)
     return HttpResponseRedirect('/delay/')
 
 #接受
