@@ -505,6 +505,7 @@ def sendmessage(request,status,pid):
                 uids.append(project.operator_p_id)
             if project.customer_service_id > 0 :
                 uids.append(project.customer_service_id)
+            uids = set(uids)
             for uid in uids :
                 # 存表public_message
                 pmessage = public_message(project=pid, \
@@ -580,6 +581,7 @@ def sendmessage(request,status,pid):
                 uids.append(project.operator_p_id)
             if project.customer_service_id > 0 :
                 uids.append(project.customer_service_id)
+            uids = set(uids)
             for uid in uids :
                 # 存表public_message
                 pmessage = public_message(project=pid, \
@@ -1610,16 +1612,19 @@ def confirmmessage(request):
             #如果public_message的isactived为2，就是设计需要确认
             #如果public_message的isactived为3，就是已发测试版本需要确认
             if  reconmessage.isactived==3:
-                pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
+                pmessages = project_operator_bussniess_message.objects.filter(userid_id=useid , project_id = conmessage.project ,\
                                                                   status = "项目未验收" )
-                pmessage.check_date = datetime.datetime.now()
-                pmessage.status = "项目已验收"
+                for pmessage in pmessages:
+                    pmessage.check_date = datetime.datetime.now()
+                    pmessage.status = "项目已验收"
+                    pmessage.save()
             if reconmessage.isactived==2:
-                pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
+                pmessages = project_operator_bussniess_message.objects.filter(userid_id=useid , project_id = conmessage.project ,\
                                                                   status = "未确认设计" )
-                pmessage.confirm_design_date = datetime.datetime.now()
-                pmessage.status = "已确认设计"
-            pmessage.save()
+                for pmessage in pmessages:
+                    pmessage.confirm_design_date = datetime.datetime.now()
+                    pmessage.status = "已确认设计"
+                    pmessage.save()
     return HttpResponseRedirect('/historymessage/')
 
 
