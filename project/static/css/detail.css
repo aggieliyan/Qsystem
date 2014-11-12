@@ -101,6 +101,11 @@ span {
     border-width: 1px 1px 1px;
     margin-top: 20px;
 }
+.message-area li .date {
+	color: #aaa;
+    margin-left: 5px;
+    margin-right: 5px;
+}
 .message-total {
 	border-bottom: 1px solid #ddd;
     padding-top: 6px;

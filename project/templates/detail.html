@@ -168,7 +168,7 @@
 						<td class="line-text">{{res.pro.remark_p}}</td>
 					</tr>
 				</table>
-				<div class="feedback-area">
+				<div id="feedback" name="feedback" class="feedback-area">
 					<div class="feed-background">
 						<form name="feedbackForm" class="f-form" action="/feedback/" method="post" style="margin-left:150px;">	
 							{% csrf_token %}
@@ -186,7 +186,7 @@
 								{% for key, value in res.feedback.1.items %}														
 									<li class="item-message" itemid="{{key.id}}">
 										<div class="item-feedback">
-											<span class="member-name"><b>{{key.feedback_member.realname}}</b>:</span>
+											<span class="member-name"><b>{{key.feedback_member.realname}}：</b></span>
 											{{key.content}}
 											<span class="date">({{key.feedback_date|date:"Y-m-d"}})</span>
 											<a id={{key.id}} class="reply-btn" href="javascript:void(0)" hidefocus="true">回复</a>

@@ -975,7 +975,8 @@ def detail(request, pid='', nid=''):
     for item in pro_feedback:
         feedback_comment = models.project_feedback_comment.objects.filter(feedbackid_id=item.id).order_by("-feedback_date_c")
         fc[item] = feedback_comment
-            
+    for key in fc:
+        print key.feedback_date       
     try:
         request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
