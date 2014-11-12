@@ -240,10 +240,13 @@ def new_project(request, pid='', nid=''):
             business_man = form.cleaned_data['business_man']
             operator_p = form.cleaned_data['operator_p']
             customer_service = form.cleaned_data['customer_service']
-            roles = [designer, tester, business_man, operator_p, customer_service]
-            for i in range(len(roles)):
-                if roles[i]:
-                    roles[i] = models.user.objects.get(id=roles[i])
+            role = [designer, tester, business_man, operator_p, customer_service]
+            roles = []
+            for item in role:
+                if item:
+                    roles.append(models.user.objects.get(id=item))
+                else:
+                    roles.append(item)
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
