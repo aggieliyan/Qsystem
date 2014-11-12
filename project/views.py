@@ -669,8 +669,12 @@ def sendmessage(request,status,pid):
                 message = public_message.objects.filter(project=pid).order_by("-id")[0]
                 #给项目和消息创建关系
                 pro_u_messages = []
+                users = []
                 for i in related_user:
-                    uid = i.feedback_member_id
+                    users.append(i.feedback_member_id)
+                users = set(users)
+                for u in users:
+                    uid = u
                     megid = message.id
                     pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=pid, isactived='1')
                     pro_u_messages.append(pro_u_message)
