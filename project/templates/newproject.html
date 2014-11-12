@@ -41,8 +41,10 @@
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目类型：</label>
                 </div>
-                <select name = "type_p" class="inputfield" selected="{{res.pro.type_p}}">
-                  <option select = 'selected'>{{res.pro.type_p}}</option>
+                <select name = "type_p" class="inputfield">
+                  {%if res.pro.type_p %}
+                  <option select = 'selected' value="{{res.pro.type_p}}">{{res.pro.type_p}}运营型</option>
+                  {% endif %}
                   <option value="业务">业务运营型</option>
                   <option value="产品">产品运营型</option>
                 </select>
