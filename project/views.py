@@ -8,7 +8,7 @@ import time
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm
+from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
 from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
 import models
 import hashlib
@@ -111,9 +111,6 @@ def logout(request):
 
         session_key = request.session.session_key
         Session.objects.get(session_key=session_key).delete()
-
-        #认证系统的退出
-        #auth.logout()
         return response
     except:
         pass
@@ -240,10 +237,13 @@ def new_project(request, pid='', nid=''):
             business_man = form.cleaned_data['business_man']
             operator_p = form.cleaned_data['operator_p']
             customer_service = form.cleaned_data['customer_service']
-            roles = [designer, tester, business_man, operator_p, customer_service]
-            for i in range(len(roles)):
-                if roles[i]:
-                    roles[i] = models.user.objects.get(id=roles[i])
+            role = [designer, tester, business_man, operator_p, customer_service]
+            roles = []
+            for item in role:
+                if item:
+                    roles.append(models.user.objects.get(id=item))
+                else:
+                    roles.append(item)
             sdate = form.cleaned_data['startdate']
             pdate = form.cleaned_data['plandate']
             psdate = form.cleaned_data['psdate']
@@ -329,7 +329,7 @@ def new_project(request, pid='', nid=''):
                             #先把要存的人都放入列表all_p_user中
                             project_user = models.project_user\
                             (username_id=uid, project_id=pid, roles=i, isactived=1)
-                            all_p_user.append(project_user);
+                            all_p_user.append(project_user)
 
             #最后再一起插入数据库
             models.project_user.objects.bulk_create(all_p_user);
@@ -350,232 +350,20 @@ def new_project(request, pid='', nid=''):
                                         project_id=pid, item=item, db=db, sql=sql)
                     project_statistics.save()
             
-            musername = models.user.objects.get(id=leaderid).username
-            #给项目负责人加入到项目负责人权限组
-            User.objects.get(username=musername).groups.add(4)
+            # musername = models.user.objects.get(id=leaderid).username
+            # #给项目负责人加入到项目负责人权限组
+            # User.objects.get(username=musername).groups.add(4)
 
-            #给其他负责人加入到相应负责人权限组
-            allmasters = [[designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
+            #将各负责人加入到相应负责人权限组
+            allmasters = [[leaderid, 4], [designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
             for m in allmasters:
                 if m[0]:
                     mname = models.user.objects.get(id=m[0]).username
                     User.objects.get(username=mname).groups.add(m[1])
-
-
-            #项目设计完成需要给业务负责人和产品负责人发消息，project_operator_bussniess_message和public_message
-            #project_user_message这三个表
-            #设计完成isactived存2，测试中isactived存3，上线给留言发消息isactived存1，上线发公告isactived存0
-            #--杜
-            if status == u"设计完成":
-                flag = 0
-                prolist = public_message.objects.filter\
-                (project=pid).filter(isactived=2).order_by("-id")
-                try:
-                    prolist[0].isactived
-                except IndexError:
-                    try:
-                        request.session['id']
-                    except KeyError:
-                        return HttpResponseRedirect("/nologin")
-                    else:
-                        flag = 1                        
-                else:
-                    if prolist[0].isactived != 2:
-                        try:
-                            request.session['id']
-                        except KeyError:
-                            return HttpResponseRedirect("/nologin")
-                        else:
-                            flag = 1
-                if flag == 1:        
-                    usrid = request.session['id']
-                    project = models.project.objects.get(id=pid)
-                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                    content = project.project + u"于"+time+u"设计完成，请立即查看设计图并确认！"    
-                    uids = []
-                    if project.business_man_id > 0 :
-                        uids.append(project.business_man_id)
-                    if project.operator_p_id > 0 :
-                        uids.append(project.operator_p_id)
-                    if project.customer_service_id > 0 :
-                        uids.append(project.customer_service_id)
-                    for uid in uids :
-                        #存表public_message
-                        pmessage = public_message(project=pid, \
-                                              publisher=uid, content=content, type_p="message", \
-                                              publication_date=datetime.datetime.now(), \
-                                              delay_status = "未确认" ,\
-                                              isactived=2)
-                        pmessage.save()
-                        #存表project_user_message
-                        #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦 
-                        messageid = public_message.objects.filter(publisher = uid).order_by("-id")[0]
-                        ppmessage = project_user_message(userid_id = uid , messageid_id = messageid.id ,\
-                                                        project_id = pid , isactived = True )
-                        ppmessage.save()
-                    #存表project_operator_bussniess_message
-                    #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦
-                    if project.business_man_id > 0 :
-                        pmessage = project_operator_bussniess_message(userid_id=project.business_man_id , project_id = pid ,\
-                                                                  user_type = "业务" ,\
-                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
-                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
-                                                                  isactived=False)
-                        pmessage.save()
-                    if project.operator_p_id > 0 :
-                        pmessage = project_operator_bussniess_message(userid_id=project.operator_p_id , project_id = pid ,\
-                                                                  user_type = "运营" ,\
-                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
-                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
-                                                                  isactived=False)
-                        pmessage.save()
-                    if project.customer_service_id > 0 :
-                        pmessage = project_operator_bussniess_message(userid_id=project.customer_service_id , project_id = pid ,\
-                                                                  user_type = "客服" ,\
-                                                                  title = "设计完成，请立即查看设计图并确认！" ,\
-                                                                  status = "未确认设计" , publication_date = datetime.datetime.now(), \
-                                                                  isactived=False)
-                        pmessage.save() 
-                                                
-
-
-
-
-            if status == u"测试中":
-                flag = 0
-                prolist = public_message.objects.filter\
-                (project=pid).filter(isactived=3).order_by("-id")
-                try:
-                    prolist[0].isactived
-                except IndexError:
-                    try:
-                        request.session['id']
-                    except KeyError:
-                        return HttpResponseRedirect("/nologin")
-                    else:
-                        flag = 1                        
-                else:
-                    if prolist[0].isactived != 3:
-                        try:
-                            request.session['id']
-                        except KeyError:
-                            return HttpResponseRedirect("/nologin")
-                        else:
-                            flag = 1
-                if flag == 1:        
-                    usrid = request.session['id']
-                    project = models.project.objects.get(id=pid)
-                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                    content = project.project + u"于"+time+u"已发测试版，请在上线前联系项目负责人并确认验收！"    
-                    uids = []
-                    if project.business_man_id > 0 :
-                        uids.append(project.business_man_id)
-                    if project.operator_p_id > 0 :
-                        uids.append(project.operator_p_id)
-                    if project.customer_service_id > 0 :
-                        uids.append(project.customer_service_id)
-                    for uid in uids :
-                        #存表public_message
-                        pmessage = public_message(project=pid, \
-                                              publisher=uid, content=content, type_p="message", \
-                                              publication_date=datetime.datetime.now(), \
-                                              delay_status = "未确认" ,\
-                                              isactived=3)
-                        pmessage.save()
-                        #存表project_user_message
-                        #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦 
-                        messageid = public_message.objects.filter(publisher = uid).order_by("-id")[0]
-                        ppmessage = project_user_message(userid_id = uid , messageid_id = messageid.id ,\
-                                                        project_id = pid , isactived = True )
-                        ppmessage.save()
-                    #存表project_operator_bussniess_message
-                    #存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦
-                    if project.business_man_id > 0 :
-                        pmessage = project_operator_bussniess_message(userid_id=project.business_man_id , project_id = pid ,\
-                                                                  user_type = "业务" ,\
-                                                                  title = "已发测试版，请在上线前联系项目负责人并确认验收！" ,\
-                                                                  status = "项目未验收" , publication_date = datetime.datetime.now(), \
-                                                                  isactived=False)
-                        pmessage.save()
-                    if project.operator_p_id > 0 :
-                        pmessage = project_operator_bussniess_message(userid_id=project.operator_p_id , project_id = pid ,\
-                                                                  user_type = "运营" ,\
-                                                                  title = "已发测试版，请在上线前联系项目负责人并确认验收！" ,\
-                                                                  status = "项目未验收" , publication_date = datetime.datetime.now(), \
-                                                                  isactived=False)
-                        pmessage.save()
-                    if project.customer_service_id > 0 :
-                        pmessage = project_operator_bussniess_message(userid_id=project.customer_service_id , project_id = pid ,\
-                                                                  user_type = "客服" ,\
-                                                                  title = "已发测试版，请在上线前联系项目负责人并确认验收！" ,\
-                                                                  status = "项目未验收" , publication_date = datetime.datetime.now(), \
-                                                                  isactived=False)
-                        pmessage.save()
-                                                
-            
-
-
-            #给项目负责人添加申请延期权限
-            #User.objects.get(username=musername).user_permissions.add(34)
-
-            #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
-            if status == u"已上线":
-                flag = 0
-                prolist = public_message.objects.filter\
-                (project=pid).order_by("isactived")
-                try:
-                    prolist[0].isactived
-                except IndexError:
-                    try:
-                        request.session['id']
-                    except KeyError:
-                        return HttpResponseRedirect("/nologin")
-                    else:
-                        flag = 1                        
-                else:
-                    if prolist[0].isactived != 0:
-                        try:
-                            request.session['id']
-                        except KeyError:
-                            return HttpResponseRedirect("/nologin")
-                        else:
-                            flag = 1
-                if flag == 1:        
-                    usrid = request.session['id']
-                    project = models.project.objects.get(id=pid)
-                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-                    content = project.project + u"于"+time+u"已上线"
-                    pmessage = public_message(project=pid, \
-                                              publisher=usrid, content=content, type_p="notice", \
-                                              publication_date=datetime.datetime.now(), \
-                                              isactived=False)
-                    pmessage.save()
-                    
-                    ###
-                    #先判断在项目上线之前有没有留言的人
-                    try:
-                        related_user = models.project_feedback.objects.filter(project_id=pid)
-                    except:
-                        None
-                    else:
-                        #项目上线，给留言者发的消息存在消息表中
-                        string = project.project + u"已上线，您可以去体验并跟踪反馈机构的体验效果啦"
-                        pub_message = public_message(project=pid, publisher=usrid, content=string, \
-                            type_p="message", publication_date=datetime.datetime.now(), delay_status="已上线", isactived=1)
-                        pub_message.save()
-                        #先判断在项目上线之前有没有留言的人
-                        #从留言表中把此项目相关的留言数据读取出来（留言者id）
-                        message = public_message.objects.filter(project=pid).order_by("-id")[0]
-                        #给项目和消息创建关系
-                        for i in related_user:
-                            uid = i.feedback_member_id
-                            megid = message.id
-                            pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=pid, isactived='1')
-                            pro_u_message.save()   
-                    ### 
-                    
-                    project.real_launch_date = datetime.datetime.now()
-                    project.save()                   
+      
+            #发消息
+            sendmessage(request,status,pid)
+                           
             return redirect('/projectlist/')
         else:
             dateloop = ['psdate', 'pedate', 'dsdate', 'dedate', 'tsdate', 'tedate', 'startdate', 'plandate']
@@ -676,6 +464,226 @@ def new_project(request, pid='', nid=''):
 
     return render_to_response('newproject.html', \
         {'form':form, 'editdate':editdate}, context_instance=RequestContext(request))
+
+
+#发消息
+def sendmessage(request,status,pid):
+    # 项目设计完成需要给业务负责人和产品负责人发消息，project_operator_bussniess_message和public_message
+    # project_user_message这三个表
+    # 设计完成isactived存2，测试中isactived存3，上线给留言发消息isactived存1，上线发公告isactived存0
+    # --杜
+    if status == u"设计完成":
+        flag = 0
+        prolist = public_message.objects.filter\
+        (project=pid).filter(isactived=2).order_by("-id")
+        try:
+            prolist[0].isactived
+        except IndexError:
+            try:
+                request.session['id']
+            except KeyError:
+                return HttpResponseRedirect("/nologin")
+            else:
+                flag = 1                        
+        else:
+            if prolist[0].isactived != 2:
+                try:
+                    request.session['id']
+                except KeyError:
+                    return HttpResponseRedirect("/nologin")
+                else:
+                    flag = 1
+        if flag == 1:        
+            usrid = request.session['id']
+            project = models.project.objects.get(id=pid)
+            time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+            content = project.project + u"于" + time + u"设计完成，请立即查看设计图并确认！"    
+            uids = []
+            if project.business_man_id > 0 :
+                uids.append(project.business_man_id)
+            if project.operator_p_id > 0 :
+                uids.append(project.operator_p_id)
+            if project.customer_service_id > 0 :
+                uids.append(project.customer_service_id)
+            uids = set(uids)
+            for uid in uids :
+                # 存表public_message
+                pmessage = public_message(project=pid, \
+                                          publisher=uid, content=content, type_p="message", \
+                                          publication_date=datetime.datetime.now(), \
+                                          delay_status="未确认" , \
+                                          isactived=2)
+                pmessage.save()
+                # 存表project_user_message
+                # 存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦 
+                messageid = public_message.objects.filter(publisher=uid).order_by("-id")[0]
+                ppmessage = project_user_message(userid_id=uid , messageid_id=messageid.id , \
+                                                 project_id=pid , isactived=True)
+                ppmessage.save()
+            # 存表project_operator_bussniess_message
+            # 存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦
+            if project.business_man_id > 0 :
+                pmessage = project_operator_bussniess_message(userid_id=project.business_man_id , project_id=pid , \
+                                                              user_type="业务" , \
+                                                              title="设计完成，请立即查看设计图并确认！" , \
+                                                              status="未确认设计" , publication_date=datetime.datetime.now(), \
+                                                              isactived=False)
+                pmessage.save()
+            if project.operator_p_id > 0 :
+                pmessage = project_operator_bussniess_message(userid_id=project.operator_p_id , project_id=pid , \
+                                                              user_type="运营" , \
+                                                              title="设计完成，请立即查看设计图并确认！" , \
+                                                              status="未确认设计" , publication_date=datetime.datetime.now(), \
+                                                              isactived=False)
+                pmessage.save()
+            if project.customer_service_id > 0 :
+                pmessage = project_operator_bussniess_message(userid_id=project.customer_service_id , project_id=pid , \
+                                                              user_type="客服" , \
+                                                              title="设计完成，请立即查看设计图并确认！" , \
+                                                              status="未确认设计" , publication_date=datetime.datetime.now(), \
+                                                              isactived=False)
+                pmessage.save() 
+                                                
+
+
+
+
+    if status == u"测试中":
+        flag = 0
+        prolist = public_message.objects.filter\
+        (project=pid).filter(isactived=3).order_by("-id")
+        try:
+            prolist[0].isactived
+        except IndexError:
+            try:
+                request.session['id']
+            except KeyError:
+                return HttpResponseRedirect("/nologin")
+            else:
+                flag = 1                        
+        else:
+            if prolist[0].isactived != 3:
+                try:
+                    request.session['id']
+                except KeyError:
+                    return HttpResponseRedirect("/nologin")
+                else:
+                    flag = 1
+        if flag == 1:        
+            usrid = request.session['id']
+            project = models.project.objects.get(id=pid)
+            time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+            content = project.project + u"于" + time + u"已发测试版，请在上线前联系项目负责人并确认验收！"    
+            uids = []
+            if project.business_man_id > 0 :
+                uids.append(project.business_man_id)
+            if project.operator_p_id > 0 :
+                uids.append(project.operator_p_id)
+            if project.customer_service_id > 0 :
+                uids.append(project.customer_service_id)
+            uids = set(uids)
+            for uid in uids :
+                # 存表public_message
+                pmessage = public_message(project=pid, \
+                                          publisher=uid, content=content, type_p="message", \
+                                          publication_date=datetime.datetime.now(), \
+                                          delay_status="未确认" , \
+                                          isactived=3)
+                pmessage.save()
+                # 存表project_user_message
+                # 存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦 
+                messageid = public_message.objects.filter(publisher=uid).order_by("-id")[0]
+                ppmessage = project_user_message(userid_id=uid , messageid_id=messageid.id , \
+                                                 project_id=pid , isactived=True)
+                ppmessage.save()
+            # 存表project_operator_bussniess_message
+            # 存该项目的业务负责人、客服负责人和运营负责人，只有这三个个人哦
+            if project.business_man_id > 0 :
+                pmessage = project_operator_bussniess_message(userid_id=project.business_man_id , project_id=pid , \
+                                                              user_type="业务" , \
+                                                              title="已发测试版，请在上线前联系项目负责人并确认验收！" , \
+                                                              status="项目未验收" , publication_date=datetime.datetime.now(), \
+                                                              isactived=False)
+                pmessage.save()
+            if project.operator_p_id > 0 :
+                pmessage = project_operator_bussniess_message(userid_id=project.operator_p_id , project_id=pid , \
+                                                              user_type="运营" , \
+                                                              title="已发测试版，请在上线前联系项目负责人并确认验收！" , \
+                                                              status="项目未验收" , publication_date=datetime.datetime.now(), \
+                                                              isactived=False)
+                pmessage.save()
+            if project.customer_service_id > 0 :
+                pmessage = project_operator_bussniess_message(userid_id=project.customer_service_id , project_id=pid , \
+                                                              user_type="客服" , \
+                                                              title="已发测试版，请在上线前联系项目负责人并确认验收！" , \
+                                                              status="项目未验收" , publication_date=datetime.datetime.now(), \
+                                                              isactived=False)
+                pmessage.save()
+                
+    #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
+    if status == u"已上线":
+        flag = 0
+        prolist = public_message.objects.filter\
+        (project=pid).order_by("isactived")
+        try:
+            prolist[0].isactived
+        except IndexError:
+            try:
+                request.session['id']
+            except KeyError:
+                return HttpResponseRedirect("/nologin")
+            else:
+                flag = 1                        
+        else:
+            if prolist[0].isactived != 0:
+                try:
+                    request.session['id']
+                except KeyError:
+                    return HttpResponseRedirect("/nologin")
+                else:
+                    flag = 1
+        if flag == 1:        
+            usrid = request.session['id']
+            project = models.project.objects.get(id=pid)
+            time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
+            content = project.project + u"于"+time+u"已上线"
+            pmessage = public_message(project=pid, \
+                                      publisher=usrid, content=content, type_p="notice", \
+                                      publication_date=datetime.datetime.now(), \
+                                      isactived=False)
+            pmessage.save()
+                    
+            #先判断在项目上线之前有没有留言的人
+            try:
+                related_user = models.project_feedback.objects.filter(project_id=pid)
+            except:
+                None
+            else:
+                #项目上线，给留言者发的消息存在消息表中
+                string = project.project + u"已上线，您可以去体验并跟踪反馈机构的体验效果啦"
+                pub_message = public_message(project=pid, publisher=usrid, content=string, \
+                                             type_p="message", publication_date=datetime.datetime.now(), delay_status="已上线", isactived=1)
+                pub_message.save()
+                #先判断在项目上线之前有没有留言的人
+                #从留言表中把此项目相关的留言数据读取出来（留言者id）
+                message = public_message.objects.filter(project=pid).order_by("-id")[0]
+                #给项目和消息创建关系
+                pro_u_messages = []
+                users = []
+                for i in related_user:
+                    users.append(i.feedback_member_id)
+                users = set(users)
+                for u in users:
+                    uid = u
+                    megid = message.id
+                    pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=pid, isactived='1')
+                    pro_u_messages.append(pro_u_message)
+                models.project_user_message.objects.bulk_create(pro_u_messages)  
+            ### 
+                    
+            project.real_launch_date = datetime.datetime.now()
+            project.save()    
+      
     
 def project_list(request):
     #没登陆的提示去登录
@@ -854,6 +862,11 @@ def detail(request, pid='', nid=''):
     pid是项目id
     nid为1时,表示发布与项目pid相似的项目
     """
+    try:         #没登录的去登录页面
+        request.session['id']
+    except:
+        return HttpResponseRedirect('/login')
+    
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
@@ -867,6 +880,7 @@ def detail(request, pid='', nid=''):
         p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id[0], project_user__roles=item_id[1]))
 
     related_user = {'qa':p_role[0], 'dev': devs, 'pd': p_role[1], 'bm': bms, 'cs': p_role[2], 'op': ops}
+   
 
     dt_temp = {}
     dt = {}
@@ -961,7 +975,15 @@ def detail(request, pid='', nid=''):
         confirmation['cs_design'] = cs_design
         if cs_check:
             confirmation['cs_check'] = cs_check
-    
+
+    current_uid = request.session['id'] #把当前登录用户的id传给页面，方便记录反馈人ID
+    pro_feedback = models.project_feedback.objects.filter(project_id=pid).order_by("-feedback_date")
+    fc = {}
+    for item in pro_feedback:
+        feedback_comment = models.project_feedback_comment.objects.filter(feedbackid_id=item.id).order_by("-feedback_date_c")
+        fc[item] = feedback_comment
+    for key in fc:
+        print key.feedback_date       
     try:
         request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
@@ -970,7 +992,7 @@ def detail(request, pid='', nid=''):
     finally:
         if '/detail/' in request.path:
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
-                   'sql': status, 'confirmation': confirmation}
+                   'sql': status, 'confirmation': confirmation, 'curuid': current_uid, 'feedback': [len(pro_feedback), fc]}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
             
@@ -999,88 +1021,104 @@ def detail(request, pid='', nid=''):
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': sql}
             return render_to_response('newproject.html', {'res': res, 'editdate':editdate, 'isdevs':isdevs, 'isope':isope})
 
-def show_person(request):
-    roles = request.GET['role']
-    key = 0
-    if roles == "tes":
-        key = 1
-    elif roles == "dev":
-        key = 2
-    elif roles == "pro":
-        key = 3
-    elif roles =="sal":
-        key = 12
-    elif roles =="ope":
-        key = 8
-    elif roles == "com":
-        key = 7
-    else:
-        key = 0
+def project_feedback(request):  #也可以写在detail里，这样更清晰
+    try:
+        request.session['id']
+    except:
+        return HttpResponseRedirect('/login')
+    if request.method == 'POST':
+        form = feedbackForm(request.POST)
+        if form.is_valid():
+            pid = form.cleaned_data['pid']
+            mid = form.cleaned_data['mid']
+            content = form.cleaned_data['content']
+        else:
+            pid = form.cleaned_data['pid']
+            link = '/detail/' + str(pid)
+            return HttpResponseRedirect(link)
+        f = models.project_feedback(project_id=pid, feedback_member_id=mid, content=content, feedback_date=datetime.datetime.now())
+        f.save()
+        link = '/detail/' + str(pid)
+        return HttpResponseRedirect(link)
+        
+            
+def feedback_comment(request):
+    try:
+        request.session['id']
+    except:
+        return HttpResponseRedirect('/login')
+    if request.method == 'POST':
+        form = feedbackCommentForm(request.POST)
+        if form.is_valid():
+            pid = form.cleaned_data['pid']
+            feedbackid = form.cleaned_data['feedbackid']
+            replymid = form.cleaned_data['replymid']
+            comment = form.cleaned_data['comment']
+        else:
+            link = '/detail/' + str(pid)
+            return HttpResponseRedirect(link)
+        fc = models.project_feedback_comment(feedbackid_id=feedbackid, feedback_member_c_id=replymid, comment=comment, 
+                                             feedback_date_c=datetime.datetime.now())
+        fc.save()
+        link = '/detail/' + str(pid)
+        return HttpResponseRedirect(link)
+        
+# def show_person(request):
+#     roles = request.GET['role']
+#     keys = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
 
-    if key == 2:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
-    elif key == 12:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-    elif key == 8:
-        person = models.user.objects.filter(Q(department_id=key) | Q(department_id=3) | Q(department_id=12)| \
-            Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-    else:
-        person = models.user.objects.filter(department_id=key, isactived=1)
-    person_rs = []
-    num = len(person)
-    if num == 0:
-        rrs = {"person":person_rs}
-        person_rs = json.dumps(rrs)
-        return HttpResponse(person_rs)
-    for item in person:
-        uid = item.id
-        realname = item.realname
-        dic = {'id':int(uid), 'realname':realname}
-        person_rs.append(dic)
+#     if roles == 'dev':
+#         person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13), Q(isactived=1))
+#     elif roles == 'sal':
+#         person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+#     elif roles == 'ope':
+#         person = models.user.objects.filter(Q(department_id=keys[roles]) | Q(department_id=3) | Q(department_id=12)| \
+#             Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+#     else:
+#         person = models.user.objects.filter(department_id=keys[roles], isactived=1)
+#     person_rs = []
+#     num = len(person)
+#     if num == 0:
+#         rrs = {"person":person_rs}
+#         person_rs = json.dumps(rrs)
+#         return HttpResponse(person_rs)
+#     for item in person:
+#         uid = item.id
+#         realname = item.realname
+#         dic = {'id':int(uid), 'realname':realname}
+#         person_rs.append(dic)
 
-    rrs = {"person":person_rs}
-    person_rs = json.dumps(rrs)
-    return HttpResponse(person_rs)
+#     rrs = {"person":person_rs}
+#     person_rs = json.dumps(rrs)
+#     return HttpResponse(person_rs)
 
 def psearch(request):
     key = request.GET['key']
     role = request.GET['role']
     ptype = 0
-    if role == "tes":
-        ptype = 1
-    elif role == "dev":
-        ptype = 2
-    elif role == "pro":
-        ptype = 3
-    elif role =="sal":
-        ptype = 12
-    elif role =="ope":
-        ptype = 8
-    elif role == "com":
-        ptype = 7
-    else:
-        ptype = 0
+    ptypes = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
     
     if len(key) == 0:
-        if ptype == 2:
-            prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
-        elif ptype == 12:
-            person = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-        elif ptype == 8:
-            person = models.user.objects.filter(Q(department_id=ptype) | Q(department_id=3) | Q(department_id=12)| \
+        print "0000000"
+        if role == 'dev':
+            prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+        elif role == 'sal':
+            prs = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+        elif role == 'ope':
+            prs = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
                 Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
-            prs = models.user.objects.filter(department_id=ptype, isactived=1)
+            prs = models.user.objects.filter(department_id=ptypes[role], isactived=1)
     else:
-        if ptype == 2:
-            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptype)|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
-        elif ptype == 12:
-            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptype) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
-        elif ptype == 8:
-            person = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptype) | Q(department_id=3) | Q(department_id=12)| \
+        if role == 'dev':
+            prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
+        elif role == 'sal':
+            prs = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+        elif role == 'ope':
+            prs = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
                 Q(department_id=9) | Q(department_id=7), Q(isactived=1))
         else:
-            prs = models.user.objects.filter(realname__contains=key, department_id=ptype, isactived=1)
+            prs = models.user.objects.filter(realname__contains=key, department_id=ptypes[role], isactived=1)
             
     search_rs = []
     if len(prs) > 0:
@@ -1236,7 +1274,7 @@ def changedesign(request, url):
             pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()
-            related_user = models.user.objects.filter(project_user__project_id = changeid)
+            related_user = models.user.objects.filter(project_user__project_id = changeid).distinct()
             message = public_message.objects.filter(project=changeid).order_by("-id")[0]            
             for i in related_user:
                 uid = i.id
@@ -1521,13 +1559,15 @@ def refuse(request):
                 refusedelay.isactived = 0
                 refusedelay.save()
                 pub_message.save()
-                related_user = models.user.objects.filter(project_user__project_id=project_id)
+                related_user = models.user.objects.filter(project_user__project_id=project_id).distinct()
                 message = public_message.objects.filter(project=project_id).order_by("-id")[0]
+            all_uesr_message = []
             for i in related_user:
                 uid = i.id
                 megid = message.id
                 pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=project_id, isactived='1')
-                pro_u_message.save()
+                all_uesr_message.append(pro_u_message)
+            project_user_message.objects.bulk_create(all_uesr_message)
     return HttpResponseRedirect('/delay/')
 
 #接受
@@ -1576,16 +1616,19 @@ def confirmmessage(request):
             #如果public_message的isactived为2，就是设计需要确认
             #如果public_message的isactived为3，就是已发测试版本需要确认
             if  reconmessage.isactived==3:
-                pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
+                pmessages = project_operator_bussniess_message.objects.filter(userid_id=useid , project_id = conmessage.project ,\
                                                                   status = "项目未验收" )
-                pmessage.check_date = datetime.datetime.now()
-                pmessage.status = "项目已验收"
+                for pmessage in pmessages:
+                    pmessage.check_date = datetime.datetime.now()
+                    pmessage.status = "项目已验收"
+                    pmessage.save()
             if reconmessage.isactived==2:
-                pmessage = project_operator_bussniess_message.objects.get(userid_id=useid , project_id = conmessage.project ,\
+                pmessages = project_operator_bussniess_message.objects.filter(userid_id=useid , project_id = conmessage.project ,\
                                                                   status = "未确认设计" )
-                pmessage.confirm_design_date = datetime.datetime.now()
-                pmessage.status = "已确认设计"
-            pmessage.save()
+                for pmessage in pmessages:
+                    pmessage.confirm_design_date = datetime.datetime.now()
+                    pmessage.status = "已确认设计"
+                    pmessage.save()
     return HttpResponseRedirect('/historymessage/')
 
 

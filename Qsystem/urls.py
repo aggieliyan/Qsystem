@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from project.views import detail, new_project, register
+from project.views import detail, new_project, register, project_feedback, feedback_comment
 from django.contrib import admin
 admin.autodiscover()
 import project
@@ -30,11 +30,13 @@ urlpatterns = patterns('',
     url(r'^newproject/(\d+)/(\d+)$', new_project),
        
    # url(r'^create/(\d*)', project.views.create, name='create'),
-    url(r'^showperson', project.views.show_person),
+    # url(r'^showperson', project.views.show_person),
     url(r'^projectlist/', project.views.project_list),
     url(r'^psearch', project.views.psearch),
     url(r'^detail/(\d+)/$', project.views.detail,name="prodetail"),
     url(r'^detail/(\d+)/$', project.views.detail, name="\'prodetail\'"),
+    url(r'^detail/(\d+)/#feedback', project.views.detail,name="feedback"),
+    url(r'^detail/(\d+)/#feedback', project.views.detail, name="\'feedback\'"),
     url(r'^user_info', project.views.user_info),
     #homepage url added 'p' is projectlist's url
     url(r'^personal_homepage/$', project.views.personal_homepage,name="homepage"),
@@ -60,6 +62,8 @@ urlpatterns = patterns('',
     url(r'^show_user2/$',project.views.show_user2),
     url(r'^Insert_user/(\d+)/(\d+)/(\d+)/$',project.views.Insert_user),
     ('^detail/(\d+)/$',detail),
+    ('^feedback/$', project_feedback),
+    ('^comment/$', feedback_comment),
     url(r'^editproject/(\d+)/$', detail, name="editproject"),
     url(r'^editproject/(\d+)/$', detail, name="\'editproject\'"),
     url(r'^editproject/(\d+)/(\d+)$', detail,name="similarpro"),

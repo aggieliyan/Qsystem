@@ -123,3 +123,15 @@ class NoticeForm(forms.Form):
 	
 class Approveform(forms.Form):
 	delayid1 = forms.IntegerField(required=True,error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})	
+
+class feedbackForm(forms.Form):
+    pid = forms.IntegerField(required=True, error_messages={'required':u'请确定您是登录状态！'})
+    mid = forms.IntegerField(required=True, error_messages={'required':u'请确定您是登录状态！'})
+    content = forms.CharField(required=True, error_messages={'required':u'请确定您是登录状态！'})
+    
+    
+class feedbackCommentForm(forms.Form):
+    pid = forms.IntegerField(required=True)
+    feedbackid = forms.IntegerField(required=True)
+    replymid = forms.IntegerField(required=True, error_messages={'required':u'请确定您是登录状态！'})
+    comment = forms.CharField(required=True, error_messages={'required':u'请确定您是登录状态！'})

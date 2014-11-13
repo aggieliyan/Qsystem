@@ -179,8 +179,10 @@ $(document).ready(function(){
  
       $(this).next().attr("title","1");
 
-      var url="/showperson";
-      var para="role=" + roles;
+/*      var url="/showperson";
+      var para="role=" + roles;*/
+      var url="/psearch";
+      var para = {"key":"", "role":roles}
       $.get(url, para, function(data, status){
         allperson = eval('('+data+')');//全局变量
         allperson = allperson.person;
@@ -278,6 +280,7 @@ $(document).ready(function(){
       //没有值的时候提示去添加人员
       if(p.length == 0){
         alert("请先在右侧添加人员");
+        return;
       }
       $("#master").children("option").remove();
       for(var i=p.length-1; i >=0; i--){
