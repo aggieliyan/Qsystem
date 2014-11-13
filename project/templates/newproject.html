@@ -33,7 +33,7 @@
      
       <div class="row-fluid">
         <div>
-          <form class="navbar-form navbar-left" action="/newproject/{{res.pro.id}}/{{res.editid}}" method="post">
+          <form name="p_form" class="navbar-form navbar-left" action="/newproject/{{res.pro.id}}/{{res.editid}}" method="post">
             {% if  isdevs or not res.request %}
             <div class="span6">
               <div id='short'>
@@ -574,7 +574,7 @@
                 {{ field.errors }}          
               {% endfor %}
                </div>
-              <button id="submitbutton" type="button" class="btn btn-success" style="margin-left:43px; margin-top:50px;" onclick="this.disabled=true;form.submit();">提交</button>
+              <button id="submitbutton" type="button" class="btn btn-success" style="margin-left:43px; margin-top:50px;" onclick="project_check();">提交</button>
               <button type="button" class="btn btn-default" style="margin-left:30px;margin-top:50px;" onclick="javascript:history.back()">取消</button>
             </div>
           </form>
@@ -628,5 +628,21 @@
         language:"zh-CN",
         minView:2
       });     
+
+      function project_check(){
+        var type_p = $("[name='tyoe_p']").val();
+        var pro = $("[name='priority']").val();
+        var leader = $("[name='leader']").val();
+        var pname = $("[name='pname']").val();
+
+        if(type_p == "" || pro == "" || leader== "" || pname == ""){
+          alert("必填项不能为空！");
+          return false;
+        }else{
+          p_form.submit();
+          $("#submitbutton").disabled=true;
+        }
+
+    }
       </script>  
  {% endblock%}
