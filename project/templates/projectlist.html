@@ -97,6 +97,7 @@
                   <option value="测试中">测试中</option>
                   <option value="暂停">暂停</option>
                   <option value="已上线">已上线</option>
+                  <option value="已上线">运营推广</option>
                 </select>
             </div>
         </div>
@@ -234,11 +235,11 @@
                                     <td>
                                     {% if logintag == 0 %}
 
-                                        <a href="{% url 'prodetail' p.id %}">去反馈</a>
+                                        <a href="{% url 'feedback' p.id %}">去反馈</a>
 
                                     {% else %}
                                         {% if p.status_p == "已上线" or p.status_p == "暂停"%}
-                                            <a href="{% url 'prodetail' p.id %}"></a>
+                                            <a href="{% url 'feedback' p.id %}">去反馈</a>
                                             {% if createtag == 1 %}
                                                 <a href="{% url 'similarpro' p.id  1 %}">发布相似</a>
                                             {% else %}
@@ -266,7 +267,7 @@
                                             {% else %}
                                             {% endif %}
                                             {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and user_id != p.business_man.id and user_id != p.operator_p.id and user_id != p.customer_service.id and changetag == 0 and auth_changetag == 0 %}
-                                                <a  href="{% url 'prodetail' p.id %}">去反馈</a>
+                                                <a  href="{% url 'feedback' p.id %}">去反馈</a>
                                             {% else %}
                                             {% endif %}
                                             {% if createtag == 1 %}

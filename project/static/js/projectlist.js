@@ -35,9 +35,11 @@ $(document).ready(function(){
       document.getElementById("mtab2").style.display = "none";
     });
        
-
+    var table_list = {'项目编号':0,'项目名称':1,'类型':2,'优先级':3,'业务':4,'产品':5,'PM':6,'测试':7,'运营':8,'客服':9,
+                      '项目成员':10,'项目开始时间':11,'计划上线时间':12,'实际上线时间':13,'项目状态':14,'操作':15 };
     $(".chomdelay").click(function(){
-       timepro=$(this).parent().parent().children().eq(12).text();
+       timepro=$(this).parent().parent().children().eq(table_list['计划上线时间']).text();
+        console.log(timepro);
        if (!timepro)
        {
         alert("计划上线时间为空不可申请延期");
@@ -52,7 +54,9 @@ $(document).ready(function(){
     var cellIndex=parseInt($(".procolor tr").length);
     for(var i=0; i<cellIndex;i++) {
       var time =document.getElementsByName("datetime")[i].value;
-      var stut = $(".basecolor").eq(i).children().eq(14).text();
+        console.log(time);
+      var stut = $(".basecolor").eq(i).children().eq(table_list['项目状态']).text();
+        console.log(stut);
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var d=new Date(d.getTime() + 1*24*60*60*1000);
       var curDate=new Date();
@@ -64,8 +68,8 @@ $(document).ready(function(){
       }      
     };
 
-    var project_type = $(".basecolor").eq(i).children().eq(2).text();
-        console.log(project_type)
+    var project_type = $(".basecolor").eq(i).children().eq(table_list['类型']).text();
+        console.log(project_type);
     if(project_type == '产品'){
       var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
     }
@@ -77,69 +81,31 @@ $(document).ready(function(){
 
     };
 
+    $(function(){
+   //正在进行中给title赋值
+   var cell=parseInt($(".procolor tr").length);
+   for(var i=0; i<cell;i++){
+
+        user_prolist = $.trim($(".basecolor").eq(i).children().eq(table_list['项目成员']).text());
+        user_prolist =user_prolist.replace(/\s+/g,' ');
+    var project = $.trim($(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(0).text());
+       console.log(project);
+    var ptotal = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(2).text());
+    ptotal = ptotal.replace(/\s+/g,'\t\t\r');
+    $(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(1).attr("title",ptotal);
+    $(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(0).attr("title",project);
+    $(".basecolor").eq(i).children().eq(table_list['项目成员']).attr("title",user_prolist);}
+
 });
 
-(function(){
+    $(function(){
   //通过路径获取当前页
   var url = location.pathname, navg = $('.top_memu li a');
   if(url == '/personal_homepage/'){
     $("#mypage").hide();
     }
-  })()
-
-function change_p(id){
-        $('#changeid').val(id);
-        $('#myModal').modal('show');
-      }
-      function delay_p(id,time){
-        $('#delayid').val(id);
-        $('#protime').val(time);
-        $('#myModal1').modal('show');
-      }
-      function chk(){
-        var chcontent = document.test.cont.value;
-        var chdpath = document.test.dpath.value;
-        if(!chcontent||!chdpath){
-          alert('变更内容或设计图路径不能为空');
-        }
-        else{
-          document.test.submit();
-        } 
-      }
-      function chkdelay(){
-        var delaytime = document.test1.delay_date.value;
-        var delayreason = document.test1.delay_reason.value;
-        if(!delaytime||!delayreason){
-          alert('延期日期或者延期理由不能为空');
-        }
-        else{
-          document.test1.submit();
-          $('#myModal1').modal('hide');
-        alert("您的申请已发送,请等待审批");
-        } 
-      }
-
-
-
-$(function(){
-   //正在进行中给title赋值
-   var cell=parseInt($(".procolor tr").length);
-   for(var i=0; i<cell;i++){
-
-        user_prolist = $.trim($(".basecolor").eq(i).children().eq(10).text());
-        user_prolist =user_prolist.replace(/\s+/g,' ');
-    var project = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(0).text());
-    var ptotal = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(2).text());
-    ptotal = ptotal.replace(/\s+/g,'\t\t\r');
-    $(".basecolor").eq(i).children().eq(1).children().eq(1).attr("title",ptotal);
-    $(".basecolor").eq(i).children().eq(1).children().eq(0).attr("title",project);
-    $(".basecolor").eq(i).children().eq(10).attr("title",user_prolist);}
-
-});
-
-
-
-(function(){
+  });
+    $(function(){
                 //导航选中
                 var url = location.pathname, navg = $('.top_memu li a');
                 if(url == '/personal_homepage/?page=/'){
@@ -149,4 +115,43 @@ $(function(){
                 }else if(!url.indexOf('/show_user/')||!url.indexOf('/sourcemanage/')||!url.indexOf('/show_source/')||!url.indexOf('/show_user2/')){
                     navg.eq(2).addClass('selected');
                 }
-            })()
+            });
+
+});
+
+
+
+    function change_p(id){
+        $('#changeid').val(id);
+        $('#myModal').modal('show');
+      }
+
+    function delay_p(id,time){
+        $('#delayid').val(id);
+        $('#protime').val(time);
+        $('#myModal1').modal('show');
+      }
+
+    function chkdelay(){
+        var delaytime = document.test1.delay_date.value;
+        var delayreason = document.test1.delay_reason.value;
+        if(!delaytime||!delayreason){
+          alert('延期日期或者延期理由不能为空');
+        }
+        else{
+          document.test1.submit();
+          $('#myModal1').modal('hide');
+        alert("您的申请已发送,请等待审批");
+        }
+      }
+
+    function chk(){
+        var chcontent = document.test.cont.value;
+        var chdpath = document.test.dpath.value;
+        if(!chcontent||!chdpath){
+          alert('变更内容或设计图路径不能为空');
+        }
+        else{
+          document.test.submit();
+        }
+      }
