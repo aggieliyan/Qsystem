@@ -241,7 +241,7 @@ $(document).ready(function(){
 
    //选择人员框里搜索
   $("#psearch").click(function(){
-      var skey = $("#skey").val();//
+      var skey = $.trim($("#skey").val());//
       var role = $("[title='1']").prev("button").attr("name");
       
       url = "/psearch"
