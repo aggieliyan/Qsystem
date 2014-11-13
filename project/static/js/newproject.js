@@ -280,6 +280,7 @@ $(document).ready(function(){
       //没有值的时候提示去添加人员
       if(p.length == 0){
         alert("请先在右侧添加人员");
+        return;
       }
       $("#master").children("option").remove();
       for(var i=p.length-1; i >=0; i--){
