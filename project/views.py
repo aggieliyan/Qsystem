@@ -995,7 +995,7 @@ def detail(request, pid='', nid=''):
                    'sql': status, 'confirmation': confirmation, 'curuid': current_uid, 'feedback': [len(pro_feedback), fc]}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
-            
+
             edittag = 1
             editdate = 1
             isdevs = 1
