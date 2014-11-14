@@ -81,8 +81,8 @@
       <div style=""class="tabbable">
       <!-- Only required for left/right tabs -->
           <ul class="nav nav-tabs" style="display:block;background-color:#339966" id="myTab1"> 
-            <li class="active"><a href="#mtab1" data-toggle="tab" style="color:#000" id="inpro">进行中的项目</a></li>
-            <li><a href="#mtab2" data-toggle="tab" style="color:#000" id="finishedpro">已完结的项目</a></li>
+            <li class="active"><a href="#mtab1" data-toggle="tab" style="color:#000" id="inpro">研发中的项目</a></li>
+            <li><a href="#mtab2" data-toggle="tab" style="color:#000" id="finishedpro">已上线的项目</a></li>
           </ul> 
           <div class="tab-content" style="padding:0px">
             <div class="tab-pane active" id="mtab1">              
@@ -228,7 +228,17 @@
                     <td>{{pres.real_launch_date|date:"Y-m-d"}}</td>
                     <td>{{pres.status_p}}</td>     
                   <td>
-                    <a href="{% url 'feedback' pres.id %}">去反馈</a>
+                    {% if edittag == 1 %}
+                      {% if userid1 == pres.leader_p_id or userid1 == pres.designer_p.id or userid1 == pres.tester_p.id or userid1 == pres.business_man.id or userid1 == pres.operator_p.id or userid1 == pres.customer_service.id or pm == 1 %}
+                      <a class="icon-edit" href="{% url 'editproject' pres.id %}" title='编辑'></a>&nbsp;
+                      {%endif%}
+                      {% else %}                      
+                      {% endif %}
+
+                      {% if userid1 != pres.leader_p_id and userid1 != pres.designer_p_id and userid1 != pres.tester_p_id and changetag == 0 and userid1 != pres.business_man.id and userid1 != pres.operator_p.id and userid1 != pres.customer_service.id and pm == 0 %}
+                      <a href="{% url 'feedback' pres.id %}">去反馈</a>
+                      {%endif%}
+
                   </td>
                   {% endfor %}
                   {% endif %} 

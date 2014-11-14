@@ -1210,8 +1210,8 @@ def personal_homepage(request):
     for p in project_user_list:
         projectids.append(p.project.id)
     projectlist = projectlist.filter(pk__in = projectids)
-    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")   
-    result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
+    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
+    result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'运营推广')).order_by("-id")
     puser = models.project_user.objects.all()
     """分页"""
     paginator = Paginator(result1, 25)
