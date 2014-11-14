@@ -80,6 +80,7 @@
                   <option>测试中</option>
                   <option>暂停</option>
                   <option>已上线</option>
+                  <option>运营推广</option>
                 </select>
               </div>
               <div>
@@ -636,7 +637,7 @@
         var pname = $("[name='pname']").val();
 
         if(type_p == "" || pro == "" || leader== "" || pname == ""){
-          alert("必填项不能为空！");
+          $("#errofield").text("请检查必填项");
           return false;
         }else{
           p_form.submit();

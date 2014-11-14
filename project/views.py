@@ -9,7 +9,7 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
 from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
-from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
+from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message, project_feedback_comment
 import models
 import hashlib
 import django.contrib.auth.models
@@ -656,7 +656,7 @@ def sendmessage(request,status,pid):
             #先判断在项目上线之前有没有留言的人
             try:
                 related_user = models.project_feedback.objects.filter(project_id=pid)
-            except:
+            except KeyError:
                 None
             else:
                 #项目上线，给留言者发的消息存在消息表中
@@ -672,6 +672,14 @@ def sendmessage(request,status,pid):
                 users = []
                 for i in related_user:
                     users.append(i.feedback_member_id)
+                    #判断是否有回复反馈人的人feedbackid_id是反馈表中id
+                    try:
+                        back_c_user = models.project_feedback_comment.objects.filter(feedbackid_id=i.id)
+                    except KeyError:
+                        None
+                    else:
+                        for j in back_c_user:
+                            users.append(j.feedback_member_c_id)  
                 users = set(users)
                 for u in users:
                     uid = u
@@ -906,75 +914,45 @@ def detail(request, pid='', nid=''):
     for p in pro_sql:
         sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 
     if sql=='':
-        status = '未填写'
+        sql_status = '未填写'
     else:
-        status = '已填写'
+        sql_status = '已填写'
 #各部门负责人确认状态  
     confirmation = {}
-    bm_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='bm').order_by("id")
-    a = 0
-    if bm_status:
-        bm_check = None
-        for item in bm_status:            
-            if item.confirm_design_date:
-                bm_design_date = item.confirm_design_date
-                bm_design = bm_design_date.strftime("%Y-%m-%d %H:%I") + item.status
-            else:
-                if item.check_date:
-                    bm_check_date = item.check_date
-                    bm_check = bm_check_date.strftime("%Y-%m-%d %H:%I") + item.status
+    bm_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='业务')
+    op_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='运营')
+    cs_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='客服')
+    conf_status = [bm_status, op_status, cs_status]
+    name = ['bm', 'op', 'cs']
+    b = 0 #用来控制名字
+    for sec in conf_status:
+        a = 0
+        design_col = 'red' 
+        check_col = 'red'
+        if sec:
+            check = ''
+            for item in sec:            
+                if item.confirm_design_date:
+                    design_col = '#339966'
+                    design_date = item.confirm_design_date
+                    design = design_date.strftime("%Y-%m-%d ") + item.status
                 else:
-                    #print item.confirm_design_date
-                    if a == 0:
-                        bm_design = item.status
-                    else:
-                        bm_check = item.status
-            a = a + 1
-        confirmation['bm_design'] = bm_design
-        if bm_check:
-            confirmation['bm_check'] = bm_check
-    op_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='op')
-    a = 0
-    if op_status:
-        op_check = None
-        for item in op_status:            
-            if item.confirm_design_date:
-                    op_design_date = item.confirm_design_date
-                    op_design = op_design_date.strftime("%Y-%m-%d %H:%I") + item.status
-            else:
-                if item.check_date:
-                    op_check_date = item.check_date
-                    op_check = op_check_date.strftime("%Y-%m-%d %H:%I") + item.status
-                else:
-                    if a == 0:
-                        op_design = item.status
-                    else:
-                        op_check = item.status
-            a = a + 1
-        confirmation['op_design'] = op_design
-        if op_check:
-            confirmation['op_check'] = op_check
-    cs_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='cs')
-    a = 0
-    if cs_status:
-        cs_check = None
-        for item in cs_status:            
-            if item.confirm_design_date:
-                cs_design_date = item.confirm_design_date
-                cs_design = cs_design_date.strftime("%Y-%m-%d %H:%I") + item.status
-            else:
-                if item.check_date:
-                    cs_check_date = item.check_date
-                    cs_check = cs_check_date.strftime("%Y-%m-%d %H:%I") + item.status
-                else:
-                    if a == 0:
-                        cs_design = item.status
-                    else:
-                        cs_check = item.status
-            a = a + 1
-        confirmation['cs_design'] = cs_design
-        if cs_check:
-            confirmation['cs_check'] = cs_check
+                    if item.check_date:
+                        check_col ='#339966'
+                        check_date = item.check_date
+                        check = check_date.strftime("%Y-%m-%d ") + item.status
+                    else:                    
+                        if a == 0:
+                            design = item.status
+                        else:
+                            check = item.status
+                a = a + 1
+            confirmation[name[b]] = []
+            confirmation[name[b]].append(design_col)
+            confirmation[name[b]].append(design)
+            confirmation[name[b]].append(check_col)
+            confirmation[name[b]].append(check)
+            b = b + 1       
 
     current_uid = request.session['id'] #把当前登录用户的id传给页面，方便记录反馈人ID
     pro_feedback = models.project_feedback.objects.filter(project_id=pid).order_by("-feedback_date")
@@ -992,7 +970,7 @@ def detail(request, pid='', nid=''):
     finally:
         if '/detail/' in request.path:
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
-                   'sql': status, 'confirmation': confirmation, 'curuid': current_uid, 'feedback': [len(pro_feedback), fc]}
+                   'sql': sql_status, 'confirmation': confirmation, 'curuid': current_uid, 'feedback': [len(pro_feedback), fc]}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
 
@@ -1143,9 +1121,9 @@ def user_info(request):
             for p in project_user_list:
                 projectids.append(p.project.id) 
             projectlist = projectlist.filter(pk__in = projectids)       
-            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")
+            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")
             pro_num=res.count()
-            result['pro_num']=pro_num
+            result['pro_num'] = pro_num
    
             userid = request.session['id']
             messsage = project_user_message.objects.filter(userid_id = userid)
@@ -1202,8 +1180,8 @@ def personal_homepage(request):
     for p in project_user_list:
         projectids.append(p.project.id)
     projectlist = projectlist.filter(pk__in = projectids)
-    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")   
-    result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'暂停')).order_by("-id")
+    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
+    result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'运营推广')).order_by("-id")
     puser = models.project_user.objects.all()
     """分页"""
     paginator = Paginator(result1, 25)
@@ -1720,8 +1698,8 @@ def initdata(request):
     depart4.save()
     depart5 = department(id=5,department='IT',isactived=1)
     depart5.save()
-#    depart6 = department(id=6,department='院校事业',isactived=1)
-#    depart6.save()
+    depart6 = department(id=6,department='院校事业',isactived=1)
+    depart6.save()
     depart7 = department(id=7,department='客服部',isactived=1)
     depart7.save()
     depart8 = department(id=8,department='市场部',isactived=1)
