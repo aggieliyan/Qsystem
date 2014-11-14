@@ -228,12 +228,16 @@
                     <td>{{pres.real_launch_date|date:"Y-m-d"}}</td>
                     <td>{{pres.status_p}}</td>     
                   <td>
-                    {% if edittag == 1 %}
+                    {% if pres.status_p == '已上线' %}
+                      {% if edittag == 1 %}
                       {% if userid1 == pres.leader_p_id or userid1 == pres.designer_p.id or userid1 == pres.tester_p.id or userid1 == pres.business_man.id or userid1 == pres.operator_p.id or userid1 == pres.customer_service.id or pm == 1 %}
                       <a class="icon-edit" href="{% url 'editproject' pres.id %}" title='编辑'></a>&nbsp;
                       {%endif%}
                       {% else %}                      
                       {% endif %}
+                      
+                    {% else %} 
+                    {% endif %}
 
                       {% if userid1 != pres.leader_p_id and userid1 != pres.designer_p_id and userid1 != pres.tester_p_id and changetag == 0 and userid1 != pres.business_man.id and userid1 != pres.operator_p.id and userid1 != pres.customer_service.id and pm == 0 %}
                       <a href="{% url 'feedback' pres.id %}">去反馈</a>
