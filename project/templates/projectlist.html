@@ -238,47 +238,61 @@
                                         <a href="{% url 'feedback' p.id %}">去反馈</a>
 
                                     {% else %}
-                                        {% if p.status_p == "已上线" or p.status_p == "暂停"%}
-                                            <a href="{% url 'feedback' p.id %}">去反馈</a>
+                                        <a href="{% url 'feedback' p.id %}">去反馈</a>
+                                        {% if p.status_p == "运营推广" or p.status_p == "暂停"%}
+
                                             {% if createtag == 1 %}
                                                 <a href="{% url 'similarpro' p.id  1 %}"><img src='../static/img/copypro.png' style='margin-top:-7px' title='发布相似'></a>
                                             {% else %}
                                             {% endif %}
                                         {% else %}
-                                            {% if changetag == 1 %}
-                                                <a onclick="change_p({{p.id}})">设计变更</a><span> </span>
-                                            {% else %}
-                                            {% endif %}
-                                            {% if edittag == 1 %}
-                                            {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id or user_id == p.business_man.id or user_id == p.operator_p.id or user_id == p.customer_service.id or auth_changetag == 1%}
+                                            {% if p.status_p == "已上线" %}
+                                                {% if edittag == 1 %}
+                                                {% if user_id == p.business_man.id or user_id == p.operator_p.id or user_id == p.customer_service.id or auth_changetag == 1%}
                                                 <a class="icon-edit" href="{% url 'editproject' p.id %}" title="编辑"> <span> </span></a>
-                                            {% endif %}
+                                                {% else %}
+                                                {% endif %}
+                                                {% else %}
+                                                {% endif %}
                                             {% else %}
-                                            {% endif %}
-                                            {% if delaytag == 1 %}
-                                            {% ifequal user_id p.leader_p_id  %}
-                                                <a onclick="delay_p({{p.id}},{{ p.expect_launch_date|date:"Ymd" }})"class="chomdelay">延期<span> </span></a>
-                                            {% endifequal %}
-                                            {% else %}
-                                            {% endif %}
-                                            {% if deletetag == 1 or auth_changetag == 1%}
-                                                <a class="icon-pause" href="{% url 'pproject_pause' p.id %}" title="暂停" onclick="return confirm('你确定要暂停项目吗?')"> <span> </span></a>
-                                                <a class="icon-trash" href="{% url 'pproject_delete' p.id %}" title="删除" onclick="return confirm('你确认要删除吗?')"><span> </span></a>
-                                            {% else %}
-                                            {% endif %}
-                                            {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and user_id != p.business_man.id and user_id != p.operator_p.id and user_id != p.customer_service.id and changetag == 0 and auth_changetag == 0 %}
-                                                <a  href="{% url 'feedback' p.id %}">去反馈</a>
-                                            {% else %}
-                                            {% endif %}
-                                            {% if createtag == 1 %}
-                                                <a  href="{% url 'similarpro' p.id  1 %}"><img src='../static/img/copypro.png' style='margin-top:-7px' title='发布相似'></a>
-                                            {% else %}
+
+                                                {% if changetag == 1 %}
+                                                    <a onclick="change_p({{p.id}})">设计变更</a><span> </span>
+                                                {% else %}
+                                                {% endif %}
+                                                {% if edittag == 1 %}
+                                                {% if user_id == p.leader_p_id or user_id == p.designer_p.id or user_id == p.tester_p.id or user_id == p.business_man.id or user_id == p.operator_p.id or user_id == p.customer_service.id or auth_changetag == 1%}
+                                                    <a class="icon-edit" href="{% url 'editproject' p.id %}" title="编辑"> <span> </span></a>
+                                                {% endif %}
+                                                {% else %}
+                                                {% endif %}
+                                                {% if delaytag == 1 %}
+                                                {% ifequal user_id p.leader_p_id  %}
+                                                    <a onclick="delay_p({{p.id}},{{ p.expect_launch_date|date:"Ymd" }})"class="chomdelay">延期<span> </span></a>
+                                                {% endifequal %}
+                                                {% else %}
+                                                {% endif %}
+                                                {% if deletetag == 1 or auth_changetag == 1%}
+                                                    <a class="icon-pause" href="{% url 'pproject_pause' p.id %}" title="暂停" onclick="return confirm('你确定要暂停项目吗?')"> <span> </span></a>
+                                                    <a class="icon-trash" href="{% url 'pproject_delete' p.id %}" title="删除" onclick="return confirm('你确认要删除吗?')"><span> </span></a>
+                                                {% else %}
+                                                {% endif %}
+                                                {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and user_id != p.business_man.id and user_id != p.operator_p.id and user_id != p.customer_service.id and changetag == 0 and auth_changetag == 0 %}
+                                                    <a  href="{% url 'feedback' p.id %}">去反馈</a>
+                                                {% else %}
+                                                {% endif %}
+                                                {% if createtag == 1 %}
+                                                    <a  href="{% url 'similarpro' p.id  1 %}"><img src='../static/img/copypro.png' style='margin-top:-7px' title='发布相似'></a>
+                                                {% else %}
+                                                {% endif %}
                                             {% endif %}
                                         {% endif %}
-                                    </td>
                                     {% endif %}
-                                {% endfor %}
+                                    </td>
+                                   {% endfor %}
                                 </tr>
+
+
                             </tbody>
                         </table>
                     </div>
