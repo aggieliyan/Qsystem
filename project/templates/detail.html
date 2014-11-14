@@ -80,7 +80,7 @@
                        		{% endfor %}
                        	</td> 
                        	<td class="line-name"></td>               
-                       	<td class="line-text">{{res.confirmation.bm_design}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.bm_check}}</td>
+                       	<td class="line-text">{{res.confirmation.bm.0}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.bm.1}}</td>
                     </tr>
                     <tr>
 						<td class="line-name">运营人员：</td>
@@ -93,7 +93,7 @@
                        		{% endfor %}
                        	</td> 
                        	<td class="line-name"></td>               
-                       	<td class="line-text">{{res.confirmation.op_design}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.op_check}}</td>
+                       	<td class="line-text">{{res.confirmation.op.0}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.op.1}}</td>
                     </tr>
                     <tr>
 						<td class="line-name">客服人员：</td>
@@ -106,7 +106,7 @@
                        		{% endfor %}
                        	</td> 
                        	<td class="line-name"></td>               
-                       	<td class="line-text">{{res.confirmation.cs_design}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.cs_check}}</td>
+                       	<td class="line-text">{{res.confirmation.cs.0}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.cs.1}}</td>
                     </tr>
 				</table>
 				<table>					
@@ -188,7 +188,7 @@
 										<div class="item-feedback">
 											<span class="member-name"><b>{{key.feedback_member.realname}}：</b></span>
 											{{key.content}}
-											<span class="date">({{key.feedback_date|date:"Y-m-d"}})</span>
+											<span class="date">({{key.feedback_date|date:"Y-m-d H:i:s"}})</span>
 											<a id={{key.id}} class="reply-btn" href="javascript:void(0)" hidefocus="true">回复</a>
 										</div>
 										<div class="item-comment">
@@ -218,7 +218,7 @@
 													<span class="member-name"><b>{{c.feedback_member_c.realname}}</b></span>
 													<b style="font-weight:normal;padding:0 3px">回复：</b>
 													{{c.comment}}
-													<span class="date">({{c.feedback_date_c|date:"Y-m-d"}})</span>
+													<span class="date">({{c.feedback_date_c|date:"Y-m-d H:i:s"}})</span>
 												</div>											
 											{% endfor %}											
 										</div>
@@ -248,8 +248,12 @@
 		function feedbacktext(){
 	        var text = document.feedbackForm.content.value;
 	        if(!text){
-	        	alert("反馈内容或回复内容不能为空！")
+	        	alert("反馈内容不能为空！")
 	          	return false;
+	        }
+	        else if(text.length>300){
+	        	alert("反馈内容不能超过300字")
+	        	return false;
 	        }
 	        else{
 	          document.feedbackForm.submit();
@@ -258,8 +262,12 @@
         function commenttext(){
 	        var text = document.commentForm.comment.value;
 	        if(!text){
-	        	alert("反馈内容或回复内容不能为空！")
+	        	alert("回复内容不能为空！")
 	        	return false;	          
+	        }
+	        else if(text.length>300){
+	        	alert("回复内容不能超过300字")
+	        	return false;
 	        }
 	        else{
 	          document.commentForm.submit();
