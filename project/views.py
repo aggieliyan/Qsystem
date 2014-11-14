@@ -924,9 +924,9 @@ def detail(request, pid='', nid=''):
     cs_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='客服')
     conf_status = [bm_status, op_status, cs_status]
     name = ['bm', 'op', 'cs']
+    b = 0 #用来控制名字
     for sec in conf_status:
         a = 0
-        b = 0 #用来控制名字
         if sec:
             check = ''
             for item in sec:            
