@@ -1121,9 +1121,9 @@ def user_info(request):
             for p in project_user_list:
                 projectids.append(p.project.id) 
             projectlist = projectlist.filter(pk__in = projectids)       
-            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停')).order_by("-id")
+            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")
             pro_num=res.count()
-            result['pro_num']=pro_num
+            result['pro_num'] = pro_num
    
             userid = request.session['id']
             messsage = project_user_message.objects.filter(userid_id = userid)
