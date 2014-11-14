@@ -163,9 +163,9 @@
                       {% else %}                      
                       {% endif %}
 
-                      {% if userid1 != res.leader_p_id and userid1 != res.designer_p_id and userid1 != res.tester_p_id and changetag == 0 and userid1 != res.business_man.id and userid1 != res.operator_p.id and userid1 != res.customer_service.id and pm == 0 %}
+                     
                       <a href="{% url 'feedback' res.id %}">去反馈</a>
-                      {%endif%}
+                      
               
                   </td>
                   {% endfor %}
@@ -237,8 +237,8 @@
                       {% endif %}
 
                     {% else %} 
-                      <a href="{% url 'feedback' pres.id %}">去反馈</a>
-                    {% endif %}                     
+                    {% endif %}
+                    <a href="{% url 'feedback' pres.id %}">去反馈</a>                     
 
                   </td>
                   {% endfor %}
