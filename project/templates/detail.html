@@ -80,7 +80,11 @@
                        		{% endfor %}
                        	</td> 
                        	<td class="line-name"></td>               
-                       	<td class="line-text">{{res.confirmation.bm.0}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.bm.1}}</td>
+                       	<td class="line-text">
+                       		<span style="color:{{res.confirmation.bm.0}}">{{res.confirmation.bm.1}}</span>
+                       		&nbsp&nbsp&nbsp&nbsp
+                       		<span style="color:{{res.confirmation.bm.2}}">{{res.confirmation.bm.3}}</span>
+                       	</td>
                     </tr>
                     <tr>
 						<td class="line-name">运营人员：</td>
@@ -93,7 +97,11 @@
                        		{% endfor %}
                        	</td> 
                        	<td class="line-name"></td>               
-                       	<td class="line-text">{{res.confirmation.op.0}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.op.1}}</td>
+                       	<td class="line-text">
+                       		<span style="color:{{res.confirmation.op.0}}">{{res.confirmation.op.1}}</span>
+                       		&nbsp&nbsp&nbsp&nbsp
+                       		<span style="color:{{res.confirmation.op.2}}">{{res.confirmation.op.3}}</span>
+                       	</td>
                     </tr>
                     <tr>
 						<td class="line-name">客服人员：</td>
@@ -106,7 +114,11 @@
                        		{% endfor %}
                        	</td> 
                        	<td class="line-name"></td>               
-                       	<td class="line-text">{{res.confirmation.cs.0}}&nbsp&nbsp&nbsp&nbsp{{res.confirmation.cs.1}}</td>
+                       	<td class="line-text">
+                       		<span style="color:{{res.confirmation.cs.0}}">{{res.confirmation.cs.1}}</span>
+                       		&nbsp&nbsp&nbsp&nbsp
+                       		<span style="color:{{res.confirmation.cs.2}}">{{res.confirmation.cs.3}}</span>
+                       	</td>
                     </tr>
 				</table>
 				<table>					

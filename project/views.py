@@ -927,17 +927,20 @@ def detail(request, pid='', nid=''):
     b = 0 #用来控制名字
     for sec in conf_status:
         a = 0
+        design_col = 'red' 
+        check_col = 'red'
         if sec:
             check = ''
             for item in sec:            
                 if item.confirm_design_date:
+                    design_col = '#339966'
                     design_date = item.confirm_design_date
-                    design = design_date.strftime("%Y-%m-%d %H:%I") + item.status
-                    print "lalala"
+                    design = design_date.strftime("%Y-%m-%d ") + item.status
                 else:
                     if item.check_date:
+                        check_col ='#339966'
                         check_date = item.check_date
-                        check = check_date.strftime("%Y-%m-%d %H:%I") + item.status
+                        check = check_date.strftime("%Y-%m-%d ") + item.status
                     else:                    
                         if a == 0:
                             design = item.status
@@ -945,53 +948,11 @@ def detail(request, pid='', nid=''):
                             check = item.status
                 a = a + 1
             confirmation[name[b]] = []
+            confirmation[name[b]].append(design_col)
             confirmation[name[b]].append(design)
+            confirmation[name[b]].append(check_col)
             confirmation[name[b]].append(check)
-            b = b + 1
-    print confirmation        
-#                
-#   
-#    a = 0
-#    if op_status:
-#        op_check = None
-#        for item in op_status:            
-#            if item.confirm_design_date:
-#                    op_design_date = item.confirm_design_date
-#                    op_design = op_design_date.strftime("%Y-%m-%d %H:%I") + item.status
-#            else:
-#                if item.check_date:
-#                    op_check_date = item.check_date
-#                    op_check = op_check_date.strftime("%Y-%m-%d %H:%I") + item.status
-#                else:
-#                    if a == 0:
-#                        op_design = item.status
-#                    else:
-#                        op_check = item.status
-#            a = a + 1
-#        confirmation['op_design'] = op_design
-#        if op_check:
-#            confirmation['op_check'] = op_check
-#    
-#    a = 0
-#    if cs_status:
-#        cs_check = None
-#        for item in cs_status:            
-#            if item.confirm_design_date:
-#                cs_design_date = item.confirm_design_date
-#                cs_design = cs_design_date.strftime("%Y-%m-%d %H:%I") + item.status
-#            else:
-#                if item.check_date:
-#                    cs_check_date = item.check_date
-#                    cs_check = cs_check_date.strftime("%Y-%m-%d %H:%I") + item.status
-#                else:
-#                    if a == 0:
-#                        cs_design = item.status
-#                    else:
-#                        cs_check = item.status
-#            a = a + 1
-#        confirmation['cs_design'] = cs_design
-#        if cs_check:
-#            confirmation['cs_check'] = cs_check
+            b = b + 1       
 
     current_uid = request.session['id'] #把当前登录用户的id传给页面，方便记录反馈人ID
     pro_feedback = models.project_feedback.objects.filter(project_id=pid).order_by("-feedback_date")
