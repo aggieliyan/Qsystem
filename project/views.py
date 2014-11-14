@@ -9,7 +9,7 @@ from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
 from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
-from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
+from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message, project_feedback_comment
 import models
 import hashlib
 import django.contrib.auth.models
@@ -656,7 +656,7 @@ def sendmessage(request,status,pid):
             #先判断在项目上线之前有没有留言的人
             try:
                 related_user = models.project_feedback.objects.filter(project_id=pid)
-            except:
+            except KeyError:
                 None
             else:
                 #项目上线，给留言者发的消息存在消息表中
@@ -672,6 +672,14 @@ def sendmessage(request,status,pid):
                 users = []
                 for i in related_user:
                     users.append(i.feedback_member_id)
+                    #判断是否有回复反馈人的人feedbackid_id是反馈表中id
+                    try:
+                        back_c_user = models.project_feedback_comment.objects.filter(feedbackid_id=i.id)
+                    except KeyError:
+                        None
+                    else:
+                        for j in back_c_user:
+                            users.append(j.feedback_member_c_id)  
                 users = set(users)
                 for u in users:
                     uid = u
