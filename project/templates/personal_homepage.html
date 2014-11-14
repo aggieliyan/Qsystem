@@ -235,13 +235,10 @@
                       {%endif%}
                       {% else %}                      
                       {% endif %}
-                      
-                    {% else %} 
-                    {% endif %}
 
-                      {% if userid1 != pres.leader_p_id and userid1 != pres.designer_p_id and userid1 != pres.tester_p_id and changetag == 0 and userid1 != pres.business_man.id and userid1 != pres.operator_p.id and userid1 != pres.customer_service.id and pm == 0 %}
+                    {% else %} 
                       <a href="{% url 'feedback' pres.id %}">去反馈</a>
-                      {%endif%}
+                    {% endif %}                     
 
                   </td>
                   {% endfor %}
