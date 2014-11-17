@@ -451,7 +451,7 @@ def new_project(request, pid='', nid=''):
                 dt_temp['d'] = pro['estimated_develop_end_date'] - pro['estimated_develop_start_date']
                 dt['dtime'] = int(dt_temp['d'].days+1)
             else:
-               dt['dtime'] = 0
+                dt['dtime'] = 0
             if (pro['estimated_test_end_date'] != None) & (pro['estimated_test_start_date'] != None):
                 dt_temp['t'] = pro['estimated_test_end_date'] - pro['estimated_test_start_date']
                 dt['ttime'] = int(dt_temp['t'].days+1)
@@ -878,8 +878,8 @@ def detail(request, pid='', nid=''):
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
-    bms = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=3), Q(department_id=12) | Q(department_id=9) | Q(department_id=7))
-    ops = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=4),Q(department_id=3) | Q(department_id=8) | Q(department_id=12)| Q(department_id=9) | Q(department_id=7))
+    bms = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=3), Q(department_id=12) | Q(department_id=9) | Q(department_id=7)| Q(department_id=6))
+    ops = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=4), Q(department_id=3) | Q(department_id=8) | Q(department_id=12)| Q(department_id=9) | Q(department_id=7) | Q(department_id=6))
     #这个列表用来存测试产品销售客服
     p_role = []
     #这个列表用来存测试产品销售客服的部门id和roles值
@@ -947,7 +947,7 @@ def detail(request, pid='', nid=''):
                         else:
                             check = item.status
                 a = a + 1
-            confirmation[name[b]] = []
+            confirmation[name[b]] = []                                      #用来存储不同部门的四个值：０是设计确认颜色值，１是设计确认状态文字，２是测试版确认状态的颜色值，３是测试版确认状态的文字。
             confirmation[name[b]].append(design_col)
             confirmation[name[b]].append(design)
             confirmation[name[b]].append(check_col)
@@ -960,8 +960,9 @@ def detail(request, pid='', nid=''):
     for item in pro_feedback:
         feedback_comment = models.project_feedback_comment.objects.filter(feedbackid_id=item.id).order_by("-feedback_date_c")
         fc[item] = feedback_comment
-    for key in fc:
-        print key.feedback_date       
+    
+#    print sorted(fc.iteritems(), key=lambda d:d[0].id, reverse = True)  如果想按评论也倒序显示，可以使用这句先将字典变成列表
+         
     try:
         request.user             
         if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
@@ -1081,20 +1082,20 @@ def psearch(request):
         if role == 'dev':
             prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
         elif role == 'sal':
-            prs = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+            prs = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7) | Q(department_id=6), Q(isactived=1))
         elif role == 'ope':
             prs = models.user.objects.filter(Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
-                Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+                Q(department_id=9) | Q(department_id=7) | Q(department_id=6), Q(isactived=1))
         else:
             prs = models.user.objects.filter(department_id=ptypes[role], isactived=1)
     else:
         if role == 'dev':
             prs = models.user.objects.filter(Q(realname__contains=key), Q(isactived=1), Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
         elif role == 'sal':
-            prs = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+            prs = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=9) | Q(department_id=7) | Q(department_id=6), Q(isactived=1))
         elif role == 'ope':
             prs = models.user.objects.filter(Q(realname__contains=key),Q(department_id=ptypes[role]) | Q(department_id=3) | Q(department_id=12)| \
-                Q(department_id=9) | Q(department_id=7), Q(isactived=1))
+                Q(department_id=9) | Q(department_id=7) | Q(department_id=6), Q(isactived=1))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptypes[role], isactived=1)
             

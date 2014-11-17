@@ -183,12 +183,11 @@
 				<div id="feedback" name="feedback" class="feedback-area">
 					<div class="feed-background">
 						<form name="feedbackForm" class="f-form" action="/feedback/" method="post" style="margin-left:150px;">	
-							{% csrf_token %}
 							<div class="send_feedback">
-								<textarea class="feedback" name="content" defaultval="请输入您想要反馈的问题" style="width:700px; margin-top:20px; margin-bottom:20px;"></textarea>
-								<input id="pro_id" name="pid" type="hidden" value="{{res.pro.id}}"/>
-								<input id="member_id" name="mid" type="hidden" value="{{res.curuid}}"/>
-								<button id="sendfeedbacbtn" class="btn btn-success" style="margin-left:43px;" onclick="return feedbacktext();">提交反馈</button>									
+							<textarea class="feedback" name="content" style="font-family: 'Microsoft YaHei,arial,宋体'; color: #999999; width:700px; margin-top:20px; margin-bottom:20px;" onBlur="if(this.innerHTML==''){this.innerHTML='请输入您想要反馈的问题，最多不要超过300字哟！';this.style.color='#999999'}" onFocus="if(this.innerHTML=='请输入您想要反馈的问题，最多不要超过300字哟！'){this.innerHTML='';this.style.color='#000'}">请输入您想要反馈的问题，最多不要超过300字哟！</textarea>
+							<input id="pro_id" name="pid" type="hidden" value="{{res.pro.id}}"/>
+							<input id="member_id" name="mid" type="hidden" value="{{res.curuid}}"/>
+							<button id="sendfeedbacbtn" class="btn btn-success" style="margin-left:43px;" onclick="return feedbacktext();">提交反馈</button>									
 							</div>
 						</form>					
 					</div>
@@ -206,16 +205,14 @@
 										<div class="item-comment">
 											<div class="reply-pup" id=rp{{key.id}} style="display:none;">
 												<form name="commentForm" class="fc-form" action="/comment/" method="post" style="margin-left:150px;">
-													{% csrf_token %}
 													<div>
-														<textarea class="feedback-reply" name="comment" style="width:600px; margin-top:20px; margin-bottom:20px;"></textarea>
-														<script type="text/javascript"></script>
+														<textarea class="feedback-reply" id="comment{{key.id}}" name="comment" style="width:600px; margin-top:20px; margin-bottom:20px;"></textarea>
 														<input id="pro_id" name="pid" type="hidden" value="{{res.pro.id}}"/>
 														<input name="feedbackid" type="hidden" value="{{key.id}}"/>
 														<input name="replymid" type="hidden" value="{{res.curuid}}"/>														
 													</div>
 													<div class="action-btn">									
-														<button onclick="return commenttext();" class="btn btn-success" style="margin-left:43px;" hidefocus="true">
+														<button onclick="return commenttext(id);" class="btn btn-success" id=comment{{key.id}} style="margin-left:43px;" hidefocus="true">
 															回复
 														</button>
 														<a class="cancle-reply" id = {{key.id}} href="javascript:void(0)" hidefocus="true">
@@ -223,6 +220,7 @@
 														</a>
 													</div>																								
 												</form>
+											</div>
 										</div>
 										<div class="reply-area">									
 											{% for c in value %}
@@ -259,27 +257,32 @@
 		});
 		function feedbacktext(){
 	        var text = document.feedbackForm.content.value;
-	        if(!text){
-	        	alert("反馈内容不能为空！")
-	          	return false;
+	        if(text == "请输入您想要反馈的问题，最多不要超过300字哟！"){	        			        	
+	        	$(".feedback").attr("style", "width:700px; margin-top:20px; margin-bottom:20px; background:#ffe4e1");
+	          	try{alert("反馈内容不能为空！")}
+	          	finally{return false;}	          		
 	        }
 	        else if(text.length>300){
-	        	alert("反馈内容不能超过300字")
-	        	return false;
+	        	$(".feedback").attr("style", "width:700px; margin-top:20px; margin-bottom:20px; background:#ffe4e1");
+	        	try{alert("反馈内容不能超过300字")}
+	        	finally{return false;}
 	        }
 	        else{
 	          document.feedbackForm.submit();
 	        } 
         }	
-        function commenttext(){
-	        var text = document.commentForm.comment.value;
+        function commenttext(id){    
+        	var text = $("#"+id).val();
 	        if(!text){
-	        	alert("回复内容不能为空！")
-	        	return false;	          
+	        	$(".feedback-reply").attr("style", "width:600px; margin-top:20px; margin-bottom:20px; background:#ffe4e1");
+	        	try {alert("回复内容不能为空！")}	 
+	        	finally{return false;}       	
+	        		          
 	        }
 	        else if(text.length>300){
-	        	alert("回复内容不能超过300字")
-	        	return false;
+	        	$(".feedback-reply").attr("style", "width:600px; margin-top:20px; margin-bottom:20px; background:#ffe4e1");
+	        	try{alert("回复内容不能超过300字")}
+	        	finally{return false;}
 	        }
 	        else{
 	          document.commentForm.submit();
