@@ -964,9 +964,10 @@ def detail(request, pid='', nid=''):
 #    print sorted(fc.iteritems(), key=lambda d:d[0].id, reverse = True)  如果想按评论也倒序显示，可以使用这句先将字典变成列表
          
     try:
-        request.user             
-        if (request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id \
-            or request.session['id']==pro.designer_p_id or request.session['id']==pro.tester_p_id):
+        request.user 
+        auth_id = [pro.leader_p_id, pro.designer_p_id, pro.tester_p_id, 
+                   pro.business_man_id, pro.operator_p_id, pro.customer_service_id]            
+        if(request.user.has_perm('auth.change_permission') or request.session['id'] in auth_id):
             editboolean = True
     finally:
         if '/detail/' in request.path:
