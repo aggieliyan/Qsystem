@@ -238,7 +238,7 @@
                                         <a href="{% url 'feedback' p.id %}">去反馈</a>
 
                                     {% else %}
-                                        <a href="{% url 'feedback' p.id %}">去反馈</a>
+
                                         {% if p.status_p == "运营推广" or p.status_p == "暂停"%}
 
                                             {% if createtag == 1 %}
@@ -287,6 +287,7 @@
                                                 {% endif %}
                                             {% endif %}
                                         {% endif %}
+                                         <a href="{% url 'feedback' p.id %}">去反馈</a>
                                     {% endif %}
                                     </td>
                                    {% endfor %}
