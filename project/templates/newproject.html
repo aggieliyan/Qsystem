@@ -452,7 +452,7 @@
                             {% if item.id == res.pro.tester_p_id %}
                               <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' checked = 'checked' disabled="false"><span>{{item.realname}}</span></div>
                             {% else %}
-                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' disabled="false"><span>{{item.realname}}</span><span class="close">x</span></div>
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' disabled="false"><span>{{item.realname}}</span></div>
                             {% endif %}
                           {% endfor %}
                        {% endif %}
