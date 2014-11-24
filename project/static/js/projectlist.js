@@ -71,10 +71,10 @@ $(document).ready(function(){
     var project_type = $(".basecolor").eq(i).children().eq(table_list['类型']).text();
         console.log(project_type);
     if(project_type == '产品'){
-      var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+      var list = {'需求讨论中':4,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
     }
     else{
-      var list = {'需求讨论中':7,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+      var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
     }
 
     $(".basecolor").eq(i).children().eq(list[stut]+1).css('border', "2px solid #339966");
