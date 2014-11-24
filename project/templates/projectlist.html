@@ -238,7 +238,7 @@
                                         <a href="{% url 'feedback' p.id %}">去反馈</a>
 
                                     {% else %}
-                                        <a href="{% url 'feedback' p.id %}">去反馈</a>
+                                        {% comment %}<a href="{% url 'feedback' p.id %}">去反馈</a>{% endcomment %}
                                         {% if p.status_p == "运营推广" or p.status_p == "暂停"%}
 
                                             {% if createtag == 1 %}
