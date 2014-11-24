@@ -770,7 +770,7 @@ def project_list(request):
             status_p = search_form.cleaned_data['status_p']
             leader_p = search_form.cleaned_data['leader_p']
             type_p = search_form.cleaned_data['type_p']
-
+            #先按状态排序，状态相同按priority排
             projectlist = models.project.objects.filter().order_by("-status_p","-priority")
             
 
