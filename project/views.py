@@ -1423,7 +1423,6 @@ def Insert_user(request, id, id2, id3):
 #延期
 def delay(request):
 
-    #if not request.session['id']:
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
 
@@ -1486,7 +1485,7 @@ def historymessage(request):
 
     if not request.user.has_perm('project.change_project_delay'):
         return HttpResponseRedirect("/noperm")
-        
+
     global search_key
     search_key=''
     # 查询与用户相关的消息
