@@ -1239,7 +1239,7 @@ def delayproject(request, url):
                 apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason, isactived = 1)
             delay_p.save()                   
     return HttpResponseRedirect(url)
-def changedesign(request, url):          
+def changedesign(request, url):
     if request.method == 'POST':
         form = changedesignForm(request.POST)
         if form.is_valid():
