@@ -74,6 +74,22 @@ $(document).ready(function(){
     $(".basecolor").eq(i).children().eq(list[stut]).css('border', "2px solid #339966");
     };
 
+    //已完结项目负责人添加border
+    var cellIndex1=parseInt($(".procolor1 tr").length);
+    for(var i=0; i<cellIndex1;i++) {
+      var stut1 = $(".basecolor1").eq(i).children().eq(table_list['项目状态']).text();
+      var project_type1 = $(".basecolor1").eq(i).children().eq(table_list['类型']).text();
+    if(project_type1 == '产品'){
+      var list1 = {'需求讨论中':4,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+    }
+    else{
+      var list1 = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+    }     
+
+    $(".basecolor1").eq(i).children().eq(list1[stut1]).css('border', "2px solid #339966");
+    };
+
+
 
    //已完结项目中，翻页后，默认显示当前tab
     var tabcookievalue = $.cookie("mytab");
