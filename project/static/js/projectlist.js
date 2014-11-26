@@ -12,13 +12,13 @@ $(document).ready(function(){
       //console.log("aaaaaaaa");
       $("#mybody").css("width","1100px");
       $("#x-table2").css("width","1100px");
-      $(".pro-proname").css("width","125px")
+      $(".pro-proname").css("width","130px")
     });
 
     $("#bigtable").click(function(){
       $("#mybody").css("width","1500px");
       $("#x-table2").css("width","1500px");
-      $(".pro-proname").css("width","125px")
+      $(".pro-proname").css("width","146px")
     });
 
 
