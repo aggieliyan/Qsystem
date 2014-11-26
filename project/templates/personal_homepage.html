@@ -1,4 +1,4 @@
-
+﻿
   {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
@@ -37,7 +37,7 @@
  
      {% for item in messages %}
        
-        <p><a href="/historymessage/" target="_blank" style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;">{{item.content|cut:"<br/>"}}</a></p>
+        <p><a href="/historymessage/"  style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;">{{item.content|cut:"<br/>"}}</a></p>
     
       {% endfor %}
    		
@@ -60,7 +60,7 @@
  
    {% if dealdelay = 1 %}
     <div style="padding:50px 0 15px">
-    <a href="/delay/" style="color:#339666" target="_blank">查看您要处理的延期申请({{countdelay}})>></a>
+    <a href="/delay/" style="color:#339666" >查看您要处理的延期申请({{countdelay}})>></a>
     </div>  
    {% endif %}
   
