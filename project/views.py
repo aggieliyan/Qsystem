@@ -1393,17 +1393,26 @@ def Insert_user(request, id, id2, id3):
         id=id2).update(Position_level='0')
     elif id == '7':
         id = request.POST['level_1']
-        user = models.user.objects.get(department_id=department_id, \
-        id=id)
-        user.delete()
+        if(int(id)==request.session['id']):
+            return HttpResponseRedirect("/noperm")
+        else:
+            user = models.user.objects.get(department_id=department_id, \
+            id=id)
+            user.delete()
     elif id == '8':
-        user = models.user.objects.get(department_id=department_id, \
-        id=id2)
-        user.delete()
+        if(int(id2)==request.session['id']):
+            return HttpResponseRedirect("/noperm")
+        else:
+            user = models.user.objects.get(department_id=department_id, \
+            id=id2)
+            user.delete()
     elif id == '9':
-        user = models.user.objects.get(department_id=department_id, \
-        id=id2)
-        user.delete()
+        if(int(id2)==request.session['id']):
+            return HttpResponseRedirect("/noperm")
+        else:
+            user = models.user.objects.get(department_id=department_id, \
+            id=id2)
+            user.delete()
     elif id == '10':
         user = models.user.objects.filter(department_id=department_id, \
         id=id3).update(Position_level='0')

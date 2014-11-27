@@ -84,13 +84,18 @@ body{
 	    }
 
         .notify-icon {
+           text-decoration: none;
            background: url(/static/img/notify-icon.png) no-repeat scroll center 4px rgba(0, 0, 0, 0);
     	   width: 15px;
 }
         .notify-icon:hover{
+           text-decoration: none;
            color:#3b3b3b;
            background: url(/static/img/notify-icon.png) no-repeat scroll center -22px rgba(0, 0, 0, 0);;
 }
+        .notify-icon:visited{
+           text-decoration: none;
+           }
 
 		.nav-link {
     	   border: 1px solid #3b3b3b;
