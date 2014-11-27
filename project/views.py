@@ -125,6 +125,7 @@ def login(request):
     template_var = {}
     if "username" in request.COOKIES and "password" in request.COOKIES:
         username = request.COOKIES["username"]
+        realname = request.COOKIES["realname"]
         password = request.COOKIES["password"]
         _userset = models.user.objects.filter(username__exact=username, password__exact=password)
         if _userset.count() >= 1:
@@ -151,6 +152,9 @@ def login(request):
                         newUser.save()
                         link = str("/register/" + username)
                         return HttpResponseRedirect(link)
+                    elif isldap[0].department_id == 100:
+                        link = str("/register/" + username)
+                        return HttpResponseRedirect(link) 
                     
                     _userset = models.user.objects.filter(username__exact=username)    
                     if _userset.count() >= 1:
