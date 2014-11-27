@@ -96,6 +96,12 @@ body{
         .notify-icon:visited{
            text-decoration: none;
            }
+        .notify-icon:active{
+           text-decoration: none;
+           }
+         .notify-icon:link{
+           text-decoration: none;
+           }
 
 		.nav-link {
     	   border: 1px solid #3b3b3b;
