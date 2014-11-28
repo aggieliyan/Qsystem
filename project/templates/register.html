@@ -211,9 +211,7 @@ function getByteLen(val) {
 	                 			<select id="Select_part" name="departmentid">m
 		                   			<option style="color: #C0C0C0" value="">请选择您所在的部门</option>
 		                         	{% for l in list %}  
-		                         		{%if l.department != 'blank' %}
 										<option style="color: #000000" value={{ l.id }}>{{ l.department }}</option>
-										{%endif %}
 									{% endfor %}
 	                     		</select>
 	                     		<span id="departmentidErrorMsg" style="color: red"></span>	                     		

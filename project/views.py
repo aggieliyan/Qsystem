@@ -64,7 +64,7 @@ def register(request,uname=''):
         else:
             uf = UserForm()
     
-        return render_to_response('register.html', {'list':department.objects.all()},
+        return render_to_response('register.html', {'list':department.objects.all(depid!=100)},
                                   context_instance=RequestContext(request))
     else:
         if request.method == "POST":
@@ -99,7 +99,7 @@ def register(request,uname=''):
                 return HttpResponseRedirect("/personal_homepage")
         
         userinfo = models.user.objects.filter(username=uname)[0]
-        return render_to_response('register.html', {'list':department.objects.all(),
+        return render_to_response('register.html', {'list':department.objects.all(depid!=100),
                                                     'info': userinfo})
 
 def logout(request):
@@ -1292,7 +1292,6 @@ def show_source(request):
         department = models.department.objects.get(id=\
         department_id).department
         department_list = models.department.objects.all()
-        department_list = department_list.exclude(Q(department='blank'))
         level_1_list = models.user.objects.filter(department_id=\
         department_id, Position_level="1")
         level_2_list = models.user.objects.filter(department_id=\
@@ -1321,7 +1320,6 @@ def show_user2(request):
     level_3_list = models.user.objects.filter(department_id=\
     department_id, Position_level="3")
     department_list = models.department.objects.all()
-    department_list = department_list.exclude(Q(department='blank'))
     return render_to_response('show_source.html', locals())
 
 @csrf_exempt
@@ -1355,7 +1353,6 @@ def show_user(request):
         level_3_list = models.user.objects.filter(department_id=\
         department_id, Position_level="3")
         department_list = models.department.objects.all()
-        department_list = department_list.exclude(Q(department='blank'))
         return render_to_response('sourcemanage.html', locals())
     except KeyError:
         return redirect('/nologin/')
