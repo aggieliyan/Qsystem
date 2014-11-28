@@ -1,0 +1,649 @@
+  {% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="/static/css/datetimepicker.css" rel="stylesheet" media="screen">
+  <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="/static/css/newproject.css" rel="stylesheet" media="screen">
+  {% endblock %}
+  {% block content %}
+    <div class="container-fluid">
+	    <div class="row-fluid">
+		    <div class="span12" style="margin-top: -15px;margin-left: -20px;">
+			     <ul class="breadcrumb">
+				     <li><a href="/projectlist/" class="divider">项目管理</a><span class="divider">>></span></li>
+				     {% if res.request %}
+				     	<li class="active">编辑项目</li>
+				     {% else %}
+				     	<li class="active">新建项目</li>
+				     {% endif %}
+             <li class="back"><a href="javascript:history.back()">返回上一页</a></li>
+			     </ul>
+		    </div>
+	    </div> 
+	   {% if res.request %}
+	   		<div class="title" style="margin-left:40px; margin-bottom:10px;">编辑项目:
+      </div>
+	   {% else %}
+			<div class="title" style="margin-left:40px; margin-bottom:10px;">新建项目:
+      </div>
+	   {% endif %}
+     
+      <div class="row-fluid">
+        <div>
+          <form name="p_form" class="navbar-form navbar-left" action="/newproject/{{res.pro.id}}/{{res.editid}}" method="post">
+            {% if  isdevs or not res.request %}
+            <div class="span6">
+              <div id='short'>
+                <div >
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目类型：</label>
+                </div>
+                <select name = "type_p" class="inputfield">
+                  {%if res.pro.type_p %}
+                  <option select = 'selected' value="{{res.pro.type_p}}">{{res.pro.type_p}}运营型</option>
+                  {% endif %}
+                  <option value="业务">业务运营型</option>
+                  <option value="产品">产品运营型</option>
+                </select>
+              </div>
+              <div>
+                <div class="title">
+                  <label class="item-title"><span class="must">*</span>优先级：</label>
+                </div>
+                <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字" maxlength=4 value="{{res.pro.priority}}" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " >               
+              </div>
+              <div>
+                <div class="title">
+                  <label class="item-title"><span class="must">*</span>项目名称：</label>
+                </div>
+                <input type="text" name="pname" class="form-control inputfield" maxlength=100 value="{{res.pro.project}}">
+              </div>
+              <div style="height:100px;">
+                <div class="title">
+                  <label class="item-title">项目说明：</label>
+                </div>
+                <textarea style="width:205px;height:80px;resize:none;" type="text" name="description" class="form-control inputfield" maxlength=500>{{res.pro.description}}</textarea>
+              </div>
+              <div >
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目状态：</label>
+                </div>
+                <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
+                  <option select = 'selected'>{{res.pro.status_p}}</option>
+                  <option>需求讨论中</option>
+                  <option>设计中</option>
+                  <option>设计完成</option>
+                  <option>开发中</option>
+                  <option>测试中</option>
+                  <option>暂停</option>
+                  <option>已上线</option>
+                  <option>运营推广</option>
+                </select>
+              </div>
+              <div>
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目负责人：</label>
+                </div>
+                <input name="leader" style="display:none;" value={{res.user.id}}>
+                {% if res.pro.designer_p_id %}
+                	<input name="designer" style="display:none;" value={{res.pro.designer_p_id}}>
+                {% else %}
+                	<input name="designer" style="display:none;" value=''>
+                {% endif %} 
+                {% if res.pro.tester_p_id %}
+                	<input name="tester" style="display:none;" value={{res.pro.tester_p_id}}> 
+                {% else %}                	
+                	<input name="tester" style="display:none;" value=''>  
+                {% endif %} 
+                {% if res.pro.business_man_id %}
+                  <input name="business_man" style="display:none;" value={{res.pro.business_man_id}}> 
+                {% else %}                  
+                  <input name="business_man" style="display:none;" value=''>  
+                {% endif %}   
+                {% if res.pro.operator_p_id %}
+                  <input name="operator_p" style="display:none;" value={{res.pro.operator_p_id}}> 
+                {% else %}                  
+                  <input name="operator_p" style="display:none;" value=''>  
+                {% endif %}   
+                {% if res.pro.customer_service_id %}
+                  <input name="customer_service" style="display:none;" value={{res.pro.customer_service_id }}> 
+                {% else %}                  
+                  <input name="customer_service" style="display:none;" value=''>  
+                {% endif %}   
+                <select id="master"  class="inputfield" >
+                	<option select='selected'>{{res.user.realname}}</option>
+                </select>
+                	
+              </div>
+              <div>
+                <div class="title">
+                    <label class="item-title">项目开始时间：</label>
+                </div>
+                <div class="inputfield input-append date form_datetime">
+                  <input name="startdate" class="dateinput" size="16" type="text" value="{{res.pro.start_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+              </div>
+              <div>
+                <div class="title">
+                    <label class="item-title">计划上线时间：</label>
+                </div>
+                
+                {% if editdate %}
+                <div class="inputfield input-append date form_datetime">
+                  <input name="plandate" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+                {% else %}
+                <div class="inputfield input-append date" onclick="alert('您没有权限修改计划上线时间');">
+                  <input name="plandate" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on" disabled="disabled"><i class="icon-calendar"></i></span>
+                </div>
+                {% endif %}     
+                
+              </div>             
+              </div>
+            </div>
+            <div  class="span6">
+              <div>
+                <div class="roles">
+                  <input name="relateduser0" style="display:none;">
+                  <input name="relateduser1" style="display:none;">
+                  <input name="relateduser2" style="display:none;">
+                  <input name="relateduser3" style="display:none;">
+                  <input name="relateduser4" style="display:none;">
+                  <input name="relateduser5" style="display:none;">
+
+                  <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro" >添加</button>
+                    <div class="p-list">
+						            {% if res.reuser.pd %}
+                       		{% for item in res.reuser.pd %}
+                       			{% if item.id == res.pro.designer_p_id %}
+                       				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% else %}
+                       				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro'><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% endif %}
+                       		{% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div  class="roles">
+                  <label class="item-title" style="float:left;">开发人员：</label><button type="button" class="btn btn-success" name="dev">添加</button>
+                    <div id="roles-dev" class="p-list">
+                    	{% if res.reuser.dev %}
+                       		{% for item in res.reuser.dev %}
+                       			<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-dev'><span>{{item.realname}}</span><span class="close">x</span></div>  
+                       		{% endfor %}
+                        {% endif %}
+                      </div>
+                    </div>
+                </div>
+                <div  class="roles">
+                  <label class="item-title" style="float:left;">测试人员：</label><button type="button" class="btn btn-success" name="tes">添加</button>
+                    <div id="testarea" class="p-list">
+                       {% if res.reuser.qa %}
+                       		{% for item in res.reuser.qa %}
+                       			{% if item.id == res.pro.tester_p_id %}
+                       				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% else %}
+                       				<div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa'><span>{{item.realname}}</span><span class="close">x</span></div>
+                       			{% endif %}
+                       		{% endfor %}
+                       {% endif %}
+                    </div>         
+                </div>
+                <div class="roles">
+                  <input style="display:none;">
+                  <label class="item-title" style="float:left;">业务人员：</label><button type="button" class="btn btn-success" name="sal">添加</button>
+                    <div class="p-list">
+                        {% if res.reuser.bm %}
+                          {% for item in res.reuser.bm %}
+                            {% if item.id == res.pro.business_man_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-sal' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% else %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-sal'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="roles">
+                  <input style="display:none;">
+                  <label class="item-title" style="float:left;">运营人员：</label><button type="button" class="btn btn-success" name="ope">添加</button>
+                    <div class="p-list">
+                        {% if res.reuser.op %}
+                          {% for item in res.reuser.op %}
+                            {% if item.id == res.pro.operator_p_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-ope' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% else %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-ope'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="roles">
+                  <input style="display:none;">
+                  <label class="item-title" style="float:left;">客服人员：</label><button type="button" class="btn btn-success" name="com">添加</button>
+                    <div class="p-list">
+                        {% if res.reuser.cs %}
+                          {% for item in res.reuser.cs %}
+                            {% if item.id == res.pro.customer_service_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-com' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% else %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-com'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+              </div>
+            </div> 
+            <div class="span2">
+              <span style="margin-left: 38px;">预估时间：
+              </span>
+            </div>
+            <div id="long" class="span8" style="margin-left:-22px;">
+              <div class="range">
+                <div><label>产品：</label><span class="days">{{res.dt.ptime}}</span>天</div>
+                <span class="input-append date form_datetime">   
+                  <input name='psdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_product_start_date|date:"Y-m-d"}}" readonly> 
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date form_datetime">   
+                  <input name='pedate' class="dateinput" size="16"  type="text" value="{{res.pro.estimated_product_end_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div>
+              <div class="range">
+                <div><label>开发：</label><span class="days">{{res.dt.dtime}}</span>天</div>
+                <span class="input-append date form_datetime">   
+                  <input name='dsdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_start_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date form_datetime">   
+                  <input name='dedate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_end_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div class="range">
+              <div class="range">
+                <div><label>测试：</label><span class="days">{{res.dt.ttime}}</span>天</div>
+                <span class="input-append date form_datetime">   
+                  <input name='tsdate' class="dateinput" ="16" type="text" value="{{res.pro.estimated_test_start_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date form_datetime">   
+                  <input name='tedate' class="dateinput"size="16" type="text" value="{{res.pro.estimated_test_end_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div>
+            </div>
+            <div id='filepath' class="span12">
+              <div>
+                <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}">
+              </div>
+              <div>
+                <div><label class="item-title">开发计划：</label></div><input type="text" name='dppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}">
+              </div>
+              <div>
+                <div><label class="item-title">测试计划：</label></div><input type="text" name='tppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}">
+              </div>
+              <div>
+                <div><label class="item-title">测试用例：</label></div><input type="text" name='tcpath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_case_p}}">
+              </div>
+              <div>
+                <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}">
+              </div>
+              <div>
+                <div><label class="item-title">统计sql：</label></div><input type="text" name="countsql" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}">
+              </div>
+              <div>
+                <div><label class="item-title">备注：</label></div>
+                <textarea style="width:610px;height:100px;resize:none;" type="text" name="remark_p" maxlength=5000 value="">{{res.pro.remark_p}}</textarea>
+              </div>
+            </div>
+            {% else %}
+            <div class="span6">
+              <div id='short'>
+                <div >
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目类型：</label>
+                </div>
+                <select name = "type_p" class="inputfield" selected="{{res.pro.type_p}}" readonly>
+                  <option select = 'selected'>{{res.pro.type_p}}</option>
+                </select>
+              </div>
+              <div>
+                <div class="title">
+                  <label class="item-title"><span class="must">*</span>优先级：</label>
+                </div>
+                <input type="text" name="priority" class="form-control inputfield" placeholder="请输入1-1000的数字" maxlength=4 value="{{res.pro.priority}}" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " readonly>               
+              </div>
+              <div>
+                <div class="title">
+                  <label class="item-title"><span class="must">*</span>项目名称：</label>
+                </div>
+                <input type="text" name="pname" class="form-control inputfield" maxlength=100 value="{{res.pro.project}}" readonly>
+              </div>
+              <div style="height:100px;">
+                <div class="title">
+                  <label class="item-title">项目说明：</label>
+                </div>
+                <textarea style="width:205px;height:80px;resize:none;" type="text" name="description" class="form-control inputfield" maxlength=500 readonly>{{res.pro.description}}</textarea>
+              </div>
+              <div >
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目状态：</label>
+                </div>
+                
+                <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
+                  <option select = 'selected'>{{res.pro.status_p}}</option>
+                  {% if isope %}
+                  <option>需求讨论中</option>
+                  <option>设计中</option>
+                  <option>设计完成</option>
+                  <option>开发中</option>
+                  <option>测试中</option>
+                  <option>暂停</option>
+                  <option>已上线</option> 
+                  <option>运营推广</option>
+                  {% endif %}
+                </select>
+
+              </div>
+              <div>
+                <div class="title">
+                <label class="item-title"><span class="must">*</span>项目负责人：</label>
+                </div>
+                <input name="leader" style="display:none;" value={{res.user.id}} readonly>
+                {% if res.pro.designer_p_id %}
+                  <input name="designer" style="display:none;" value={{res.pro.designer_p_id}}>
+                {% else %}
+                  <input name="designer" style="display:none;" value=''>
+                {% endif %} 
+                {% if res.pro.tester_p_id %}
+                  <input name="tester" style="display:none;" value={{res.pro.tester_p_id}}> 
+                {% else %}                  
+                  <input name="tester" style="display:none;" value=''>  
+                {% endif %} 
+                {% if res.pro.business_man_id %}
+                  <input name="business_man" style="display:none;" value={{res.pro.business_man_id}}> 
+                {% else %}                  
+                  <input name="business_man" style="display:none;" value=''>  
+                {% endif %}   
+                {% if res.pro.operator_p_id %}
+                  <input name="operator_p" style="display:none;" value={{res.pro.operator_p_id}}> 
+                {% else %}                  
+                  <input name="operator_p" style="display:none;" value=''>  
+                {% endif %}   
+                {% if res.pro.customer_service_id %}
+                  <input name="customer_service" style="display:none;" value={{res.pro.customer_service_id }}> 
+                {% else %}                  
+                  <input name="customer_service" style="display:none;" value=''>  
+                {% endif %}
+                <select class="inputfield" >
+                  <option select='selected' readonly>{{res.user.realname}}</option>
+                </select>
+                  
+              </div>
+              <div>
+                <div class="title">
+                    <label class="item-title">项目开始时间：</label>
+                </div>
+                <div class="inputfield input-append date">
+                  <input name="startdate" class="dateinput" size="16" type="text" value="{{res.pro.start_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+              </div>
+              <div>
+                <div class="title">
+                    <label class="item-title">计划上线时间：</label>
+                </div>
+                <div class="inputfield input-append date" onclick="alert('您没有权限修改计划上线时间');">
+                  <input name="plandate" class="dateinput" size="16" type="text" value="{{res.pro.expect_launch_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on" disabled="disabled"><i class="icon-calendar"></i></span>
+                </div>  
+                
+              </div>             
+              </div>
+            </div>
+            <div  class="span6">
+              <div>
+                <div class="roles">
+                  <input name="relateduser0" style="display:none;">
+                  <input name="relateduser1" style="display:none;">
+                  <input name="relateduser2" style="display:none;">
+                  <input name="relateduser3" style="display:none;">
+                  <input name="relateduser4" style="display:none;">
+                  <input name="relateduser5" style="display:none;">
+
+                  <label class="item-title" style="float:left;">产品人员：</label><button type="button" class="btn btn-success" name="pro" disabled="false">添加</button>
+                    <div class="p-list">
+                        {% if res.reuser.pd %}
+                          {% for item in res.reuser.pd %}
+                            {% if item.id == res.pro.designer_p_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' checked = 'checked' disabled="false"><span>{{item.realname}}</span></div>
+                            {% else %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-pro' disabled="false"><span>{{item.realname}}</span></div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div  class="roles">
+                  <label class="item-title" style="float:left;">开发人员：</label><button type="button" class="btn btn-success" name="dev" disabled="false">添加</button>
+                    <div id="roles-dev" class="p-list">
+                      {% if res.reuser.dev %}
+                          {% for item in res.reuser.dev %}
+                            <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-dev' disabled="false"><span>{{item.realname}}</span></div>  
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    </div>
+                </div>
+                <div  class="roles">
+                  <label class="item-title" style="float:left;">测试人员：</label><button type="button" class="btn btn-success" name="tes" disabled="false">添加</button>
+                    <div id="testarea" class="p-list">
+                       {% if res.reuser.qa %}
+                          {% for item in res.reuser.qa %}
+                            {% if item.id == res.pro.tester_p_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' checked = 'checked' disabled="false"><span>{{item.realname}}</span></div>
+                            {% else %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-qa' disabled="false"><span>{{item.realname}}</span></div>
+                            {% endif %}
+                          {% endfor %}
+                       {% endif %}
+                    </div>         
+                </div>
+                <div class="roles">
+                  <input style="display:none;">
+                  <label class="item-title" style="float:left;">业务人员：</label><button type="button" class="btn btn-success" name="sal">添加</button>
+                    <div class="p-list">
+                        {% if res.reuser.bm %}
+                          {% for item in res.reuser.bm %}
+                            {% if item.id == res.pro.business_man_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-sal' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% else %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-sal'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="roles">
+                  <input style="display:none;">
+                  <label class="item-title" style="float:left;">运营人员：</label><button type="button" class="btn btn-success" name="ope">添加</button>
+                    <div class="p-list">
+                        {% if res.reuser.op %}
+                          {% for item in res.reuser.op %}
+                            {% if item.id == res.pro.operator_p_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-ope' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% else %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-ope'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="roles">
+                  <input style="display:none;">
+                  <label class="item-title" style="float:left;">客服人员：</label><button type="button" class="btn btn-success" name="com">添加</button>
+                    <div class="p-list">
+                        {% if res.reuser.cs %}
+                          {% for item in res.reuser.cs %}
+                            {% if item.id == res.pro.customer_service_id %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-com' checked = 'checked'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% else %}
+                              <div class="role-item" value="{{item.id}}" type="radio"><input type="radio" name='role-com'><span>{{item.realname}}</span><span class="close">x</span></div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+              </div>
+            </div> 
+            <div class="span2">
+              <span style="margin-left: 38px;">预估时间：
+              </span>
+            </div>
+            <div id="long" class="span8" style="margin-left:-22px;">
+              <div class="range">
+                <div><label>产品：</label><span class="days">{{res.dt.ptime}}</span>天</div>
+                <span class="input-append date">   
+                  <input name='psdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_product_start_date|date:"Y-m-d"}}" readonly> 
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date">   
+                  <input name='pedate' class="dateinput" size="16"  type="text" value="{{res.pro.estimated_product_end_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div>
+              <div class="range">
+                <div><label>开发：</label><span class="days">{{res.dt.dtime}}</span>天</div>
+                <span class="input-append date">   
+                  <input name='dsdate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_start_date|date:"Y-m-d"}}"readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date">   
+                  <input name='dedate' class="dateinput" size="16" type="text" value="{{res.pro.estimated_develop_end_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div class="range">
+              <div class="range">
+                <div><label>测试：</label><span class="days">{{res.dt.ttime}}</span>天</div>
+                <span class="input-append date">   
+                  <input name='tsdate' class="dateinput" ="16" type="text" value="{{res.pro.estimated_test_start_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span><span class="word">至</span>
+                <span class="input-append date">   
+                  <input name='tedate' class="dateinput"size="16" type="text" value="{{res.pro.estimated_test_end_date|date:"Y-m-d"}}" readonly>
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+                </span>
+              </div>
+            </div>
+            <div id='filepath' class="span12">
+              <div>
+                <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}" readonly>
+              </div>
+              <div>
+                <div><label class="item-title">开发计划：</label></div><input type="text" name='dppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}"readonly>
+              </div>
+              <div>
+                <div><label class="item-title">测试计划：</label></div><input type="text" name='tppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}"readonly>
+              </div>
+              <div>
+                <div><label class="item-title">测试用例：</label></div><input type="text" name='tcpath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_case_p}}"readonly>
+              </div>
+              <div>
+                <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}"readonly>
+              </div>
+              <div>
+                <div><label class="item-title">统计sql：</label></div><input type="text" name="countsql" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}"readonly>
+              </div>
+              <div>
+                <div><label class="item-title">备注：</label></div>
+                <textarea style="width:610px;height:100px;resize:none;"  type="text" name="remark_p" maxlength=5000 value="">{{res.pro.remark_p}}</textarea>
+              </div>
+            </div>            
+            {% endif %}
+            <div class="span12">
+              <div style="color:red;" id="errofield">
+              {% for field in form%}    
+                {{ field.errors }}          
+              {% endfor %}
+               </div>
+              <button id="submitbutton" type="button" class="btn btn-success" style="margin-left:43px; margin-top:50px;" onclick="project_check();">提交</button>
+              <button type="button" class="btn btn-default" style="margin-left:30px;margin-top:50px;" onclick="javascript:history.back()">取消</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+          
+    <!-- Model select -->
+<div class="modal fade" id="select" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+           <h4 class="modal-title" id="myModalLabel">选择人员</h4>
+      </div>
+      <div class="modal-body"> 
+           <div><input type="text" id="skey"><button type="submit" class="btn btn-default" id="psearch">搜索</button></div>
+           <input style="display:none;" name="depart" value='1'>
+           <div  id="testerlist"style="border-style: solid;border-radius: 4px; border-width: 1px;border-color:#DDDDDD; height=30px"> 
+             <table >
+             </table>         
+           </div> 
+           <div>
+             <div  class="all"><input type="checkbox" style="margin-top: 0px;">全选
+             </div>
+             <div class="pagination" style="float:right;">
+                <ul >
+                </ul>
+             </div> 
+           </div>       
+      </div>
+      <div class="modal-footer">
+        <button type="button" id= "selectok" class="btn btn-primary" data-dismiss="modal">确定</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->       
+ {% endblock %}
+ {% block js %}
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
+    <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/static/js/newproject.js"></script>
+    <script type="text/javascript">
+      $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        language:"zh-CN",
+        minView:2
+      });     
+
+      function project_check(){
+        var type_p = $("[name='tyoe_p']").val();
+        var pro = $("[name='priority']").val();
+        var leader = $("[name='leader']").val();
+        var pname = $("[name='pname']").val();
+
+        if(type_p == "" || pro == "" || leader== "" || pname == ""){
+          $("#errofield").text("请检查必填项");
+          return false;
+        }else{
+          p_form.submit();
+          $("#submitbutton").disabled=true;
+        }
+
+    }
+      </script>  
+ {% endblock%}

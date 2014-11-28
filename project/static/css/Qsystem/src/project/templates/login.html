@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title >Q系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="zh-cn" />
+    <!-- Bootstrap -->
+    <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+</head>
+<body style="margin:0px;">
+    <div class="backgroud">
+        <div align="center" class="top">
+            <div class="top_logo" align="center"></div>
+        <form action="/login" method="post">
+            {% csrf_token %}
+	        <div class="backgroud_white" align="center" style="overflow:hidden">
+	            <table style="width:500px; height: 220px; margin-left: 60px; margin-top: 55px; cellspacing='1'; cellpadding='10'">
+                    <tr>
+                        <td class="table-td" style="font-family: Verdana,Microsoft YaHei ,宋体;">用户登录
+                        </td>
+                        <td class="table-td">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-td">
+                            <label for="id_name" style="font-family: Verdana,Microsoft YaHei ,宋体;">请输入您的帐号:</label>
+                            {{ form.username }}
+                        </td>
+                        <td class="table-td" style="color: red;font-size: 14px;font-family: Verdana,Microsoft YaHei ,宋体;">
+                            {{ form.username.errors }}{{ error }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-td">
+                            <label for="id_password"  style="font-family: Verdana,Microsoft YaHei ,宋体;">请输入您的密码:</label>
+                            {{ form.password }}
+                        </td>
+                        <td class="table-td" style="color: red;font-size: 14px;font-family: Verdana,Microsoft YaHei ,宋体;">
+                            {{ form.password.errors }}
+                        </td>
+                       
+                    </tr>
+                    <tr>
+                        <td class="table-td" style="font-size: 14px;font-family: Verdana,Microsoft YaHei ,宋体;">
+                            {{ form.isautologin }}&nbsp;自动登录
+                        </td>
+                        <td class="table-td">
+                        </td>
+                      
+                    </tr>
+                    <tr>
+                        <td class="table-td">
+                            <input id="Button_login" type="submit" value="登  录"
+                                style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/>&nbsp;&nbsp;
+                            <input id="Button_register" type="button" value="注  册" onclick="javascript: window.open('/register/')" 
+                                style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/></td>
+                        <td class="table-td">
+                        </td>
+                    </tr>
+                </table>
+	        </div><p style="font-size: 14px; margin-top: 150px;font-family: Verdana,Microsoft YaHei ,宋体;">© 2014 Ablesky, Inc. 版权所有, 能力天空科技（北京）有限公司 </p>
+        </form>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+

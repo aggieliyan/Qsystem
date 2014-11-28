@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <title>Q系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap -->
+<link rel="stylesheet" type="text/css" href="/static/css/nopermitsourcemaind.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+
+
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+<script type="text/javascript" src="/static/jquery/jquery-2.0.0.min.js"></script>
+<script type="text/javascript" src="/static/js/source.js" charset="UTF-8"></script>
+</head>
+
+<body>
+
+
+
+
+<div class="top">
+		<ul class="top_logo">
+			<li><a href=""> </a></li>
+		</ul>
+		<ul class="top_memu">
+			<li><a href="">个人主页</a></li>
+			<li><a href="">项目管理</a></li>
+			<li><a href="">资源管理</a></li>
+		</ul>
+		<ul class="top_bar">
+			<li><a href="">name</a></li>
+			<li><i> | </i></li>
+			<li><a href="">退出</a></li>
+		</ul>
+	</div>  
+
+<div class="body">
+
+
+
+	<form name="form" method="post">
+	
+	<div class="choose">
+		<select name="department" id="department" class="section" onchange="showuser()" >
+		<option value="请选择">请选择</option>
+		{% for department in department_list %}
+		    <option value="{{department}}">{{department}}</option>
+		    {% endfor %}
+		</select>
+		
+		
+		
+		<button type="button" class="btn-section">新建部门</button>
+		<button type="button" class="btn-edit" >编辑</button>
+	</div>
+	
+	<div class="people">
+		<div class="def2">
+		   <select name="level_2" class="section2" id="sec2" onfocus="this.blur()" onchange="insert2()">
+			  <option value="请选择">请选择</option>
+					{% for level_1 in level_list %}
+		    		<option value="{{level_1}}">{{level_1}}</option>
+		   			{% endfor %}
+			</select>	
+		
+			<button type="button" class="addsub" id="add2" disabled="disabled"> </button>
+			<button type="button" class="minsub" id="min2" disabled="disabled" onclick="del_logic2()"> </button>
+			<button type="button" class="delsub" id="del1" disabled="disabled" onclick="del2()"> </button>
+		
+		</div>
+	
+	
+	  <div class="def3">
+		<select name="level_3" class="section3" id="sec3" onfocus="this.blur()" onchange="insert3()">
+			<option value="请选择">请选择</option>
+				{% for level_1 in level_list %}
+		    <option value="{{level_1}}">{{level_1}}</option>
+		    	{% endfor %}
+		</select>		
+		<button type="button" class="addsub" id="add3" disabled="disabled" > </button>
+		<button type="button" class="minsub" id="min3" disabled="disabled" onclick="del_logic3()"> </button>
+		<button type="button" class="delsub" id="del1" disabled="disabled" onclick="del3()"> </button>
+		
+      </div>
+		
+		
+		<div class="s1">
+		{% for level in level_1_list %}
+		<select name="level_1" class="section1" id="sec1" onfocus="this.blur()" >
+		<option value="请选择">请选择</option>
+		{% for level_1 in level_list %}
+		    <option value="{{level_1}}" {% if level_1 == level %} selected {% endif %} >{{level_1}}</option>
+		    {% endfor %}
+	
+		</select>		
+		<button type="button" class="addsub" id="add1" disabled="disabled" > </button>
+		<button type="button" class="minsub" id="min1" disabled="disabled" onclick="del_logic()"> </button>
+		<button type="button" class="delsub" id="del1" disabled="disabled" onclick="del()"> </button>
+		{% endfor %}
+		</div>
+		
+
+		{% for level_2 in level_2_list %}
+		 	<div class="s2">
+				<select name="level_2" class="section2" id="sec2" onfocus="this.blur()" onchange="insert2()">
+				<option value="请选择">请选择</option>
+					{% for level_1 in level_list %}
+		    		<option value="{{level_1}}" {% if level_1 == level_2 %} selected {% endif %}>{{level_1}}</option>
+		   			{% endfor %}
+				</select>	
+		
+				<button type="button" class="addsub" id="add2" disabled="disabled"> </button>
+				<button type="button" class="minsub" id="min2" disabled="disabled" onclick="del_logic2()"> </button>
+				<button type="button" class="delsub" id="del1" disabled="disabled" onclick="del2()"> </button>
+		
+		 	</div>
+		 	{% endfor %}
+	   
+	   
+	    {% for level_3 in level_3_list %}
+			<div class="s3">
+				<select name="level_3" class="section3" id="sec3" onfocus="this.blur()" onchange="insert3()">
+				<option value="请选择">请选择</option>
+					{% for level_1 in level_list %}
+		    		<option value="{{level_1}}" {% if level_1 == level_3 %} selected {% endif %}>{{level_1}}</option>
+		    		{% endfor %}
+	
+				</select>		
+				<button type="button" class="addsub" id="add3" disabled="disabled" > </button>
+				<button type="button" class="minsub" id="min3" disabled="disabled" onclick="del_logic3()"> </button>
+				<button type="button" class="delsub" id="del1" disabled="disabled" onclick="del3()"> </button>
+		
+			</div>
+			{% endfor %}
+			</form>
+	</div>	
+</div>
+
+<script type="text/javascript">
+    var s1 = document.getElementById("department");
+    var s2 = document.getElementById("level_2");
+    for(i = 0;i<=s1.length;i++){
+         
+        if(s1.options[i].value == '{{department}}'){
+            s1.options[i].selected = true;
+        }
+    }
+   
+  //显示选择的部门的人员 
+   function showuser()
+{
+document.form.action="/show_user/"
+document.form.submit()
+}
+
+//增加二/三级人员
+function insert2()
+{
+document.form.action="/Insert_user2/"
+document.form.submit()
+}
+ 
+function insert3()
+{
+document.form.action="/Insert_user3/"
+document.form.submit()
+}
+
+//逻辑删除人
+function del_logic()
+{
+document.form.action="/delet_userlogic/"
+document.form.submit()
+}
+
+function del_logic2()
+{
+document.form.action="/delet_userlogic2/"
+document.form.submit()
+}
+
+
+function del_logic3()
+{
+document.form.action="/delet_userlogic3/"
+document.form.submit()
+}
+
+//物理删除人员
+function del()
+{
+document.form.action="/delete_user1/"
+document.form.submit()
+}
+
+function del2()
+{
+document.form.action="/delete_user2/"
+document.form.submit()
+} 
+
+function del3()
+{
+document.form.action="/delete_user3/"
+document.form.submit()
+}
+</script>
+
+</body>
+</html>
+
+
+
+$(document).ready(function(){
+
+
+     $(".def2").hide();
+     $(".def3").hide();
+  // $(".s2").hide();
+  // $(".s3").hide();
+   	
+	   
+   //新建部门
+   $(".btn-section").click(function()
+  {  
+  
+ 
+	alert('ok');
+ 
+  });
+ 
+  
+  
+  //编辑
+  
+
+	$(".btn-edit").click(function()
+  {  
+  
+	if($(".btn-edit").text()=="编辑"){
+	  $(".btn-edit").text("完成");
+      $(".addsub").attr("disabled",false); 
+	  $(".minsub").attr("disabled",false); 
+	  $(".delsub").attr("disabled",false); 
+     
+	  // $("#sec1").attr("onfocus",false);
+	  $("#sec1").removeAttr("onfocus");
+	  $("#sec2").removeAttr("onfocus");
+	  $("#sec3").removeAttr("onfocus");
+	
+   }
+ 	else{
+	$(".btn-edit").text("编辑");
+	$(".addsub").attr("disabled",true); 
+	$(".minsub").attr("disabled",true);
+	$(".delsub").attr("disabled",true);
+
+	$("#sec1").attr("onfocus","this.blur()");
+	$("#sec2").attr("onfocus","this.blur()");
+	$("#sec3").attr("onfocus","this.blur()");
+	}	
+ 
+    });
+	
+ 
+   //add
+
+	$("#add1").click(function() {  
+   
+
+      $(".def2").clone(true).show().appendTo(".people");  
+		
+			
+        }); 
+	
+	$("#add2").click(function() {  
+       
+        $(".def3").clone(true).show().appendTo($(this).parent());  
+			
+        }); 
+	
+	 $("#add3").click(function() {  
+            alert("不能添加第四级");  
+        });
+	 
+	 
+	//删除类目
+    $("#min1").click(function() {  
+            alert('不能删除一级类目');  
+        });		
+			
+		 
+    $("#min2").click(function(){ 
+		 
+		var checkval=$(this).parent().has("#sec2").find("option:selected").val();//获取选择的iption value值
+		
+		 var child=$(this).parent().has(".s3");
+		
+	     if(child.length>0){
+		  alert('该类目有子类，不能直接删除');
+		  }
+		  
+		 else if(checkval=="请选择"){
+		   
+		  $(this).parent().remove();
+		  
+		   }
+		   
+		 else {	         
+		   
+		   alert('该类目有用户，不能直接删除');
+		   }
+		
+        });  
+   
+		
+	$("#min3").click(function() {  
+	    
+		 var checkval=$(this).parent().has("#sec3").find("option:selected").val();//获取选择的iption value值
+	     if(checkval=="请选择"){
+		 $(this).parent().remove();
+		  }
+		 else{		 
+		  
+	     
+		   
+		   alert('该类目有用户，不能直接删除');
+		   }
+		   
+		
+        }); 
+	
+	//删除用户
+	$("#del1").click(function() {    
+		
+		var checkval=$(this).parent().has("#sec1").find("option:selected").val();//获取选择的option value值
+		if(checkval=="请选择"){
+		alert("当前没有用户");
+		}
+		else {
+		$(this).parent().has("#sec1").find("OPTION:selected").remove();
+		}
+   
+		 });
+	
+	$("#del2").click(function() {    
+		var checkval=$(this).parent().has("#sec2").find("option:selected").val();//获取选择的option value值
+		if(checkval=="请选择"){
+		alert("当前没有用户");
+		}
+		/*
+		else {
+		$(this).parent().has("#sec2").find("OPTION:selected").remove();
+		}
+   */
+		 });
+	
+	 $("#del3").click(function() {   
+		  
+		var checkval=$(this).parent().has("#sec3").find("option:selected").val();//获取选择的option value值
+		if(checkval=="请选择"){
+		alert("当前没有用户");
+		}
+		/*
+		else {
+		$(this).parent().has("#sec3").find("OPTION:selected").remove();
+		}
+   */
+		 });
+		
+
+ 
+		
+});
+
+  

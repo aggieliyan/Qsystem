@@ -1,0 +1,286 @@
+﻿
+  {% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="/static/css/datetimepicker.css" rel="stylesheet" media="screen">
+  <link href="/static/css/tankuang.css" rel="stylesheet" media="screen">
+  <link href="/static/css/homepage.css" rel="stylesheet" media="screen">
+  {% endblock %}
+  {% block content %}
+  <body id="mybody">
+
+  <!-- Button trigger modal -->   
+   
+  {% if messages %}
+  
+   {% if count = 1 or count = 2 or count = 3 %}
+	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
+   {% endif %}   
+   
+    {% if count >= 4 %}
+	<div style="height:140px; padding-left: 10px; padding-top: 10px;width:99%" class="notice" >
+   {% endif %} 
+   
+		<div class="notice_title">
+			<span>
+				<b>消息提醒<span style="color:#ffa03e">({{count}}):</span></b>
+			</span>
+		</div>
+			
+	 <div style="width:850px" class="notice_content">		
+
+ 
+     {% for item in messages %}
+       
+        <p><a href="/historymessage/"  style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;">{{item.content|cut:"<br/>"}}</a></p>
+    
+      {% endfor %}
+   		
+		 </div>								
+		<div style="position:absolute;right:10px;height:35px;bottom:0">
+			<a href="/historymessage/" style="color:#339666">查看历史记录</a>
+		</div>		
+	</div>	
+  {% else %}
+  <div style="height:25px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
+  <div class="notice_title">
+			<span>
+				<b>消息提醒<span style="color:#ffa03e">(0):</span></b>
+			</span>
+		</div>
+		
+    <p>暂无消息</p>
+   </div>	
+  {% endif %}
+ 
+   {% if dealdelay = 1 %}
+    <div style="padding:50px 0 15px">
+    <a href="/delay/" style="color:#339666" >查看您要处理的延期申请({{countdelay}})>></a>
+    </div>  
+   {% endif %}
+  
+  
+  <div style="width:100%; height:25px;margin-bottom: 10px;margin-top: 10px;">
+    <div style="float:left;">
+    <b>我参与的项目:</b>
+    <input type="radio" class="btn btn-default" id="smalltable" name="changet">小鸟依人版
+    <input type="radio" class="btn btn-default" id="bigtable" name="changet" checked="checked">大气版 
+    {% if perms.project.can_change_project%}
+    <p>我有<p>
+    {% endif %}
+    </div>
+  </div>
+
+<div id="x-table2">
+    <div style="margin:3px 0px">
+      <div style=""class="tabbable">
+      <!-- Only required for left/right tabs -->
+          <ul class="nav nav-tabs" style="display:block;background-color:#339966" id="myTab1"> 
+            <li class="active"><a href="#mtab1" data-toggle="tab" style="color:#000" id="inpro">研发中的项目</a></li>
+            <li><a href="#mtab2" data-toggle="tab" style="color:#000" id="finishedpro">已上线的项目</a></li>
+          </ul> 
+          <div class="tab-content" style="padding:0px">
+            <div class="tab-pane active" id="mtab1">              
+              <table id="customers">
+                <thead>
+                  {% if not result %}
+                      <p style="text-align:center;">暂无相关项目</p>
+                  {% else %}
+                <tr>
+                  <th style="width:50px;">优先级</th>
+                  <th style="width:137px;">项目名称</th>
+                  <th style="width:38px;">类型</th>
+                  <th style="width:48px;">业务</th>
+                  <th style="width:48px">产品</th>
+                  <th style="width:48px">PM</th>
+                  <th style="width:48px">测试</th>
+                  <th style="width:48px">运营</th>
+                  <th style="width:48px">客服</th>
+                  <th style="width:184px">项目成员</th>
+                  <th style="width:82px">项目开始时间</th>
+                  <th style="width:82px">计划上线时间</th>
+                  <th style="width:82px">实际上线时间</th>
+                  <th style="width:82px">项目状态</th>
+                  <th style="width:170px">操作</th>
+                </tr>
+              </thead>
+              <tbody id="group_one" class="procolor">
+                {% for res in result %}                                          
+                  <tr class="basecolor">                     
+                    <td>{{res.priority}}</td>
+                    <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
+                    <td>{{res.type_p}}</td>
+                    <td>{{res.business_man.realname}}</td>
+                    <td>{{res.designer_p.realname}}</td>
+                    <td>{{res.leader_p.realname}}</td>                    
+                    <td>{{res.tester_p.realname}}</td>
+                    <td>{{res.operator_p.realname}}</td>
+                    <td>{{res.customer_service.realname}}</td>
+                    <td>{% for u in puser %}
+                      {% ifequal res.id u.project_id %}
+                    {{u.username.realname}}&nbsp;
+                    {% endifequal %}
+                    {% endfor %}
+                  </td>
+                    <td>{{res.start_date|date:"Y-m-d" }}</td>
+                    <td >{{res.expect_launch_date|date:"Y-m-d"}}</td>
+                    <td>{{res.real_launch_date|date:"Y-m-d"}}</td>
+                    <td>{{res.status_p}}</td> 
+                    <input name="datetime" value="{{res.expect_launch_date|date:"Y-m-d"}}" type="hidden">    
+                  <td>
+                     {% if changetag == 1 %}                           
+                      <a class="changepro" onclick="change_p({{res.id}})">设计变更</a>&nbsp;
+                      {% else %}
+                      {% endif %}
+                       
+                      {% if edittag == 1 %}
+                      {% if userid1 == res.leader_p_id or userid1 == res.designer_p.id or userid1 == res.tester_p.id or userid1 == res.business_man.id or userid1 == res.operator_p.id or userid1 == res.customer_service.id or pm == 1 %}
+                      <a class="icon-edit" href="{% url 'editproject' res.id %}" title='编辑'></a>&nbsp;
+                      {%endif%}
+
+                      {% else %}                      
+                      {% endif %}
+                      
+                      {% if delaytag == 1 %}
+                      {% ifequal userid1 res.leader_p_id %}
+                      <a onclick="delay_p({{res.id}},{{res.expect_launch_date|date:"Ymd"}})" class="chomdelay">延期</a>&nbsp;
+                      {%endifequal%}
+                      {% else %}                     
+                      {% endif %}
+                      
+                      {% if pausetag == 1 or pm == 1 %}
+                      <a class="icon-pause" title='暂停' href="{% url 'project_pause' res.id %}" onclick="return confirm('你确定要暂停项目吗?')"></a>&nbsp;
+                      {% else %}                      
+                      {% endif %} 
+                       
+                      {% if deletetag == 1 or pm == 1 %}
+                      <a class="icon-trash" title='删除' href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')"></a>&nbsp;
+                      {% else %}                      
+                      {% endif %}
+
+                     
+                      <a href="{% url 'feedback' res.id %}">去反馈</a>
+                      
+              
+                  </td>
+                  {% endfor %}
+                  {% endif %} 
+                </tr>
+                
+              </tbody>
+              </table>
+              <p> </p>
+            </div>
+               
+            <div class="tab-pane" id="mtab2">
+              <table id="customers">
+                <thead>
+                  {% if not projectobj %}
+                      <p style="text-align:center;">暂无相关项目</p>
+                  {% else %}
+                <tr>
+                  <th style="width:50px;">优先级</th>
+                  <th style="width:137px;">项目名称</th>
+                  <th style="width:34px;">类型</th>
+                  <th style="width:48px;">业务</th>
+                  <th style="width:48px">产品</th>
+                  <th style="width:48px">PM</th>                  
+                  <th style="width:48px">测试</th>
+                  <th style="width:48px">运营</th>
+                  <th style="width:48px">客服</th>
+                  <th style="width:184px">项目成员</th>
+                  <th style="width:82px">项目开始时间</th>
+                  <th style="width:82px">计划上线时间</th>
+                  <th style="width:82px">实际上线时间</th>
+                  <th style="width:82px">项目状态</th>
+                  <th style="width:170px">操作</th>
+                </tr>
+              </thead>
+
+              <tbody id="group_one" class="procolor1">
+                {% for pres in projectobj %}                                          
+                  <tr class="basecolor1">                    
+                    <td>{{pres.priority}}</td>
+                    <td><a href="{% url 'prodetail' pres.id %}">{{pres.project}}</a></td>
+                    <td>{{pres.type_p}}</td>
+                    <td>{{pres.business_man.realname}}</td>
+                    <td>{{pres.designer_p.realname}}</td>
+                    <td>{{pres.leader_p.realname}}</td>
+                    <td>{{pres.tester_p.realname}}</td>
+                    <td>{{pres.operator_p.realname}}</td>
+                    <td>{{pres.customer_service.realname}}</td>
+                    <td>                                                                
+                    
+                    {% for us in puser %}
+                    {% ifequal pres.id us.project_id %}                                                        
+                    {{us.username.realname}}&nbsp;
+                    {% endifequal %}
+                    {% endfor %}                  
+
+                    </td>
+                    <td>{{pres.start_date|date:"Y-m-d" }}</td>
+                    <td>{{pres.expect_launch_date|date:"Y-m-d"}}</td>
+                    <td>{{pres.real_launch_date|date:"Y-m-d"}}</td>
+                    <td>{{pres.status_p}}</td>     
+                  <td>
+                    {% if pres.status_p == '已上线' %}
+                      {% if edittag == 1 %}
+                      {% if userid1 == pres.leader_p_id or userid1 == pres.designer_p.id or userid1 == pres.tester_p.id or userid1 == pres.business_man.id or userid1 == pres.operator_p.id or userid1 == pres.customer_service.id or pm == 1 %}
+                      <a class="icon-edit" href="{% url 'editproject' pres.id %}" title='编辑'></a>&nbsp;
+                      {%endif%}
+                      {% else %}                      
+                      {% endif %}
+
+                    {% else %} 
+                    {% endif %}
+                    <a href="{% url 'feedback' pres.id %}">去反馈</a>                     
+
+                  </td>
+                  {% endfor %}
+                  {% endif %} 
+                </tr>
+                
+              </tbody>
+              </table>
+              <p> </p>
+            </div>  
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--分页-->
+    <div class="pagination" style="text-align:right;margin-right:10px" id="mypage">
+    <span class="step-links">
+        {% if projectobj.has_previous %}
+            <a href="?page={{ projectobj.previous_page_number }}"> << </a>
+        {% endif %}
+
+        <span class="current">
+            第 {{ projectobj.number }} 页，共 {{ projectobj.paginator.num_pages }}页
+        </span>
+
+        {% if projectobj.has_next %}
+            <a href="?page={{ projectobj.next_page_number }}"> >> </a>
+        {% endif %}
+    </span>
+    </div>
+
+ {% include "pauseproject.html" %}
+ {% include "changedesign.html" %}
+
+
+</body>      
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
+    <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/static/js/home_page.js"></script> 
+    <script type="text/javascript" src="/static/jquery/jquery.cookie.js"></script>        
+{% endblock %}

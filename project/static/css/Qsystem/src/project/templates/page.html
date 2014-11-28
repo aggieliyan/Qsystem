@@ -1,0 +1,711 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>项目管理系统</title>
+	<!-- Bootstrap -->
+	<!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/static/css/datetimepicker.css" rel="stylesheet" media="screen">
+  	<link href="/static/css/mycss.css" rel="stylesheet" media="screen">
+	<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+	<style type="text/css">
+	    li{ 
+	    	list-style: none;
+	    	display: inline-block;
+
+	    }
+	    ul{
+	    	padding-left: 0;
+	    	margin: 0px;
+	    	display: inline-block;
+	    }
+	    body{
+	    	background: url(top.jpg) repeat-x;
+
+	    }
+	    p,a{
+	    	font-size: 12px;
+	    	text-decoration: none;
+	    }
+	    .top{
+	    	width: 1100px;
+	    	height: 86px;
+	    	margin: auto;
+	    }
+	    .top_logo{
+	    	float: left;
+	    	background: url(logo.jpg) no-repeat;
+	    	height: 86px;
+	    	width: 300px;
+	    	padding-left: 40px;
+
+	    }
+	    .top_memu{
+	    	float: left;
+	    }
+	    .top_memu li{
+	    	float: left;
+	    	line-height: 85px;
+	    	padding-right: 113px;
+	    }
+	    .top_memu a{
+	    	color: #fff;	    	
+	    	font-size: 18px;
+	    	font-family: Verdana,​Microsoft YaHei,​宋体;
+	    	font-weight:bold;
+
+	    }
+	    .top_memu a:active{
+	    	color: #339966
+	    }
+	    .top_memu a:hover{
+	    	text-decoration: none;
+	    	color: #339966;
+	    }
+	   
+	    .top_bar{
+	    	float: right;
+	    	padding-right: 28px;
+
+	    }
+	    .top_bar li {
+	    	float: right;
+	    	line-height: 85px;
+	    	color: #fff;
+	    }
+	    .top_bar a{
+	    	color: #fff;
+	    	font-size: 18px;
+	    }
+	    	    	    
+		.notice{
+			height:150px;
+			width:100%;
+			margin:auto;
+			border:#ff9933 solid thin;						
+			background-color:#ffffdd;
+			position:relative;
+			margin-top:18px;
+		}
+		.notice_title{
+			float:left;
+			height:15px;
+			width:120px;
+			color:#339966;
+			zoom:1;
+		}
+        .notice_content{
+        	float:left;
+        	height:120px;
+        	width:500px;
+        	color:#003366;
+        }
+		#x-table{
+			width:1100px;
+			margin:auto;									
+			background-color:#ffffff;
+		}
+		#x-table2{
+			width:1100px;
+			margin:auto;
+			border:#ddd solid thin;						
+			background-color:#ffffff;}
+		
+		.block-option{width:1100px;height:140px;}
+		
+		#customers{
+			font-family:"Trebuchet MS", Arial, 12px;
+			width:100%;
+			margin:auto;
+			padding-bottom: 30px;
+			border-collapse:collapse;
+		    table-layout:fixed;}
+	    #customers td, #customers th{
+	    	font-size:12px;
+	    	border:1px solid #ddd;
+	    	padding:3px 7px 2px 7px;
+	    	width:100%;
+	    	word-break:keep-all;
+            white-space:nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+           
+        }
+	    #customers th{
+	    	background-image: url(list.png);
+            width: 30px;
+            text-align:center;
+        }
+        #customers th tr{
+	    	font-size:1.1em;
+	    	text-align:center;
+	    	padding-top:5px;
+	    	padding-bottom:4px;
+	    	color:#ffffff;}
+	    #customers a:link{
+	    	color: #000;
+	    	text-decoration: none;
+	    }
+	    #customers a:hover{
+	    	color: #0099ff
+	    }
+		.option-item{
+		width:380px;
+		margin-top:5px;
+		height:60px;
+		float:left;
+		}
+		.option-item-right{
+		width:720px;
+		margin-top:5px;
+		height:60px;
+		float:left;
+		}
+		.option-item-right-short{
+		width:520px;
+		margin-top:5px;
+		height:60px;
+		float:left;
+		}
+		.option-left{width:380px;height:120px;float:left;margin-left:5px;}
+		.option-right{width:620px;height:120px;float:left;margin-left:5px;}
+		.btn-success {
+			background-color: #5BB75B;
+			background-image: linear-gradient(to bottom, #62C462, #51A351);
+			background-repeat: repeat-x;
+			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+			color: #FFFFFF;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+		}
+	     
+		.title1 {display:inline-block; 
+				width:110px;}
+    </style>
+</head>
+
+<body id="x-table">
+	<div class="top">
+		<ul class="top_logo">
+			<li><a href=""> </a></li>
+		</ul>
+		<ul class="top_memu">
+			<li><a href="">个人主页</a></li>
+			<li><a href="">项目管理</a></li>
+			<li><a href="">资源管理</a></li>
+		</ul>
+		<ul class="top_bar">
+			<li><a href="">name</a></li>
+			<li><i> | </i></li>
+			<li><a href="">退出</a></li>
+		</ul>
+	</div>
+	<div class="notice">
+		<div class="notice_title">
+			<span>
+				<b>项目公告：<span style="color:#ffa03e">(14):</span></b>
+			</span>
+		</div>
+		<div class="notice_content">
+			<p style="font-size:12px"></p>
+			<p><a href="">公告5：播放页面正式进入开发阶段</a></p>
+			<p><a href="">公告4：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
+			<p><a href="">公告3：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
+			<p><a href="">公告2：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
+			<p><a href="">公告1：播放页面延期2天的申请被批准，现延期至2013-09-13</a></p>
+			
+		</div>		
+		<div style="position:absolute;right:500px;bottom:0">
+			<a href="" style="color:#339666">未读公告<span style="color:#ffa03e">(10)>></span></a>
+		</div>		
+	</div>	
+	<div class="block-option">
+		<div class="option-left">
+			<div class="option-item">
+					<div class="title">
+					<label class="item-title">项目名称：</label>
+				  </div>
+					<input type="text" class="form-control inputfield">
+					
+			</div>
+			<div class="option-item" >
+					<div class="title">
+                <label class="item-title">项目状态：</label>
+              </div>
+                <select class="inputfield">
+                  <option select="selected">需求讨论中</option>
+                  <option>设计中</option>
+                  <option>设计完成</option>
+                  <option>开发中</option>
+                </select>
+              </div>
+		</div>	  
+		<div class="option-right">
+		
+        	<div class="option-item-right">
+				  <div class="title">
+					<label class="item-title">时间检索：</label>
+				  </div>
+                <div style="display: inline-block;">
+					<div style="position:relative;top:-15px;">
+						<span class="input-append date form_datetime">   
+						  <input class="dateinput" size="16" type="text" value="" readonly>
+						  <span class="add-on"><i class="icon-calendar"></i></span>
+						</span>至
+						<span class="input-append date form_datetime">   
+						  <input class="dateinput" size="16" type="text" value="" readonly>
+						  <span class="add-on"><i class="icon-calendar"></i></span>
+						</span>
+					</div>
+				</div>
+		 	</div>
+			
+			<div class="option-item-right-short">
+                <div class="title">
+					<label class="item-title">项目成员：</label>
+        		</div>
+				<input type="text" class="form-control " style="position:relative;top: -15px;" />	
+			
+        	</div>
+			<div>
+			<button style="margin-left:5px; margin-top:5px;" class="btn btn-primary" type="button">搜索</button>		
+			</div>
+		 </div>	
+		 	  
+	</div>
+	<div class="option" ></div>
+	<div id="x-table2">
+		<div style="margin:3px 0px">
+			<div style=""class="tabbable">
+			
+			    <div class="tab-content" style="padding:0px">
+			    	<div class="tab-pane active" id="tab1">
+			    		<table  id="customers">
+			    			<thead>
+			    				<tr>
+			    					<th width="64" style="width:50px;">优先级</th>
+			    					<th width="151" style="width:137px;">项目名称</th>
+			    					<th width="90" style="width:76px">项目负责人</th>
+			    					<th width="83" style="width:69px">产品负责人</th>
+			    					<th width="84" style="width:70px">测试负责人</th>
+			    					<th width="148" style="width:134px">项目成员</th>
+			    					<th width="96" style="width:82px">项目开始时间</th>
+			    					<th width="96" style="width:82px">计划上线时间</th>
+			    					<th width="96" style="width:82px">实际上线时间</th>
+			    					<th width="90" style="width:76px">项目状态</th>
+			    					<th width="389" style="width:236px">操作</th>
+			    				</tr>
+			    			<thead>
+			    			<tbody id="group_one">
+			    				<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+			    				</tr>
+			    				<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+			    				</tr>
+			    			    <tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+			    				</tr>
+			    			    <tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+			    				</tr>
+			    			    <tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+			    				</tr>
+			    			<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+		    				  </tr>
+			    			<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+		    				  </tr>
+			    			<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+		    				  </tr>
+			    			<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+		    				  </tr>
+			    			<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+		    				  </tr>
+			    			<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+		    				  </tr>
+			    			<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+		    				  </tr>
+			    			<tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+		    				  </tr>
+			    			    <tr>
+			    					<td>500</td>
+			    					<td><a href="/">播放页面播放页面二期</a></td>
+			    					<td>高子叶</td>
+			    					<td>赵希</td>
+			    					<td>孙敏、国玉玲</td>
+			    					<td>国玉玲、刘红娇</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>2013-08-19</td>
+			    					<td>开发中</td>
+			    					<td>
+			    						<a href="">计划变更<span>|</span></a>
+			    						<a href="">编辑<span>|</span></a>
+			    						<a href="">延期<span>|</span></a>
+			    						<a href="">暂停<span>|</span></a>
+			    						<a href="">删除<span></span></a>
+			    					</td>
+			    				</tr>
+			    			</tbody>
+			    		</table>
+			    	</div> 
+			     	<div class="tab-pane" id="tab2">
+			     		<table id="customers">
+			     			<thead>
+			    			<tr>
+			    				<th style="width:50px;">优先级</th>
+			    				<th style="width:137px;">项目名称</th>
+			    				<th style="width:76px">项目负责人</th>
+			    				<th style="width:69px">产品负责人</th>
+			    				<th style="width:70px">测试负责人</th>
+			    				<th style="width:134px">项目成员</th>
+			    				<th style="width:82px">项目开始时间</th>
+			    				<th style="width:82px">计划上线时间</th>
+			    				<th style="width:82px">实际上线时间</th>
+			    				<th style="width:236px">操作</th>
+			    			</tr>
+			    		</thead>
+			    		<tbody id="group_one">
+			    			<tr>
+			    				<td>500</td>
+			    				<td><a href="/">播放页面播放页面二期dddd</a></td>
+			    				<td>高子叶</td>
+			    				<td>赵希</td>
+			    				<td>孙敏、国玉玲</td>
+			    				<td>国玉玲、刘红娇</td>
+			    				<td>2013-08-19</td>
+			    				<td>2013-08-19</td>
+			    				<td>2013-08-19</td>			    				
+			    				<td>
+			    					<a href="">计划变更<span>|</span></a>
+			    					<a href="">编辑<span>|</span></a>
+			    					<a href="">延期<span>|</span></a>
+			    					<a href="">暂停<span>|</span></a>
+			    					<a href="">删除<span></span></a>
+			    				</td>
+			    			</tr>
+			    			<tr>
+			    				<td>1000</td>
+			    				<td>v6前后台改版</td>
+			    				<td>高子叶</td>
+			    				<td>赵希</td>
+			    				<td>易璐璐</td>
+			    				<td>孙敏、刘红娇、李稳</td>
+			    				<td>2013-09-19</td>
+			    				<td>2013-10-18</td>
+			    				<td>2013-10-18</td>			    				
+			    				<td>
+			    					<a href="">编辑<span>|</span></a>
+			    					<a href="">延期<span>|</span></a>
+			    					<a href="">暂停<span>|</span></a>
+			    					<a href="">删除<span></span></a>
+			    				</td>
+			    			</tr>
+			    			<tr>
+			    				<td>优先级</td>
+			    				<td>项目名称</td>
+			    				<td>项目负责人</td>
+			    				<td>产品负责人</td>
+			    				<td>测试负责人</td>
+			    				<td>项目成员</td>
+			    				<td>项目开始时间</td>
+			    				<td>计划上线时间</td>
+			    				<td>实际上线时间</td>			    				
+			    				<td>操作</td>
+			    			</tr>
+			    			<tr>
+			    				<td>优先级</td>
+			    				<td>项目名称</td>
+			    				<td>项目负责人</td>
+			    				<td>产品负责人</td>
+			    				<td>测试负责人</td>
+			    				<td>项目成员</td>
+			    				<td>项目开始时间</td>
+			    				<td>计划上线时间</td>
+			    				<td>实际上线时间</td>			    				
+			    				<td>操作</td>
+			    			</tr>
+			    			<tr>
+			    				<td>优先级</td>
+			    				<td>项目名称</td>
+			    				<td>项目负责人</td>
+			    				<td>产品负责人</td>
+			    				<td>测试负责人</td>
+			    				<td>项目成员</td>
+			    				<td>项目开始时间</td>
+			    				<td>计划上线时间</td>
+			    				<td>实际上线时间</td>			    				
+			    				<td>操作</td>
+			    			</tr>
+			    			<tr>
+			    				<td>优先级</td>
+			    				<td>项目名称</td>
+			    				<td>项目负责人</td>
+			    				<td>产品负责人</td>
+			    				<td>测试负责人</td>
+			    				<td>项目成员</td>
+			    				<td>项目开始时间</td>
+			    				<td>计划上线时间</td>
+			    				<td>实际上线时间</td>			    				
+			    				<td>操作</td>
+			    			</tr>
+			    		</tbody>
+			    		</table>
+			     	</div>  
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--分页-->	
+	<div class="pagination pagination-right">
+		<ul>
+			<li class=""><a href="#" onClick="page.prePage();">&laquo;</a></li>
+			<li class=""><a href="#">1</a></li>
+			<li class=""><a href="#">2</a></li>
+			<li class=""><a href="#">3</a></li>
+			<li class=""><a href="#">4</a></li>
+			<li class=""><a href="#">5</a></li>
+			<li class=""><a href="#" onClick="page.nextPage();">&raquo;</a></li>
+		</ul>
+	</div>
+	
+<!-- Le javascript ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+   <script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>    
+<script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
+<script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/static/js/pm.js"></script>
+<script type="text/javascript">
+      $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        language:"zh-CN",
+        minView:2
+      });
+</script> 
+<script src="js/bootstrap.js"></script>
+</body>
+</html>
