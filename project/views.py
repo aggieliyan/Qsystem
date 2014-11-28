@@ -1298,6 +1298,7 @@ def show_source(request):
         department_id, Position_level="2")
         level_3_list = models.user.objects.filter(department_id=\
         department_id, Position_level="3")
+        department_list = department_list.exclude(Q(id=100))
         return render_to_response('show_source.html', locals())
     except KeyError:
         return redirect('/nologin/')
@@ -1320,6 +1321,7 @@ def show_user2(request):
     level_3_list = models.user.objects.filter(department_id=\
     department_id, Position_level="3")
     department_list = models.department.objects.all()
+    department_list = department_list.exclude(Q(id=100))
     return render_to_response('show_source.html', locals())
 
 @csrf_exempt
@@ -1353,6 +1355,7 @@ def show_user(request):
         level_3_list = models.user.objects.filter(department_id=\
         department_id, Position_level="3")
         department_list = models.department.objects.all()
+        department_list = department_list.exclude(Q(id=100))
         return render_to_response('sourcemanage.html', locals())
     except KeyError:
         return redirect('/nologin/')
