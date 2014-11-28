@@ -39,12 +39,12 @@ def register(request,uname=''):
                     user = User.objects.create_user(username=username, email=email, password=password)
                     user.save()
                 except:
-                    uf = UserForm()
-                    return render_to_response('register.html', {'list':department.objects.all(),
+                    uf = UserForm() 
+                    return render_to_response('register.html', {'list':department.objects.filter(~Q(id=100)),
                                                                 'error':'注册的用户名已存在'},
                                               context_instance=RequestContext(request))
                 user_new = uf.save()
-    
+  
                 #如果是产品部门，加入产品部门权限组
                 depid = uf.cleaned_data['departmentid']
                 if depid == '3':
@@ -63,8 +63,7 @@ def register(request,uname=''):
                 return HttpResponseRedirect("/personal_homepage")
         else:
             uf = UserForm()
-    
-        return render_to_response('register.html', {'list':department.objects.all()},
+        return render_to_response('register.html', {'list':department.objects.filter(~Q(id=100))},
                                   context_instance=RequestContext(request))
     else:
         if request.method == "POST":
@@ -99,7 +98,7 @@ def register(request,uname=''):
                 return HttpResponseRedirect("/personal_homepage")
         
         userinfo = models.user.objects.filter(username=uname)[0]
-        return render_to_response('register.html', {'list':department.objects.all(),
+        return render_to_response('register.html', {'list':department.objects.filter(~Q(id=100)),
                                                     'info': userinfo})
 
 def logout(request):
