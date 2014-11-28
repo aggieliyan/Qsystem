@@ -72,7 +72,7 @@
 .btn-section{background-color:#29a65d;width:100px;height:30px;float:left;margin-left:20px;border:0px}
 .btn-edit{background-color:#29a65d;width:100px;height:30px;float:left;margin-left:600px;border:0px}
 
-.people{background-color:#f7f7f7;width:1100px;height:auto;padding-left:20px;padding-right:20px;border:5px;padding-top:20px;float:left}
+.people{background-color:#f7f7f7;width:1100px;height:auto;padding-left:20px;padding-right:20px;border:5px;padding-top:20px;float:left;margin-bottom: 15px;}
 
 .section1{width:810px;height:30px;float: left}
 .section2{width:780px;height:30px;float: left;margin-left:30px;}
