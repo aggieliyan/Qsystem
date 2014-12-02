@@ -71,7 +71,7 @@ $(document).ready(function(){
       var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
     }     
 
-    $(".basecolor").eq(i).children().eq(list[stut]).css('border', "2px solid #339966");
+    $(".basecolor").eq(i).children().eq(list[stut]).css({'color': "#339966",'font-weight':'bold'});
     };
 
     //已完结项目负责人添加border
@@ -86,7 +86,7 @@ $(document).ready(function(){
       var list1 = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
     }     
 
-    $(".basecolor1").eq(i).children().eq(list1[stut1]).css('border', "2px solid #339966");
+    $(".basecolor1").eq(i).children().eq(list1[stut1]).css({'color': "#339966",'font-weight':'bold'});
     };
 
 

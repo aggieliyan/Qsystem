@@ -77,7 +77,7 @@ $(document).ready(function(){
       var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
     }
 
-    $(".basecolor").eq(i).children().eq(list[stut]+1).css('border', "2px solid #339966");
+    $(".basecolor").eq(i).children().eq(list[stut]+1).css({'color': "#339966",'font-weight':'bold'});
 
     };
 
