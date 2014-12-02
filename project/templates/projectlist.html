@@ -222,11 +222,13 @@
                                     <td>{{ p.operator_p.realname}}</td>
                                     <td>{{ p.customer_service.realname }}</td>
                                     <td>
-                                    {% for u in puser%}
-                                    {% ifequal p.id u.project_id %}
-                                    {{u.username.realname}}&nbsp
-                                    {%endifequal%}
-                                    {%endfor%}
+                                    {% for i,j in relateduser.items %}
+                                    {% if i == p.id %}
+                                    {% for u in j %}
+                                    {{u}}
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endfor %}
                                     </td>
                                     <td>{{ p.start_date|date:"Y-m-d" }}</td>
                                     <td>{{ p.expect_launch_date|date:"Y-m-d" }}</td>

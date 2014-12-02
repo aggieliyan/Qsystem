@@ -805,6 +805,18 @@ def project_list(request):
             projectids.append(p.project.id)
         projectlist = projectlist.filter(pk__in=projectids)
 
+    relateduser = {}
+
+    for i in projectlist:
+        list_user =  models.project_user.objects.filter(project = i.id)
+        r=[]
+        for u in list_user:            
+            r.append(u.username.realname)
+            print u.username.realname
+        print r
+        relateduser[i.id] = r
+    print relateduser
+
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
@@ -843,7 +855,7 @@ def project_list(request):
         filter_project.append(pcount.filter(project_id=x['project_id']).order_by("total")[0])
     
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
-            'puser':puser, 'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
+            'puser':puser, 'relateduser':relateduser,'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
             'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p,"type_p":type_p, 'notices':notices, \
             'count':count, "logintag":logintag, "changetag":changetag, "delaytag":delaytag, "deletetag":deletetag,\
@@ -1182,8 +1194,18 @@ def personal_homepage(request):
     if request.user.has_perm("auth.change_permission"):
             pm = 1
     projectids = []
+    relateduser={}
     for p in project_user_list:
         projectids.append(p.project.id)
+        print p.project.id
+        user = models.project_user.objects.filter(project = p.project.id)
+        r=[]
+        for u in user:            
+            r.append(u.username.realname)
+            print u.username.realname
+        print r
+        relateduser[p.project.id] = r
+    #print relateduser
     projectlist = projectlist.filter(pk__in = projectids)
     result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'运营推广')).order_by("-id")
@@ -1217,7 +1239,7 @@ def personal_homepage(request):
     count = messagess.count()
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
-        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'messages': messages, \
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'relateduser': relateduser, 'messages': messages, \
          'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    

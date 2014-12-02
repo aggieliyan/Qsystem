@@ -122,11 +122,15 @@
                     <td>{{res.tester_p.realname}}</td>
                     <td>{{res.operator_p.realname}}</td>
                     <td>{{res.customer_service.realname}}</td>
-                    <td>{% for u in puser %}
-                      {% ifequal res.id u.project_id %}
-                    {{u.username.realname}}&nbsp;
-                    {% endifequal %}
+                    <td>
+                    {% for i,j in relateduser.items %} 
+                    {% if i == res.id %}
+                    {% for u in j %}
+                    {{u}}
                     {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                                              
                   </td>
                     <td>{{res.start_date|date:"Y-m-d" }}</td>
                     <td >{{res.expect_launch_date|date:"Y-m-d"}}</td>
@@ -215,13 +219,15 @@
                     <td>{{pres.tester_p.realname}}</td>
                     <td>{{pres.operator_p.realname}}</td>
                     <td>{{pres.customer_service.realname}}</td>
-                    <td>                                                                
-                    
-                    {% for us in puser %}
-                    {% ifequal pres.id us.project_id %}                                                        
-                    {{us.username.realname}}&nbsp;
-                    {% endifequal %}
-                    {% endfor %}                  
+                    <td> 
+                                                                                   
+                    {% for i,j in relateduser.items %} 
+                    {% if i == pres.id %}
+                    {% for u in j %}
+                    {{u}}
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}          
 
                     </td>
                     <td>{{pres.start_date|date:"Y-m-d" }}</td>
