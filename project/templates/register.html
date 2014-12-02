@@ -143,7 +143,7 @@ function getByteLen(val) {
 	             		<tr>
 	                 		<td class="table">
 	                 			{% if info.username %}
-		                     		<input id="Text_nameid" name="username" type="text" value="{{info.username}}" onblur="Validation();"><span id="nameIdErrorMsg" style="color: red"></span>
+		                     		<input id="Text_nameid" name="username" type="text" value="{{info.username}}" onblur="Validation();" style="background-color: #eee" readonly/><span id="nameIdErrorMsg" style="color: red"></span>
 		                     		<div style="color:red;">
 		                     		{{ error}}
 		                     	    </div>
@@ -171,7 +171,7 @@ function getByteLen(val) {
 	             		<tr>
 	             			{% if info.password %}
 		                 		<td class="table">
-		                     		<input id="Text_password" name="password" type="password" value="{{info.password}}" onblur="Validation();"/><span id="pwdErrorMsg" style="color: red"></span>
+		                     		<input id="Text_password" name="password" type="password" value="{{info.password}}" onblur="Validation();" style="background-color: #eee" readonly/><span id="pwdErrorMsg" style="color: red"></span>
 		                     	</td>
 		                 		<td class="table">
 		                     	</td>
@@ -190,7 +190,7 @@ function getByteLen(val) {
 	             		<tr>
 	             			{% if info.password %}
 		                 		<td class="table">
-		                     		<input id="Text_repeatpassword" name="confirmpassword" type="password" value="{{info.password}}"  onblur="Validation();" style="width:266px;height: 29px; "/><span id="repeatpwdErrorMsg" style="color: red"></span>
+		                     		<input id="Text_repeatpassword" name="confirmpassword" type="password" value="{{info.password}}"  onblur="Validation();" style="width:266px;height: 29px; background-color: #eee" readonly/><span id="repeatpwdErrorMsg" style="color: red"></span>
 		                     	</td>
 		                 		<td class="table">
 		                     	</td>
@@ -208,7 +208,7 @@ function getByteLen(val) {
 	             		</tr>
 	             		<tr>
 	                 		<td class="table">
-	                 			<select id="Select_part" name="departmentid">m
+	                 			<select id="Select_part" name="departmentid">
 		                   			<option style="color: #C0C0C0" value="">请选择您所在的部门</option>
 		                         	{% for l in list %}  
 		                         		{%if l.department != 'blank' %}

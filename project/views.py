@@ -73,7 +73,6 @@ def register(request,uname=''):
                 #返回注册成功页面
                 #往Django user表里再插入一条数据
                 username = uf.cleaned_data['username']
-                password = uf.cleaned_data['password']
                 realname = uf.cleaned_data['realname']
                 email = username+"@ablesky.com"    
                 #如果是产品部门，加入产品部门权限组
@@ -82,8 +81,7 @@ def register(request,uname=''):
                     User.objects.get(username=username).groups.add(3)
                 uid = models.user.objects.filter(username=username)[0].id
                 u = models.user(id=uid, username=username,
-                                       realname=realname,
-                                       password=password,
+                                       realname=realname,                                       
                                        create_time=datetime.datetime.now(),
                                        department=department.objects.get(id=depid),
                                        isactived=1)
@@ -93,14 +91,14 @@ def register(request,uname=''):
                 request.session['id'] = uid
     
                 #Django 认证系统的登录
-                user = auth.authenticate(username=username, password=models.user.objects.filter(username=username)[0].password)
+                user = auth.authenticate(username=username, password='assecret')
                 auth.login(request, user)
     
                 return HttpResponseRedirect("/personal_homepage")
         
         userinfo = models.user.objects.filter(username=uname)[0]
         return render_to_response('register.html', {'list':department.objects.all(),
-                                                    'info': userinfo})
+                                                    'info': userinfo, 'editable': False})
 
 def logout(request):
     try:
@@ -146,9 +144,10 @@ def login(request):
                     isldap = models.user.objects.filter(username__exact=username)
                     if len(isldap) == 0: #说明该用户通过ldap第一次登录,数据库尚未存储该用户
                         newUser = User.objects.filter(username=username)[0]       #django User表
-                        newuser = models.user(username=username, password='1234', realname=newUser.first_name, create_time=datetime.datetime.now(), department_id='100', isactived=1)
+                        newuser = models.user(username=username, password='1234', realname=newUser.first_name, 
+                                              create_time=datetime.datetime.now(), department_id='100', isactived=1) #1234只是为了页面显示好看
                         newuser.save()
-                        newUser.password = '81dc9bdb52d04dc20036dbd8313ed055'       #设置django的User表密码为1234,否则注册后登录无法通过authenticate()验证.
+                        newUser.password = hashlib.md5('assecret').hexdigest()      #设置django的User表密码为assecret,否则注册后登录无法通过authenticate()验证.看代码的人可以知道ldap登录用户的密码，存在安全风险，不过数据库中看不出来。
                         newUser.save()
                         link = str("/register/" + username)
                         return HttpResponseRedirect(link)
