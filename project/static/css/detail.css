@@ -9,7 +9,6 @@ body {
     font-size: 14px;
     margin-top: 0px;
 }
-
 table {
 	width: 100%;
 }
@@ -29,6 +28,7 @@ a:hover {
 	width: 100%;
 	background-color: #339966;
 	border-radius: 2px;
+	margin-top: 15px;
 }
 #bread p {
 	padding: 16px;
