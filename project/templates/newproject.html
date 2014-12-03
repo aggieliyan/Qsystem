@@ -641,8 +641,8 @@
           $("#errofield").text("请检查必填项");
           return false;
         }else{
-          p_form.submit();
-          $("#submitbutton").disabled=true;
+          $("#submitbutton").attr("disabled","true");
+          p_form.submit();  
         }
 
     }
