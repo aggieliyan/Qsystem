@@ -699,7 +699,7 @@ def sendmessage(request,status,pid):
 def project_list(request):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
-        return HttpResponseRedirect("/nologin")
+        return HttpResponseRedirect("/login")
     #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
     #以下是权限标记，createtag是发布相似的权限
     createtag = 0
