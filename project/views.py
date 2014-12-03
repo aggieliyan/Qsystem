@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404, Re
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 import json
-import time
+import time, re
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
@@ -809,12 +809,16 @@ def project_list(request):
 
     for i in projectlist:
         list_user =  models.project_user.objects.filter(project = i.id)
-        r=[]
-        for u in list_user:            
-            r.append(u.username.realname)
-            print u.username.realname
-        print r
-        relateduser[i.id] = r
+        u_name = ''
+        for u in list_user:
+            pattern = re.compile(u.username.realname)
+            match = pattern.search(u_name)
+            if not match:
+                u_name = u_name + ' ' + u.username.realname
+            #r.append(u.username.realname)
+            #print u.username.realname
+        #print r
+        relateduser[i.id] = u_name
     print relateduser
 
     paginator = Paginator(projectlist, 25)
@@ -1199,12 +1203,17 @@ def personal_homepage(request):
         projectids.append(p.project.id)
         print p.project.id
         user = models.project_user.objects.filter(project = p.project.id)
-        r=[]
-        for u in user:            
-            r.append(u.username.realname)
-            print u.username.realname
-        print r
-        relateduser[p.project.id] = r
+        uname=''
+        for u in user:
+            pattern = re.compile(u.username.realname)
+            match = pattern.search(uname)
+            if not match:
+                uname = uname + ' ' + u.username.realname
+                #print match.group()                            
+            #r.append(u.username.realname)
+            #print u.username.realname
+        #print uname
+        relateduser[p.project.id] = uname
     #print relateduser
     projectlist = projectlist.filter(pk__in = projectids)
     result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   

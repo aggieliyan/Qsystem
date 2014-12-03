@@ -225,9 +225,9 @@
                                     <td>
                                     {% for i,j in relateduser.items %}
                                     {% if i == p.id %}
-                                    {% for u in j %}
-                                    {{u}}
-                                    {% endfor %}
+                                    
+                                    {{j}}
+                                    
                                     {% endif %}
                                     {% endfor %}
                                     </td>
@@ -329,9 +329,8 @@
 {% endblock %}
 {% block js %}
 <script src="../static/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../static/jquery/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="../static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="../static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../static/js/projectlist.js"></script>
 
 <script type="text/javascript">

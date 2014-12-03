@@ -39,7 +39,6 @@ $(document).ready(function(){
                       '项目成员':10,'项目开始时间':11,'计划上线时间':12,'实际上线时间':13,'项目状态':14,'操作':15 };
     $(".chomdelay").click(function(){
        timepro=$(this).parent().parent().children().eq(table_list['计划上线时间']).text();
-        console.log(timepro);
        if (!timepro)
        {
         alert("计划上线时间为空不可申请延期");
@@ -54,9 +53,7 @@ $(document).ready(function(){
     var cellIndex=parseInt($(".procolor tr").length);
     for(var i=0; i<cellIndex;i++) {
       var time =document.getElementsByName("datetime")[i].value;
-        console.log(time);
       var stut = $(".basecolor").eq(i).children().eq(table_list['项目状态']).text();
-        console.log(stut);
       var d=new Date(Date.parse(time.replace(/-/g, "/")));
       var d=new Date(d.getTime() + 1*24*60*60*1000);
       var curDate=new Date();
@@ -69,7 +66,6 @@ $(document).ready(function(){
     };
 
     var project_type = $(".basecolor").eq(i).children().eq(table_list['类型']).text();
-        console.log(project_type);
     if(project_type == '产品'){
       var list = {'需求讨论中':4,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
     }
@@ -89,7 +85,6 @@ $(document).ready(function(){
         user_prolist = $.trim($(".basecolor").eq(i).children().eq(table_list['项目成员']).text());
         user_prolist =user_prolist.replace(/\s+/g,' ');
     var project = $.trim($(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(0).text());
-       console.log(project);
     var ptotal = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(2).text());
     ptotal = ptotal.replace(/\s+/g,'\t\t\r');
     $(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(1).attr("title",ptotal);
