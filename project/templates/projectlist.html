@@ -222,12 +222,6 @@
                                     <td>{{ p.status_p }}</td>
                                     <input name="datetime" value="{{p.expect_launch_date|date:"Y-m-d"}}" type="hidden">
                                     <td>
-                                    {% if logintag == 0 %}
-
-                                        <a href="{% url 'feedback' p.id %}">去反馈</a>
-
-                                    {% else %}
-
                                         {% if p.status_p == "运营推广" or p.status_p == "暂停"%}
 
                                             {% if createtag == 1 %}
@@ -266,10 +260,6 @@
                                                     <a class="icon-trash" href="{% url 'pproject_delete' p.id %}" title="删除" onclick="return confirm('你确认要删除吗?')"><span> </span></a>
                                                 {% else %}
                                                 {% endif %}
-                                               {% comment %} {% if user_id != p.leader_p.id and user_id != p.designer_p.id and user_id != p.tester_p.id and user_id != p.business_man.id and user_id != p.operator_p.id and user_id != p.customer_service.id and changetag == 0 and auth_changetag == 0 %}
-                                                    <a  href="{% url 'feedback' p.id %}">去反馈</a>
-                                                {% else %}
-                                                {% endif %}{% endcomment %}
                                                 {% if createtag == 1 %}
                                                     <a  href="{% url 'similarpro' p.id  1 %}"><img src='../static/img/copypro.png' style='margin-top:-7px' title='发布相似'></a>
                                                 {% else %}
@@ -277,7 +267,6 @@
                                             {% endif %}
                                         {% endif %}
                                          <a href="{% url 'feedback' p.id %}">去反馈</a>
-                                    {% endif %}
                                     </td>
                                    {% endfor %}
                                 </tr>
