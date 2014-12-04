@@ -974,7 +974,7 @@ def detail(request, pid='', nid=''):
         confirmation[name[b]].append(check_col)
         confirmation[name[b]].append(check)
         b = b + 1       
-    
+    print confirmation
     current_uid = request.session['id'] #把当前登录用户的id传给页面，方便记录反馈人ID
     pro_feedback = models.project_feedback.objects.filter(project_id=pid).order_by("-feedback_date")
     fc = {}
