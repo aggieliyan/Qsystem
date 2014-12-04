@@ -58,7 +58,7 @@ $(document).ready(function(){
       var d=new Date(d.getTime() + 1*24*60*60*1000);
       var curDate=new Date();
       //var curDate1=curDate.toLocaleDateString(); 
-      if(stut !='暂停' && stut != '已上线'){
+      if(stut !='暂停' && stut != '已上线' && stut != '运营推广'){
         if(d){
           if(d < curDate){
             $(".basecolor").eq(i).css("background-color","#ff9933"); }
