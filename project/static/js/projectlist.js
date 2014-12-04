@@ -134,6 +134,7 @@ $(document).ready(function(){
           alert('延期日期或者延期理由不能为空');
         }
         else{
+          $("#prodelay_p").attr("disabled","true");
           document.test1.submit();
           $('#myModal1').modal('hide');
         alert("您的申请已发送,请等待审批");
@@ -147,6 +148,7 @@ $(document).ready(function(){
           alert('变更内容或设计图路径不能为空');
         }
         else{
+          $("#prochange_d").attr("disabled","true");
           document.test.submit();
         }
       }
