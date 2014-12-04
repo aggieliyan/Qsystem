@@ -204,7 +204,7 @@
 										</div>
 										<div class="item-comment">
 											<div class="reply-pup" id=rp{{key.id}} style="display:none;">
-												<form name="commentForm" class="fc-form" action="/comment/" method="post" style="margin-left:150px;">
+												<form name="commentForm" id="form{{key.id}}" class="fc-form" action="/comment/" method="post" style="margin-left:150px;">
 													<div>
 														<textarea class="feedback-reply" id="comment{{key.id}}" name="comment" style="width:600px; margin-top:20px; margin-bottom:20px;"></textarea>
 														<input id="pro_id" name="pid" type="hidden" value="{{res.pro.id}}"/>
@@ -212,7 +212,7 @@
 														<input name="replymid" type="hidden" value="{{res.curuid}}"/>														
 													</div>
 													<div class="action-btn">									
-														<button onclick="return commenttext(id);" class="btn btn-success" id=comment{{key.id}} style="margin-left:43px;" hidefocus="true">
+														<button onclick="return commenttext(id);" class="btn btn-success" id=comment_{{key.id}} style="margin-left:43px;" hidefocus="true">
 															回复
 														</button>
 														<a class="cancle-reply" id = {{key.id}} href="javascript:void(0)" hidefocus="true">
@@ -268,11 +268,12 @@
 	        	finally{return false;}
 	        }
 	        else{
+	          $("#sendfeedbacbtn").attr("disabled","");
 	          document.feedbackForm.submit();
 	        } 
         }	
         function commenttext(id){    
-        	var text = $("#"+id).val();
+        	var text = $("#"+id.replace("_","")).val();
 	        if(!text){
 	        	$(".feedback-reply").attr("style", "width:600px; margin-top:20px; margin-bottom:20px; background:#ffe4e1");
 	        	try {alert("回复内容不能为空！")}	 
@@ -285,7 +286,8 @@
 	        	finally{return false;}
 	        }
 	        else{
-	          document.commentForm.submit();
+	          $("#"+id).attr("disabled","");
+	          $("#form" + id.split("_")[1]).submit();	          
 	        } 
         }						
 	 </script>
