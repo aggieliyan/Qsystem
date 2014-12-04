@@ -220,11 +220,9 @@
                     <td> 
                                                                                    
                     {% for i,j in relateduser.items %} 
-                    {% if i == pres.id %}
-                    {% for u in j %}
-                    {{u}}
-                    {% endfor %}
-                    {% endif %}
+                    {% if i == pres.id %}                    
+                    {{j}}
+                    {% endif %}                    
                     {% endfor %}          
 
                     </td>
