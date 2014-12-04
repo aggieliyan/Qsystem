@@ -12,7 +12,6 @@
     <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet" media="screen">
-
     <link href="/static/css/tankuang.css" rel="stylesheet" media="screen">
     <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet" media="screen">
     <link href="{% static 'css/projectlist.css' %}" rel="stylesheet" media="screen">
@@ -20,52 +19,38 @@
 {% endblock %}
 {% block content %}
 <body id="mybody">
-
-    
-	{% if notices %}
-   {% if count = 1 or count = 2 or count = 3 %}
-	<div style="height:120px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %}   
+  {% if notices %}
+  {% if count = 1 or count = 2 or count = 3 %}
+	<div class="notice notice_123">
+    {% endif %}   
     {% if count = 4 %}
-	<div style="height:140px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %} 
+    <div class="notice notice_4">
+    {% endif %} 
     {% if count >= 5 %}
-	<div style="height:150px;padding-left: 10px; padding-top: 10px;width:99%"  class="notice">
-   {% endif %} 
-
-		<div class="notice_title">
-			<span>
-				<b>项目公告<span style="color:#ffa03e">({{count}}):</span></b>
-			</span>
-		</div>
-		<div style="width:800px" class="notice_content">
-		
-	{% for item in notices %}
-      
-        <p><a href="/notice/"  style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;line-height:15px;margin:0;padding:0;">{{item.content}}</a></p>
-    
-        {% endfor %}	
-		</div>
-		{% if count > 5 %}
-		<div style="position:absolute;right:10px;height:30px;bottom:0">
-			<a href="/notice/" style="color:#339666" >查看所有<span style="color:#ffa03e">>></span></a>
-		</div>	
-         {% endif %} 
-	</div>	
-	{% else %}
-      <div style="height:25px;padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   <div class="notice_title">
-			<span>
-				<b>项目公告<span style="color:#ffa03e">(0):</span></b>
-			</span>
-		</div>
-		
-    <p >暂无公告</p>
-   </div>	
+    <div class="notice notice_excess">
     {% endif %}
-	
-	
-    
+    <div class="notice_title">
+      <span><b>项目公告<span style="color:#ffa03e">({{count}}):</span></b></span>
+    </div>
+		<div class="notice_content">
+      {% for item in notices %}
+      <p><a href="/notice/" class='nitice_content_c'>{{item.content}}</a></p>
+      {% endfor %}
+    </div>
+		{% if count > 5 %}
+    <div class="notice_content_excess">
+      <a href="/notice/" style="color:#339666" >查看所有<span style="color:#ffa03e">>></span></a>
+		</div>
+    {% endif %}
+    </div>
+    {% else %}
+    <div class="notice notice_content_less">
+      <div class="notice_title">
+        <span><b>项目公告<span style="color:#ffa03e">(0):</span></b></span>
+		  </div>
+      <p >暂无公告</p>
+    </div>	
+    {% endif %}    
     <form action="/projectlist/" id="searchform" method="post">
         {% csrf_token %}
     <div class="block-option">
@@ -166,22 +151,22 @@
                         <table  id="customers" class="basetitle">
                             <thead>
                             <tr>
-                                <th width="25" style="width:25px;">编号</th>
-                                <th width="150" style="width:186px;">项目名称</th>
-                                <th width="30" style="width:25px;">类型</th>
-                                <th width="64" style="width:30px;" title="优先级">PRI</th>
-                                <th width="90" style="width:43px">业务</th>
-                                <th width="83" style="width:43px">产品</th>
-                                <th width="90" style="width:43px">PM</th>
-                                <th width="84" style="width:43px">测试</th>
-                                <th width="84" style="width:43px">运营</th>
-                                <th width="84" style="width:43px">客服</th>
-                                <th width="184" style="width:155px">项目成员</th>
-                                <th width="96" style="width:78px">项目开始</th>
-                                <th width="96" style="width:78px">计划上线</th>
-                                <th width="96" style="width:78px">实际上线</th>
-                                <th width="90" style="width:70px">项目状态</th>
-                                <th width="170" style="width:155px">操作</th>
+                                <th style="width:25px;">编号</th>
+                                <th style="width:186px;">项目名称</th>
+                                <th style="width:25px;">类型</th>
+                                <th style="width:30px;" title="优先级">PRI</th>
+                                <th style="width:43px">业务</th>
+                                <th style="width:43px">产品</th>
+                                <th style="width:43px">PM</th>
+                                <th style="width:43px">测试</th>
+                                <th style="width:43px">运营</th>
+                                <th style="width:43px">客服</th>
+                                <th style="width:155px">项目成员</th>
+                                <th style="width:78px">项目开始</th>
+                                <th style="width:78px">计划上线</th>
+                                <th style="width:78px">实际上线</th>
+                                <th style="width:70px">项目状态</th>
+                                <th style="width:155px">操作</th>
                             </tr>
                             </thead>
                             <tbody id="group_one" class="procolor">

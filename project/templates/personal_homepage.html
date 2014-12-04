@@ -16,72 +16,56 @@
 
   <!-- Button trigger modal -->   
    
-  {% if messages %}
-  
-   {% if count = 1 or count = 2 or count = 3 %}
-	<div style="height:120px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-   {% endif %}   
-   
-    {% if count >= 4 %}
-	<div style="height:140px; padding-left: 10px; padding-top: 10px;width:99%" class="notice" >
-   {% endif %} 
-   
-		<div class="notice_title">
-			<span>
-				<b>消息提醒<span style="color:#ffa03e">({{count}}):</span></b>
-			</span>
-		</div>
-			
-	 <div style="width:850px" class="notice_content">		
-
- 
-     {% for item in messages %}
-       
-        <p><a href="/historymessage/"  style="text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;width: 800px;">{{item.content|cut:"<br/>"}}</a></p>
-    
-      {% endfor %}
-   		
-		 </div>								
-		<div style="position:absolute;right:10px;height:35px;bottom:0">
-			<a href="/historymessage/" style="color:#339666">查看历史记录</a>
-		</div>		
-	</div>	
-  {% else %}
-  <div style="height:25px; padding-left: 10px; padding-top: 10px;width:99%" class="notice">
-  <div class="notice_title">
-			<span>
-				<b>消息提醒<span style="color:#ffa03e">(0):</span></b>
-			</span>
-		</div>
-		
-    <p>暂无消息</p>
-   </div>	
-  {% endif %}
- 
-   {% if dealdelay = 1 %}
-    <div style="padding:50px 0 15px">
-    <a href="/delay/" style="color:#339666" >查看您要处理的延期申请({{countdelay}})>></a>
-    </div>  
-   {% endif %}
-  
-  
-  <div style="width:100%; height:25px;margin-bottom: 10px;margin-top: 10px;">
-    <div style="float:left;">
-    <b>我参与的项目:</b>
-    <input type="radio" class="btn btn-default" id="smalltable" name="changet">小鸟依人版
-    <input type="radio" class="btn btn-default" id="bigtable" name="changet" checked="checked">大气版 
-    <span style="margin-left:8px">(注：项目所处状态的负责人为绿色加粗字体)</span>
-    {% if perms.project.can_change_project%}
-    <p>我有<p>
+  {% if messages %}  
+  {% if count = 1 or count = 2 or count = 3 %}
+	<div class="notice notice_less">
     {% endif %}
+    {% if count >= 4 %}
+    <div class="notice notice_excess4" >
+    {% endif %}
+      <div class="notice_title">
+        <span><b>消息提醒<span style="color:#ffa03e">({{count}}):</span></b></span>
+		  </div>
+      <div class="notice_content">
+        {% for item in messages %}
+        <p><a href="/historymessage/"  class="message">{{item.content|cut:"<br/>"}}</a></p>
+        {% endfor %}
+      </div>								
+		  <div class="historymessage_text">
+        <a href="/historymessage/" style="color:#339666">查看历史记录</a>
+		  </div>
+    </div>
+    {% else %}
+    <div class="notice notice_d">
+      <div class="notice_title">
+        <span><b>消息提醒<span style="color:#ffa03e">(0):</span></b></span>
+      </div>
+      <p>暂无消息</p>
+   </div>	
+   {% endif %}
+   {% if dealdelay = 1 %}
+   <div style="padding:50px 0 15px">
+    <a href="/delay/" style="color:#339666" >查看您要处理的延期申请({{countdelay}})>></a>
+  </div>
+  {% endif %}
+
+  <div class="text-div">
+    <div style="float:left;">
+      <b>我参与的项目:</b>
+      <input type="radio" class="btn btn-default" id="smalltable" name="changet">小鸟依人版
+      <input type="radio" class="btn btn-default" id="bigtable" name="changet" checked="checked">大气版 
+      <span style="margin-left:8px">(注：项目所处状态的负责人为绿色加粗字体)</span>
+      {% if perms.project.can_change_project%}
+      <p>我有<p>
+      {% endif %}
     </div>
   </div>
 
-<div id="x-table2">
+  <div id="x-table2">
     <div style="margin:3px 0px">
       <div style=""class="tabbable">
       <!-- Only required for left/right tabs -->
-          <ul class="nav nav-tabs" style="display:block;background-color:#339966" id="myTab1"> 
+          <ul class="nav nav-tabs nav-tabs-custom" id="myTab1"> 
             <li class="active"><a href="#mtab1" data-toggle="tab" style="color:#000" id="inpro">研发中的项目</a></li>
             <li><a href="#mtab2" data-toggle="tab" style="color:#000" id="finishedpro">已上线的项目</a></li>
           </ul> 
@@ -164,22 +148,16 @@
                       {% if deletetag == 1 or pm == 1 %}
                       <a class="icon-trash" title='删除' href="{% url 'project_delete' res.id %}" onclick="return confirm('你确认要删除吗?')"></a>&nbsp;
                       {% else %}                      
-                      {% endif %}
-
-                     
-                      <a href="{% url 'feedback' res.id %}">去反馈</a>
-                      
-              
+                      {% endif %}                     
+                      <a href="{% url 'feedback' res.id %}">去反馈</a>             
                   </td>
                   {% endfor %}
                   {% endif %} 
-                </tr>
-                
+                </tr>                
               </tbody>
               </table>
               <p> </p>
-            </div>
-               
+            </div>               
             <div class="tab-pane" id="mtab2">
               <table id="customers">
                 <thead>
@@ -204,7 +182,6 @@
                   <th style="width:170px">操作</th>
                 </tr>
               </thead>
-
               <tbody id="group_one" class="procolor1">
                 {% for pres in projectobj %}                                          
                   <tr class="basecolor1">                    
@@ -238,16 +215,13 @@
                       {%endif%}
                       {% else %}                      
                       {% endif %}
-
                     {% else %} 
                     {% endif %}
-                    <a href="{% url 'feedback' pres.id %}">去反馈</a>                     
-
+                    <a href="{% url 'feedback' pres.id %}">去反馈</a>
                   </td>
                   {% endfor %}
                   {% endif %} 
-                </tr>
-                
+                </tr>                
               </tbody>
               </table>
               <p> </p>
@@ -273,11 +247,8 @@
         {% endif %}
     </span>
     </div>
-
  {% include "pauseproject.html" %}
  {% include "changedesign.html" %}
-
-
 </body>      
 {% endblock %}
 {% block js %}
