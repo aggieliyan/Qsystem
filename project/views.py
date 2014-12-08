@@ -966,13 +966,15 @@ def detail(request, pid='', nid=''):
                         else:
                             check = item.status
                 a = a + 1
-            confirmation[name[b]] = []                                      #用来存储不同部门的四个值：０是设计确认颜色值，１是设计确认状态文字，２是测试版确认状态的颜色值，３是测试版确认状态的文字。
-            confirmation[name[b]].append(design_col)
-            confirmation[name[b]].append(design)
-            confirmation[name[b]].append(check_col)
-            confirmation[name[b]].append(check)
-            b = b + 1       
-
+        else:
+            design_col = design = check_col = check = ''
+        confirmation[name[b]] = []                                      #用来存储不同部门的四个值：０是设计确认颜色值，１是设计确认状态文字，２是测试版确认状态的颜色值，３是测试版确认状态的文字。
+        confirmation[name[b]].append(design_col)
+        confirmation[name[b]].append(design)
+        confirmation[name[b]].append(check_col)
+        confirmation[name[b]].append(check)
+        b = b + 1       
+    
     current_uid = request.session['id'] #把当前登录用户的id传给页面，方便记录反馈人ID
     pro_feedback = models.project_feedback.objects.filter(project_id=pid).order_by("-feedback_date")
     fc = {}
