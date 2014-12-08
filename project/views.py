@@ -39,27 +39,27 @@ def register(request,uname=''):
                     user = User.objects.create_user(username=username, email=email, password=password)
                     user.save()
                 except:
-                    uf = UserForm() 
+                    uf = UserForm()
                     return render_to_response('register.html', {'list':department.objects.filter(~Q(id=100)),
                                                                 'error':'注册的用户名已存在'},
                                               context_instance=RequestContext(request))
                 user_new = uf.save()
-  
+
                 #如果是产品部门，加入产品部门权限组
                 depid = uf.cleaned_data['departmentid']
                 if depid == '3':
                     User.objects.get(username=username).groups.add(3)
-    
+
                 #登录
                 uid = models.user.objects.filter(username=username)[0].id
                 request.session['username'] = username
                 request.session['realname'] = realname
                 request.session['id'] = uid
-    
+
                 #Django 认证系统的登录
                 user = auth.authenticate(username=username, password=password)
                 auth.login(request, user)
-    
+
                 return HttpResponseRedirect("/personal_homepage")
         else:
             uf = UserForm()
@@ -73,14 +73,14 @@ def register(request,uname=''):
                 #往Django user表里再插入一条数据
                 username = uf.cleaned_data['username']
                 realname = uf.cleaned_data['realname']
-                email = username+"@ablesky.com"    
+                email = username+"@ablesky.com"
                 #如果是产品部门，加入产品部门权限组
                 depid = int(uf.cleaned_data['departmentid'])
                 if depid == 3:
                     User.objects.get(username=username).groups.add(3)
                 uid = models.user.objects.filter(username=username)[0].id
                 u = models.user(id=uid, username=username,
-                                       realname=realname,                                       
+                                       realname=realname,
                                        create_time=datetime.datetime.now(),
                                        department=department.objects.get(id=depid),
                                        isactived=1)
@@ -88,13 +88,13 @@ def register(request,uname=''):
                 request.session['username'] = username
                 request.session['realname'] = realname
                 request.session['id'] = uid
-    
+
                 #Django 认证系统的登录
                 user = auth.authenticate(username=username, password='assecret')
                 auth.login(request, user)
-    
+
                 return HttpResponseRedirect("/personal_homepage")
-        
+
         userinfo = models.user.objects.filter(username=uname)[0]
         return render_to_response('register.html', {'list':department.objects.filter(~Q(id=100)),
                                                     'info': userinfo})
@@ -138,13 +138,13 @@ def login(request):
             username = form.cleaned_data["username"]
             password = hashlib.md5(form.cleaned_data["password"]).hexdigest()
             isautologin = form.cleaned_data["isautologin"]
-            try:                
+            try:
                 user = auth.authenticate(username=username, password=form.cleaned_data["password"]) #先去ldap验证,如果没有再去django的User表里验证,一旦验证成功,返回用户名,不成功,返回None
-                if user != None:                   
+                if user != None:
                     isldap = models.user.objects.filter(username__exact=username)
                     if len(isldap) == 0: #说明该用户通过ldap第一次登录,数据库尚未存储该用户
                         newUser = User.objects.filter(username=username)[0]       #django User表
-                        newuser = models.user(username=username, password='1234', realname=newUser.first_name, 
+                        newuser = models.user(username=username, password='1234', realname=newUser.first_name,
                                               create_time=datetime.datetime.now(), department_id='100', isactived=1) #1234只是为了页面显示好看
                         newuser.save()
                         newUser.password = hashlib.md5('assecret').hexdigest()      #设置django的User表密码为assecret,否则注册后登录无法通过authenticate()验证.看代码的人可以知道ldap登录用户的密码，存在安全风险，不过数据库中看不出来。
@@ -153,9 +153,9 @@ def login(request):
                         return HttpResponseRedirect(link)
                     elif isldap[0].department_id == 100:
                         link = str("/register/" + username)
-                        return HttpResponseRedirect(link) 
-                    
-                    _userset = models.user.objects.filter(username__exact=username)    
+                        return HttpResponseRedirect(link)
+
+                    _userset = models.user.objects.filter(username__exact=username)
                     if _userset.count() >= 1:
                         _user = _userset[0]
                         if _user.isactived:
@@ -164,34 +164,34 @@ def login(request):
                             request.session['id'] = _user.id
                             auth.login(request, user)
                         else:
-                            template_var["error"] = _(u'您输入的帐号未激活，请联系管理员') 
+                            template_var["error"] = _(u'您输入的帐号未激活，请联系管理员')
                             template_var["form"] = form
-                            return render_to_response("login.html", template_var, context_instance=RequestContext(request))  
+                            return render_to_response("login.html", template_var, context_instance=RequestContext(request))
                 else:
-                    template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')  
+                    template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
                     template_var["form"] = form
-                    return render_to_response("login.html", template_var, context_instance=RequestContext(request))                          
+                    return render_to_response("login.html", template_var, context_instance=RequestContext(request))
             except:
                 template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
                 template_var["form"] = form
-                return render_to_response("login.html", template_var, context_instance=RequestContext(request))    
-            
-            response = HttpResponseRedirect("/personal_homepage")           
+                return render_to_response("login.html", template_var, context_instance=RequestContext(request))
+
+            response = HttpResponseRedirect("/personal_homepage")
             if isautologin:
                 response.set_cookie("username", username, 3600)
-                response.set_cookie("password", password, 3600)   
+                response.set_cookie("password", password, 3600)
             return response
-        
+
     template_var["form"] = form
-    return render_to_response("login.html", template_var, context_instance=RequestContext(request))  
+    return render_to_response("login.html", template_var, context_instance=RequestContext(request))
 
 def strQ2B(ustring):
     """全角转半角"""
     rstring = ""
     for uchar in ustring:
         inside_code=ord(uchar)
-        if inside_code == 12288:                              #全角空格直接转换            
-            inside_code = 32 
+        if inside_code == 12288:                              #全角空格直接转换
+            inside_code = 32
         elif (inside_code >= 65281 and inside_code <= 65374): #全角字符（除空格）根据关系转化
             inside_code -= 65248
 
@@ -312,7 +312,7 @@ def new_project(request, pid='', nid=''):
                     remark_p=remark_p,isactived=1, praise_p=pnum)
             pro.save()
             #存完项目，存相关产品测试开发等人员信息
-            
+
             #如果是新建就取出刚才存在的项目id,否则是编辑则删掉此前的用户与项目的关系
             if pid == '' or nid =='1':
                 pid = models.project.objects.filter\
@@ -325,7 +325,7 @@ def new_project(request, pid='', nid=''):
             for i in range(len(relateduser)):
                 #把相关人员的id存入列表中
                 relateduser[i] = relateduser[i].replace(" ", "").split(",")
-                if len(relateduser[i]):          
+                if len(relateduser[i]):
                     #存用户与项目的关系
                     for uid in relateduser[i]:
                         if uid:
@@ -352,7 +352,7 @@ def new_project(request, pid='', nid=''):
                     project_statistics = models.project_statistics(
                                         project_id=pid, item=item, db=db, sql=sql)
                     project_statistics.save()
-            
+
             # musername = models.user.objects.get(id=leaderid).username
             # #给项目负责人加入到项目负责人权限组
             # User.objects.get(username=musername).groups.add(4)
@@ -363,10 +363,10 @@ def new_project(request, pid='', nid=''):
                 if m[0]:
                     mname = models.user.objects.get(id=m[0]).username
                     User.objects.get(username=mname).groups.add(m[1])
-      
+
             #发消息
             sendmessage(request,status,pid)
-                           
+
             return redirect('/projectlist/')
         else:
             dateloop = ['psdate', 'pedate', 'dsdate', 'dedate', 'tsdate', 'tedate', 'startdate', 'plandate']
@@ -388,7 +388,7 @@ def new_project(request, pid='', nid=''):
             relateduser3 = request.POST['relateduser3']
             relateduser4 = request.POST['relateduser4']
             relateduser5 = request.POST['relateduser5']
-            
+
             relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
             people = []
             allpeople = []
@@ -396,7 +396,7 @@ def new_project(request, pid='', nid=''):
                 relateduser[i] = relateduser[i].replace(" ", "").split(",")
             # pd = []
             # dev = []
-            # qa = []           
+            # qa = []
                 for uid in relateduser[i]:
                     if uid:
                         tuser = models.user.objects.get(id=int(uid))
@@ -487,7 +487,7 @@ def sendmessage(request,status,pid):
             except KeyError:
                 return HttpResponseRedirect("/nologin")
             else:
-                flag = 1                        
+                flag = 1
         else:
             if prolist[0].isactived != 2:
                 try:
@@ -496,11 +496,11 @@ def sendmessage(request,status,pid):
                     return HttpResponseRedirect("/nologin")
                 else:
                     flag = 1
-        if flag == 1:        
+        if flag == 1:
             usrid = request.session['id']
             project = models.project.objects.get(id=pid)
             time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-            content = project.project + u"于" + time + u"设计完成，请立即查看设计图并确认！"    
+            content = project.project + u"于" + time + u"设计完成，请立即查看设计图并确认！"
             uids = []
             if project.business_man_id > 0 :
                 uids.append(project.business_man_id)
@@ -545,8 +545,8 @@ def sendmessage(request,status,pid):
                                                               title="设计完成，请立即查看设计图并确认！" , \
                                                               status="未确认设计" , publication_date=datetime.datetime.now(), \
                                                               isactived=False)
-                pmessage.save() 
-                                                
+                pmessage.save()
+
 
 
 
@@ -563,7 +563,7 @@ def sendmessage(request,status,pid):
             except KeyError:
                 return HttpResponseRedirect("/nologin")
             else:
-                flag = 1                        
+                flag = 1
         else:
             if prolist[0].isactived != 3:
                 try:
@@ -572,11 +572,11 @@ def sendmessage(request,status,pid):
                     return HttpResponseRedirect("/nologin")
                 else:
                     flag = 1
-        if flag == 1:        
+        if flag == 1:
             usrid = request.session['id']
             project = models.project.objects.get(id=pid)
             time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
-            content = project.project + u"于" + time + u"已发测试版，请在上线前联系项目负责人并确认验收！"    
+            content = project.project + u"于" + time + u"已发测试版，请在上线前联系项目负责人并确认验收！"
             uids = []
             if project.business_man_id > 0 :
                 uids.append(project.business_man_id)
@@ -622,7 +622,7 @@ def sendmessage(request,status,pid):
                                                               status="项目未验收" , publication_date=datetime.datetime.now(), \
                                                               isactived=False)
                 pmessage.save()
-                
+
     #上线后插条公告,如果表中项目ID存在,排序看isactived是否为0,如果不存在该项目ID或最小的isactived=0,则插入公告
     if status == u"已上线":
         flag = 0
@@ -636,7 +636,7 @@ def sendmessage(request,status,pid):
             except KeyError:
                 return HttpResponseRedirect("/nologin")
             else:
-                flag = 1                        
+                flag = 1
         else:
             if prolist[0].isactived != 0:
                 try:
@@ -645,7 +645,7 @@ def sendmessage(request,status,pid):
                     return HttpResponseRedirect("/nologin")
                 else:
                     flag = 1
-        if flag == 1:        
+        if flag == 1:
             usrid = request.session['id']
             project = models.project.objects.get(id=pid)
             time = datetime.datetime.now().strftime("%Y-%m-%d %H:%I:%S")
@@ -655,7 +655,7 @@ def sendmessage(request,status,pid):
                                       publication_date=datetime.datetime.now(), \
                                       isactived=False)
             pmessage.save()
-                    
+
             #先判断在项目上线之前有没有留言的人
             try:
                 related_user = models.project_feedback.objects.filter(project_id=pid)
@@ -682,20 +682,20 @@ def sendmessage(request,status,pid):
                         None
                     else:
                         for j in back_c_user:
-                            users.append(j.feedback_member_c_id)  
+                            users.append(j.feedback_member_c_id)
                 users = set(users)
                 for u in users:
                     uid = u
                     megid = message.id
                     pro_u_message = project_user_message(userid_id=uid, messageid_id=megid, project_id=pid, isactived='1')
                     pro_u_messages.append(pro_u_message)
-                models.project_user_message.objects.bulk_create(pro_u_messages)  
-            ### 
-                    
+                models.project_user_message.objects.bulk_create(pro_u_messages)
+            ###
+
             project.real_launch_date = datetime.datetime.now()
-            project.save()    
-      
-    
+            project.save()
+
+
 def project_list(request):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
@@ -733,7 +733,7 @@ def project_list(request):
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
-    notices = noticess[:5]   	
+    notices = noticess[:5]
     ##
     projectlist = None
     puser = None
@@ -775,7 +775,7 @@ def project_list(request):
             type_p = search_form.cleaned_data['type_p']
             #先按状态排序，状态相同按priority排
             projectlist = models.project.objects.filter().order_by("-status_p","-priority")
-            
+
 
 
     else:
@@ -831,7 +831,7 @@ def project_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-    # 项目使用量统计    
+    # 项目使用量统计
     pcount = models.project_statistics.objects.all()
     for c in pcount:
         sql = c.sql
@@ -840,31 +840,31 @@ def project_list(request):
             cursor = connections[db].cursor()
             cursor.execute(sql)
             total = cursor.fetchall()
-            total_list = ''       
+            total_list = ''
             for a in total:         #适合显示1列数据，若要多显示，则需要对a继续循环
                     if len(total) == 1:         #此处if, else为了调整样式好看
                         total_list = str(a[0])
                     else:
                         total_list = total_list + str(a[0]) + '\r'
-                  
+
             c.total = total_list
             c.save()
             cursor.close()
         except:
             pass
-                
+
     p1 = models.project_statistics.objects.distinct().values('project_id')
     filter_project =[] #每个项目只返回一组统计值最大的记录,方便页面显示
     for x in p1:
         filter_project.append(pcount.filter(project_id=x['project_id']).order_by("total")[0])
-    
+
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
             'puser':puser, 'relateduser':relateduser,'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
             'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p,"type_p":type_p, 'notices':notices, \
             'count':count, "logintag":logintag, "changetag":changetag, "delaytag":delaytag, "deletetag":deletetag,\
             "edittag":edittag, "user_id":user_id, "auth_changetag":auth_changetag, "createtag":createtag}))
-    
+
 def praise(request ,pid):
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):
         ip = request.META['HTTP_X_FORWARDED_FOR']
@@ -883,7 +883,7 @@ def isNone(s):
         return True
     else:
         return False
-    
+
 def detail(request, pid='', nid=''):
     """
     pid是项目id
@@ -893,7 +893,7 @@ def detail(request, pid='', nid=''):
         request.session['id']
     except:
         return HttpResponseRedirect('/login')
-    
+
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
@@ -907,7 +907,7 @@ def detail(request, pid='', nid=''):
         p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id[0], project_user__roles=item_id[1]))
 
     related_user = {'qa':p_role[0], 'dev': devs, 'pd': p_role[1], 'bm': bms, 'cs': p_role[2], 'op': ops}
-   
+
 
     dt_temp = {}
     dt = {}
@@ -931,12 +931,12 @@ def detail(request, pid='', nid=''):
     pro_sql = models.project_statistics.objects.filter(project_id=pid)
     sql = ''
     for p in pro_sql:
-        sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 
+        sql = sql + p.item + ':' + p.db + ':' + p.sql + ';'
     if sql=='':
         sql_status = '未填写'
     else:
         sql_status = '已填写'
-#各部门负责人确认状态  
+#各部门负责人确认状态
     confirmation = {}
     bm_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='业务')
     op_status = models.project_operator_bussniess_message.objects.filter(project_id=pid, user_type='运营')
@@ -946,11 +946,11 @@ def detail(request, pid='', nid=''):
     b = 0 #用来控制名字
     for sec in conf_status:
         a = 0
-        design_col = 'red' 
+        design_col = 'red'
         check_col = 'red'
         if sec:
             check = ''
-            for item in sec:            
+            for item in sec:
                 if item.confirm_design_date:
                     design_col = '#339966'
                     design_date = item.confirm_design_date
@@ -960,7 +960,7 @@ def detail(request, pid='', nid=''):
                         check_col ='#339966'
                         check_date = item.check_date
                         check = check_date.strftime("%Y-%m-%d ") + item.status
-                    else:                    
+                    else:
                         if a == 0:
                             design = item.status
                         else:
@@ -971,7 +971,7 @@ def detail(request, pid='', nid=''):
             confirmation[name[b]].append(design)
             confirmation[name[b]].append(check_col)
             confirmation[name[b]].append(check)
-            b = b + 1       
+            b = b + 1
 
     current_uid = request.session['id'] #把当前登录用户的id传给页面，方便记录反馈人ID
     pro_feedback = models.project_feedback.objects.filter(project_id=pid).order_by("-feedback_date")
@@ -979,18 +979,18 @@ def detail(request, pid='', nid=''):
     for item in pro_feedback:
         feedback_comment = models.project_feedback_comment.objects.filter(feedbackid_id=item.id).order_by("-feedback_date_c")
         fc[item] = feedback_comment
-    
+
 #    print sorted(fc.iteritems(), key=lambda d:d[0].id, reverse = True)  如果想按评论也倒序显示，可以使用这句先将字典变成列表
-         
+
     try:
-        request.user 
-        auth_id = [pro.leader_p_id, pro.designer_p_id, pro.tester_p_id, 
-                   pro.business_man_id, pro.operator_p_id, pro.customer_service_id]            
+        request.user
+        auth_id = [pro.leader_p_id, pro.designer_p_id, pro.tester_p_id,
+                   pro.business_man_id, pro.operator_p_id, pro.customer_service_id]
         if(request.user.has_perm('auth.change_permission') or request.session['id'] in auth_id):
             editboolean = True
     finally:
         if '/detail/' in request.path:
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean,
                    'sql': sql_status, 'confirmation': confirmation, 'curuid': current_uid, 'feedback': [len(pro_feedback), fc]}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
@@ -1039,8 +1039,8 @@ def project_feedback(request):  #也可以写在detail里，这样更清晰
         f.save()
         link = '/detail/' + str(pid)
         return HttpResponseRedirect(link)
-        
-            
+
+
 def feedback_comment(request):
     try:
         request.session['id']
@@ -1056,12 +1056,12 @@ def feedback_comment(request):
         else:
             link = '/detail/' + str(pid)
             return HttpResponseRedirect(link)
-        fc = models.project_feedback_comment(feedbackid_id=feedbackid, feedback_member_c_id=replymid, comment=comment, 
+        fc = models.project_feedback_comment(feedbackid_id=feedbackid, feedback_member_c_id=replymid, comment=comment,
                                              feedback_date_c=datetime.datetime.now())
         fc.save()
         link = '/detail/' + str(pid)
         return HttpResponseRedirect(link)
-        
+
 # def show_person(request):
 #     roles = request.GET['role']
 #     keys = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
@@ -1096,7 +1096,7 @@ def psearch(request):
     role = request.GET['role']
     ptype = 0
     ptypes = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
-    
+
     if len(key) == 0:
         print "0000000"
         if role == 'dev':
@@ -1118,7 +1118,7 @@ def psearch(request):
                 Q(department_id=9) | Q(department_id=7) | Q(department_id=6), Q(isactived=1))
         else:
             prs = models.user.objects.filter(realname__contains=key, department_id=ptypes[role], isactived=1)
-            
+
     search_rs = []
     if len(prs) > 0:
         for item in prs:
@@ -1140,26 +1140,26 @@ def user_info(request):
             project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
             projectids = []
             for p in project_user_list:
-                projectids.append(p.project.id) 
-            projectlist = projectlist.filter(pk__in = projectids)       
+                projectids.append(p.project.id)
+            projectlist = projectlist.filter(pk__in = projectids)
             res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")
             pro_num=res.count()
             result['pro_num'] = pro_num
-   
+
             userid = request.session['id']
             messsage = project_user_message.objects.filter(userid_id = userid)
             message_num = messsage.count()
             result['message_num'] = message_num
-                       
+
             username = request.session['username']
             realname = request.session['realname']
             result['username'] = username
-            result['realname'] = realname      
+            result['realname'] = realname
     except KeyError:
             result['pro_num'] = 0
             result['message_num'] = 0
             result['username'] = 'GUEST'
-            result['realname'] = 'GUEST' 
+            result['realname'] = 'GUEST'
     rs = json.dumps(result)
     return HttpResponse(rs)
 #homepage
@@ -1187,13 +1187,13 @@ def personal_homepage(request):
     if request.user.has_perm('project.add_project_delay'):
         delaytag = 1
     #暂停
-    pausetag = 0 
+    pausetag = 0
     if request.user.has_perm('project.delete_project'):
-        pausetag = 1  
+        pausetag = 1
     #删除
     deletetag = 0
     if request.user.has_perm('project.delete_project'):
-        deletetag = 1 
+        deletetag = 1
     pm=0
     if request.user.has_perm("auth.change_permission"):
             pm = 1
@@ -1216,10 +1216,10 @@ def personal_homepage(request):
         relateduser[p.project.id] = uname
     #print relateduser
     projectlist = projectlist.filter(pk__in = projectids)
-    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
+    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'运营推广')).order_by("-id")
     puser = models.project_user.objects.all()
-    
+
     """分页"""
     paginator = Paginator(result1, 25)
     page = request.GET.get('page')
@@ -1245,14 +1245,14 @@ def personal_homepage(request):
     messagess = []
     for test in tests:
         lists.append(test.messageid_id)
-    messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')  
+    messagess = public_message.objects.filter(pk__in = lists).filter(type_p = "message").order_by('-id')
     count = messagess.count()
-    messages = messagess[:4]   
+    messages = messagess[:4]
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'relateduser': relateduser, 'messages': messages, \
          'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
-    delpro=get_object_or_404(project,pk=int(id))    
+    delpro=get_object_or_404(project,pk=int(id))
     delpro.delete()
     return HttpResponseRedirect(url)
 def pauseproject(request, id, url):
@@ -1272,9 +1272,9 @@ def delayproject(request, url):
             protitle = delpro.project
             delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
                 apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason, isactived = 1)
-            delay_p.save()                   
+            delay_p.save()
     return HttpResponseRedirect(url)
-def changedesign(request, url):          
+def changedesign(request, url):
     if request.method == 'POST':
         form = changedesignForm(request.POST)
         if form.is_valid():
@@ -1290,13 +1290,13 @@ def changedesign(request, url):
              publication_date = datetime.datetime.now(), isactived = "1")
             pub_message.save()
             related_user = models.user.objects.filter(project_user__project_id = changeid).distinct()
-            message = public_message.objects.filter(project=changeid).order_by("-id")[0]            
+            message = public_message.objects.filter(project=changeid).order_by("-id")[0]
             for i in related_user:
                 uid = i.id
                 megid = message.id
                 pro_u_message = project_user_message(userid_id = uid, messageid_id = megid, \
                     project_id = changeid, isactived = '1')
-                pro_u_message.save()           
+                pro_u_message.save()
     return HttpResponseRedirect(url)
     #return render_to_response('personal_homepage.html', {'form': form})
 
@@ -1635,7 +1635,7 @@ def confirmmessage(request):
         useid = request.session['id']
     if request.method == 'POST':
         form = ConmessageForm(request.POST)
-        if form.is_valid(): 
+        if form.is_valid():
             #public_message修改状态已确认
             messageid = form.cleaned_data['conmessageid']
             conmessage = public_message.objects.get(publisher=useid, id=messageid)
@@ -1703,7 +1703,7 @@ def emptyehistory(request):
     if request.method == 'POST':
         for test in tests:
             test.delete()
-    return HttpResponseRedirect('/historymessage/')    
+    return HttpResponseRedirect('/historymessage/')
 def initdata(request):
     #auth_group
     group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理、发布相似')
@@ -1717,13 +1717,13 @@ def initdata(request):
     group5 = Group(id=5,name='产品负责人权限--编辑')
     group5.save()
     group6 = Group(id=6,name='测试负责人权限--编辑')
-    group6.save()  
+    group6.save()
     group7 = Group(id=7,name='业务负责人权限--编辑')
-    group7.save() 
+    group7.save()
     group8 = Group(id=8,name='运营负责人权限--编辑')
-    group8.save() 
+    group8.save()
     group9 = Group(id=9,name='客服负责人权限--编辑')
-    group9.save() 
+    group9.save()
     #auth_group_permissions
     group1.permissions.add(25)
     group1.permissions.add(26)
@@ -1767,7 +1767,7 @@ def initdata(request):
     depart13 = department(id=13,department='项目研发部',isactived=1)
     depart13.save()
     depart100 = department(id=100,department='blank',isactived=1)
-    depart100.save()   
+    depart100.save()
     return HttpResponse("恭喜你,初始化数据成功~")
 
   
