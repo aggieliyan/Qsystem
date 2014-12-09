@@ -161,6 +161,7 @@ $(document).ready(function(){
           $(this).parent().remove();
         }
         count_relateduser()
+        set_other_master()
     });
     
     //点添加，弹出人员选择框展示数据
