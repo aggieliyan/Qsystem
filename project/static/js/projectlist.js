@@ -49,33 +49,33 @@ $(document).ready(function(){
        $.trim($("#as").val())
      });    
 
-    //超过上线日期时显示橙色
-    var cellIndex=parseInt($(".procolor tr").length);
-    for(var i=0; i<cellIndex;i++) {
-      var time =document.getElementsByName("datetime")[i].value;
-      var stut = $(".basecolor").eq(i).children().eq(table_list['项目状态']).text();
-      var d=new Date(Date.parse(time.replace(/-/g, "/")));
-      var d=new Date(d.getTime() + 1*24*60*60*1000);
-      var curDate=new Date();
-      //var curDate1=curDate.toLocaleDateString(); 
-      if(stut !='暂停' && stut != '已上线' && stut != '运营推广'){
-        if(d){
-          if(d < curDate){
-            $(".basecolor").eq(i).css("background-color","#ff9933"); }
-      }      
-    };
+    // //超过上线日期时显示橙色
+    // var cellIndex=parseInt($(".procolor tr").length);
+    // for(var i=0; i<cellIndex;i++) {
+    //   var time =document.getElementsByName("datetime")[i].value;
+    //   var stut = $(".basecolor").eq(i).children().eq(table_list['项目状态']).text();
+    //   var d=new Date(Date.parse(time.replace(/-/g, "/")));
+    //   var d=new Date(d.getTime() + 1*24*60*60*1000);
+    //   var curDate=new Date();
+    //   //var curDate1=curDate.toLocaleDateString(); 
+    //   if(stut !='暂停' && stut != '已上线' && stut != '运营推广'){
+    //     if(d){
+    //       if(d < curDate){
+    //         $(".basecolor").eq(i).css("background-color","#ff9933"); }
+    //   }      
+    // };
 
-    var project_type = $(".basecolor").eq(i).children().eq(table_list['类型']).text();
-    if(project_type == '产品'){
-      var list = {'需求讨论中':4,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
-    }
-    else{
-      var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
-    }
+    // var project_type = $(".basecolor").eq(i).children().eq(table_list['类型']).text();
+    // if(project_type == '产品'){
+    //   var list = {'需求讨论中':4,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+    // }
+    // else{
+    //   var list = {'需求讨论中':3,'设计中':4, '设计完成':4, '开发中':5, '测试中':6, '运营推广':7};
+    // }
 
-    $(".basecolor").eq(i).children().eq(list[stut]+1).css({'color': "#339966",'font-weight':'bold'});
+    // $(".basecolor").eq(i).children().eq(list[stut]+1).css({'color': "#339966",'font-weight':'bold'});
 
-    };
+    // };
 
     $(function(){
    //正在进行中给title赋值

@@ -736,7 +736,6 @@ def project_list(request):
     notices = noticess[:5]   	
     ##
     projectlist = None
-    puser = None
     project_id = ""if isNone(request.GET.get("id"))else request.GET.get("id")
     project_name = ""if isNone(request.GET.get("project"))else request.GET.get("project")
 
@@ -760,7 +759,6 @@ def project_list(request):
 
 
     project_user_list = None
-    puser = project_user.objects.all()
     #projectlist = project.objects.all()
     if request.method == 'POST':
         search_form = ProjectSearchForm(request.POST)
@@ -775,9 +773,6 @@ def project_list(request):
             type_p = search_form.cleaned_data['type_p']
             #先按状态排序，状态相同按priority排
             projectlist = models.project.objects.filter().order_by("-status_p","-priority")
-            
-
-
     else:
         projectlist = models.project.objects.all().order_by("-status_p","-priority")
     if not isNone(project_id):
@@ -804,9 +799,8 @@ def project_list(request):
         for p in project_user_list:
             projectids.append(p.project.id)
         projectlist = projectlist.filter(pk__in=projectids)
-
+    """将成员链接在一起放入字典中"""
     relateduser = {}
-
     for i in projectlist:
         list_user =  models.project_user.objects.filter(project = i.id)
         u_name = ''
@@ -815,12 +809,7 @@ def project_list(request):
             match = pattern.search(u_name)
             if not match:
                 u_name = u_name + ' ' + u.username.realname
-            #r.append(u.username.realname)
-            #print u.username.realname
-        #print r
         relateduser[i.id] = u_name
-    print relateduser
-
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
@@ -831,6 +820,49 @@ def project_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
+
+    #判断项目是否显示橙色和选中相应项目负责人
+    rendering = {}
+    for org in projectobj:
+        l = []
+        if org.status_p !=u'暂停' and org.status_p != u'已上线' :
+            time = datetime.datetime.now()
+            nowtime=time.strftime("%Y-%m-%d ") 
+            if org.expect_launch_date:
+                expect_date = org.expect_launch_date
+                if org.status_p != u'运营推广':
+                    if  expect_date.strftime("%Y-%m-%d ") < nowtime:
+                        stu_col = "style=background-color:#ff9933"
+                    else:
+                        stu_col =''
+                else:
+                    stu_col =''
+                l.append(stu_col)
+            else:
+                stu_col =''
+                l.append(stu_col) 
+        business_man = design = prom = tester = operator = customer_service = ''
+        if org.type_p == u'产品':
+            if org.status_p == u'需求讨论中' or org.status_p == u'设计中' or org.status_p == u'设计完成':                
+                design =  "style=color:#339966;font-weight:bold"    
+        else:
+            if org.status_p == u'需求讨论中':
+                business_man =  "style=color:#339966;font-weight:bold"
+            if org.status_p == u'设计中' or org.status_p == u'设计完成':
+                design =  "style=color:#339966;font-weight:bold"
+        if org.status_p == u'开发中':
+            prom = "style=color:#339966;font-weight:bold"
+        if org.status_p == u'测试中':
+            tester = "style=color:#339966;font-weight:bold"
+        if org.status_p == u'运营推广':
+            operator = "style=color:#339966;font-weight:bold"
+        l.append(business_man)
+        l.append(design)
+        l.append(prom)
+        l.append(tester)
+        l.append(operator)
+        l.append(customer_service)
+        rendering[org.id]= l
     # 项目使用量统计    
     pcount = models.project_statistics.objects.all()
     for c in pcount:
@@ -859,7 +891,7 @@ def project_list(request):
         filter_project.append(pcount.filter(project_id=x['project_id']).order_by("total")[0])
     
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
-            'puser':puser, 'relateduser':relateduser,'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
+            'rendering':rendering, 'relateduser':relateduser,'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
             'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p,"type_p":type_p, 'notices':notices, \
             'count':count, "logintag":logintag, "changetag":changetag, "delaytag":delaytag, "deletetag":deletetag,\
@@ -1129,7 +1161,6 @@ def psearch(request):
     ptypes = {"tes":1, "dev":2, "pro":3, "sal":12, "ope":8, "com":7}
     
     if len(key) == 0:
-        print "0000000"
         if role == 'dev':
             prs = models.user.objects.filter(Q(isactived=1),Q(department_id=ptypes[role])|Q(department_id=4)|Q(department_id=5)|Q(department_id=13))
         elif role == 'sal':
@@ -1198,41 +1229,34 @@ def personal_homepage(request):
     try:
         request.session['username']
         projectlist = models.project.objects.filter()
-        #print projectlist
         project_user_list = models.project_user.objects.filter(username__username = request.session['username'])
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
-    changetag = 0
+    changetag = edittag =edittag = delaytag = pausetag = deletetag = pm = 0
     if request.user.has_perm('project.change_public_message'):
         changetag = 1
     #编辑
-    edittag = 0
     if request.user.has_perm('project.change_project'):
         edittag = 1
     #延期申请权限
-    userid1 = 0
     if request.user.is_authenticated():
         userid1 = request.session['id']
-    delaytag = 0
     if request.user.has_perm('project.add_project_delay'):
         delaytag = 1
     #暂停
-    pausetag = 0 
     if request.user.has_perm('project.delete_project'):
         pausetag = 1  
     #删除
-    deletetag = 0
     if request.user.has_perm('project.delete_project'):
         deletetag = 1 
-    pm=0
     if request.user.has_perm("auth.change_permission"):
-            pm = 1
+        pm = 1
     projectids = []
+    #用于存储相应项目成员
     relateduser={}
     for p in project_user_list:
         projectids.append(p.project.id)
-        print p.project.id
         user = models.project_user.objects.filter(project = p.project.id)
         uname=''
         for u in user:
@@ -1240,17 +1264,49 @@ def personal_homepage(request):
             match = pattern.search(uname)
             if not match:
                 uname = uname + ' ' + u.username.realname
-                #print match.group()                            
-            #r.append(u.username.realname)
-            #print u.username.realname
-        #print uname
         relateduser[p.project.id] = uname
-    #print relateduser
     projectlist = projectlist.filter(pk__in = projectids)
     result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'运营推广')).order_by("-id")
-    puser = models.project_user.objects.all()
-    
+    #判断项目是否显示橙色和选中相应项目负责人
+    rendering = {}
+    for org in result:
+        l = []
+        if org.status_p !=u'暂停' and org.status_p != u'已上线':
+            time = datetime.datetime.now()
+            nowtime=time.strftime("%Y-%m-%d ") 
+            if org.expect_launch_date:
+                expect_date = org.expect_launch_date
+                if  expect_date.strftime("%Y-%m-%d ") < nowtime:
+                    stu_col = "style=background-color:#ff9933"
+                else:
+                    stu_col =''
+                l.append(stu_col)
+            else:
+                stu_col =''
+                l.append(stu_col) 
+        business_man = design = prom = tester = operator = customer_service = ''
+        if org.type_p == u'产品':
+            if org.status_p == u'需求讨论中' or org.status_p == u'设计中' or org.status_p == u'设计完成':                
+                design =  "style=color:#339966;font-weight:bold"    
+        else:
+            if org.status_p == u'需求讨论中':
+                business_man =  "style=color:#339966;font-weight:bold"
+            if org.status_p == u'设计中' or org.status_p == u'设计完成':
+                design =  "style=color:#339966;font-weight:bold"
+        if org.status_p == u'开发中':
+            prom = "style=color:#339966;font-weight:bold"
+        if org.status_p == u'测试中':
+            tester = "style=color:#339966;font-weight:bold"
+        if org.status_p == u'运营推广':
+            operator = "style=color:#339966;font-weight:bold"
+        l.append(business_man)
+        l.append(design)
+        l.append(prom)
+        l.append(tester)
+        l.append(operator)
+        l.append(customer_service)
+        rendering[org.id]= l    
     """分页"""
     paginator = Paginator(result1, 25)
     page = request.GET.get('page')
@@ -1280,7 +1336,7 @@ def personal_homepage(request):
     count = messagess.count()
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
-        {'projectobj':projectobj, 'result':result, 'result1':result1, 'puser':puser, 'relateduser': relateduser, 'messages': messages, \
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'relateduser': relateduser,'rendering': rendering, 'messages': messages, \
          'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,id,url):
     delpro=get_object_or_404(project,pk=int(id))    
@@ -1314,8 +1370,6 @@ def changedesign(request, url):
             dpath = form.cleaned_data['dpath'].replace('\r\n','<br/> ')
             chd = models.project.objects.get(id = changeid)
             uid = request.session['id']
-            #chd.blueprint_p=dpath
-            #chd.save()
             string = chd.project+u' : ' + '<br/> ' +cont + '<br/> ' + dpath
             pub_message = public_message(project = changeid, publisher = uid, content = string, type_p = "message",\
              publication_date = datetime.datetime.now(), isactived = "1")

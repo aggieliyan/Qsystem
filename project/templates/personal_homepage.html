@@ -95,24 +95,25 @@
                 </tr>
               </thead>
               <tbody id="group_one" class="procolor">
-                {% for res in result %}                                          
-                  <tr class="basecolor">                     
+                {% for res in result %} 
+                {% for i,j in rendering.items %} 
+                    {% if i == res.id %}                                                    
+                  <tr class="basecolor" {{j.0}}>                                      
                     <td>{{res.priority}}</td>
                     <td><a href="{% url 'prodetail' res.id %}">{{res.project}}</a>
                     <td>{{res.type_p}}</td>
-                    <td>{{res.business_man.realname}}</td>
-                    <td>{{res.designer_p.realname}}</td>
-                    <td>{{res.leader_p.realname}}</td>                    
-                    <td>{{res.tester_p.realname}}</td>
-                    <td>{{res.operator_p.realname}}</td>
-                    <td>{{res.customer_service.realname}}</td>
+                    <td {{j.1}}>{{res.business_man.realname}}</td>
+                    <td {{j.2}}>{{res.designer_p.realname}}</td>
+                    <td {{j.3}}>{{res.leader_p.realname}}</td>                    
+                    <td {{j.4}}>{{res.tester_p.realname}}</td>
+                    <td {{j.5}}>{{res.operator_p.realname}}</td>
+                    <td {{j.6}}>{{res.customer_service.realname}}</td>
                     <td>
                     {% for i,j in relateduser.items %} 
                     {% if i == res.id %}
                     {{j}}
                     {% endif %}
-                    {% endfor %}
-                                              
+                    {% endfor %}                                              
                   </td>
                     <td>{{res.start_date|date:"Y-m-d" }}</td>
                     <td >{{res.expect_launch_date|date:"Y-m-d"}}</td>
@@ -151,6 +152,8 @@
                       {% endif %}                     
                       <a href="{% url 'feedback' res.id %}">去反馈</a>             
                   </td>
+                  {% endif %}                    
+                    {% endfor %}
                   {% endfor %}
                   {% endif %} 
                 </tr>                
@@ -237,11 +240,9 @@
         {% if projectobj.has_previous %}
             <a href="?page={{ projectobj.previous_page_number }}"> << </a>
         {% endif %}
-
         <span class="current">
             第 {{ projectobj.number }} 页，共 {{ projectobj.paginator.num_pages }}页
         </span>
-
         {% if projectobj.has_next %}
             <a href="?page={{ projectobj.next_page_number }}"> >> </a>
         {% endif %}
@@ -253,8 +254,7 @@
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>    
+    <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js"></script>    
     <script type="text/javascript" src="/static/js/home_page.js"></script> 
     <script type="text/javascript" src="/static/jquery/jquery.cookie.js"></script>        
 {% endblock %}

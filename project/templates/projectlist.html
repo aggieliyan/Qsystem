@@ -171,7 +171,9 @@
                             </thead>
                             <tbody id="group_one" class="procolor">
                                 {% for p in projectobj %}
-                                <tr class="basecolor">
+                                {% for i,j in rendering.items %}
+                                {% if i == p.id %}
+                                <tr class="basecolor" {{j.0}}>
                                     <td>{{ p.id}}</td>
                                     <td>
                                         <!--a href="{% url 'prodetail' p.id %}">{{ p.project }}</a-->
@@ -201,12 +203,12 @@
                                     </td>
                                     <td>{{ p.type_p}}</td>
                                     <td>{{ p.priority }}</td>
-                                    <td>{{ p.business_man.realname}}</td>
-                                    <td>{{ p.designer_p.realname}}</td>
-                                    <td>{{ p.leader_p.realname}}</td>
-                                    <td>{{ p.tester_p.realname}}</td>
-                                    <td>{{ p.operator_p.realname}}</td>
-                                    <td>{{ p.customer_service.realname }}</td>
+                                    <td {{j.1}}>{{ p.business_man.realname}}</td>
+                                    <td {{j.2}}>{{ p.designer_p.realname}}</td>
+                                    <td {{j.3}}>{{ p.leader_p.realname}}</td>
+                                    <td {{j.4}}>{{ p.tester_p.realname}}</td>
+                                    <td {{j.5}}>{{ p.operator_p.realname}}</td>
+                                    <td {{j.6}}>{{ p.customer_service.realname }}</td>
                                     <td>
                                     {% for i,j in relateduser.items %}
                                     {% if i == p.id %}
@@ -268,6 +270,8 @@
                                         {% endif %}
                                          <a href="{% url 'feedback' p.id %}">去反馈</a>
                                     </td>
+                                    {% endif %}                    
+                                    {% endfor %}
                                    {% endfor %}
                                 </tr>
 
@@ -304,7 +308,6 @@
 {% block js %}
 <script src="../static/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="../static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../static/js/projectlist.js"></script>
 
 <script type="text/javascript">
