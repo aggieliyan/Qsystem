@@ -11,11 +11,12 @@
     <!-- Bootstrap -->
     <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet" media="screen">
-    <link href="/static/css/tankuang.css" rel="stylesheet" media="screen">
     <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'css/projectlist.css' %}" rel="stylesheet" media="screen">
-
+    <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet" media="screen">
+    <script type="text/javascript">
+      document.write( "<link href='/static/css/tankuang.css?v=" + Math.random() + "' rel='stylesheet' media='screen'>" )
+      document.write( "<link href='/static/css/projectlist.css?v=" + Math.random() + "' rel='stylesheet' media='screen'>" )
+    </script>
 {% endblock %}
 {% block content %}
 <body id="mybody">
@@ -308,8 +309,9 @@
 {% block js %}
 <script src="../static/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="../static/js/projectlist.js"></script>
-
+<script type="text/javascript">
+  document.write( "<script type='text/javascript' src='../static/js/projectlist.js?v=" + Math.random() + "'></s" + "cript>" )
+</script>
 <script type="text/javascript">
       $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
