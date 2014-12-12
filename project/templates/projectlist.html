@@ -228,7 +228,7 @@
                                         {% if p.status_p == "运营推广" or p.status_p == "暂停"%}
 
                                             {% if createtag == 1 %}
-                                                <a href="{% url 'similarpro' p.id  1 %}"><img src='../static/img/copypro.png' style='margin-top:-7px' title='发布相似'></a>
+                                                <a href="{% url 'similarpro' p.id  1 %}" class = 'copypro' title='发布相似'></a>
                                             {% else %}
                                             {% endif %}
                                         {% else %}
@@ -264,7 +264,7 @@
                                                 {% else %}
                                                 {% endif %}
                                                 {% if createtag == 1 %}
-                                                    <a  href="{% url 'similarpro' p.id  1 %}"><img src='../static/img/copypro.png' style='margin-top:-7px' title='发布相似'></a>
+                                                    <a  href="{% url 'similarpro' p.id  1 % }" class='copypro' title='发布相似'><span></span></a>
                                                 {% else %}
                                                 {% endif %}
                                             {% endif %}

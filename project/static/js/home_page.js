@@ -188,7 +188,7 @@ $(function(){
           alert('延期日期或者延期理由不能为空');
         }
         else{
-          $("#chkdelay").attr("disabled","true");
+          $("#subdelay").attr("disabled","true");
           document.test1.submit();
           $('#myModal1').modal('hide');
         alert("您的申请已发送,请等待审批"); 

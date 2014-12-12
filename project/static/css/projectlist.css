@@ -153,7 +153,7 @@ body{
 
 body div{margin:0 auto;}
  .icon-calendar {
-  background: url("http://stat1.ablesky.cn/stata/images/livecourse/lcourse.png") no-repeat scroll 0 -37px transparent;
+  background-image: url("http://stat1.ablesky.cn/stata/images/livecourse/lcourse.png") no-repeat scroll 0 -37px transparent;
   margin-top: 0;
 }
 
@@ -180,6 +180,14 @@ body div{margin:0 auto;}
     float:left;
     overflow:hidden;
     text-overflow: ellipsis;
+}
+.copypro{
+  background-image: url('../img/copypro.png');
+  display: inline-block;
+  margin-top:2px;
+  height: 12px;
+  vertical-align: text-top;
+  width: 11px;
 }
 
 
