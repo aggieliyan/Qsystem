@@ -992,6 +992,7 @@ def detail(request, pid='', nid=''):
                         check_col ='#339966'
                         check_date = item.check_date
                         check = check_date.strftime("%Y-%m-%d ") + item.status
+                        design = ''
                     else:                    
                         if a == 0:
                             design = item.status
