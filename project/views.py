@@ -1071,6 +1071,7 @@ def project_feedback(request):  #也可以写在detail里，这样更清晰
             return HttpResponseRedirect(link)
         f = models.project_feedback(project_id=pid, feedback_member_id=mid, content=content, feedback_date=datetime.datetime.now())
         f.save()
+        #下面是给该项目的所有负责人发提醒
         fb_name = models.user.objects.get(id=mid).realname
         fb_pro_name = models.project.objects.get(id=pid).project
         fb_content = fb_name + '对"' + fb_pro_name + '"发表了一条反馈, 请到该项目详情页进行查看'
@@ -1088,6 +1089,7 @@ def project_feedback(request):  #也可以写在detail里，这样更清晰
                 ppmessage.append(models.project_user_message(userid_id=i, messageid_id=messageid,
                                                          project_id=pid, isactived=1))
         models.project_user_message.objects.bulk_create(ppmessage)
+        
         link = '/detail/' + str(pid)
         return HttpResponseRedirect(link)
         
@@ -1110,6 +1112,7 @@ def feedback_comment(request):
         fc = models.project_feedback_comment(feedbackid_id=feedbackid, feedback_member_c_id=replymid, comment=comment, 
                                              feedback_date_c=datetime.datetime.now())
         fc.save()
+        #有人回复后,反馈人会收到一个提醒.
         reply_name = models.user.objects.get(id=replymid).realname
         pro_name = models.project.objects.get(id=pid).project
         reply_message = reply_name + '回复了你对"' + pro_name + '"的反馈, 快到项目详情页面查看吧!'
@@ -1122,6 +1125,7 @@ def feedback_comment(request):
         messageid = public_message.objects.filter(publisher=replymid).order_by("-id")[0].id
         pum = models.project_user_message(userid_id=replyTo_id, messageid_id=messageid, project_id=pid, isactived=1)
         pum.save()
+        
         link = '/detail/' + str(pid)
         return HttpResponseRedirect(link)
         
