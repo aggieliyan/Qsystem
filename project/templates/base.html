@@ -5,14 +5,14 @@
     <title>{% block title %}{% endblock %}</title> 
     {% block head %}{% endblock %}
     <script type="text/javascript">
-      document.write( "<link  href='/static/css/commonhead.css?v=" + Math.random() + "' rel='stylesheet' media='screen'> " )
+      document.write( "<link  href='/static/css/common.min.css?v=" + Math.random() + "' rel='stylesheet' media='screen'> " )
     </script>
   </head>
  
   <body>
   <form name="form1" method="post">
   	<div class="top">
-	 <ul class="top_logo">
+	 <ul class="pic top_logo">
 	   <li><a href=""> </a></li>
 	 </ul>
 	 <ul class="top_memu" id="test">
@@ -24,8 +24,8 @@
 		  <li><a href="/personal_homepage" class='username'></a></li>
       <li><i> | </i></li>
       <li><a href="/logout/">退出</a></li>
-      <li><a class="nav-link notify-icon" href="/historymessage">&nbsp;</a>
-			<sup class="notify-tip" id="message-num">0</sup></li>
+      <li><a class="nav-link pic notify-icon" href="/historymessage">&nbsp;</a>
+			<sup class="pic notify-tip" id="message-num">0</sup></li>
 		</ul>
 	</div>
 </form>
@@ -37,7 +37,7 @@
     {% endblock %}
   <script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>
   <script type="text/javascript">
-    document.write( "<script type='text/javascript' src='/static/js/base.js?v=" + Math.random() + "'></s" + "cript>" )
+    document.write( "<script type='text/javascript' src='/static/js/base.min.js?v=" + Math.random() + "'></s" + "cript>" )
   </script> 
   {% block js %}
   {% endblock %}

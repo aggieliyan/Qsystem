@@ -10,19 +10,17 @@
     <title>项目管理系统</title>
     <!-- Bootstrap -->
     <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet" media="screen">
-    <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" media="screen">
     <script type="text/javascript">
-      document.write( "<link href='/static/css/tankuang.css?v=" + Math.random() + "' rel='stylesheet' media='screen'>" )
-      document.write( "<link href='/static/css/projectlist.css?v=" + Math.random() + "' rel='stylesheet' media='screen'>" )
+      document.write( "<link  href='/static/css/projectlist.min.css?v=" + Math.random() + "' rel='stylesheet' media='screen'> " )
     </script>
+    
 {% endblock %}
 {% block content %}
 <body id="mybody">
   {% if notices %}
   {% if count = 1 or count = 2 or count = 3 %}
-	<div class="notice notice_123">
+    <div class="notice notice_123">
     {% endif %}   
     {% if count = 4 %}
     <div class="notice notice_4">
@@ -33,24 +31,24 @@
     <div class="notice_title">
       <span><b>项目公告<span style="color:#ffa03e">({{count}}):</span></b></span>
     </div>
-		<div class="notice_content">
+        <div class="notice_content">
       {% for item in notices %}
       <p><a href="/notice/" class='nitice_content_c'>{{item.content}}</a></p>
       {% endfor %}
     </div>
-		{% if count > 5 %}
+        {% if count > 5 %}
     <div class="notice_content_excess">
       <a href="/notice/" style="color:#339666" >查看所有<span style="color:#ffa03e">>></span></a>
-		</div>
+        </div>
     {% endif %}
     </div>
     {% else %}
     <div class="notice notice_content_less">
       <div class="notice_title">
         <span><b>项目公告<span style="color:#ffa03e">(0):</span></b></span>
-		  </div>
+          </div>
       <p >暂无公告</p>
-    </div>	
+    </div>  
     {% endif %}    
     <form action="/projectlist/" id="searchform" method="post">
         {% csrf_token %}
@@ -127,7 +125,7 @@
                         </span>
                     </div>
                
- 				</div>
+                </div>
             </div>
             <button style="margin-left:5px; margin-top:10px;" class="btn btn-primary" type="button" onclick="searchform.submit()">搜索</button>
             <button style="margin-left:5px; margin-top:10px;" class="btn btn-primary" type="button" onclick="javascript:window.location.href='/newproject/'">创建项目</button>
@@ -174,7 +172,7 @@
                                 {% for p in projectobj %}
                                 {% for i,j in rendering.items %}
                                 {% if i == p.id %}
-                                <tr class="basecolor" {{j.0}}>
+                                <tr class="basecolor" {{j.1}}>
                                     <td>{{ p.id}}</td>
                                     <td>
                                         <!--a href="{% url 'prodetail' p.id %}">{{ p.project }}</a-->
@@ -204,20 +202,14 @@
                                     </td>
                                     <td>{{ p.type_p}}</td>
                                     <td>{{ p.priority }}</td>
-                                    <td {{j.1}}>{{ p.business_man.realname}}</td>
-                                    <td {{j.2}}>{{ p.designer_p.realname}}</td>
-                                    <td {{j.3}}>{{ p.leader_p.realname}}</td>
-                                    <td {{j.4}}>{{ p.tester_p.realname}}</td>
-                                    <td {{j.5}}>{{ p.operator_p.realname}}</td>
-                                    <td {{j.6}}>{{ p.customer_service.realname }}</td>
-                                    <td>
-                                    {% for i,j in relateduser.items %}
-                                    {% if i == p.id %}
-                                    
-                                    {{j}}
-                                    
-                                    {% endif %}
-                                    {% endfor %}
+                                    <td {{j.2}}>{{ p.business_man.realname}}</td>
+                                    <td {{j.3}}>{{ p.designer_p.realname}}</td>
+                                    <td {{j.4}}>{{ p.leader_p.realname}}</td>
+                                    <td {{j.5}}>{{ p.tester_p.realname}}</td>
+                                    <td {{j.6}}>{{ p.operator_p.realname}}</td>
+                                    <td {{j.7}}>{{ p.customer_service.realname }}</td>
+                                    <td>                            
+                                    {{j.0}}                           
                                     </td>
                                     <td>{{ p.start_date|date:"Y-m-d" }}</td>
                                     <td>{{ p.expect_launch_date|date:"Y-m-d" }}</td>
@@ -228,7 +220,7 @@
                                         {% if p.status_p == "运营推广" or p.status_p == "暂停"%}
 
                                             {% if createtag == 1 %}
-                                                <a href="{% url 'similarpro' p.id  1 %}" class = 'copypro' title='发布相似'></a>
+                                                <a href="{% url 'similarpro' p.id  1 %}" class = 'pic copypro' title='发布相似'></a>
                                             {% else %}
                                             {% endif %}
                                         {% else %}
@@ -264,7 +256,7 @@
                                                 {% else %}
                                                 {% endif %}
                                                 {% if createtag == 1 %}
-                                                    <a  href="{% url 'similarpro' p.id  1 % }" class='copypro' title='发布相似'><span></span></a>
+                                                    <a  href="{% url 'similarpro' p.id  1 % }" class='pic copypro' title='发布相似'><span></span></a>
                                                 {% else %}
                                                 {% endif %}
                                             {% endif %}
@@ -308,45 +300,8 @@
 {% endblock %}
 {% block js %}
 <script src="../static/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="../static/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
-  document.write( "<script type='text/javascript' src='../static/js/projectlist.js?v=" + Math.random() + "'></s" + "cript>" )
-</script>
-<script type="text/javascript">
-      $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-        language:"zh-CN",
-        minView:2
-      });
-
-      // $('.icon-fire').on('click',function(){
-      //     var $this = $(this);
-      //     var id = $this.data('id');
-      //     $.get("/praise/"+id+"/",function(data){
-
-      //        if(data){
-      //           $this.siblings('.p-count').html('('+ data + ')');
-      //        }else{
-      //            alert('error');
-      //        }
-
-
-      //     });
-      // });
-     {% comment %} function update(id){
-          var $this = $(this);
-          $.get("/praise/"+id+"/",function(data){
-
-              $this.siblings('span').html('('+ 1 + ')');
-
-               console.log($this);
-
-              });
-      }{% endcomment %}
-
-</script>
-<script src="../static/js/bootstrap.js"></script>
+      document.write( "<script type='text/javascript' src='/static/js/projectlist.min.js?v=" + Math.random() + "'></s" + "cript>" )
+    </script>
 {% endblock %}

@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     #login
     url('^$', 'project.views.project_list',name="index"),
     url('^login', 'project.views.login',name="login"),
-#    url('^register', 'project.views.register',name="register"),
+#    url('^register', 'project.views.register',name="register"),i
     ('^register/$',register),
     ('^register/([^/]+)/$',register),
     url('^logout','project.views.logout'),
@@ -28,7 +28,6 @@ urlpatterns = patterns('',
     url(r'^newproject/$', new_project),
     url(r'^newproject/(\d+)/$', new_project),
     url(r'^newproject/(\d+)/(\d+)$', new_project),
-       
    # url(r'^create/(\d*)', project.views.create, name='create'),
     # url(r'^showperson', project.views.show_person),
     url(r'^projectlist/', project.views.project_list),

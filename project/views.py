@@ -24,6 +24,7 @@ from django.contrib import auth
 from django.db import connections
 import datetime
 
+
 def register(request,uname=''):
     if uname =='':      #若是直接Q系统注册为空,以ldap第一次登录则会传来用户名
         if request.method == "POST":
@@ -328,7 +329,7 @@ def new_project(request, pid='', nid=''):
                 if len(relateduser[i]):          
                     #存用户与项目的关系
                     for uid in relateduser[i]:
-                        if uid:
+                        if uid: 
                             #先把要存的人都放入列表all_p_user中
                             project_user = models.project_user\
                             (username_id=uid, project_id=pid, roles=i, isactived=1)
@@ -693,30 +694,25 @@ def sendmessage(request,status,pid):
             ### 
                     
             project.real_launch_date = datetime.datetime.now()
-            project.save()    
-      
+            project.save() 
+
+def isNone(s):
+    if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
+        return True
+    else:
+        return False         
     
 def project_list(request):
+    createtag = logintag = changetag =delaytag = deletetag = edittag = user_id = auth_changetag = 0    
     #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/login")
-    #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
-    #以下是权限标记，createtag是发布相似的权限
-    createtag = 0
-    logintag = 0
-    changetag = 0
-    delaytag = 0
-    deletetag = 0
-    edittag = 0
-    user_id = 0
-    #PM的pM的tag
-    auth_changetag = 0
-    #判断是否登录
-    if  request.user.is_authenticated():
+    else:
         logintag = 1
         user_id = request.session['id']
+    #判断是否登录，给一个是否登录的标记值,logintag=1为已登录
+    #以下是权限标记，createtag是发布相似的权限
     if logintag == 1:
-
         if request.user.has_perm("project.change_public_message"):
             changetag = 1
         if request.user.has_perm('project.change_project'):
@@ -729,11 +725,10 @@ def project_list(request):
             auth_changetag = 1
         if  request.user.has_perm('project.add_project'):
             createtag = 1
-
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
-    notices = noticess[:5]   	
+    notices = noticess[:5]  	
     ##
     projectlist = None
     project_id = ""if isNone(request.GET.get("id"))else request.GET.get("id")
@@ -755,8 +750,6 @@ def project_list(request):
     if not isNone(end_date_s):
         end_time = time.strptime(end_date_s ,"%Y-%m-%d")
         end_date_s = datetime.date(*end_time[:3])
-
-
 
     project_user_list = None
     #projectlist = project.objects.all()
@@ -799,17 +792,8 @@ def project_list(request):
         for p in project_user_list:
             projectids.append(p.project.id)
         projectlist = projectlist.filter(pk__in=projectids)
-    """将成员链接在一起放入字典中"""
-    relateduser = {}
-    for i in projectlist:
-        list_user =  models.project_user.objects.filter(project = i.id)
-        u_name = ''
-        for u in list_user:
-            pattern = re.compile(u.username.realname)
-            match = pattern.search(u_name)
-            if not match:
-                u_name = u_name + ' ' + u.username.realname
-        relateduser[i.id] = u_name
+
+    """分页"""
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
@@ -821,30 +805,35 @@ def project_list(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
 
+    # print 'projectobj'
+    # print projectobj
+    print datetime.datetime.now()
+
     #判断项目是否显示橙色和选中相应项目负责人
     rendering = {}
+    proid = []
     for org in projectobj:
+        proid.append(org.id)
         l = []
+        stu_col = u_name = ''
+        business_man = design = prom = tester = operator = customer_service = ''
+        list_user =  models.project_user.objects.select_related().filter(project = org.id)
+        # u_name = list_user.distinct().values_list("username",flat=True)#查询出id下的所有成员，显示的是列表，通过外键取不出姓名
+        for u in list_user:
+            pattern = re.compile(u.username.realname)
+            match = pattern.search(u_name)
+            if not match:
+                u_name = u_name + ' ' + u.username.realname
+        l.append(u_name)   
         if org.status_p !=u'暂停' and org.status_p != u'已上线' :
             time = datetime.datetime.now()
             nowtime=time.strftime("%Y-%m-%d ") 
-            if org.expect_launch_date:
-                expect_date = org.expect_launch_date
-                if org.status_p != u'运营推广':
-                    if  expect_date.strftime("%Y-%m-%d ") < nowtime:
-                        stu_col = "style=background-color:#ff9933"
-                    else:
-                        stu_col =''
-                else:
-                    stu_col =''
-                l.append(stu_col)
-            else:
-                stu_col =''
-                l.append(stu_col) 
-        business_man = design = prom = tester = operator = customer_service = ''
-        if org.type_p == u'产品':
-            if org.status_p == u'需求讨论中' or org.status_p == u'设计中' or org.status_p == u'设计完成':                
-                design =  "style=color:#339966;font-weight:bold"    
+            expect_date = org.expect_launch_date
+            if org.expect_launch_date and org.status_p != u'运营推广' and expect_date.strftime("%Y-%m-%d ") < nowtime:
+                stu_col = "style=background-color:#ff9933"
+            l.append(stu_col)
+        if org.type_p == u'产品' and org.status_p == u'需求讨论中' or org.status_p == u'设计中' or org.status_p == u'设计完成':
+            design =  "style=color:#339966;font-weight:bold"    
         else:
             if org.status_p == u'需求讨论中':
                 business_man =  "style=color:#339966;font-weight:bold"
@@ -863,9 +852,15 @@ def project_list(request):
         l.append(operator)
         l.append(customer_service)
         rendering[org.id]= l
-    # 项目使用量统计    
-    pcount = models.project_statistics.objects.all()
-    for c in pcount:
+    # print rendering
+    print  datetime.datetime.now() 
+    # 项目使用量统计
+    filter_project =[]  
+    cpcount = []    
+    pcount = models.project_statistics.objects.filter(project_id__in = proid)
+    # p1 = models.project_statistics.objects.distinct().values_list('project_id',flat=True)
+    # pcount = list(set(p1).intersection(set(proid))) 
+    for c in pcount: 
         sql = c.sql
         db = c.db
         try:
@@ -884,14 +879,16 @@ def project_list(request):
             cursor.close()
         except:
             pass
-                
-    p1 = models.project_statistics.objects.distinct().values('project_id')
-    filter_project =[] #每个项目只返回一组统计值最大的记录,方便页面显示
-    for x in p1:
-        filter_project.append(pcount.filter(project_id=x['project_id']).order_by("total")[0])
-    
+        if c.project_id not in cpcount: #project_id 去重
+            filter_project.append(pcount.filter(project_id=c.project_id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
+            cpcount.append(c.project_id)   
+    # print 'pcount'
+    # print pcount    
+    # print 'filter_project'
+    # print filter_project
+    print datetime.datetime.now()
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
-            'rendering':rendering, 'relateduser':relateduser,'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
+            'rendering':rendering, 'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
             'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
             "status_p":status_p, "leader_p":leader_p,"type_p":type_p, 'notices':notices, \
             'count':count, "logintag":logintag, "changetag":changetag, "delaytag":delaytag, "deletetag":deletetag,\
@@ -909,12 +906,6 @@ def praise(request ,pid):
 
 
     return HttpResponse(praisecount)
-
-def isNone(s):
-    if s is None or (isinstance(s, basestring) and len(s.strip()) == 0):
-        return True
-    else:
-        return False
     
 def detail(request, pid='', nid=''):
     """
@@ -1859,6 +1850,3 @@ def initdata(request):
     depart100 = department(id=100,department='blank',isactived=1)
     depart100.save()   
     return HttpResponse("恭喜你,初始化数据成功~")
-
-  
-    

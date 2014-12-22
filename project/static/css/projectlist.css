@@ -1,7 +1,8 @@
+/*projectlist页面css*/
 #mybody{
   width: 1500px;
 }
-
+    
     .notice{
       height:150px;
       width:100%;
@@ -182,7 +183,8 @@ body div{margin:0 auto;}
     text-overflow: ellipsis;
 }
 .copypro{
-  background-image: url('../img/copypro.png');
+  background-position: -145px -20px;
+  /*background-image: url('../img/copypro.png');*/
   display: inline-block;
   margin-top:2px;
   height: 12px;
