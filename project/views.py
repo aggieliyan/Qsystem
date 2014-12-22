@@ -804,11 +804,6 @@ def project_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)
-
-    # print 'projectobj'
-    # print projectobj
-    print datetime.datetime.now()
-
     #判断项目是否显示橙色和选中相应项目负责人
     rendering = {}
     proid = []
@@ -851,9 +846,7 @@ def project_list(request):
         l.append(tester)
         l.append(operator)
         l.append(customer_service)
-        rendering[org.id]= l
-    # print rendering
-    print  datetime.datetime.now() 
+        rendering[org.id]= l 
     # 项目使用量统计
     filter_project =[]  
     cpcount = []    
@@ -882,10 +875,6 @@ def project_list(request):
         if c.project_id not in cpcount: #project_id 去重
             filter_project.append(pcount.filter(project_id=c.project_id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
             cpcount.append(c.project_id)   
-    # print 'pcount'
-    # print pcount    
-    # print 'filter_project'
-    # print filter_project
     print datetime.datetime.now()
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
             'rendering':rendering, 'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
