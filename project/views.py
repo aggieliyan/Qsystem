@@ -1064,9 +1064,11 @@ def project_feedback(request):  #也可以写在detail里，这样更清晰
         p = project.objects.get(id=pid)
         leaderlist = (p.leader_p_id, p.designer_p_id, p.tester_p_id, 
                       p.business_man_id, p.operator_p_id, p.customer_service_id)
+        adressee = []
         ppmessage = []
         for i in leaderlist:
-            if i:
+            if i and i not in adressee:
+                adressee.append(i)
                 ppmessage.append(models.project_user_message(userid_id=i, messageid_id=messageid,
                                                          project_id=pid, isactived=1))
         models.project_user_message.objects.bulk_create(ppmessage)
