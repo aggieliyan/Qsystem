@@ -253,9 +253,11 @@
 </body>      
 {% endblock %}
 {% block js %}
-    <script type="text/javascript" src="/static/js/bootstrap.min.js.gz"></script>   
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/jquery/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.min.js"></script>    
     <script type="text/javascript">
       document.write( "<script type='text/javascript' src='/static/js/home_page.js?v=" + Math.random() + "'></s" + "cript>" )
     </script>
-    <script type="text/javascript" src="/static/jquery/jquery.cookie.js.gz"></script>        
+           
 {% endblock %}

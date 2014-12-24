@@ -9,7 +9,7 @@ $(document).ready(function(){
       });
 	
     $("#smalltable").click(function(){
-      //console.log("aaaaaaaa");
+      console.log("aaaaaaaa");
       $("#mybody").css("width","1100px");
       $("#x-table2").css("width","1100px");
     });
