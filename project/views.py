@@ -2,19 +2,17 @@
 from django.shortcuts import render_to_response, redirect, get_object_or_404, RequestContext
 #from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
 import json
 import time, re
 from django.contrib.sessions.models import Session
 import datetime
 from django.db.models import Q
-from project.forms import UserForm, LoginForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
-from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message, project_feedback_comment
+from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
+from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
 import models
 import hashlib
-import django.contrib.auth.models
 from django.views.decorators.csrf import csrf_exempt
-from models import project, user, project_user, project_delay, public_message, project_user_message, project_statistics
+from models import user, project_statistics
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 #test
@@ -22,7 +20,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib import auth
 
 from django.db import connections
-import datetime
+
 
 
 def register(request,uname=''):
@@ -44,7 +42,7 @@ def register(request,uname=''):
                     return render_to_response('register.html', {'list':department.objects.filter(~Q(id=100)),
                                                                 'error':'注册的用户名已存在'},
                                               context_instance=RequestContext(request))
-                user_new = uf.save()
+                    uf.save()
   
                 #如果是产品部门，加入产品部门权限组
                 depid = uf.cleaned_data['departmentid']
@@ -1220,7 +1218,7 @@ def personal_homepage(request):
     except KeyError:
         return HttpResponseRedirect("/nologin")
     #设计变更
-    changetag = edittag =edittag = delaytag = pausetag = deletetag = pm = 0
+    changetag = edittag = delaytag = pausetag = deletetag = pm = 0
     if request.user.has_perm('project.change_public_message'):
         changetag = 1
     #编辑
@@ -1313,7 +1311,6 @@ def personal_homepage(request):
         dealdelay = 1
         delays = project_delay.objects.filter(result__isnull=True,).order_by('apply_date')
         countdelay = delays.count()
-    i = 0
     tests= project_user_message.objects.filter(userid_id = userid)
     lists = []
     messagess = []
@@ -1325,12 +1322,12 @@ def personal_homepage(request):
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'relateduser': relateduser,'rendering': rendering, 'messages': messages, \
          'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
-def deleteproject(request,id,url):
-    delpro=get_object_or_404(project,pk=int(id))    
+def deleteproject(request,pid,url):
+    delpro=get_object_or_404(project,pk=int(pid))    
     delpro.delete()
     return HttpResponseRedirect(url)
-def pauseproject(request, id, url):
-    pausepro = get_object_or_404(project, pk = int(id))
+def pauseproject(request, pid, url):
+    pausepro = get_object_or_404(project, pk = int(pid))
     pausepro.status_p ='暂停'
     pausepro.save()
     return HttpResponseRedirect(url)
@@ -1771,7 +1768,6 @@ def emptyehistory(request):
     if request.session['id']:
         useid = request.session['id']
     tests = project_user_message.objects.filter(userid_id=useid)
-    lists = []
     if request.method == 'POST':
         for test in tests:
             test.delete()
