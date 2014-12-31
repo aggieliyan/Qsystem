@@ -130,7 +130,15 @@ if socket.gethostname() == 'test':
                 'PASSWORD':'as-qa',
                 'HOST':'192.168.204.218',
                 'PORT':'3306',  
-                },          
+                },    
+        'ablesky_log': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': 'ablesky_log',
+                'USER':'qa',
+                'PASSWORD':'as-qa',
+                'HOST':'192.168.3.90',
+                'PORT':'3306',                         
+                },      
             }   
         
                                   
