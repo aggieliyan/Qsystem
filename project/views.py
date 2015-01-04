@@ -795,6 +795,10 @@ def project_list(request):
     paginator = Paginator(projectlist, 25)
     page = request.GET.get('page')
     try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    try:
         projectobj = paginator.page(page)
     except PageNotAnInteger:
         # If page is not an integer, deliver first page.

@@ -27,10 +27,17 @@ AUTHENTICATION_BACKENDS = (
     'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
     )
+# django-debug-toolbar setting
+# INTERNAL_IPS = ('127.0.0.1',)
+# DEBUG_TOOLBAR_CONFIG = {
+#     "INTERCEPT_REDIRECTS": False,
+# }
+# DEBUG_TOOLBAR_PATCH_SETTINGS = False
+# TEMPLATE_DIRS= ('C:/Python27/Lib/site-packages/django_debug_toolbar-1.2.2-py2.7.egg/debug_toolbar/templates',)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -67,6 +74,7 @@ else:
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'project',
+    # 'debug_toolbar',
 )
 
 # Application definition
@@ -80,6 +88,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.gzip.GZipMiddleware', 
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'Qsystem.urls'
