@@ -1,0 +1,31 @@
+    <!-- Model select -->
+<div class="modal fade" id="select" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+           <h4 class="modal-title" id="myModalLabel">选择人员</h4>
+      </div>
+      <div class="modal-body"> 
+           <div><input type="text" id="skey"><button type="submit" class="btn btn-default" id="psearch">搜索</button></div>
+           <input style="display:none;" name="depart" value='1'>
+           <div  id="testerlist"style="border-style: solid;border-radius: 4px; border-width: 1px;border-color:#DDDDDD; height=30px"> 
+             <table >
+             </table>         
+           </div> 
+           <div>
+             <div  class="all"><input type="checkbox" style="margin-top: 0px;">全选
+             </div>
+             <div class="pagination" style="float:right;">
+                <ul >
+                </ul>
+             </div> 
+           </div>       
+      </div>
+      <div class="modal-footer">
+        <button type="button" id= "selectok" class="btn btn-primary" data-dismiss="modal">确定</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->  

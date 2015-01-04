@@ -1,27 +1,26 @@
 # coding=utf-8
-from django.shortcuts import render_to_response, redirect, get_object_or_404, RequestContext
-#from django.template.loader import get_template
-from django.http import HttpResponse, HttpResponseRedirect
-import json
-import time, re
-from django.contrib.sessions.models import Session
-import datetime
-from django.db.models import Q
-from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
-from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
-import models
+
 import hashlib
-from django.views.decorators.csrf import csrf_exempt
+import json
+import time
+import re
+import datetime
+
+from django.shortcuts import render_to_response, redirect, get_object_or_404, RequestContext
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import auth
+from django.contrib.sessions.models import Session
+from django.contrib.auth.models import User, Group
+from django.db import connections
+from django.db.models import Q
+import models
+from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
 from models import user, project_statistics
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
-#test
-from django.contrib.auth.models import User, Group
-from django.contrib import auth
 
-from django.db import connections
-
-
+from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
 
 def register(request,uname=''):
     if uname =='':      #若是直接Q系统注册为空,以ldap第一次登录则会传来用户名
@@ -201,28 +200,29 @@ def new_project(request, pid='', nid=''):
     #没登陆的提示去登录
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
+
+    editdate = 1
     #编辑的得有编辑权限
     if pid:
         uid = request.session['id']
         cpro = models.project.objects.get(id=pid)
-        #如果是负责人且有编辑权限才可以
-        flag = 0
+        
+        #flag标志
+        # flag = 0
         mid = [cpro.leader_p_id, cpro.designer_p_id, cpro.tester_p_id, cpro.business_man_id, cpro.operator_p_id, cpro.customer_service_id]
-        if uid in mid or request.user.has_perm('auth.change_permission'):
-            if request.user.has_perm('project.change_project'):
-                flag = 1
-
-        if not flag:
+        #如果是负责人且有编辑权限才可以进入编辑页面
+        if (uid in mid or request.user.has_perm('auth.change_permission')) and request.user.has_perm('project.change_project'):
+        #是负责人或者是项目经理
+            if not request.user.has_perm('auth.change_permission'):
+            #编辑计划上线时间的标记
+                editdate = 0
+        else:
             return HttpResponseRedirect("/noperm")
-
-    #新建的得有新建权限
-    if not pid and not request.user.has_perm('project.add_project'):
-        return HttpResponseRedirect("/noperm")
-
-    if request.user.has_perm('auth.change_permission'):
-        editdate = 1
     else:
-        editdate = 0
+        #新建的得有新建权限
+        if not pid and not request.user.has_perm('project.add_project'):
+            return HttpResponseRedirect("/noperm") 
+    
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -334,7 +334,7 @@ def new_project(request, pid='', nid=''):
                             all_p_user.append(project_user)
 
             #最后再一起插入数据库
-            models.project_user.objects.bulk_create(all_p_user);
+            models.project_user.objects.bulk_create(all_p_user)
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
@@ -351,10 +351,6 @@ def new_project(request, pid='', nid=''):
                     project_statistics = models.project_statistics(
                                         project_id=pid, item=item, db=db, sql=sql)
                     project_statistics.save()
-            
-            # musername = models.user.objects.get(id=leaderid).username
-            # #给项目负责人加入到项目负责人权限组
-            # User.objects.get(username=musername).groups.add(4)
 
             #将各负责人加入到相应负责人权限组
             allmasters = [[leaderid, 4], [designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
@@ -392,10 +388,7 @@ def new_project(request, pid='', nid=''):
             people = []
             allpeople = []
             for i in range(len(relateduser)):
-                relateduser[i] = relateduser[i].replace(" ", "").split(",")
-            # pd = []
-            # dev = []
-            # qa = []           
+                relateduser[i] = relateduser[i].replace(" ", "").split(",")         
                 for uid in relateduser[i]:
                     if uid:
                         tuser = models.user.objects.get(id=int(uid))
@@ -403,12 +396,6 @@ def new_project(request, pid='', nid=''):
                 allpeople.append(people)
                 people = []
 
-                        # if tuser.department_id == 1:
-                        #     qa.append(tuser)
-                        # elif tuser.department_id == 3:
-                        #     pd.append(tuser)
-                        # else:
-                        #     dev.append(tuser)
             related_user = {'pd':allpeople[0], 'dev': allpeople[1], 'qa': allpeople[2], \
             'bm': allpeople[3], 'cs': allpeople[4], 'op': allpeople[5]}
             dpid = request.POST['designer']
