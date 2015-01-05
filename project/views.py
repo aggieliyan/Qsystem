@@ -1452,7 +1452,7 @@ def show_user(request):
         return redirect('/nologin/')
 
 @csrf_exempt
-def Insert_user(request, id, id2, id3):
+def Insert_user(request, id1, id2, id3):
     if request.session['username']:
         username = request.session['username']
         department_id = models.user.objects.get(username=\
@@ -1467,29 +1467,29 @@ def Insert_user(request, id, id2, id3):
         for item in depart:
             departdic[item.department] = item.id
         department_id = departdic[department]
-    if id == '1':
+    if id1 == '1':
         id = request.POST['level_1']
         user = models.user.objects.filter(department_id=\
         department_id, id=id).update(Position_level='1')
-    elif id == '2':
+    elif id1 == '2':
         id = request.POST['level_2a']
         user = models.user.objects.filter(department_id=department_id, \
         id=id).update(Position_level='2')
-    elif id == '3':
+    elif id1 == '3':
         id = request.POST['level_3a']
         user = models.user.objects.filter(department_id=department_id, \
         id=id).update(Position_level='3')
-    elif id == '4':
+    elif id1 == '4':
         id = request.POST['level_1']
         user = models.user.objects.filter(department_id=department_id, \
         id=id).update(Position_level='0')
-    elif id == '5':
+    elif id1 == '5':
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='0')
-    elif id == '6':
+    elif id1 == '6':
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='0')
-    elif id == '7':
+    elif id1 == '7':
         id = request.POST['level_1']
         if(int(id)==request.session['id']):
             return HttpResponseRedirect("/noperm")
@@ -1497,31 +1497,31 @@ def Insert_user(request, id, id2, id3):
             user = models.user.objects.get(department_id=department_id, \
             id=id)
             user.delete()
-    elif id == '8':
+    elif id1 == '8':
         if(int(id2)==request.session['id']):
             return HttpResponseRedirect("/noperm")
         else:
             user = models.user.objects.get(department_id=department_id, \
             id=id2)
             user.delete()
-    elif id == '9':
+    elif id1 == '9':
         if(int(id2)==request.session['id']):
             return HttpResponseRedirect("/noperm")
         else:
             user = models.user.objects.get(department_id=department_id, \
             id=id2)
             user.delete()
-    elif id == '10':
+    elif id1 == '10':
         user = models.user.objects.filter(department_id=department_id, \
         id=id3).update(Position_level='0')
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='2')
-    elif id == '11':
+    elif id1 == '11':
         user = models.user.objects.filter(department_id=department_id, \
         id=id3).update(Position_level='0')
         user = models.user.objects.filter(department_id=department_id, \
         id=id2).update(Position_level='3')
-    elif id == '12':
+    elif id1 == '12':
         user = models.user.objects.filter(department_id=department_id, \
         id=id3).update(Position_level='0')
         user = models.user.objects.filter(department_id=department_id, \
