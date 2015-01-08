@@ -41,7 +41,7 @@ def register(request,uname=''):
                     return render_to_response('register.html', {'list':department.objects.filter(~Q(id=100)),
                                                                 'error':'注册的用户名已存在'},
                                               context_instance=RequestContext(request))
-                    uf.save()
+                uf.save()
   
                 #如果是产品部门，加入产品部门权限组
                 depid = uf.cleaned_data['departmentid']
