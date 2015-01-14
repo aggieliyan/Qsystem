@@ -3,20 +3,9 @@
   {% block head %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap -->
-  <script type="text/javascript">
-    document.write( "<link href='/static/css/nopermitsourcemaind.css?v=" + Math.random() + "' rel='stylesheet' media='screen'>" )
-  </script>
-<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.css">
-<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min.css">
+<link href='/static/css/nopermitsourcemaind.min.css?v=20150106' rel='stylesheet' media='screen'>
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
 
-
-<script type="text/javascript" src="/static/js/bootstrap.js"></script>
-<script type="text/javascript" src="/static/jquery/jquery-2.0.0.min.js"></script>
-<script type="text/javascript">
-  document.write( "<script type='text/javascript' src='/static/js/source.js?v=" + Math.random() + "' charset='UTF-8'></s" + "cript>" )
-</script>
   {% endblock %}
   {% block content %}
 <div class="selfbody">
@@ -45,9 +34,9 @@
 		 {% endfor %}
 		 </select>	
 		 	
-		<button type="button" class="addsub" id="add1a" > </button>
-		<button type="button" class="minsub" id="min1"  onclick="del_logic()"> </button>
-		<button type="button" class="delsub" id="del1"  onclick="del()"> </button>
+		<button type="button" class="pic addsub" id="add1a" > </button>
+		<button type="button" class="pic minsub" id="min1"  onclick="del_logic()"> </button>
+		<button type="button" class="pic delsub" id="del1"  onclick="del()"> </button>
 		</div>
 		
 		<div class="def2">
@@ -58,9 +47,9 @@
 		   			{% endfor %}
 			</select>	
 
-			<button type="button" class="addsub" id="add2a" > </button>
-			<button type="button" class="minsub" id="min2"  onclick="del_logic2a()"> </button>
-			<button type="button" class="delsub" id="del1" onclick="del22()"> </button>
+			<button type="button" class="pic addsub" id="add2a" > </button>
+			<button type="button" class="pic minsub" id="min2"  onclick="del_logic2a()"> </button>
+			<button type="button" class="pic delsub" id="del1" onclick="del22()"> </button>
 		
 		</div>
 	
@@ -71,9 +60,9 @@
 		    <option value="{{level_1.id}}">{{level_1.realname}}</option>
 		    	{% endfor %}
 		</select>		
-		<button type="button" class="addsub" id="add3a" > </button>
-		<button type="button" class="minsub" id="min3" onclick="del_logic3a()"> </button>
-		<button type="button" class="delsub" id="del1" onclick="del33()"> </button>
+		<button type="button" class="pic addsub" id="add3a" > </button>
+		<button type="button" class="pic minsub" id="min3" onclick="del_logic3a()"> </button>
+		<button type="button" class="pic delsub" id="del1" onclick="del33()"> </button>
 		
       </div>
       
@@ -86,9 +75,9 @@
 		    <option value="{{level_1.id}}" {% if level_1 == level %} selected {% endif %} >{{level_1.realname}}</option>
 		    {% endfor %}
 		</select>		
-		<button type="button" class="addsub" id="add1" > </button>
-		<button type="button" class="minsub" id="min1"  onclick="del_logic2('{{level.id}}')"> </button>
-		<button type="button" class="delsub" id="del1"  onclick="del2('{{level.id}}')" > </button>
+		<button type="button" class="pic addsub" id="add1" > </button>
+		<button type="button" class="pic minsub" id="min1"  onclick="del_logic2('{{level.id}}')"> </button>
+		<button type="button" class="pic delsub" id="del1"  onclick="del2('{{level.id}}')" > </button>
 		{% endfor %}
 	  {% else %}
 	  		<select name="level_1" class="section1" id="sec1"  onchange="insert1()"  >
@@ -97,9 +86,9 @@
 		    <option value="{{level_1.id}}">{{level_1.realname}}</option>
 		    {% endfor %}
 		</select>
-		<button type="button" class="addsub" id="add1" > </button>
-		<button type="button" class="minsub" id="min1"  onclick="del_logic()" > </button>
-		<button type="button" class="delsub" id="del1"  onclick="del()" > </button>
+		<button type="button" class="pic addsub" id="add1" > </button>
+		<button type="button" class="pic minsub" id="min1"  onclick="del_logic()" > </button>
+		<button type="button" class="pic delsub" id="del1"  onclick="del()" > </button>
 		{% endif %}
 		</div>
 	
@@ -112,9 +101,9 @@
 		   			{% endfor %}
 				</select>	
 
-				<button type="button" class="addsub ad2" id="add2" > </button>
-				<button type="button" class="minsub" id="min2" onclick="del_logic2('{{level_2.id}}')"> </button>
-				<button type="button" class="delsub" id="del1" onclick="del2('{{level_2.id}}')"> </button>
+				<button type="button" class="pic addsub ad2" id="add2" > </button>
+				<button type="button" class="pic minsub" id="min2" onclick="del_logic2('{{level_2.id}}')"> </button>
+				<button type="button" class="pic delsub" id="del1" onclick="del2('{{level_2.id}}')"> </button>
 				
 		 	</div>
 		 	{% endfor %}
@@ -129,198 +118,29 @@
 		    		{% endfor %}
 	
 				</select>		
-				<button type="button" class="addsub ad3" id="add3"  > </button>
-				<button type="button" class="minsub" id="min3"  onclick="del_logic3('{{level_3.id}}')"> </button>
-				<button type="button" class="delsub" id="del1"  onclick="del3('{{level_3.id}}')"> </button>
+				<button type="button" class="pic addsub ad3" id="add3"  > </button>
+				<button type="button" class="pic minsub" id="min3"  onclick="del_logic3('{{level_3.id}}')"> </button>
+				<button type="button" class="pic delsub" id="del1"  onclick="del3('{{level_3.id}}')"> </button>
 		
 			</div>
 			{% endfor %}
 			</div>
 			</form>
 		</div>
-<script type="text/javascript">
-    var s1 = document.getElementById("department");
-    var s2 = document.getElementById("level_2");
-    for(i = 0;i<=s1.length;i++){
-         
+
+ {% endblock%}
+  {% block js %}
+  <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/static/jquery/jquery-2.0.0.min.js"></script>
+  <script type='text/javascript' src='/static/js/source.min.js?v=20150106' charset='UTF-8'></script>
+  
+  <script type="text/javascript">
+  var s1 = document.getElementById("department");
+    for(i = 0;i<=s1.length;i++){         
         if(s1.options[i].value == '{{department}}'){
             s1.options[i].selected = true;
         }
     }
-
-  //显示选择的部门的人员 
-   function showuser()
-{
-document.form.action="/show_user/"
-document.form.submit()
-}
-
-//增加人员
-function insert1()
-{
-document.form.action="/Insert_user/1/0/0/"
-document.form.submit()
-}
-function insert2()
-{
-document.form.action="/Insert_user/2/0/0/";
-document.form.submit();
-}
-
-function insert3()
-{
-document.form.action="/Insert_user/3/0/0/"
-document.form.submit()
-}
-
-function insert11(id)
-{
-var a2=document.getElementsByName(id)[0]
-id2=a2.value
-if(id2=='0'){
-alert('请选择人员'); 
-}
-else{
-document.form.action="/Insert_user/12/"+id2+"/"+id+"/"
-document.form.submit()
-}
-}
-
-function insert22(id)
-{
-var a2=document.getElementsByName(id)[0]
-id2=a2.value
-if(id2=='0'){
-alert('请选择人员'); 
-}
-else{
-document.form.action="/Insert_user/10/"+id2+"/"+id+"/"
-document.form.submit()
-}
-}
-function insert33(id)
-{
-var a3=document.getElementsByName(id)[0]
-id3=a3.value
-if(id3=='0'){
-alert('请选择人员'); 
-}
-else{
-document.form.action="/Insert_user/11/"+id3+"/"+id+"/"
-document.form.submit()
-}
-}
-//逻辑删除人
-function del_logic()
-{
-var l1= document.getElementsByName("level_1")[0];
-if(l1.value == '0'){
-alert('请选择要求删除的人员'); 
-}
-else{
-document.form.action="/Insert_user/4/0/0/";
-document.form.submit();
-}
-}
-
-function del_logic2(id)
-{
-document.form.action="/Insert_user/5/"+id+"/"+"0/"
-document.form.submit()
-}
-
-function del_logic3(id)
-{
-document.form.action="/Insert_user/6/"+id+"/"+"0/"
-document.form.submit()
-}
-
-function del_logic2a()
-{
-var l1= document.getElementsByName("level_2a")[0];
-if(l1.value == '0'){
-alert('请选择要求删除的人员'); 
-}
-else{
-document.form.action="/Insert_user/5/0/0/"
-document.form.submit()
-}
-}
-
-function del_logic3a()
-{
-var l1= document.getElementsByName("level_3a")[0];
-if(l1.value == '0'){
-alert('请选择要求删除的人员'); 
-}
-else{
-document.form.action="/Insert_user/6/0/0/"
-document.form.submit()
-}
-}
-//物理删除人员
-function del()
-{
-var l1= document.getElementsByName("level_1")[0]
-if (!confirm("确认要删除？")) { 
-            window.event.returnValue = false; 
-        } 
-else{
-if(l1.value == '0'){
-alert('请选择要求删除的人员'); 
-}
-else{
-document.form.action="/Insert_user/7/0/0/"
-document.form.submit()
-}
-}
-}
-function del22()
-{
-var l1= document.getElementsByName("level_2a")[0];
-if(l1.value == '0'){
-alert('请选择要求删除的人员'); 
-}
-else{
-document.form.action="/Insert_user/8/0/0/"
-document.form.submit()
-}
-}
-
-function del33()
-{
-var l1= document.getElementsByName("level_2a")[0];
-if(l1.value == '0'){
-alert('请选择要求删除的人员'); 
-}
-else{
-document.form.action="/Insert_user/8/0/0/"
-document.form.submit()
-}
-}
-
-function del2(id)
-{
-  if (!confirm("确认要删除？")) { 
-            window.event.returnValue = false; 
-        } 
-else{
-document.form.action="/Insert_user/8/"+id+"/"+"0/"
-document.form.submit()
-}
-} 
-
-function del3(id)
-{
-
-if (!confirm("确认要删除？")) { 
-            window.event.returnValue = false; 
-        } 
-else{
-document.form.action="/Insert_user/9/"+id+"/"+"0/"
-document.form.submit()
-}
-}
-
-</script>
- {% endblock%}
+    </script>
+  {% endblock%}
+  

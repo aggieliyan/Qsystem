@@ -6,17 +6,19 @@
 <meta http-equiv="Content-Language" content="zh-cn" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="/static/css/bootstrap.min.css" rel="stylesheet"
+<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
 	media="screen">
+<!--
 <link href="/static/css/datetimepicker.css" rel="stylesheet"
 	media="screen">
+-->
 <!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
+<!--
 <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet"
 	media="screen">
-<script type="text/javascript">
-  document.write( "<link href='/static/css/tankuang.css?v=" + Math.random() + "' rel='stylesheet' media='screen'>" )
-  document.write( "<link href='/static/css/message.css?v=" + Math.random() + "' rel='stylesheet' media='screen'>" )
-</script>
+-->
+<link href='/static/css/common.min.css?v=20150106' rel='stylesheet' media='screen'>
+<link href='/static/css/message.min.css?v=20150106' rel='stylesheet' media='screen'>
  
 {% endblock %}
 {% block content %}
@@ -188,25 +190,7 @@
 
 		{% endblock %}
 		{% block js%}
-		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
-		<script type="text/javascript">
-			function refuse_delay(id){
-				$('#delayid').val(id);
-				$('#myModal').modal('show');
-			}
-			
-			function do_refuse(){
-				$('#test_form').submit();
-			}
-			
-			function approve_delay(id){
-				$('#delayid1').val(id);
-				$('#myModal_approve').modal('show');
-			}
-			
-			function do_approve(){
-				
-				$('#approve_form').submit();
-			}
-		</script>
+		<script src="../static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/bootstrap-datetimepicker.min.js"></script>
+<script type='text/javascript' src='/static/js/delay.min.js?v=20150106'></script>
 		{% endblock%}

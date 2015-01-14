@@ -3,9 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title> 
-    <script type="text/javascript">
-      document.write( "<link  href='/static/css/commonhead.css?v=" + Math.random() + "' rel='stylesheet' media='screen'> " )
-    </script>
+    <link  href='/static/css/commonhead.css?v=20150106' rel='stylesheet' media='screen'>
     {% block head %}{% endblock %}
      
   </head>
@@ -31,8 +29,6 @@
     {% block footer %}
     <p class="basefooter">Thanks for visiting my site.</p>
     {% endblock %}
-    <script type="text/javascript">
-      document.write( "<script type='text/javascript' src='/static/js/base.js?v=" + Math.random() + "'></s" + "cript>" )
-    </script>
+    <script type='text/javascript' src='/static/js/base.js?v=20150106'></script>
   </body>
 </html>

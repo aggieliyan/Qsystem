@@ -7,9 +7,7 @@
   <!-- Bootstrap -->
   <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <!-- <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen"> -->
-  <script type="text/javascript">
-    document.write( "<link href='/static/css/homepage.css?v=" + Math.random() + "' rel='stylesheet' media='screen'>" )
-  </script>
+  <link href='/static/css/homepage.min.css?v=20150106' rel='stylesheet' media='screen'>
   {% endblock %}
   {% block content %}
   <body id="mybody">
@@ -254,10 +252,8 @@
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/static/jquery/jquery.cookie.js"></script>
-    <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.min.js"></script>    
-    <script type="text/javascript">
-      document.write( "<script type='text/javascript' src='/static/js/home_page.js?v=" + Math.random() + "'></s" + "cript>" )
-    </script>
+    <script type="text/javascript" src="../static/js/bootstrap-datetimepicker.min.js"></script> 
+    <script type="text/javascript" src="/static/jquery/jquery.cookie.min.js"></script>       
+    <script type='text/javascript' src='/static/js/home_page.min.js?v=20150106'></script>
            
 {% endblock %}
