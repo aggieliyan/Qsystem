@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 #LDAP configuration
 import ldap
-from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+from django_auth_ldap.config import LDAPSearch
 # Baseline configuration.
 AUTH_LDAP_SERVER_URI = "ldap://192.168.3.13:389"
 AUTH_LDAP_BIND_DN = "cn=manager,dc=ablesky,dc=com"

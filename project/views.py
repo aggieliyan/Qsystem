@@ -1044,7 +1044,7 @@ def project_feedback(request):  #也可以写在detail里，这样更清晰
         #下面是给该项目的所有负责人发提醒
         fb_name = models.user.objects.get(id=mid).realname
         fb_pro_name = models.project.objects.get(id=pid).project
-        fb_content = fb_name + '对"' + fb_pro_name + '"发表了一条反馈, 请到该项目详情页进行查看'
+        fb_content = fb_name + u'对"' + fb_pro_name + u'"发表了一条反馈, 请到该项目详情页进行查看'
         m = models.public_message(project=pid, publisher=mid, 
                                   content=fb_content, type_p="message", 
                                   publication_date=datetime.datetime.now(), isactived=4)
@@ -1087,7 +1087,7 @@ def feedback_comment(request):
         #有人回复后,反馈人会收到一个提醒.
         reply_name = models.user.objects.get(id=replymid).realname
         pro_name = models.project.objects.get(id=pid).project
-        reply_message = reply_name + '回复了你对"' + pro_name + '"的反馈, 快到项目详情页面查看吧!'
+        reply_message = reply_name + u'回复了你对"' + pro_name + u'"的反馈, 快到项目详情页面查看吧!'
         m = models.public_message(project=pid, publisher=replymid, 
                                   content=reply_message, type_p="message", 
                                   publication_date=datetime.datetime.now(), isactived=4)
