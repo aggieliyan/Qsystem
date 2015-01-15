@@ -1313,13 +1313,13 @@ def personal_homepage(request):
     return render_to_response('personal_homepage.html', \
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'relateduser': relateduser,'rendering': rendering, 'messages': messages, \
          'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
-def deleteproject(request,id,url):
-    print("id is"+id)
-    delpro=get_object_or_404(project,pk=int(id))
+def deleteproject(request,pid,url):
+    print("id is"+pid)
+    delpro=get_object_or_404(project,pk=int(pid))
     delpro.delete()
     return HttpResponseRedirect(url)
-def pauseproject(request, id, url):
-    pausepro = get_object_or_404(project, pk = int(id))
+def pauseproject(request, pid, url):
+    pausepro = get_object_or_404(project, pk = int(pid))
     pausepro.status_p ='暂停'
     pausepro.save()
     return HttpResponseRedirect(url)
