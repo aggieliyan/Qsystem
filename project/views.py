@@ -1191,7 +1191,7 @@ def user_info(request):
             if request.user.has_perm('project.change_project_delay'):
                 messsage = project_user_message.objects.filter(Q(userid_id = userid) | Q(isactived = 0))
             else:
-                 messsage = project_user_message.objects.filter(userid_id = userid)
+                messsage = project_user_message.objects.filter(userid_id = userid).exclude(isactived = 0)
             message_num = messsage.count()
             result['message_num'] = message_num
                        
