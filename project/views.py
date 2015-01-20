@@ -1065,7 +1065,10 @@ def project_feedback(request):  #也可以写在detail里，这样更清晰
         link = '/detail/' + str(pid)
         return HttpResponseRedirect(link)
         
-            
+"""
+存储消息时，在public_message中isactived=4,
+表示存储的是反馈信息
+"""            
 def feedback_comment(request):
     try:
         request.session['id']
@@ -1308,8 +1311,6 @@ def personal_homepage(request):
         tests= project_user_message.objects.filter(Q(isactived ='0') |Q(userid_id = userid1))
     else:
         tests= project_user_message.objects.filter(userid_id = userid1).exclude(isactived = 0)
-        print tests
-
     lists = []
     messagess = []
     for test in tests:
@@ -1330,6 +1331,11 @@ def pauseproject(request, pid, url):
     pausepro.status_p ='暂停'
     pausepro.save()
     return HttpResponseRedirect(url)
+"""
+存储消息时，跟消息对应的是项目的成员，项目经理不属于成员，所以
+在public_message中isactived=5,
+project_user_message 中isactived=0，表示发送给项目经理的
+"""
 def delayproject(request, url):
     if request.method == 'POST':
         form = delayprojectForm(request.POST)
@@ -1341,9 +1347,7 @@ def delayproject(request, url):
             uid = delpro.leader_p
             protitle = delpro.project
             delay_name = uid.realname
-            uuid = request.session['id']
-            print type(uid)
-            print type(uuid) 
+            uuid = request.session['id'] 
             delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
                 apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason, isactived = 1)
             delay_p.save()
