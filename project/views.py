@@ -459,7 +459,7 @@ def new_project(request, pid='', nid=''):
 def sendmessage(request,status,pid):
     # 项目设计完成需要给业务负责人和产品负责人发消息，project_operator_bussniess_message和public_message
     # project_user_message这三个表
-    # 设计完成isactived存2，测试中isactived存3，上线给留言发消息isactived存1，上线发公告isactived存0
+    # 设计完成isactived存2，测试中isactived存3，上线给留言发消息isactived存1，上线发公告isactived存0 
     # --杜
     if status == u"设计完成":
         flag = 0
@@ -1185,7 +1185,10 @@ def user_info(request):
             result['pro_num'] = pro_num
    
             userid = request.session['id']
-            messsage = project_user_message.objects.filter(userid_id = userid)
+            if request.user.has_perm('project.change_project_delay'):
+                messsage = project_user_message.objects.filter(Q(userid_id = userid) | Q(isactived = 0))
+            else:
+                 messsage = project_user_message.objects.filter(userid_id = userid)
             message_num = messsage.count()
             result['message_num'] = message_num
                        
@@ -1302,7 +1305,11 @@ def personal_homepage(request):
         dealdelay = 1
         delays = project_delay.objects.filter(result__isnull=True,).order_by('apply_date')
         countdelay = delays.count()
-    tests= project_user_message.objects.filter(userid_id = userid)
+        tests= project_user_message.objects.filter(Q(isactived ='0') |Q(userid_id = userid1))
+    else:
+        tests= project_user_message.objects.filter(userid_id = userid1).exclude(isactived = 0)
+        print tests
+
     lists = []
     messagess = []
     for test in tests:
@@ -1333,9 +1340,22 @@ def delayproject(request, url):
             delpro = models.project.objects.get(id=delayid)
             uid = delpro.leader_p
             protitle = delpro.project
+            delay_name = uid.realname
+            uuid = request.session['id']
+            print type(uid)
+            print type(uuid) 
             delay_p = project_delay(application = uid, project_id = delayid, delay_to_date = delay_date, \
                 apply_date = datetime.datetime.now(), title = protitle, reason = delay_reason, isactived = 1)
-            delay_p.save()                   
+            delay_p.save()
+            #向project_message中isactived=5和project_user_message isactived=0表中分别插入一条消息，数字分别标记发送给项目经理的信息
+            remind_con = protitle + u' : ' + delay_name + u'申请延期，请及时处理!'
+            delay_remind = public_message(project = delayid, publisher = uuid, content = remind_con, type_p = "message",\
+                           publication_date = datetime.datetime.now(), isactived = 5) 
+            delay_remind.save()
+            message = public_message.objects.filter(project=delayid).order_by("-id")[0]
+            delay_pm_message = project_user_message(userid_id = uuid, messageid_id = message.id, \
+                    project_id = delayid, isactived = 0)
+            delay_pm_message.save()                  
     return HttpResponseRedirect(url)
 def changedesign(request, url):          
     if request.method == 'POST':
@@ -1596,7 +1616,10 @@ def historymessage(request):
     # 查询与用户相关的消息
     if request.session['id']:
         useid = request.session['id']
-    tests = project_user_message.objects.filter(userid_id=useid)
+    if request.user.has_perm('project.change_project_delay'):
+        tests= project_user_message.objects.filter(Q(isactived = 0) | Q(userid_id = useid))
+    else:
+        tests= project_user_message.objects.filter(userid_id = useid).exclude(isactived = 0)
     lists = []
     for test in tests:
         lists.append(test.messageid_id)
@@ -1731,7 +1754,10 @@ def deletehistory(request):
         form = MessageForm(request.POST)
         if form.is_valid():
             messageid = form.cleaned_data['messageid']
-            usermessage = project_user_message.objects.get(userid_id=useid, messageid_id=messageid)
+            if request.user.has_perm('project.change_project_delay'): 
+                usermessage = project_user_message.objects.get(messageid_id=messageid)
+            else:
+                usermessage = project_user_message.objects.get(userid_id=useid, messageid_id=messageid)
             usermessage.delete()
     tests = project_user_message.objects.filter(userid_id=useid)
     lists = []
@@ -1759,7 +1785,8 @@ def deletenotice(request):
 def emptyehistory(request):
     if request.session['id']:
         useid = request.session['id']
-    tests = project_user_message.objects.filter(userid_id=useid)
+    tests = project_user_message.objects.filter(Q(userid_id=useid) | Q(isactived = 0))
+    print tests
     if request.method == 'POST':
         for test in tests:
             test.delete()

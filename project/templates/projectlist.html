@@ -212,12 +212,15 @@
                                     <td>{{ p.status_p }}</td>
                                     <input name="datetime" value="{{p.expect_launch_date|date:"Y-m-d"}}" type="hidden">
                                     <td>
+                                        {% if p.status_p == "暂停" and deletetag == 1 %}
+                                                <a class="icon-trash" href="{% url 'pproject_delete' p.id %}" title="删除" onclick="return confirm('你确认要删除吗?')"><span> </span></a>
+                                        {% endif %}
                                         {% if p.status_p == "运营推广" or p.status_p == "暂停"%}
-
                                             {% if createtag == 1 %}
                                                 <a href="{% url 'similarpro' p.id  1 %}" class = 'pic copypro' title='发布相似'></a>
-                                            {% else %}
-                                            {% endif %}
+                                        {% else %}
+                                        {% endif %}                               
+
                                         {% else %}
                                             {% if p.status_p == "已上线" %}
                                                 {% if edittag == 1 %}
