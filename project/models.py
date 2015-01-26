@@ -97,7 +97,8 @@ class project_statistics(models.Model):
     item = models.CharField(u'统计项', max_length=1000)
     db = models.CharField(u'使用哪个库',max_length=50)
     sql = models.TextField(u'查询语句', max_length=21000)
-    total = models.TextField(max_length=9999999,blank=True, null=True)   
+    total = models.TextField(max_length=9999999,blank=True, null=True) 
+    is_graph = models.BooleanField(u'是否画图')   
 
 class project_feedback(models.Model):
     project= models.ForeignKey(project)
@@ -121,3 +122,26 @@ class project_operator_bussniess_message(models.Model):
     confirm_design_date = models.DateField(blank=True, null=True)
     check_date = models.DateField(blank=True, null=True)
     isactived = models.IntegerField(max_length=1,blank=True, null=True) 
+
+#统计信息相关表
+class module(models.Model):
+    module_name= models.CharField(u'模块名称',max_length=20)
+    isactived = models.BooleanField()
+
+class project_module(models.Model):
+    project = models.ForeignKey(project)
+    module = models.ForeignKey(module)
+    isactived = models.BooleanField()
+
+class project_statistics_result(models.Model):
+    project = models.ForeignKey(project)
+    sql = models.ForeignKey(project_statistics)
+    date = models.DateField(u'统计日期')
+    statistical_result = models.IntegerField(u'统计结果', max_length=10)
+    isactived = models.BooleanField()
+
+
+
+
+
+        
