@@ -55,11 +55,11 @@
 		<table class="table table-striped-list">
 			<col width="10%" />
 			<col width="30%" />
-			<col width="30%" />
-			<col width="15%" />
-			<col width="15%" />
+			<col width="28%" />
+			<col width="22%" />
+			<col width="10%" />
 			<thead>
-				<tr>
+				<tr>  
 					<th class="thead_th">项目编号</th>
 					<th class="thead_th">项目名称</th>
 					<th class="thead_th">统计数据</th>
@@ -74,8 +74,8 @@
                  {% else %}
                  {% for p in projectobj %}			
 				<tr>
-					<td class="col1"><input type="checkbox" class="checkbox"><span>&nbsp;{{p.id}}</td>
-					<td class="col1">&nbsp;{{p.project}}</span></td>
+					<td class="col1"><input type="checkbox" class="checkbox" value="{{p.id}}" name="chk_list"><span>&nbsp;{{p.id}}</td>
+					<td class="col1">&nbsp;<a style="font" href="{% url 'prodetail' p.id %}">{{p.project}}</a></span></td>
 					<td class="col1">&nbsp;
 					<span class="flip"></span>
 					{% for c in fproject %}
@@ -87,11 +87,17 @@
 					<td>
 					{% for m in relation %}
                     {% if m.project_id == p.id %}
-                    {{ m.module.module}}
+                    {{ m.module.module_name}}
                     {% endif %}
                     {% endfor %}</td>					
 					<td class="states_yes">
-					<button class="btn btn-warning " data-toggle="modal" type="button" data-toggle="modal" data-target="#addmodule">添加</button></td>										
+					{% if m.module.module_name %}
+					<button class="btn btn-warning " data-toggle="modal" type="button" onclick="s_operate({{p.id}})">编辑</button>
+					{% else %}
+					<button class="btn btn-warning " data-toggle="modal" type="button" onclick="s_operate({{p.id}})">添加</button>
+					{% endif %}
+
+				</td>										
 				</tr>
 				<tr class="panel">
 					<td colspan=5>
@@ -111,8 +117,8 @@
 	</div>
 	<div>
 	<div style="text-align:left;margin:0 10px;float:left">
-			<input type="checkbox">&nbsp;全选
-			<a data-toggle="modal" data-target="#addmodule"><span style="margin:0 5px;">批量选择所属模块</span></a>
+			<input type="checkbox" name="chk_all" id="chk_all">&nbsp;全选
+			<a data-toggle="modal" data-target="#addmodule" id="bulk_add"><span style="margin:0 5px;">批量选择所属模块</span></a>
 		</div>
 	<!--分页-->
     <div class="pagination" style="text-align:right;margin-right:10px">
@@ -141,7 +147,27 @@
 			$(".panel").toggle();
 			$(".flip").toggleClass("drapdown");
 		});
+		$("#chk_all").click(function(){
+			if(typeof($("#chk_all").attr("checked"))=="undefined")
+				$("input[name='chk_list']").removeAttr("checked");
+			else
+				$("input[name='chk_list']").attr("checked",$(this).attr("checked"));
+		});
+		$("#bulk_add").click(function(){
+			var arrChk=$("input[name='chk_list']:checked");
+			var value = '';
+			$(arrChk).each(function(){
+				value=this.value + "," + value;
+			});
+			alert(value);
+			$("#bulk_sid").val(value);
+		});			
 	});
+	function s_operate(id){
+        $('#bulk_sid').val(id);
+        $('#addmodule').modal('show');
+      }
+
 	</script>
 {% endblock%}
 

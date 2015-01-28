@@ -20,7 +20,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 
-from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
+from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, \
+MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm, addmoduleForm
 
 def register(request,uname=''):
     if uname =='':      #若是直接Q系统注册为空,以ldap第一次登录则会传来用户名
@@ -1208,7 +1209,7 @@ def user_info(request):
     return HttpResponse(rs)
 
 #项目统计列表页
-def statistics_list(request):
+def statistics_detail(request):
     filter_project =[]  
     cpcount = []
     proid = models.project_statistics.objects.distinct().values_list('project_id',flat=True)
@@ -1231,15 +1232,28 @@ def statistics_list(request):
     return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
      "statistics_list":statistics_list, "fproject":filter_project, "relation":relation, "projectobj":projectobj}))
 
-def statistics_operate(request,pid):
+def statistics_operate(request):
     if request.method == 'POST':
         form = addmoduleForm(request.POST)
         if form.is_valid():
-            modulename = form.cleaned_data['modulename']
-        add_module = models.module.objects.get(module = modulename)
-        pro_module_re = project_module(project = int(pid),module = add_module.id)
-        pro_module_re.save()
-    return HttpResponseRedirect("/statistics_detail/")
+            bulk_sid = form.cleaned_data['bulk_sid']
+            modulename = form.cleaned_data['modulename'] 
+            add_module = models.module.objects.get(module_name = modulename)
+            mid = add_module.id                      
+            bulk_sid = bulk_sid.split(",")
+            all_pro_module = []
+            for pid in bulk_sid:
+                if pid:
+                    pro_module = models.project_module.objects.filter(project_id = int(pid))
+                    if  not pro_module: 
+                        add_pro_module = project_module(project_id = int(pid), module_id = mid, isactived = 1)
+                        all_pro_module.append(add_pro_module)
+                    else:
+                        pro_module.update(module = mid)
+            models.project_module.objects.bulk_create(all_pro_module)
+        else:
+           form = addmoduleForm()
+    return HttpResponseRedirect('/sdetail/')
 #homepage
 def personal_homepage(request):
     try:

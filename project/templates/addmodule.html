@@ -2,7 +2,7 @@
 <div class="modal fade" id="addmodule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form name="modulename" class="navbar-form navbar-center" method='post' action="/addoperate/" id="test1">
+      <form name="modulename" class="navbar-form navbar-center" method='post' action="/statistics_operate/" id="modulename">
       <div class="mymodal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">项目所属模块选择</h4>
@@ -11,8 +11,8 @@
         <div class="container-fluid">
           <div class="row-fluid">
             <div class="span4">
-              <select style="margin:40px 135px;" id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
-                  <option select = 'selected'>下拉选择所属模块</option>
+              <select style="margin:40px 135px;" id="modulename" name = "modulename" class="inputfield" selected="{{modulename}}">
+                  <option select = 'selected'>下拉选择所属模块{{modulename}}</option>
                   <option>需求讨论中</option>
                   <option>设计中</option>
                   <option>设计完成</option>
@@ -24,11 +24,12 @@
                 </select>
             </div>
           </div>
+          <input id="bulk_sid" name="bulk_sid" type="hidden">
         </div>
       </div>
       <div class="modal-footer">
         <div align="center">
-          <button id='module' type="submit" class="btn mybtn-success">确定</button>
+          <button id='module' type="submit" class="btn mybtn-success" >确定</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         </div>
       </div>
