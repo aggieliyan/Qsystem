@@ -74,16 +74,14 @@ urlpatterns = patterns('',
     url(r'^emptyehistory',project.views.emptyehistory),
     url(r'^deletenotice',project.views.deletenotice),
     url(r'^approve',project.views.approve),
-<<<<<<< HEAD
     #statistics_list
-    url(r'^statistics_list',project.views.statistics_list),
+    url(r'^sdetail',project.views.statistics_list),
     url(r'^statistics_operate/(\d+)/$', project.views.statistics_operate,name="addoperate'"),
     url(r'^statistics_operate/(\d+)/$', project.views.statistics_operate,name="\'addoperate\'"),
-=======
 
     #statistics
     url(r'^slist/$', project.views.show_slist),
->>>>>>> origin/master
+
 )
 from django.conf import settings 
 if settings.DEBUG is False:
