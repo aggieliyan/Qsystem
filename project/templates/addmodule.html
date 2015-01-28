@@ -1,0 +1,38 @@
+<!-- Modal delay-->
+<div class="modal fade" id="addmodule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="modulename" class="navbar-form navbar-center" method='post' action="/addoperate/" id="test1">
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">项目所属模块选择</h4>
+      </div>
+      <div class="modal-body" style="height:150px">
+        <div class="container-fluid">
+          <div class="row-fluid">
+            <div class="span4">
+              <select style="margin:40px 135px;" id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
+                  <option select = 'selected'>下拉选择所属模块</option>
+                  <option>需求讨论中</option>
+                  <option>设计中</option>
+                  <option>设计完成</option>
+                  <option>开发中</option>
+                  <option>测试中</option>
+                  <option>暂停</option>
+                  <option>已上线</option>
+                  <option>运营推广</option>
+                </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button id='module' type="submit" class="btn mybtn-success">确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>

@@ -15,7 +15,7 @@ from django.db import connections
 from django.db.models import Q
 import models
 from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
-from models import user, project_statistics
+from models import user, project_statistics, project_statistics_result, module, project_module
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
@@ -1206,6 +1206,40 @@ def user_info(request):
             result['realname'] = 'GUEST' 
     rs = json.dumps(result)
     return HttpResponse(rs)
+
+#项目统计列表页
+def statistics_list(request):
+    filter_project =[]  
+    cpcount = []
+    proid = models.project_statistics.objects.distinct().values_list('project_id',flat=True)
+    project_list =  models.project.objects.filter(pk__in = proid)
+    statistics_list = models.project_statistics.objects.all()     
+    relation = models.project_module.objects.filter(project_id__in = proid)    
+    for c in project_list:
+        filter_project.append(statistics_list.filter(project_id=c.id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
+    """分页"""
+    paginator = Paginator(project_list, 10)
+    page = request.GET.get('page')
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        projectobj = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        projectobj = paginator.page(paginator.num_pages)   
+    return render_to_response('statistics_list.html', RequestContext(request, {'project_list': project_list,\
+     "statistics_list":statistics_list, "fproject":filter_project, "relation":relation, "projectobj":projectobj}))
+
+def statistics_operate(request,pid):
+    if request.method == 'POST':
+        form = addmoduleForm(request.POST)
+        if form.is_valid():
+            modulename = form.cleaned_data['modulename']
+        add_module = models.module.objects.get(module = modulename)
+        pro_module_re = project_module(project = int(pid),module = add_module.id)
+        pro_module_re.save()
+    return HttpResponseRedirect("/statistics_list/")
 #homepage
 def personal_homepage(request):
     try:
@@ -1322,7 +1356,6 @@ def personal_homepage(request):
         {'projectobj':projectobj, 'result':result, 'result1':result1, 'relateduser': relateduser,'rendering': rendering, 'messages': messages, \
          'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,pid,url):
-    print("id is"+pid)
     delpro=get_object_or_404(project,pk=int(pid))
     delpro.delete()
     return HttpResponseRedirect(url)

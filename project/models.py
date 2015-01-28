@@ -139,9 +139,3 @@ class project_statistics_result(models.Model):
     date = models.DateField(u'统计日期')
     statistical_result = models.IntegerField(u'统计结果', max_length=10)
     isactived = models.BooleanField()
-
-
-
-
-
-        

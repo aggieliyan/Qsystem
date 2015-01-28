@@ -74,6 +74,10 @@ urlpatterns = patterns('',
     url(r'^emptyehistory',project.views.emptyehistory),
     url(r'^deletenotice',project.views.deletenotice),
     url(r'^approve',project.views.approve),
+    #statistics_list
+    url(r'^statistics_list',project.views.statistics_list),
+    url(r'^statistics_operate/(\d+)/$', project.views.statistics_operate,name="addoperate'"),
+    url(r'^statistics_operate/(\d+)/$', project.views.statistics_operate,name="\'addoperate\'"),
 )
 from django.conf import settings 
 if settings.DEBUG is False:

@@ -1,0 +1,152 @@
+﻿  {% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
+<meta http-equiv="Content-Type" content="text/html;" />
+<!-- <meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" /> -->
+<meta http-equiv="Content-Language" content="zh-cn" />
+<!-- Bootstrap -->
+<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
+	media="screen">
+<!--
+<link href="/static/css/datetimepicker.css" rel="stylesheet"
+	media="screen">
+-->
+<link href='/static/css/common.min.css?v=20150106' rel='stylesheet' media='screen'>
+<style type="text/css">
+<!--
+.STYLE1 {
+	font-size: 16px
+}
+-->
+</style>
+<!-- border-collapse 属性设置是否将表格边框折叠为单一边框 -->
+<!--
+<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet"media="screen">
+-->
+<link href="/static/css/message.css" rel="stylesheet" media="screen">
+{% endblock %}
+{% block content %}
+</div>
+	<div>
+		<ol class="breadcrumb" style="background-color:#339966; font:bold">
+			<li><a href="/projectlist/" class="divider">项目管理>></a></li>
+			<li><label class="active">项目使用量统计</label></li>
+			<li style = "float:right;margin-right:-110px"><a class="divider" href="javascript:window.history.back()" target="_self">返回上一页
+			</a></li> 
+		</ol>
+	</div>
+	<div>
+		<h3 class="head_1">项目使用量统计:</h3>
+		<div>
+			<label for="srchtxt" class="searchlabel">
+				<form method="post" class="form-search" style="width:1015px;">
+					{% csrf_token %} 
+					<input type="text"
+						class="input-medium search-query" name="wd"
+						placeholder="请输入项目名称" style="color:grey">
+					<button type="margin:5px;submit" class="btn btn-success">搜索</button>
+					<!--
+					<button data-toggle="botton" class="btn btn-danger " type="button"
+						style="margin:5px;float:right ;display:inline;">清空</button>
+					-->
+				</form>
+			</label>
+		</div>
+		<table class="table table-striped-list">
+			<col width="10%" />
+			<col width="30%" />
+			<col width="30%" />
+			<col width="15%" />
+			<col width="15%" />
+			<thead>
+				<tr>
+					<th class="thead_th">项目编号</th>
+					<th class="thead_th">项目名称</th>
+					<th class="thead_th">统计数据</th>
+					<th class="thead_th">项目所属模块</th>
+					<th class="thead_th">操作</th>
+					<!--<th class="thead_th">操作</th>-->
+				</tr>
+			</thead>
+			<tbody>
+			    {% if not projectobj %}
+                      <p style="text-align:center;">暂无相关项目</p>
+                 {% else %}	
+                 {% for p in projectobj %}			
+				<tr>
+					<td class="col1"><input type="checkbox" class="checkbox"><span>&nbsp;{{p.id}}</td>
+					<td class="col1">&nbsp;{{p.project}}</span></td>
+					<td class="col1">&nbsp;
+					<span class="flip"></span>
+					{% for c in fproject %}
+                    {% if c.project_id == p.id %}
+                    <span class="p-count">{{ c.total}}</span>
+                    {% endif %}
+                    {% endfor %}
+					</td>
+					<td>
+					{% for m in relation %}
+                    {% if m.project_id == p.id %}
+                    {{ m.module.module}}
+                    {% endif %}
+                    {% endfor %}</td>					
+					<td class="states_yes">
+					<button class="btn btn-warning " data-toggle="modal" type="button" data-toggle="modal" data-target="#addmodule">添加</button></td>										
+				</tr>
+				<tr class="panel">
+					<td colspan=5>
+						<div>
+							{% for c in statistics_list %}
+                            {% if c.project_id == p.id %}
+                            <p class="p-count" style="color:#339966;">{{c.item}}：&nbsp{{ c.total }}</p>
+                            {% endif %}
+                            {% endfor %}							
+						</div>
+					</td>
+			    </tr>			    
+				{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
+	<div>
+	<div style="text-align:left;margin:0 10px;float:left">
+			<input type="checkbox">&nbsp;全选
+			<a data-toggle="modal" data-target="#addmodule"><span style="margin:0 5px;">批量选择所属模块</span></a>
+		</div>
+	<!--分页-->
+    <div class="pagination" style="text-align:right;margin-right:10px">
+    <span class="step-links"  >
+        {% if projectobj.has_previous %}
+            <a href="?page={{ projectobj.previous_page_number }}&search_key={{ search_key }}"> << </a>
+        {% endif %}
+        <span class="current">
+            第 {{ projectobj.number }} 页,共 {{ projectobj.paginator.num_pages }}页
+        </span>
+        {% if projectobj.has_next %}
+            <a href="?page={{ projectobj.next_page_number }}&search_key={{ search_key }}"> >> </a>
+        {% endif %}
+    </span>
+    </div>
+	<!-- Modal -->
+	{% include "addmodule.html" %}
+	
+	
+{% endblock %}
+{% block js%}
+	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$(".panel").hide();
+		$(".flip").click(function(){
+			$(".panel").toggle();
+			$(".flip").toggleClass("drapdown");
+		});
+	});
+	</script>
+{% endblock%}
+
+
+
+
+

@@ -135,3 +135,5 @@ class feedbackCommentForm(forms.Form):
     feedbackid = forms.IntegerField(required=True)
     replymid = forms.IntegerField(required=True, error_messages={'required':u'请确定您是登录状态！'})
     comment = forms.CharField(required=True, error_messages={'required':u'请确定您是登录状态！'})
+class addmoduleForm(forms.Form):
+    modulename = forms.CharField(required=True)
