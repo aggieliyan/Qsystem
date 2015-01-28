@@ -70,7 +70,9 @@
 			</thead>
 			<tbody>
 			    {% if not projectobj %}
-                      <p style="text-align:center;">暂无相关项目</p>
+			    <tr>
+                    <td colspan=5><p style="text-align:center;">暂无相关项目</p></td>
+                </tr>
                  {% else %}	
                  {% for p in projectobj %}			
 				<tr>
