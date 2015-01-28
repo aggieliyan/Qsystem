@@ -1228,7 +1228,7 @@ def statistics_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)   
-    return render_to_response('statistics_list.html', RequestContext(request, {'project_list': project_list,\
+    return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
      "statistics_list":statistics_list, "fproject":filter_project, "relation":relation, "projectobj":projectobj}))
 
 def statistics_operate(request,pid):
@@ -1239,7 +1239,7 @@ def statistics_operate(request,pid):
         add_module = models.module.objects.get(module = modulename)
         pro_module_re = project_module(project = int(pid),module = add_module.id)
         pro_module_re.save()
-    return HttpResponseRedirect("/statistics_list/")
+    return HttpResponseRedirect("/statistics_detail/")
 #homepage
 def personal_homepage(request):
     try:
