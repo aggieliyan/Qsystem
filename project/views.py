@@ -1830,6 +1830,9 @@ def emptyehistory(request):
     return HttpResponseRedirect('/historymessage/')
 
 def show_slist(request):
+    module_info = models.project_module.objects.filter(isactived=1)
+
+
     return render_to_response('statistics_list.html')
 
 def initdata(request):

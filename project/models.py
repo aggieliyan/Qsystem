@@ -98,7 +98,7 @@ class project_statistics(models.Model):
     db = models.CharField(u'使用哪个库',max_length=50)
     sql = models.TextField(u'查询语句', max_length=21000)
     total = models.TextField(max_length=9999999,blank=True, null=True) 
-    is_graph = models.BooleanField(u'是否画图')   
+    is_graph = models.BooleanField(u'是否画图', default=0)   
 
 class project_feedback(models.Model):
     project= models.ForeignKey(project)

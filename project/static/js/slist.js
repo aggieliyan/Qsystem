@@ -1,6 +1,16 @@
 $(document).ready(function(){
 
-	$(".row a").click(function(){
-		$(this).append("<tr class='row canremove'><td>哎呀呀 我这这里是展开的内容啊</td></tr>");
+	$(".flip").click(function(){
+		$(".flip").toggleClass("drapdown");
+		$(".panel").toggle();
+		var panel = $(this).parent().parent().next(".panel");
+		console.log(panel.length);
+        content="这是一个内容很好<br/>这是一个内容很好<br/>这是一个内容很好<br/>这是一个内容很好<br/>"
+		if(panel.length == 0){
+			$(this).parent().parent().after("<tr class='row panel'><td><span>"+content+"<span></td></tr>");
+		}
+
 	});
-}
+
+
+});
