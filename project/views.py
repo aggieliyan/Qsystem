@@ -1830,10 +1830,16 @@ def emptyehistory(request):
     return HttpResponseRedirect('/historymessage/')
 
 def show_slist(request):
-    module_info = models.project_module.objects.filter(isactived=1)
+    module_info = models.module.objects.all()
+    modele_list = []
+    for item in module_info:
+        tempdict = {}
+        mproject = models.project_module.objects.filter(module_id=item.id)[0:16]
+        tempdict = {'id':item.id, 'name':item.module_name, 'plist':mproject}
+        modele_list.append(tempdict)
 
-
-    return render_to_response('statistics_list.html')
+    print modele_list
+    return render_to_response('statistics_list.html', {'module_list':modele_list}, context_instance=RequestContext(request))
 
 def initdata(request):
     #auth_group
