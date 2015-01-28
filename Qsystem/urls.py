@@ -74,6 +74,9 @@ urlpatterns = patterns('',
     url(r'^emptyehistory',project.views.emptyehistory),
     url(r'^deletenotice',project.views.deletenotice),
     url(r'^approve',project.views.approve),
+
+    #statistics
+    url(r'^slist/$', project.views.show_slist),
 )
 from django.conf import settings 
 if settings.DEBUG is False:
