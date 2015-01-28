@@ -1827,7 +1827,11 @@ def emptyehistory(request):
     if request.method == 'POST':
         for test in tests:
             test.delete()
-    return HttpResponseRedirect('/historymessage/')    
+    return HttpResponseRedirect('/historymessage/')
+
+def show_slist(request):
+    return render_to_response('statistics_list.html')
+
 def initdata(request):
     #auth_group
     group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理、发布相似')

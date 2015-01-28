@@ -7,6 +7,7 @@ body{
   font-size:14px;
 }
 
+
        .pic {background-image: url("/static/img/q_picture.png"); display: inline-block;}
        .top li{ 
 	    	list-style: none;

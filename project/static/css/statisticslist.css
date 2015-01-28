@@ -1,0 +1,48 @@
+.breadcrumb > li {
+    text-shadow: none;
+}
+
+.breadcrumb {
+    background-color: #339966;
+    margin-top: 0px;
+    width: 100%;
+}
+
+.breadcrumb > li > .divider {
+    font-size: 14px;
+    color: white;
+}
+
+.breadcrumb > .active {
+    color: black;
+}
+
+.back{
+  color: black;
+  float: right;
+  margin-right: 5px;
+}
+
+.sbox{
+  width:48%;
+  border:#339966 solid thin;
+  float:left;
+  margin-right:15px;
+}
+
+.sboxtitle{
+  /*color:#51a351;*/
+  background-color: #ddd;
+  font-size:16px;
+  font-weight:bold;
+  text-align: center;
+  line-height:40px;
+}
+
+.canremove{
+  background-color:#edf7f1 !important;
+}
+
+.row{
+  background-color: #ffd;
+}
