@@ -3,25 +3,16 @@ var lineChartData = {
 		labels : ["1月","2月","3月","4月","5月","6月","7月"],
 		datasets : [
 			{
-				label: "My First dataset",
-				fillColor : "rgba(220,220,220,0.2)",
-				strokeColor : "rgba(220,220,220,1)",
-				pointColor : "rgba(220,220,220,1)",
-				pointStrokeColor : "#fff",
-				pointHighlightFill : "#fff",
-				pointHighlightStroke : "rgba(220,220,220,1)",
+				label: "My dataset",
+				fillColor : "rgba(220,220,220,0)",
+				strokeColor : "rgba(255,153,51,1)",
+				pointColor : "#fff",
+				pointStrokeColor : "rgba(255,153,51,1)",
+				pointHighlightFill : "rgba(220,220,220,1)",
+				pointHighlightStroke : "rgba(255,153,51,1)",
 				data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
 			},
-			{
-				label: "My Second dataset",
-				fillColor : "rgba(151,187,205,0.2)",
-				strokeColor : "rgba(151,187,205,1)",
-				pointColor : "rgba(151,187,205,1)",
-				pointStrokeColor : "#fff",
-				pointHighlightFill : "#fff",
-				pointHighlightStroke : "rgba(151,187,205,1)",
-				data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-			}
+
 		]
 
 };

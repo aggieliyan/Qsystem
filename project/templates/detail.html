@@ -6,7 +6,7 @@
 	<META http-equiv="content-type" content="text/html; charset=utf-8">
   {% endblock %}
   {% block content %}
-	<div id="container">
+	<div id="container" style="background: white">
 		<div>
 			<div id="head"></div>
 			<div id="bread">
@@ -180,7 +180,12 @@
 						<td class="line-text">{{res.pro.remark_p}}</td>
 					</tr>
 				</table>
-				<canvas id="canvas" height="450" width="600"></canvas>
+				<div style="width:30%">
+					<div>
+						<p>机构增长量:</p>
+						<canvas id="canvas" height="450" width="600"></canvas>
+					</div>
+				</div>
 				<script type="text/javascript" src="/static/js/Chart.js"></script>
 				<script type="text/javascript" src="/static/js/chartline.js"></script>
 				
