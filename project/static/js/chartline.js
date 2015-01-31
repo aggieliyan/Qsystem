@@ -1,5 +1,4 @@
 function show_graph(pid){
-	//var randomScalingFactor = function(){ return Math.round(Math.random()*100);};
 	var url = "/getsdata/" + pid;
 	$.get(url, function(data, status){
 		var json = eval ("(" + data + ")");
