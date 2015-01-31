@@ -81,7 +81,7 @@ urlpatterns = patterns('',
 
     #statistics
     url(r'^slist/$', project.views.show_slist),
-
+    url(r'^getsdata/(\d+)/$', project.views.sdata),
 )
 from django.conf import settings 
 if settings.DEBUG is False:

@@ -81,6 +81,7 @@
 					{% for c in fproject %}
                     {% if c.project_id == p.id %}
                     <span class="p-count">{{ c.total}}</span>
+                   
                     {% endif %}
                     {% endfor %}
 					</td>
@@ -105,6 +106,12 @@
 							{% for c in statistics_list %}
                             {% if c.project_id == p.id %}
                             <p class="p-count" style="color:#339966;">{{c.item}}：&nbsp{{ c.total }}</p>
+                            <div style="width:30%">
+								<div>
+									<p>机构增长量:</p>
+									<canvas id="canvas" name="canvas" height="450" width="600"></canvas>
+								</div>
+							</div>
                             {% endif %}
                             {% endfor %}							
 						</div>
@@ -140,12 +147,15 @@
 {% endblock %}
 {% block js%}
 	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/js/Chart.min.js?v=20150129"></script>
+	<script type="text/javascript" src="/static/js/chartline.js?v=20150129"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$(".panel").hide();
 		$(".flip").click(function(){
 			$(".panel").toggle();
 			$(".flip").toggleClass("drapdown");
+			show_graph(1);
 		});
 		$("#chk_all").click(function(){
 			if(typeof($("#chk_all").attr("checked"))=="undefined")

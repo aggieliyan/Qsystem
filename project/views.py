@@ -1855,6 +1855,26 @@ def show_slist(request):
     print modele_list
     return render_to_response('statistics_list.html', {'module_list':modele_list}, context_instance=RequestContext(request))
 
+def sdata(request, pid):
+    sqlnum = models.project_statistics_result.objects.filter(project_id=pid).distinct().values_list('sql_id')
+    sql_ids = []
+    for s in sqlnum:
+        sql_ids.append(s[0])
+    sdata = {}
+    for sid in sql_ids:
+        labels = []
+        total = []
+        datas = models.project_statistics_result.objects.filter(sql_id=sid)
+        for data in datas:
+                labels.append(str(data.date))
+                total.append(data.statistical_result)
+        print labels, total
+        sdata[sid] = {'labels': labels, 'total': total}
+   
+    print sdata
+        
+    return HttpResponse(json.dumps(sdata))
+
 def initdata(request):
     #auth_group
     group1 = Group(id=1,name='项目经理权限--新建、编辑、删除、暂停、延期处理、发布相似')
