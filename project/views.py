@@ -21,7 +21,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 
 from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, \
-MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm, addmoduleForm
+MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm, addmoduleForm, sdetailForm
 
 def register(request,uname=''):
     if uname =='':      #若是直接Q系统注册为空,以ldap第一次登录则会传来用户名
@@ -714,7 +714,7 @@ def project_list(request):
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
-    notices = noticess[:5]  	
+    notices = noticess[:5]      
     ##
     projectlist = None
     project_id = ""if isNone(request.GET.get("id"))else request.GET.get("id")
@@ -1171,6 +1171,7 @@ def psearch(request):
     else:
         rrs = {"person":search_rs}
         search_rs = json.dumps(rrs)
+        print search_rs
     return HttpResponse(search_rs)
 
 #通用头
@@ -1209,17 +1210,59 @@ def user_info(request):
     return HttpResponse(rs)
 
 #项目统计列表页
-def statistics_detail(request):
-    filter_project =[]  
-    cpcount = []
-    proid = models.project_statistics.objects.distinct().values_list('project_id',flat=True)
-    project_list =  models.project.objects.filter(pk__in = proid)
-    statistics_list = models.project_statistics.objects.all()     
-    relation = models.project_module.objects.filter(project_id__in = proid)    
-    for c in project_list:
-        filter_project.append(statistics_list.filter(project_id=c.id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
+def statistics_detail(request): 
+    sdetail = {}  
+    dic_list = [] 
+    flip_list = []
+    proid = set(models.project_statistics.objects.distinct().values_list('project_id', flat=True))
+    project_list = models.project.objects.filter(pk__in = proid)
+    if request.method == "POST":
+        form = sdetailForm(request.POST)
+        if form.is_valid():
+            module_p = form.cleaned_data['module_p']
+            kw = form.cleaned_data['kw']
+    else:
+        kw=''
+        module_p=''
+        try:
+            kw = request.GET["kw"]
+            module_p = request.GET["module_p"]
+        except Exception:
+            pass
+    if kw and module_p:
+        relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
+        project_list = project_list.filter(project__contains = kw).filter(pk__in = relapro )
+    else:
+        if kw:
+            project_list = project_list.filter(project__contains = kw)
+        if module_p:
+            relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
+            project_list = project_list.filter(pk__in = relapro )           
+    for p in project_list:
+        all_sp = []
+        try:
+            mname = models.module.objects.get(project_module__project_id = p.id).module_name 
+        except Exception:
+            mname = '' 
+        print mname        
+        total = models.project_statistics.objects.filter(project_id=p.id).order_by("total")[0]
+            # for s in total:
+            #     static = []
+            #     static.append(s.total)
+            
+            #     sdetail = {"item":s.item, "num":s.total}
+            #     all_sp.append(sdetail)
+            # print static
+        dic = {'id':p.id, "total":total.total, "module":mname}
+            # flip = {'id':p.id, "show_slist":all_sp}
+        dic_list.append(dic) 
+            # flip_list.append(flip)
+    print dic_list
+    #     flip_all = {"drapdown":flip_list}
+    # rs = json.dumps(flip_all)
+    # return HttpResponse(rs)
     """分页"""
-    paginator = Paginator(project_list, 10)
+    paginator = Paginator(project_list, 20)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -1228,9 +1271,10 @@ def statistics_detail(request):
         projectobj = paginator.page(1)
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
-        projectobj = paginator.page(paginator.num_pages)   
+        projectobj = paginator.page(paginator.num_pages)
+    print projectobj   
     return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
-     "statistics_list":statistics_list, "fproject":filter_project, "relation":relation, "projectobj":projectobj}))
+     "dic_list":dic_list, "projectobj":projectobj, "kw":kw, "module_p":module_p}))
 
 def statistics_operate(request):
     if request.method == 'POST':
@@ -1254,6 +1298,7 @@ def statistics_operate(request):
         else:
            form = addmoduleForm()
     return HttpResponseRedirect('/sdetail/')
+
 #homepage
 def personal_homepage(request):
     try:

@@ -41,10 +41,25 @@
 			<label for="srchtxt" class="searchlabel">
 				<form method="post" class="form-search" style="width:1015px;">
 					{% csrf_token %} 
-					<input type="text"
-						class="input-medium search-query" name="wd"
-						placeholder="请输入项目名称" style="color:grey">
-					<button type="margin:5px;submit" class="btn btn-success">搜索</button>
+					 <div style="float:left;" >
+					 	<div>
+					 		<select name="module_p" id="protype">
+					 			<option select = 'selected' value="{{ module_p }}">{{ module_p }}</option>
+					 			<option>需求讨论中</option>
+					 			<option>设计中</option>
+					 			<option>设计完成</option>
+                                <option>开发中</option>
+                                <option>测试中</option>
+                                <option>暂停</option>
+                                <option>已上线</option>
+                                <option>运营推广</option>
+					 		</select>
+					 	</div>
+				    </div>
+					<div style="float:right;margin-right:530px">
+						<input type="text" class="input-medium search-query" name="kw" value="{{kw}}"
+						placeholder="请输入项目名称" style="color:grey;position:relative;">
+					<button type="submit" class="btn btn-success">搜索</button></div>
 					<!--
 					<button data-toggle="botton" class="btn btn-danger " type="button"
 						style="margin:5px;float:right ;display:inline;">清空</button>
@@ -52,7 +67,8 @@
 				</form>
 			</label>
 		</div>
-		<table class="table table-striped-list">
+		<div style="margin-top:68px;">
+			<table class="table">
 			<col width="10%" />
 			<col width="30%" />
 			<col width="28%" />
@@ -70,46 +86,40 @@
 			</thead>
 			<tbody>
 			    {% if not projectobj %}
-                      <p style="text-align:center;">暂无相关项目</p>
+			    <tr>
+			    	<td><p style="text-align:center;">暂无相关项目</p></td>
+			    </tr>
                  {% else %}
                  {% for p in projectobj %}			
-				<tr>
-					<td class="col1"><input type="checkbox" class="checkbox" value="{{p.id}}" name="chk_list"><span>&nbsp;{{p.id}}</td>
-					<td class="col1">&nbsp;<a style="font" href="{% url 'prodetail' p.id %}">{{p.project}}</a></span></td>
-					<td class="col1">&nbsp;
-					<span class="flip"></span>
-					{% for c in fproject %}
-                    {% if c.project_id == p.id %}
-                    <span class="p-count">{{ c.total}}</span>
-                    {% endif %}
-                    {% endfor %}
+				 {% if forloop.counter|divisibleby:'2' %}
+				 <tr class="low1">
+				 {% else %}
+				 <tr class="low2">
+				 {% endif %}
+					<td>
+						<input type="checkbox" class="checkbox" value="{{p.id}}" name="chk_list">&nbsp;{{p.id}}
 					</td>
 					<td>
-					{% for m in relation %}
-                    {% if m.project_id == p.id %}
-                    {{ m.module.module_name}}
-                    {% endif %}
-                    {% endfor %}</td>					
+						<a style="font" href="{% url 'prodetail' p.id %}">{{p.project}}</a>
+					</td>
+					{% for c in dic_list %}
+					{% if c.id == p.id %}
+					<td>
+						<span class="flip"></span>						
+						<span>{{ c.total}}</span>
+					</td>
+					<td>
+					{{c.module}}
+					</td>
 					<td class="states_yes">
-					{% if m.module.module_name %}
+					{% if c.module %}
 					<button class="btn btn-warning " data-toggle="modal" type="button" onclick="s_operate({{p.id}})">编辑</button>
 					{% else %}
 					<button class="btn btn-warning " data-toggle="modal" type="button" onclick="s_operate({{p.id}})">添加</button>
 					{% endif %}
-
-				</td>										
-				</tr>
-				<tr class="panel">
-					<td colspan=5>
-						<div>
-							{% for c in statistics_list %}
-                            {% if c.project_id == p.id %}
-                            <p class="p-count" style="color:#339966;">{{c.item}}：&nbsp{{ c.total }}</p>
-                            {% endif %}
-                            {% endfor %}							
-						</div>
-					</td>
-			    </tr>			    
+				    </td>
+				    {% endif %}
+					{% endfor %}
 				{% endfor %}
 				{% endif %}
 			</tbody>
@@ -124,13 +134,13 @@
     <div class="pagination" style="text-align:right;margin-right:10px">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
-            <a href="?page={{ projectobj.previous_page_number }}&search_key={{ search_key }}"> << </a>
+            <a href="?page={{ projectobj.previous_page_number }}&module_p={{ module_p }}&kw={{kw}}"> << </a>
         {% endif %}
         <span class="current">
             第 {{ projectobj.number }} 页,共 {{ projectobj.paginator.num_pages }}页
         </span>
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}&search_key={{ search_key }}"> >> </a>
+            <a href="?page={{ projectobj.next_page_number }}&&module_p={{ module_p }}&kw={{kw}}"> >> </a>
         {% endif %}
     </span>
     </div>
@@ -142,11 +152,19 @@
 	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$(".panel").hide();
+
 		$(".flip").click(function(){
-			$(".panel").toggle();
-			$(".flip").toggleClass("drapdown");
-		});
+			$(this).toggleClass("drapdown");
+			var panel = $(this).parent().parent().next(".panel");
+			console.log(panel.length);
+			content="这是一个内容很好<br/>这是一个内容很好<br/>这是一个内容很好<br/>这是一个内容很好<br/>"
+			if(panel.length == 0){
+				$(this).parent().parent().after("<tr class='panel'><td colspan=5><span>"+content+"<span></td></tr>");
+				}
+			else{
+				panel.toggle();
+				}
+			});
 		$("#chk_all").click(function(){
 			if(typeof($("#chk_all").attr("checked"))=="undefined")
 				$("input[name='chk_list']").removeAttr("checked");
@@ -167,7 +185,6 @@
         $('#bulk_sid').val(id);
         $('#addmodule').modal('show');
       }
-
 	</script>
 {% endblock%}
 
