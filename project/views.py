@@ -1262,7 +1262,7 @@ def statistics_detail(request):
     # rs = json.dumps(flip_all)
     # return HttpResponse(rs)
     """分页"""
-    paginator = Paginator(project_list, 20)
+    paginator = Paginator(project_list, 5)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)

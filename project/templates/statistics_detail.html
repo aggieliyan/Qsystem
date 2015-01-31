@@ -97,7 +97,7 @@
 				 <tr class="low2">
 				 {% endif %}
 					<td>
-						<input type="checkbox" class="checkbox" value="{{p.id}}" name="chk_list">&nbsp;{{p.id}}
+						<label class="checkbox inline"><input type="checkbox" value="{{p.id}}" name="chk_list"> {{p.id}}</label>
 					</td>
 					<td>
 						<a style="font" href="{% url 'prodetail' p.id %}">{{p.project}}</a>
@@ -127,11 +127,12 @@
 	</div>
 	<div>
 	<div style="text-align:left;margin:0 10px;float:left">
-			<input type="checkbox" name="chk_all" id="chk_all">&nbsp;全选
-			<a data-toggle="modal" data-target="#addmodule" id="bulk_add"><span style="margin:0 5px;">批量选择所属模块</span></a>
+		<label class="checkbox inline" ><input type="checkbox" id="chk_all" name="chk_all">全选</label>
+		<label class="checkbox inline" ><a id="bulk_add" style="margin:0 5px;"><span >批量选择所属模块</span></a></label>
+		
 		</div>
 	<!--分页-->
-    <div class="pagination" style="text-align:right;margin-right:10px">
+    <div class="pagination" style="text-align:right;margin-right:10px;padding-top: 6px;">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
             <a href="?page={{ projectobj.previous_page_number }}&module_p={{ module_p }}&kw={{kw}}"> << </a>
@@ -179,8 +180,14 @@
 			$(arrChk).each(function(){
 				value=this.value + "," + value;
 			});
-			alert(value);
-			$("#bulk_sid").val(value);
+			if (value) {
+				$("#bulk_sid").val(value);
+				$("#addmodule").modal('show')
+			}			
+			else{
+				alert("请勾选项目后再进行批量操作！");
+			}
+				
 		});			
 	});
 	function s_operate(id){
