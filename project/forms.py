@@ -140,3 +140,7 @@ class addmoduleForm(forms.Form):
     sid = forms.IntegerField(required=False)
     bulk_sid = forms.CharField(required=False) 
     modulename = forms.CharField(required=True)
+
+class sdetailForm(forms.Form):
+    module_p = forms.CharField(required=False) 
+    kw = forms.CharField(required=False)
