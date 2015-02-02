@@ -1208,97 +1208,6 @@ def user_info(request):
             result['realname'] = 'GUEST' 
     rs = json.dumps(result)
     return HttpResponse(rs)
-
-#项目统计列表页
-def statistics_detail(request): 
-    sdetail = {}  
-    dic_list = [] 
-    flip_list = []
-    proid = set(models.project_statistics.objects.distinct().values_list('project_id', flat=True))
-    project_list = models.project.objects.filter(pk__in = proid)
-    if request.method == "POST":
-        form = sdetailForm(request.POST)
-        if form.is_valid():
-            module_p = form.cleaned_data['module_p']
-            kw = form.cleaned_data['kw']
-    else:
-        kw=''
-        module_p=''
-        try:
-            kw = request.GET["kw"]
-            module_p = request.GET["module_p"]
-        except Exception:
-            pass
-    if kw and module_p:
-        relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
-        project_list = project_list.filter(project__contains = kw).filter(pk__in = relapro )
-    else:
-        if kw:
-            project_list = project_list.filter(project__contains = kw)
-        if module_p:
-            relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
-            project_list = project_list.filter(pk__in = relapro )           
-    for p in project_list:
-        all_sp = []
-        try:
-            mname = models.module.objects.get(project_module__project_id = p.id).module_name 
-        except Exception:
-            mname = '' 
-        print mname        
-        total = models.project_statistics.objects.filter(project_id=p.id).order_by("total")[0]
-            # for s in total:
-            #     static = []
-            #     static.append(s.total)
-            
-            #     sdetail = {"item":s.item, "num":s.total}
-            #     all_sp.append(sdetail)
-            # print static
-        dic = {'id':p.id, "total":total.total, "module":mname}
-            # flip = {'id':p.id, "show_slist":all_sp}
-        dic_list.append(dic) 
-            # flip_list.append(flip)
-    print dic_list
-    #     flip_all = {"drapdown":flip_list}
-    # rs = json.dumps(flip_all)
-    # return HttpResponse(rs)
-    """分页"""
-    paginator = Paginator(project_list, 5)
-    page = request.GET.get('page')
-    try:
-        projectobj = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        projectobj = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        projectobj = paginator.page(paginator.num_pages)
-    print projectobj   
-    return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
-     "dic_list":dic_list, "projectobj":projectobj, "kw":kw, "module_p":module_p}))
-
-def statistics_operate(request):
-    if request.method == 'POST':
-        form = addmoduleForm(request.POST)
-        if form.is_valid():
-            bulk_sid = form.cleaned_data['bulk_sid']
-            modulename = form.cleaned_data['modulename'] 
-            add_module = models.module.objects.get(module_name = modulename)
-            mid = add_module.id                      
-            bulk_sid = bulk_sid.split(",")
-            all_pro_module = []
-            for pid in bulk_sid:
-                if pid:
-                    pro_module = models.project_module.objects.filter(project_id = int(pid))
-                    if  not pro_module: 
-                        add_pro_module = project_module(project_id = int(pid), module_id = mid, isactived = 1)
-                        all_pro_module.append(add_pro_module)
-                    else:
-                        pro_module.update(module = mid)
-            models.project_module.objects.bulk_create(all_pro_module)
-        else:
-           form = addmoduleForm()
-    return HttpResponseRedirect('/sdetail/')
-
 #homepage
 def personal_homepage(request):
     try:
@@ -1887,6 +1796,101 @@ def emptyehistory(request):
         for test in tests:
             test.delete()
     return HttpResponseRedirect('/historymessage/')
+
+#项目统计列表页
+def statistics_detail(request): 
+    sdetail = {}  
+    dic_list = [] 
+    flip_list = []
+    flip = {}
+    proid = set(models.project_statistics.objects.distinct().values_list('project_id', flat=True))
+    project_list = models.project.objects.filter(pk__in = proid)
+    if request.method == "POST":
+        form = sdetailForm(request.POST)
+        if form.is_valid():
+            module_p = form.cleaned_data['module_p']
+            kw = form.cleaned_data['kw']
+    else:
+        kw=''
+        module_p=''
+        try:
+            kw = request.GET["kw"]
+            module_p = request.GET["module_p"]
+        except Exception:
+            pass
+    if kw and module_p:
+        relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
+        project_list = project_list.filter(project__contains = kw).filter(pk__in = relapro )
+    else:
+        if kw:
+            project_list = project_list.filter(project__contains = kw)
+        if module_p:
+            relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
+            project_list = project_list.filter(pk__in = relapro )           
+    for p in project_list:
+        all_sp = []
+        try:
+            mname = models.module.objects.get(project_module__project_id = p.id).module_name 
+        except Exception:
+            mname = ''         
+        total = models.project_statistics.objects.filter(project_id=p.id).order_by("total")[0]
+        dic = {'id':p.id, "total":total.total, "module":mname}
+        dic_list.append(dic)
+    #     for s in total:
+    #         static = []
+    #         static.append(s.total)            
+    #         sdetail = {"item":s.item, "num":s.total}
+    #         all_sp.append(sdetail)      
+    #     flip[s.project_id] = sdetail
+           
+    # return HttpResponse(json.dumps(flip))
+    """分页"""
+    paginator = Paginator(project_list, 5)
+    page = request.GET.get('page')
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        projectobj = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        projectobj = paginator.page(paginator.num_pages)   
+    return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
+     "dic_list":dic_list, "projectobj":projectobj, "kw":kw, "module_p":module_p}))
+
+def sdropdown(request, pid):
+    total = models.project_statistics.objects.filter(project_id=pid).order_by("total")
+    flip = {}
+    for s in total:
+        all_sp = []
+        sdetail = {"item":s.item, "num":s.total}
+        all_sp.append(sdetail)      
+    flip = {"slist":all_sp}           
+    return HttpResponse(json.dumps(all_sp))
+
+def statistics_operate(request):
+    if request.method == 'POST':
+        form = addmoduleForm(request.POST)
+        if form.is_valid():
+            bulk_sid = form.cleaned_data['bulk_sid']
+            modulename = form.cleaned_data['modulename'] 
+            add_module = models.module.objects.get(module_name = modulename)
+            mid = add_module.id                      
+            bulk_sid = bulk_sid.split(",")
+            all_pro_module = []
+            for pid in bulk_sid:
+                if pid:
+                    pro_module = models.project_module.objects.filter(project_id = int(pid))
+                    if  not pro_module: 
+                        add_pro_module = project_module(project_id = int(pid), module_id = mid, isactived = 1)
+                        all_pro_module.append(add_pro_module)
+                    else:
+                        pro_module.update(module = mid)
+            models.project_module.objects.bulk_create(all_pro_module)
+        else:
+           form = addmoduleForm()
+    return HttpResponseRedirect('/sdetail/')
+
 
 def show_slist(request):
     module_info = models.module.objects.all()

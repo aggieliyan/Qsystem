@@ -4,6 +4,7 @@
 	$.get(url, function(data){
 		var result = eval("\("+data+"\)");
 		var name = result.realname;
+    console.log(name);
 		var pro_num = result.pro_num;
 		var message_num = result.message_num;
 		

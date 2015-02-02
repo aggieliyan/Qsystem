@@ -105,7 +105,7 @@
 					{% for c in dic_list %}
 					{% if c.id == p.id %}
 					<td>
-						<span class="flip"></span>						
+						<span class="flip" value="{{p.id}}"></span>						
 						<span>{{ c.total}}</span>
 					</td>
 					<td>
@@ -155,15 +155,26 @@
 	<script type="text/javascript" src="/static/js/chartline.js?v=20150129"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-
+		var id=0;
 		$(".flip").click(function(){
+		    id++;
+		    console.log(id);
 			$(this).toggleClass("drapdown");
+			pid = $(this).attr("value");
 			var panel = $(this).parent().parent().next(".panel");
-			console.log(panel.length);
-			content="这是一个内容很好<br/>这是一个内容很好<br/>这是一个内容很好<br/>这是一个内容很好<br/>"
 			if(panel.length == 0){
-				$(this).parent().parent().after("<tr class='panel'><td colspan=5><span>"+content+"<span></td></tr>");
-				}
+				$(this).parent().parent().after("<tr class='panel'><td colspan=2 id='"+id+"'></td><td colspan=3 id='chart"+id+"'></td></tr>");
+				var url = "/sflip/" + pid;
+				$.get(url, function(data, status){
+					var datalist = eval ("(" + data + ")");
+					var num = datalist.length;
+					for(var i=0;i<num;i++){
+						$("#"+id).append("<p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p>");
+						$("#chart"+id).append("<p>"+item+":"+"</p><p>"+detail+"</p>");
+					}
+				
+				});
+			}
 			else{
 				panel.toggle();
 				}
@@ -188,12 +199,14 @@
 				alert("请勾选项目后再进行批量操作！");
 			}
 				
-		});			
+		});		
 	});
+
 	function s_operate(id){
         $('#bulk_sid').val(id);
         $('#addmodule').modal('show');
       }
+
 	</script>
 {% endblock%}
 
