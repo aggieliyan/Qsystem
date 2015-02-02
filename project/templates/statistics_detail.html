@@ -157,7 +157,9 @@
 	$(document).ready(function(){
 		var id=0;
 		$(".flip").click(function(){
-		    id++;
+		    if ($(".panel").length != id){
+				id++;
+			}
 		    console.log(id);
 			$(this).toggleClass("drapdown");
 			pid = $(this).attr("value");
@@ -170,10 +172,10 @@
 					var num = datalist.length;
 					for(var i=0;i<num;i++){
 						$("#"+id).append("<p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p>");
-						$("#chart"+id).append("<p>"+item+":"+"</p><p>"+detail+"</p>");
-					}
-				
+						$("#chart"+id).append("<div style='width:30%;'><div><p>"+datalist[i].item+":"+"</p><canvas id='canvas"+id+"' name='canvas' height='450' width='600'></canvas></div></div>");
+					}				
 				});
+				show_graph(pid);
 			}
 			else{
 				panel.toggle();
