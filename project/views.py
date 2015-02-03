@@ -1863,7 +1863,7 @@ def sdropdown(request, pid):
     sdetail = {}
     all_sp = []
     for s in total:        
-        sdetail = {"item":s.item, "num":s.total}
+        sdetail = {"sql":s.id, "item":s.item, "num":s.total}
         all_sp.append(sdetail)          
     return HttpResponse(json.dumps(all_sp))
 

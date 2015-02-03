@@ -41,7 +41,7 @@
 			<label for="srchtxt" class="searchlabel">
 				<form method="post" class="form-search" style="width:1015px;">
 					{% csrf_token %} 
-					 <div style="float:left;" >
+					 <div class="sselect">
 					 	<div>
 					 		<select name="module_p" id="protype">
 					 			<option select = 'selected' value="{{ module_p }}">{{ module_p }}</option>
@@ -56,7 +56,7 @@
 					 		</select>
 					 	</div>
 				    </div>
-					<div style="float:right;margin-right:530px">
+					<div class="ssearch">
 						<input type="text" class="input-medium search-query" name="kw" value="{{kw}}"
 						placeholder="请输入项目名称" style="color:grey;position:relative;">
 					<button type="submit" class="btn btn-success">搜索</button></div>
@@ -100,7 +100,7 @@
 						<label class="checkbox inline"><input type="checkbox" value="{{p.id}}" name="chk_list"> {{p.id}}</label>
 					</td>
 					<td>
-						<a style="font" href="{% url 'prodetail' p.id %}">{{p.project}}</a>
+						<a href="{% url 'prodetail' p.id %}">{{p.project}}</a>
 					</td>
 					{% for c in dic_list %}
 					{% if c.id == p.id %}
@@ -126,13 +126,13 @@
 		</table>
 	</div>
 	<div>
-	<div style="text-align:left;margin:0 10px;float:left">
+	<div class="scheck_m">
 		<label class="checkbox inline" ><input type="checkbox" id="chk_all" name="chk_all">全选</label>
-		<label class="checkbox inline" ><a id="bulk_add" style="margin:0 5px;"><span >批量选择所属模块</span></a></label>
+		<label class="checkbox inline" ><a id="bulk_add" class="bulk">批量选择所属模块</a></label>
 		
 		</div>
 	<!--分页-->
-    <div class="pagination" style="text-align:right;margin-right:10px;padding-top: 6px;">
+    <div class="pagination page">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
             <a href="?page={{ projectobj.previous_page_number }}&module_p={{ module_p }}&kw={{kw}}"> << </a>
@@ -161,7 +161,6 @@
 		    if ($(".panel").length != id){
 				id++;
 			}
-		    console.log(id);
 			$(this).toggleClass("drapdown");
 			pid = $(this).attr("value");
 			var panel = $(this).parent().parent().next(".panel");
@@ -172,10 +171,11 @@
 					var datalist = eval ("(" + data + ")");
 					var num = datalist.length;
 					for(var i=0;i<num;i++){
-						$("#"+id).append("<div><div style='float:left;width:500px;'><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='float:right;width:600px;'><div style='width:60%;'><canvas id='canvas"+id+"' name='canvas' height='2' width='3'></canvas></div></div>");
+						$("#"+id).append("<div><div style='float:left;width:500px;'><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='float:right;width:600px;'><div style='width:60%;'><canvas id='canvas"+id+i+"' name='canvas' height='2' width='3'></canvas></div></div>");
 					}				
 				});				
-				setTimeout("show_graph(pid)",500);			
+				setTimeout(500);
+				show_graph(pid,id);			
 			}
 			else{
 				panel.toggle();
