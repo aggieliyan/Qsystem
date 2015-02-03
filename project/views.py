@@ -1860,15 +1860,11 @@ def statistics_detail(request):
 
 def sdropdown(request, pid):
     total = models.project_statistics.objects.filter(project_id=pid).order_by("total")
-    print total
-    flip = {}
     sdetail = {}
     all_sp = []
     for s in total:        
         sdetail = {"item":s.item, "num":s.total}
-        all_sp.append(sdetail)
-    print all_sp      
-    flip = {"slist":all_sp}           
+        all_sp.append(sdetail)          
     return HttpResponse(json.dumps(all_sp))
 
 def statistics_operate(request):
