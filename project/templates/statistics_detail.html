@@ -165,17 +165,20 @@
 			pid = $(this).attr("value");
 			var panel = $(this).parent().parent().next(".panel");
 			if(panel.length == 0){
-				$(this).parent().parent().after("<tr class='panel'><td colspan=2 id='"+id+"'></td><td colspan=3 id='chart"+id+"'></td></tr>");
+				$(this).parent().parent().after("<tr class='panel'><td colspan=5 id='"+id+"'></td></tr>");
 				var url = "/sflip/" + pid;
 				$.get(url, function(data, status){
 					var datalist = eval ("(" + data + ")");
 					var num = datalist.length;
 					for(var i=0;i<num;i++){
-						$("#"+id).append("<p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p>");
-						$("#chart"+id).append("<div style='width:30%;'><div><p>"+datalist[i].item+":"+"</p><canvas id='canvas"+id+"' name='canvas' height='450' width='600'></canvas></div></div>");
+						$("#"+id).append("<div><div style='float:left;width:500px;'><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='float:right;width:600px;'><div style='width:60%;'><canvas id='canvas"+id+"' name='canvas' height='2' width='3'></canvas></div></div>");
+						// $("#chart"+id).append("<div style='width:30%;float:right;'><div><p>"+datalist[i].item+":"+"</p><canvas id='canvas"+id+"' name='canvas' height='450' width='600'></canvas></div></div>");
 					}				
 				});
-				show_graph(pid);
+				
+				setTimeout("show_graph(pid)",500);
+				
+				
 			}
 			else{
 				panel.toggle();
