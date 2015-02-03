@@ -4,7 +4,6 @@ $(document).ready(function(){
 		if ($(".panel").length != id){
 			id++;
 		}
-		console.log(id);
 		$(this).toggleClass("drapdown");
 		pid = $(this).attr("value");
 		var panel = $(this).parent().parent().next(".panel");

@@ -1799,6 +1799,11 @@ def emptyehistory(request):
 
 #项目统计列表页
 def statistics_detail(request): 
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/nologin")
+    pm = 0
+    if request.user.has_perm("auth.change_permission"):
+        pm = 1
     sdetail = {}  
     dic_list = [] 
     flip_list = []
@@ -1818,6 +1823,7 @@ def statistics_detail(request):
             module_p = request.GET["module_p"]
         except Exception:
             pass
+    # if module_p == u"综合类":
     if kw and module_p:
         relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
         project_list = project_list.filter(project__contains = kw).filter(pk__in = relapro )
@@ -1836,14 +1842,6 @@ def statistics_detail(request):
         total = models.project_statistics.objects.filter(project_id=p.id).order_by("total")[0]
         dic = {'id':p.id, "total":total.total, "module":mname}
         dic_list.append(dic)
-    #     for s in total:
-    #         static = []
-    #         static.append(s.total)            
-    #         sdetail = {"item":s.item, "num":s.total}
-    #         all_sp.append(sdetail)      
-    #     flip[s.project_id] = sdetail
-           
-    # return HttpResponse(json.dumps(flip))
     """分页"""
     paginator = Paginator(project_list, 5)
     page = request.GET.get('page')
@@ -1856,7 +1854,7 @@ def statistics_detail(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)   
     return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
-     "dic_list":dic_list, "projectobj":projectobj, "kw":kw, "module_p":module_p}))
+     "dic_list":dic_list, "projectobj":projectobj, "kw":kw, "module_p":module_p, 'pm':pm}))
 
 def sdropdown(request, pid):
     total = models.project_statistics.objects.filter(project_id=pid).order_by("total")
@@ -1984,4 +1982,19 @@ def initdata(request):
     depart13.save()
     depart100 = department(id=100,department='blank',isactived=1)
     depart100.save()   
+    # module
+    module1 = module(id=1,module_name='内部管理',isactived=1)
+    module1.save()
+    module2 = module(id=2,module_name='机构后台',isactived=1)
+    module2.save()
+    module3 = module(id=3,module_name='机构前台',isactived=1)
+    module3.save()
+    module4 = module(id=4,module_name='AS平台(AS运营类)',isactived=1)
+    module4.save()
+    module5 = module(id=5,module_name='客户端产品',isactived=1)
+    module5.save()
+    module6 = module(id=6,module_name='考试系统',isactived=1)
+    module6.save()
+    module7 = module(id=7,module_name='项目组产品',isactived=1)
+    module7.save()
     return HttpResponse("恭喜你,初始化数据成功~")

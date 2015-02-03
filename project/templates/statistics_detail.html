@@ -45,14 +45,14 @@
 					 	<div>
 					 		<select name="module_p" id="protype">
 					 			<option select = 'selected' value="{{ module_p }}">{{ module_p }}</option>
-					 			<option>需求讨论中</option>
-					 			<option>设计中</option>
-					 			<option>设计完成</option>
-                                <option>开发中</option>
-                                <option>测试中</option>
-                                <option>暂停</option>
-                                <option>已上线</option>
-                                <option>运营推广</option>
+					 			<option>综合类</option>
+					 			<option>内部管理</option>
+					 			<option>机构后台</option>
+					 			<option>机构前台</option>
+					 			<option>AS平台(AS运营类)</option>
+					 			<option>客户端产品</option>
+                                <option>考试系统</option>
+                                <option>项目组产品</option>
 					 		</select>
 					 	</div>
 				    </div>
@@ -112,10 +112,13 @@
 					{{c.module}}
 					</td>
 					<td class="states_yes">
+					{% if pm == 1 %}
 					{% if c.module %}
 					<button class="btn btn-warning " data-toggle="modal" type="button" onclick="s_operate({{p.id}})">编辑</button>
 					{% else %}
 					<button class="btn btn-warning " data-toggle="modal" type="button" onclick="s_operate({{p.id}})">添加</button>
+					{% endif %}
+					{% else %}
 					{% endif %}
 				    </td>
 				    {% endif %}
