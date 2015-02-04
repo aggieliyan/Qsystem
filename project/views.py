@@ -1893,7 +1893,6 @@ def show_slist(request):
         return HttpResponseRedirect("/nologin")
     module_info = models.module.objects.all()
     modele_list = []
-    modele_list.append(genaral)
     for item in module_info:
         tempdict = {}
         mproject = models.project_module.objects.filter(module_id=item.id)[0:16]
