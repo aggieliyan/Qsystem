@@ -1797,7 +1797,7 @@ def emptyehistory(request):
             test.delete()
     return HttpResponseRedirect('/historymessage/')
 
-#项目统计列表页
+#项目统计详情页
 def statistics_detail(request): 
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
@@ -1808,7 +1808,7 @@ def statistics_detail(request):
     dic_list = [] 
     flip_list = []
     flip = {}
-    proid = set(models.project_statistics.objects.distinct().values_list('project_id', flat=True))
+    proid = models.project_statistics.objects.distinct().values_list('project_id', flat=True)
     project_list = models.project.objects.filter(pk__in = proid)
     if request.method == "POST":
         form = sdetailForm(request.POST)
@@ -1823,7 +1823,6 @@ def statistics_detail(request):
             module_p = request.GET["module_p"]
         except Exception:
             pass
-    # if module_p == u"综合类":
     if kw and module_p:
         relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
         project_list = project_list.filter(project__contains = kw).filter(pk__in = relapro )
@@ -1890,8 +1889,11 @@ def statistics_operate(request):
 
 
 def show_slist(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/nologin")
     module_info = models.module.objects.all()
     modele_list = []
+    modele_list.append(genaral)
     for item in module_info:
         tempdict = {}
         mproject = models.project_module.objects.filter(module_id=item.id)[0:16]
@@ -1983,18 +1985,20 @@ def initdata(request):
     depart100 = department(id=100,department='blank',isactived=1)
     depart100.save()   
     # module
-    module1 = module(id=1,module_name='内部管理',isactived=1)
+    module1 = module(id=1,module_name='综合类',isactived=1)
     module1.save()
-    module2 = module(id=2,module_name='机构后台',isactived=1)
+    module2 = module(id=1,module_name='内部管理',isactived=1)
     module2.save()
-    module3 = module(id=3,module_name='机构前台',isactived=1)
+    module3 = module(id=2,module_name='机构后台',isactived=1)
     module3.save()
-    module4 = module(id=4,module_name='AS平台(AS运营类)',isactived=1)
+    module4 = module(id=3,module_name='机构前台',isactived=1)
     module4.save()
-    module5 = module(id=5,module_name='客户端产品',isactived=1)
+    module5 = module(id=4,module_name='AS平台(AS运营类)',isactived=1)
     module5.save()
-    module6 = module(id=6,module_name='考试系统',isactived=1)
+    module6 = module(id=5,module_name='客户端产品',isactived=1)
     module6.save()
-    module7 = module(id=7,module_name='项目组产品',isactived=1)
+    module7 = module(id=6,module_name='考试系统',isactived=1)
     module7.save()
+    module8 = module(id=7,module_name='项目组产品',isactived=1)
+    module8.save()
     return HttpResponse("恭喜你,初始化数据成功~")

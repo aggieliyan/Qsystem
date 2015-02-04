@@ -14,7 +14,7 @@ $(document).ready(function(){
 				var datalist = eval ("(" + data + ")");
 				var num = datalist.length;
 				for(var i=0;i<num;i++){
-					$("#"+id).append("<div><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='width:60%;'><canvas id='canvas"+id+i+"' name='canvas' height='2' width='3'></canvas></div>");
+					$("#"+id).append("<div><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='width:60%;'><canvas id='canvas"+id+i+"' height='2' width='3'></canvas></div>");
 				}				
 			});				
 			setTimeout(500);	
