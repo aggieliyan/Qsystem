@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
    
     #login
+    url('^cron/$','project.cron.my_scheduled_job'),
     url('^$', 'project.views.project_list',name="index"),
     url('^login', 'project.views.login',name="login"),
 #    url('^register', 'project.views.register',name="register"),i

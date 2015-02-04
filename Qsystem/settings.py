@@ -61,6 +61,7 @@ if socket.gethostname() == 'test':
     'django.contrib.staticfiles',
     'project',
     'south',
+    'django_crontab',
 )
     
 else:
@@ -74,6 +75,7 @@ else:
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'project',
+    'django_crontab',
     # 'debug_toolbar',
 )
 
@@ -200,3 +202,47 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+CRONJOBS = [
+        ('0 0 * * * *', 'project.cron.my_scheduled_job')
+    ]
+
+# config log, windows's ok, but on linux, filename has problem
+#LOGGING = {
+#    'version': 1,
+#    'disable_existing_loggers': True,
+#    'formatters': {
+#        'standard': {
+#                'format': '%(levelname)s %(asctime)s %(message)s'
+#                },
+#    },
+#    'filters': {
+#    },
+#    'handlers': {
+#         'default': {
+#            'level':'ERROR',
+#            'class':'logging.handlers.RotatingFileHandler',
+#            'filename': 'll.log',
+#            'maxBytes': 1024*1024*5, # 5 MB
+#            'backupCount': 5,
+#            'formatter':'standard',
+#        },
+#         'console':{
+#            'level': 'DEBUG',
+#            'class': 'logging.StreamHandler',
+#            'formatter': 'standard'
+#        },
+#    },
+#    'loggers': {
+#          'django': {
+#            'handlers': ['default','console'],
+#            'level': 'ERROR',
+#            'propagate': False
+#        },
+#         'project':{
+#            'handlers': ['default','console'],
+#            'level': 'DEBUG',
+#            'propagate': True         
+#        },
+#         
+#    }
+#}
