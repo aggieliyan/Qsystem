@@ -298,7 +298,7 @@
                 <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}">
               </div>
               <div>
-                <div><label class="item-title">统计sql：</label></div><input style="width:550px;margin-right:60px;" type="text" name="countsql" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}"><input style="width:0px;margin-right:-585px;" type="checkbox" value="{{res.sql}}"><i class="icon-plus" style="margin:-52px 736px;"></i>
+                <div><label class="item-title">统计sql：</label></div><input style="width:550px;margin-right:60px;" type="text" name="countsql" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}"><input style="width:auto;margin-right:-590px;" type="checkbox" value="{{res.sql}}"><i class="icon-plus" style="margin:-52px 742px;"></i>
               </div>
               
               <div>
@@ -561,7 +561,7 @@
                 <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}"readonly>
               </div>
               <div>
-                <div><label class="item-title">统计sql：</label></div><input type="text" name="countsql" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}"readonly>
+                <div><label class="item-title">统计sql：</label></div><input style="width:550px;margin-right:60px;" type="text" name="countsql" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}"readonly><input style="width:auto;margin-right:-590px;" type="checkbox" value="{{res.sql}}"><i class="icon-plus" style="margin:-52px 742px;"></i>
               </div>
               <div>
                 <div><label class="item-title">备注：</label></div>
@@ -592,7 +592,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
       $(".icon-plus").click(function(){
-        $(this).parent().after("<div><div><label class=\"item-title\">统计sql：</label></div><input style='width:550px;margin-right:60px;' type='text' name='countsql' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开\" value='{{res.sql}}'><input style=\"width:0px;margin-right:-585px;\" type=\"checkbox\"></div>");
+        $(this).parent().after("<div><div><label class=\"item-title\">统计sql：</label></div><input style='width:550px;margin-right:60px;' type='text' name='countsql' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开\" value='{{res.sql}}'><input style=\"width:auto;margin-right:-590px;\" type=\"checkbox\"></div>");
         });
 
         $(".form_datetime").datetimepicker({

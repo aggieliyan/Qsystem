@@ -75,7 +75,7 @@ else:
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'project',
-    'django_crontab',
+    # 'django_crontab',
     # 'debug_toolbar',
 )
 
