@@ -1804,12 +1804,7 @@ def statistics_detail(request):
     pm = 0
     if request.user.has_perm("auth.change_permission"):
         pm = 1
-    sdetail = {}  
-    dic_list = [] 
-    flip_list = []
-    flip = {}
-    proid = models.project_statistics.objects.distinct().values_list('project_id', flat=True)
-    project_list = models.project.objects.filter(pk__in = proid)
+    sproject_info = models.project_module.objects.all()
     if request.method == "POST":
         form = sdetailForm(request.POST)
         if form.is_valid():
@@ -1823,26 +1818,15 @@ def statistics_detail(request):
             module_p = request.GET["module_p"]
         except Exception:
             pass
-    if kw and module_p:
-        relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
-        project_list = project_list.filter(project__contains = kw).filter(pk__in = relapro )
-    else:
-        if kw:
-            project_list = project_list.filter(project__contains = kw)
-        if module_p:
-            relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
-            project_list = project_list.filter(pk__in = relapro )           
-    for p in project_list:
-        all_sp = []
-        try:
-            mname = models.module.objects.get(project_module__project_id = p.id).module_name 
-        except Exception:
-            mname = ''         
-        total = models.project_statistics.objects.filter(project_id=p.id).order_by("total")[0]
-        dic = {'id':p.id, "total":total.total, "module":mname}
-        dic_list.append(dic)
+    sproject_info = sproject_info.filter(project__project__contains = kw, module__module_name__contains = module_p)
+    dic_list = []
+    for item in sproject_info:
+        all_sp = []       
+        total = models.project_statistics.objects.filter(project_id=item.project.id).order_by("total")[0]
+        dic = {'id':item.project.id, "total":total.total, "module":item.module.module_name}
+        dic_list.append(dic)            
     """分页"""
-    paginator = Paginator(project_list, 5)
+    paginator = Paginator(sproject_info, 5)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
@@ -1852,7 +1836,7 @@ def statistics_detail(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         projectobj = paginator.page(paginator.num_pages)   
-    return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
+    return render_to_response('statistics_detail.html', RequestContext(request, {'sproject_info': sproject_info,\
      "dic_list":dic_list, "projectobj":projectobj, "kw":kw, "module_p":module_p, 'pm':pm}))
 
 def sdropdown(request, pid):
