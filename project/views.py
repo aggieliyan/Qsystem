@@ -317,9 +317,26 @@ def new_project(request, pid='', nid=''):
             if pid == '' or nid =='1':
                 pid = models.project.objects.filter\
                 (project=pname).order_by("-id")[0].id
+                
+                if request.POST['countsql']:
+                    project_module(project_id=pid, module_id=100)  #新建项目若有sql的情况下默认归入综合类模块
+                
             else:
                 models.project_user.objects.filter(project_id=pid).delete()
-
+                models.project_statistics.objects.filter(project_id=pid).delete()   #先将本项目的sql删除
+                if request.POST['countsql']:
+                    try:
+                        project_module.objects.get(project_id=pid)
+                    except:
+                        m = project_module(project_id=pid, module_id=100, isactived=1)      #编辑项目时,若sql有值,看是否有所属模块,没有就存
+                        m.save()
+                else:
+                    try:
+                        project_module.objects.get(project_id=pid)
+                        project_module.objects.get(project_id=pid).delete()     #编辑项目时,若无sql,看是否有所属模块,有就删除
+                    except:
+                        pass
+            
             relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
             all_p_user = []
             for i in range(len(relateduser)):
@@ -339,11 +356,6 @@ def new_project(request, pid='', nid=''):
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
-            if pid == '' or nid =='1':
-                pid = models.project.objects.filter\
-                    (project=pname).order_by("-id")[0].id
-            else:
-                models.project_statistics.objects.filter(project_id=pid).delete()
             for sql in psql:
                 if ":" in sql:
                     item = sql.split(":")[0]
@@ -352,6 +364,7 @@ def new_project(request, pid='', nid=''):
                     project_statistics = models.project_statistics(
                                         project_id=pid, item=item, db=db, sql=sql)
                     project_statistics.save()
+            
 
             #将各负责人加入到相应负责人权限组
             allmasters = [[leaderid, 4], [designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
