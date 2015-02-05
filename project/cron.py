@@ -3,15 +3,11 @@ Created on 2015-2-3
 
 @author: liyan
 '''
-import logging
 import models
 import datetime
 from django.http import HttpResponse
 
 def my_scheduled_job(request):
-#    logger = logging.getLogger(__name__)
-#    logger.info("INFOFOFOFOFO")
-#    logger.error("Something went wrong!")
     chart_pro = models.project_statistics.objects.filter(is_graph=1)
     results = []
     for item in chart_pro:
