@@ -321,7 +321,7 @@ $(document).ready(function(){
           $(this).parent().siblings('div').children('span').text(days);
         }
     });
-    $("#is_graph").click(function(){
+/*    $(".is_graph").click(function(){
     	if ($(this).attr("checked")=="checked"){
     		$(this).attr("value", "1")
     		
@@ -329,7 +329,7 @@ $(document).ready(function(){
     		$(this).attr("value", "0")
     	}
     	return
-    });
+    });*/
 
 
 });
