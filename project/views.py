@@ -20,7 +20,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import ugettext_lazy as _
 
-from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm
+from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, \
+MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm, addmoduleForm, sdetailForm
 
 def register(request,uname=''):
     if uname =='':      #若是直接Q系统注册为空,以ldap第一次登录则会传来用户名
@@ -713,7 +714,7 @@ def project_list(request):
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
     count = len(noticess)
-    notices = noticess[:5]  	
+    notices = noticess[:5]      
     ##
     projectlist = None
     project_id = ""if isNone(request.GET.get("id"))else request.GET.get("id")
@@ -1170,6 +1171,7 @@ def psearch(request):
     else:
         rrs = {"person":search_rs}
         search_rs = json.dumps(rrs)
+        print search_rs
     return HttpResponse(search_rs)
 
 #通用头
@@ -1206,40 +1208,6 @@ def user_info(request):
             result['realname'] = 'GUEST' 
     rs = json.dumps(result)
     return HttpResponse(rs)
-
-#项目统计列表页
-def statistics_list(request):
-    filter_project =[]  
-    cpcount = []
-    proid = models.project_statistics.objects.distinct().values_list('project_id',flat=True)
-    project_list =  models.project.objects.filter(pk__in = proid)
-    statistics_list = models.project_statistics.objects.all()     
-    relation = models.project_module.objects.filter(project_id__in = proid)    
-    for c in project_list:
-        filter_project.append(statistics_list.filter(project_id=c.id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
-    """分页"""
-    paginator = Paginator(project_list, 10)
-    page = request.GET.get('page')
-    try:
-        projectobj = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        projectobj = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        projectobj = paginator.page(paginator.num_pages)   
-    return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
-     "statistics_list":statistics_list, "fproject":filter_project, "relation":relation, "projectobj":projectobj}))
-
-def statistics_operate(request,pid):
-    if request.method == 'POST':
-        form = addmoduleForm(request.POST)
-        if form.is_valid():
-            modulename = form.cleaned_data['modulename']
-        add_module = models.module.objects.get(module = modulename)
-        pro_module_re = project_module(project = int(pid),module = add_module.id)
-        pro_module_re.save()
-    return HttpResponseRedirect("/statistics_detail/")
 #homepage
 def personal_homepage(request):
     try:
@@ -1829,7 +1797,100 @@ def emptyehistory(request):
             test.delete()
     return HttpResponseRedirect('/historymessage/')
 
+#项目统计详情页
+def statistics_detail(request): 
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/nologin")
+    pm = 0
+    if request.user.has_perm("auth.change_permission"):
+        pm = 1
+    sdetail = {}  
+    dic_list = [] 
+    flip_list = []
+    flip = {}
+    proid = models.project_statistics.objects.distinct().values_list('project_id', flat=True)
+    project_list = models.project.objects.filter(pk__in = proid)
+    if request.method == "POST":
+        form = sdetailForm(request.POST)
+        if form.is_valid():
+            module_p = form.cleaned_data['module_p']
+            kw = form.cleaned_data['kw']
+    else:
+        kw=''
+        module_p=''
+        try:
+            kw = request.GET["kw"]
+            module_p = request.GET["module_p"]
+        except Exception:
+            pass
+    if kw and module_p:
+        relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
+        project_list = project_list.filter(project__contains = kw).filter(pk__in = relapro )
+    else:
+        if kw:
+            project_list = project_list.filter(project__contains = kw)
+        if module_p:
+            relapro = models.project_module.objects.select_related().filter(module__module_name__contains = module_p).values_list('project', flat=True)
+            project_list = project_list.filter(pk__in = relapro )           
+    for p in project_list:
+        all_sp = []
+        try:
+            mname = models.module.objects.get(project_module__project_id = p.id).module_name 
+        except Exception:
+            mname = ''         
+        total = models.project_statistics.objects.filter(project_id=p.id).order_by("total")[0]
+        dic = {'id':p.id, "total":total.total, "module":mname}
+        dic_list.append(dic)
+    """分页"""
+    paginator = Paginator(project_list, 5)
+    page = request.GET.get('page')
+    try:
+        projectobj = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        projectobj = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        projectobj = paginator.page(paginator.num_pages)   
+    return render_to_response('statistics_detail.html', RequestContext(request, {'project_list': project_list,\
+     "dic_list":dic_list, "projectobj":projectobj, "kw":kw, "module_p":module_p, 'pm':pm}))
+
+def sdropdown(request, pid):
+    total = models.project_statistics.objects.filter(project_id=pid).order_by("total")
+    sdetail = {}
+    all_sp = []
+    for s in total:        
+        sdetail = {"sql":s.id, "item":s.item, "num":s.total}
+        all_sp.append(sdetail)          
+    return HttpResponse(json.dumps(all_sp))
+
+def statistics_operate(request):
+    if request.method == 'POST':
+        form = addmoduleForm(request.POST)
+        if form.is_valid():
+            bulk_sid = form.cleaned_data['bulk_sid']
+            modulename = form.cleaned_data['modulename'] 
+            add_module = models.module.objects.get(module_name = modulename)
+            mid = add_module.id                      
+            bulk_sid = bulk_sid.split(",")
+            all_pro_module = []
+            for pid in bulk_sid:
+                if pid:
+                    pro_module = models.project_module.objects.filter(project_id = int(pid))
+                    if  not pro_module: 
+                        add_pro_module = project_module(project_id = int(pid), module_id = mid, isactived = 1)
+                        all_pro_module.append(add_pro_module)
+                    else:
+                        pro_module.update(module = mid)
+            models.project_module.objects.bulk_create(all_pro_module)
+        else:
+           form = addmoduleForm()
+    return HttpResponseRedirect('/sdetail/')
+
+
 def show_slist(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/nologin")
     module_info = models.module.objects.all()
     modele_list = []
     for item in module_info:
@@ -1840,6 +1901,23 @@ def show_slist(request):
 
     print modele_list
     return render_to_response('statistics_list.html', {'module_list':modele_list}, context_instance=RequestContext(request))
+
+def sdata(request, pid):
+    sqlnum = models.project_statistics_result.objects.filter(project_id=pid).distinct().values_list('sql_id')
+    sql_ids = []
+    for s in sqlnum:
+        sql_ids.append(s[0])
+    sdata = {}
+    for sid in sql_ids:
+        labels = []
+        total = []
+        datas = models.project_statistics_result.objects.filter(sql_id=sid)
+        for data in datas:
+                labels.append(str(data.date))
+                total.append(data.statistical_result)
+        sdata[sid] = {'labels': labels, 'total': total}
+           
+    return HttpResponse(json.dumps(sdata))
 
 def initdata(request):
     #auth_group
@@ -1905,4 +1983,22 @@ def initdata(request):
     depart13.save()
     depart100 = department(id=100,department='blank',isactived=1)
     depart100.save()   
+    # module
+    module1 = module(id=1,module_name='机构后台',isactived=1)
+    module1.save()
+    module2 = module(id=2,module_name='机构前台',isactived=1)
+    module2.save()
+    module3 = module(id=3,module_name='AS平台(AS运营类)',isactived=1)
+    module3.save()
+    module4 = module(id=4,module_name='客户端产品',isactived=1)
+    module4.save()
+    module5 = module(id=5,module_name='考试系统',isactived=1)
+    module5.save()
+    module6 = module(id=6,module_name='项目组产品',isactived=1)
+    module6.save()
+    module7 = module(id=7,module_name='内部管理',isactived=1)
+    module7.save()
+    module8 = module(id=8,module_name='综合类',isactived=1)
+    module8.save()
+    
     return HttpResponse("恭喜你,初始化数据成功~")

@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
    
     #login
+    url('^cron/$','project.cron.my_scheduled_job'),
     url('^$', 'project.views.project_list',name="index"),
     url('^login', 'project.views.login',name="login"),
 #    url('^register', 'project.views.register',name="register"),i
@@ -75,13 +76,14 @@ urlpatterns = patterns('',
     url(r'^deletenotice',project.views.deletenotice),
     url(r'^approve',project.views.approve),
     #statistics_list
-    url(r'^sdetail',project.views.statistics_list),
-    url(r'^statistics_operate/(\d+)/$', project.views.statistics_operate,name="addoperate'"),
-    url(r'^statistics_operate/(\d+)/$', project.views.statistics_operate,name="\'addoperate\'"),
+    url(r'^sdetail',project.views.statistics_detail),
+    url(r'^statistics_operate', project.views.statistics_operate,name="addoperate'"),
+    url(r'^statistics_operate', project.views.statistics_operate,name="\'addoperate\'"),
+    url(r'^sflip/(\d+)/$', project.views.sdropdown),
 
     #statistics
     url(r'^slist/$', project.views.show_slist),
-
+    url(r'^getsdata/(\d+)/$', project.views.sdata),
 )
 from django.conf import settings 
 if settings.DEBUG is False:

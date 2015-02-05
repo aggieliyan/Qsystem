@@ -26,13 +26,13 @@
 					    {% for p in item.plist %}
 						<tr class="row">
 						   <td>
-						       <span class="flip"></span>
+						       <span class="flip" value="{{p.project.id}}"></span>
 						       <span>{{p.project.project}}</span>
 						    </td>
 						</tr>
 					    {% endfor %}
 						<tr class="row">
-							<td style="text-align:right; color:#f89406;"><a href="/sdetail/" style="color:#f89406;">查看更多>></a>
+							<td style="text-align:right; color:#f89406;"><a href="/sdetail?page=1&&module_p={{item.name}}&kw=" style="color:#f89406;">查看更多>></a>
 							</td>
 						</tr>
 					{% else %}
@@ -52,4 +52,6 @@
 {% endblock %}
 {% block js %}
 <script type='text/javascript' src="/static/js/slist.js?v=1"></script>
+<script type="text/javascript" src="/static/js/Chart.min.js?v=20150129"></script>
+<script type="text/javascript" src="/static/js/chartline.js?v=20150129"></script>
 {% endblock %}

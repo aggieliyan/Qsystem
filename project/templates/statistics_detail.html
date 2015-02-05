@@ -41,10 +41,25 @@
 			<label for="srchtxt" class="searchlabel">
 				<form method="post" class="form-search" style="width:1015px;">
 					{% csrf_token %} 
-					<input type="text"
-						class="input-medium search-query" name="wd"
-						placeholder="请输入项目名称" style="color:grey">
-					<button type="margin:5px;submit" class="btn btn-success">搜索</button>
+					 <div class="sselect">
+					 	<div>
+					 		<select name="module_p" id="protype">
+					 			<option select = 'selected' value="{{ module_p }}">{{ module_p }}</option>
+					 			<option>综合类</option>
+					 			<option>内部管理</option>
+					 			<option>机构后台</option>
+					 			<option>机构前台</option>
+					 			<option>AS平台(AS运营类)</option>
+					 			<option>客户端产品</option>
+                                <option>考试系统</option>
+                                <option>项目组产品</option>
+					 		</select>
+					 	</div>
+				    </div>
+					<div class="ssearch">
+						<input type="text" class="input-medium search-query" name="kw" value="{{kw}}"
+						placeholder="请输入项目名称" style="color:grey;position:relative;">
+					<button type="submit" class="btn btn-success">搜索</button></div>
 					<!--
 					<button data-toggle="botton" class="btn btn-danger " type="button"
 						style="margin:5px;float:right ;display:inline;">清空</button>
@@ -52,14 +67,15 @@
 				</form>
 			</label>
 		</div>
-		<table class="table table-striped-list">
+		<div style="margin-top:68px;">
+			<table class="table">
 			<col width="10%" />
 			<col width="30%" />
-			<col width="30%" />
-			<col width="15%" />
-			<col width="15%" />
+			<col width="28%" />
+			<col width="22%" />
+			<col width="10%" />
 			<thead>
-				<tr>
+				<tr>  
 					<th class="thead_th">项目编号</th>
 					<th class="thead_th">项目名称</th>
 					<th class="thead_th">统计数据</th>
@@ -70,61 +86,65 @@
 			</thead>
 			<tbody>
 			    {% if not projectobj %}
-                      <p style="text-align:center;">暂无相关项目</p>
+			    <tr>
+			    	<td><p style="text-align:center;">暂无相关项目</p></td>
+			    </tr>
                  {% else %}
-                 {% for p in projectobj %}			
-				<tr>
-					<td class="col1"><input type="checkbox" class="checkbox"><span>&nbsp;{{p.id}}</td>
-					<td class="col1">&nbsp;{{p.project}}</span></td>
-					<td class="col1">&nbsp;
-					<span class="flip"></span>
-					{% for c in fproject %}
-                    {% if c.project_id == p.id %}
-                    <span class="p-count">{{ c.total}}</span>
-                    {% endif %}
-                    {% endfor %}
+                 {% for p in projectobj %}	
+				 {% if forloop.counter|divisibleby:'2' %}
+				 <tr class="low1">
+				 {% else %}
+				 <tr class="low2">
+				 {% endif %}
+					<td>
+						<label class="checkbox inline"><input type="checkbox" value="{{p.id}}" name="chk_list"> {{p.id}}</label>
 					</td>
 					<td>
-					{% for m in relation %}
-                    {% if m.project_id == p.id %}
-                    {{ m.module.module}}
-                    {% endif %}
-                    {% endfor %}</td>					
-					<td class="states_yes">
-					<button class="btn btn-warning " data-toggle="modal" type="button" data-toggle="modal" data-target="#addmodule">添加</button></td>										
-				</tr>
-				<tr class="panel">
-					<td colspan=5>
-						<div>
-							{% for c in statistics_list %}
-                            {% if c.project_id == p.id %}
-                            <p class="p-count" style="color:#339966;">{{c.item}}：&nbsp{{ c.total }}</p>
-                            {% endif %}
-                            {% endfor %}							
-						</div>
+						<a href="{% url 'prodetail' p.id %}">{{p.project}}</a>
 					</td>
-			    </tr>			    
+					{% for c in dic_list %}
+					{% if c.id == p.id %}
+					<td>
+						<span class="flip" value="{{p.id}}"></span>						
+						<span>{{ c.total}}</span>
+					</td>
+					<td>
+					{{c.module}}
+					</td>
+					<td class="states_yes">
+					{% if pm == 1 %}
+					{% if c.module %}
+					<button class="btn btn-warning " data-toggle="modal" type="button" onclick="s_operate({{p.id}})">编辑</button>
+					{% else %}
+					<button class="btn btn-warning " data-toggle="modal" type="button" onclick="s_operate({{p.id}})">添加</button>
+					{% endif %}
+					{% else %}
+					{% endif %}
+				    </td>
+				    {% endif %}
+					{% endfor %}
 				{% endfor %}
 				{% endif %}
 			</tbody>
 		</table>
 	</div>
 	<div>
-	<div style="text-align:left;margin:0 10px;float:left">
-			<input type="checkbox">&nbsp;全选
-			<a data-toggle="modal" data-target="#addmodule"><span style="margin:0 5px;">批量选择所属模块</span></a>
+	<div class="scheck_m">
+		<label class="checkbox inline" ><input type="checkbox" id="chk_all" name="chk_all">全选</label>
+		<label class="checkbox inline" ><a id="bulk_add" class="bulk">批量选择所属模块</a></label>
+		
 		</div>
 	<!--分页-->
-    <div class="pagination" style="text-align:right;margin-right:10px">
+    <div class="pagination page">
     <span class="step-links"  >
         {% if projectobj.has_previous %}
-            <a href="?page={{ projectobj.previous_page_number }}&search_key={{ search_key }}"> << </a>
+            <a href="?page={{ projectobj.previous_page_number }}&module_p={{ module_p }}&kw={{kw}}"> << </a>
         {% endif %}
         <span class="current">
             第 {{ projectobj.number }} 页,共 {{ projectobj.paginator.num_pages }}页
         </span>
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}&search_key={{ search_key }}"> >> </a>
+            <a href="?page={{ projectobj.next_page_number }}&&module_p={{ module_p }}&kw={{kw}}"> >> </a>
         {% endif %}
     </span>
     </div>
@@ -134,14 +154,65 @@
 {% endblock %}
 {% block js%}
 	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/js/Chart.min.js?v=20150129"></script>
+	<script type="text/javascript" src="/static/js/chartline.js?v=20150129"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$(".panel").hide();
+		// 实现下拉、收起，并动态生成表格，异步展示数据
+		var id=0;
 		$(".flip").click(function(){
-			$(".panel").toggle();
-			$(".flip").toggleClass("drapdown");
+		    if ($(".panel").length != id){
+				id++;
+			}
+			$(this).toggleClass("drapdown");
+			pid = $(this).attr("value");
+			var panel = $(this).parent().parent().next(".panel");
+			if(panel.length == 0){
+				$(this).parent().parent().after("<tr class='panel'><td colspan=5 id='"+id+"'></td></tr>");
+				var url = "/sflip/" + pid;
+				$.get(url, function(data, status){
+					var datalist = eval ("(" + data + ")");
+					var num = datalist.length;
+					for(var i=0;i<num;i++){
+						$("#"+id).append("<div><div style='float:left;width:500px;'><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='float:right;width:600px;'><div style='width:60%;'><canvas id='canvas"+id+i+"' height='2' width='3'></canvas></div></div>");
+					}				
+				});				
+				setTimeout(500);
+				show_graph(pid,id);			
+			}
+			else{
+				panel.toggle();
+				}
+			});
+		// 全选和取消全选
+		$("#chk_all").click(function(){
+			if(typeof($("#chk_all").attr("checked"))=="undefined")
+				$("input[name='chk_list']").removeAttr("checked");
+			else
+				$("input[name='chk_list']").attr("checked",$(this).attr("checked"));
 		});
+		// 批量操作，批量添加模块
+		$("#bulk_add").click(function(){
+			var arrChk=$("input[name='chk_list']:checked");
+			var value = '';
+			$(arrChk).each(function(){
+				value=this.value + "," + value;
+			});
+			if (value) {
+				$("#bulk_sid").val(value);
+				$("#addmodule").modal('show')
+			}			
+			else{
+				alert("请勾选项目后再进行批量操作！");
+			}				
+		});		
 	});
+
+	function s_operate(id){
+        $('#bulk_sid').val(id);
+        $('#addmodule').modal('show');
+      }
+
 	</script>
 {% endblock%}
 
