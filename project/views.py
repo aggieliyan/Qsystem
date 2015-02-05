@@ -1991,11 +1991,11 @@ def initdata(request):
     module4.save()
     module5 = module(id=5,module_name='考试系统',isactived=1)
     module5.save()
-    module6 = module(id=6,module_name='项目组产品',isactived=1)
+    module6 = module(id=6,module_name='内部管理',isactived=1)
     module6.save()
-    module7 = module(id=7,module_name='内部管理',isactived=1)
-    module7.save()
-    module8 = module(id=8,module_name='综合类',isactived=1)
+    module7 = module(id=7,module_name='项目组产品',isactived=1)
+    module7.save()    
+    module8 = module(id=100,module_name='综合类',isactived=1)
     module8.save()
-    
+        
     return HttpResponse("恭喜你,初始化数据成功~")
