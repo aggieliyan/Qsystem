@@ -1826,7 +1826,7 @@ def statistics_detail(request):
         dic = {'id':item.project.id, "total":total.total, "module":item.module.module_name}
         dic_list.append(dic)            
     """分页"""
-    paginator = Paginator(sproject_info, 5)
+    paginator = Paginator(sproject_info, 25)
     page = request.GET.get('page')
     try:
         projectobj = paginator.page(page)
