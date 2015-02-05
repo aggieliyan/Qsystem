@@ -68,7 +68,6 @@
 		.table-striped-list > tbody > tr:nth-child(2n+1) > td, .table-striped-list > tbody > tr:nth-child(2n+1) > th{background-color:#f8f3ca;}
 		/*.table-striped-list > tbody > tr:nth-child(4n+3) > td, .table-striped-list > tbody > tr:nth-child(4n+3) > th{background-color:#ffffdd;}*/
 		/*.table-striped-list > tbody > tr:nth-child(2n+2) > td, .table-striped-list > tbody > tr:nth-child(2n+2) > th{background-color:#ffffdd;}*/
-
 		.low1 {
 				 background-color:#f8f3ca;
 		 }
@@ -143,14 +142,6 @@
   font-weight:bold;
   text-align: center;
   line-height:40px;
-}
-
-.canremove{
-  background-color:#edf7f1 !important;
-}
-
-.row{
-  background-color: #ffd;
 }
 
 .panel{
