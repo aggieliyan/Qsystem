@@ -595,13 +595,16 @@
             </div>            
             {% endif %}
             <div class="span12">
-              <div style="color:red;" id="errofield">
+              <div style="color:red; width:100%" id="errofield">
               {% for field in form%}    
                 {{ field.errors }}          
               {% endfor %}
                </div>
-              <button id="submitbutton" type="button" class="btn btn-success" style="margin-left:43px; margin-top:50px;" onclick="project_check();">提交</button>
-              <button type="button" class="btn btn-default" style="margin-left:30px;margin-top:50px;" onclick="javascript:history.back()">取消</button>
+               <div style="width:100%;display:block;">
+
+              <button id="submitbutton" type="button" class="btn btn-success" style="margin-left:43px; margin-bottom:0px;" onclick="project_check();">提交</button>
+              <button type="button" class="btn btn-default" style="margin-left:30px;margin-bottom:0px;" onclick="javascript:history.back()">取消</button>
+            </div>
             </div>
           </form>
         </div>
