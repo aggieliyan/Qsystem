@@ -1916,6 +1916,8 @@ def sdata(request, pid):
         for data in datas:
                 labels.append(str(data.date))
                 total.append(data.statistical_result)
+        if len(labels)==1:
+            labels.append("")
         sdata[sid] = {'labels': labels, 'total': total}
            
     return HttpResponse(json.dumps(sdata))
