@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'Qsystem.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-    url('^cron/$','project.cron.my_scheduled_job'), #用来测试定时任务
+    url('^cron/$','project.cron.my_scheduled_job'), #for testing timing task~
     #login    
     url('^$', 'project.views.project_list',name="index"),
     url('^login', 'project.views.login',name="login"),
