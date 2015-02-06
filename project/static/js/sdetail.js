@@ -49,7 +49,13 @@ $(document).ready(function(){
 			else{
 				alert("请勾选项目后再进行批量操作！");
 			}				
-		});		
+		});
+
+		var Referer = document.referrer;
+			if (Referer.indexOf('/projectlist/')){
+				$('.flip').addClass("drapdown");
+		}
+
 	});
 
 	function s_operate(id){
