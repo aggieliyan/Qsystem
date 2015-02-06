@@ -144,7 +144,7 @@
             第 {{ projectobj.number }} 页,共 {{ projectobj.paginator.num_pages }}页
         </span>
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}&&module_p={{ module_p }}&kw={{kw}}"> >> </a>
+            <a href="?page={{ projectobj.next_page_number }}&module_p={{ module_p }}&kw={{kw}}"> >> </a>
         {% endif %}
     </span>
     </div>
