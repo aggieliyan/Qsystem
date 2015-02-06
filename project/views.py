@@ -319,7 +319,8 @@ def new_project(request, pid='', nid=''):
                 (project=pname).order_by("-id")[0].id
                 
                 if request.POST['countsql']:
-                    project_module(project_id=pid, module_id=100)  #新建项目若有sql的情况下默认归入综合类模块
+                    m = project_module(project_id=pid, module_id=100, isactived=1)  #新建项目若有sql的情况下默认归入综合类模块
+                    m.save()
                 
             else:
                 models.project_user.objects.filter(project_id=pid).delete()
