@@ -2,9 +2,11 @@ function show_graph(pid,id){
 	var url = "/getsdata/" + pid;
 	$.get(url, function(data, status){
 		var json = eval ("(" + data + ")");
+		console.log(json);
 		var i = 0;
 		for (var key in json){
 			var lineChartData = {
+
 					labels : json[key].labels,
 					datasets : [
 						{
@@ -19,7 +21,7 @@ function show_graph(pid,id){
 						},		
 					]		
 			}; //endData			
-			var ctx = document.getElementById("canvas"+id+i).getContext("2d");
+			var ctx = document.getElementById("canvas"+id+key).getContext("2d");
 			// console.log(document.getElementById("canvas"+id+i));
 			window.myLine = new Chart(ctx).Line(lineChartData, {
 				responsive: true
