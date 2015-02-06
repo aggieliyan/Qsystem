@@ -126,10 +126,13 @@
 	</div>
 	<div>
 	<div class="scheck_m">
-		<label class="checkbox inline" ><input type="checkbox" id="chk_all" name="chk_all">全选</label>
+		{% if pm == 1 %}
+		<label class="checkbox inline" ><input type="checkbox" id="chk_all" name="chk_all">全选</label>		
 		<label class="checkbox inline" ><a id="bulk_add" class="bulk">批量选择所属模块</a></label>
+		{% else %}
+		{% endif %}
 		
-		</div>
+	</div>
 	<!--分页-->
     <div class="pagination page">
     <span class="step-links"  >
