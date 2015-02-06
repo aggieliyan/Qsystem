@@ -357,11 +357,13 @@ def new_project(request, pid='', nid=''):
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
-            print countsql
             for sql in psql:
                 if ":" in sql:
                     sqlstr = sql.split(":")
-                    print sqlstr
+
+                    #如果分隔不是4证明填写不规范不保存
+                    if len(sqlstr) != 4 :
+                        continue;
                     item = sqlstr[0]
                     db = sqlstr[1]
                     sql = sqlstr[2]
