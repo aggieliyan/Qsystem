@@ -183,7 +183,7 @@
                                                                    
                                                 {% for c in fproject %}
                                                 {% if c.project_id == p.id %}
-                                                    <span class="p-count" style="color:#339966">({{ c.total }})</span>
+                                                    <a href="/sdetail?page=1&&module_p=&kw={{p.project}}"><span class="p-count" style="color:#339966">({{ c.total }})</span></a>
                                                 {% endif %}
                                                 {% endfor %}
                                             </div>
