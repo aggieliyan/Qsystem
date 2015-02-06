@@ -307,7 +307,7 @@
                 {% if res.sql %}
                   {% for isql in res.sql%}
                   <span>
-                  <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
+                  <input id={{isql.id}} class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
                   {% if isql.is_graph %}
                     <input class="is-graph" type="checkbox" checked="checked" title='是否生成趋势图'>
                   {% else %}
@@ -317,7 +317,7 @@
                 {% endfor %}
                     <i class="icon-plus" title='再添加一条SQL'></i>
                 {% else %}
-                <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句"><input class="is-graph" type="checkbox" title='是否生成趋势图'><i class="icon-plus" title='再添加一条SQL'></i>
+                <input id="" class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句"><input class="is-graph" type="checkbox" title='是否生成趋势图'><i class="icon-plus" title='再添加一条SQL'></i>
                 {% endif %}
               </div>
               
@@ -586,10 +586,10 @@
                 <div><label class="item-title sqlcss" style="margin-top: 65px;">统计sql：</label></div>
                 {% if res.sql %}
                   {% for isql in res.sql%}
-                <input class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}" readonly>
+                <input id={{isql.id}} class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}" readonly>
                 {% endfor %}
                 {% else %}
-                <input class="sql" type="text" maxlength=2100 readonly>
+                <input id="" class="sql" type="text" maxlength=2100 readonly>
                 {% endif %}
               </div>
             </div>            
@@ -620,7 +620,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
       $(".icon-plus").click(function(){
-        $(this).parent().append("<span><input class=\"sql\"  type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\"><input class='is-graph' type=\"checkbox\" title='是否生成趋势图'><span>");
+        $(this).parent().append("<span><input id='' class=\"sql\"  type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\"><input class='is-graph' type=\"checkbox\" title='是否生成趋势图'><span>");
         });
 
         $(".form_datetime").datetimepicker({
