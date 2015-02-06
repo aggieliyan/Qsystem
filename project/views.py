@@ -356,13 +356,17 @@ def new_project(request, pid='', nid=''):
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
+            print countsql
             for sql in psql:
                 if ":" in sql:
-                    item = sql.split(":")[0]
-                    db = sql.split(":")[1]
-                    sql = sql.split(":")[2]
+                    sqlstr = sql.split(":")
+                    print sqlstr
+                    item = sqlstr[0]
+                    db = sqlstr[1]
+                    sql = sqlstr[2]
+                    isgraph = int(sqlstr[3])
                     project_statistics = models.project_statistics(
-                                        project_id=pid, item=item, db=db, sql=sql)
+                                        project_id=pid, item=item, db=db, sql=sql, is_graph=isgraph)
                     project_statistics.save()
             
 
@@ -944,10 +948,10 @@ def detail(request, pid='', nid=''):
         dt['ttime'] = 0
     editboolean = False
     pro_sql = models.project_statistics.objects.filter(project_id=pid)
-    sql = ''
-    for p in pro_sql:
-        sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 
-    if sql=='':
+    # sql = ''
+    # for p in pro_sql:
+    #     sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 
+    if pro_sql=='':
         sql_status = '未填写'
     else:
         sql_status = '已填写'
@@ -1035,7 +1039,7 @@ def detail(request, pid='', nid=''):
                 if not request.user.has_perm('auth.change_permission'):
                     editdate = 0
 
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': sql}
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': pro_sql}
             return render_to_response('newproject.html', {'res': res, 'editdate':editdate, 'isdevs':isdevs, 'isope':isope})
 
 def project_feedback(request):  #也可以写在detail里，这样更清晰

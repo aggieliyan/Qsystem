@@ -299,7 +299,18 @@
               </div>
               <div>
                 <input style="display:none;" name="countsql">
-                <div><label class="item-title">统计sql：</label></div><input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}"><input class="is_graph" style="width:auto;margin-right:-590px;" type="checkbox"><i class="icon-plus" style="margin:-52px 742px;"></i>
+                {% if res.sql %}
+                  {% for isql in res.sql%}
+                <div><label class="item-title">统计sql：</label></div><input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
+                  {% if isql.is_graph %}
+                    <input class="is_graph" style="width:auto;margin-right:-590px;" type="checkbox" checked="checked"><i class="icon-plus" style="margin:-52px 742px;"></i>
+                    {% else %}
+                    <input class="is_graph" style="width:auto;margin-right:-590px;" type="checkbox"><i class="icon-plus" style="margin:-52px 742px;"></i>
+                    {% endif %}
+                {% endfor %}
+                {% else %}
+                <div><label class="item-title">统计sql：</label></div><input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开"><input class="is_graph" style="width:auto;margin-right:-590px;" type="checkbox"><i class="icon-plus" style="margin:-52px 742px;"></i>
+                {% endif %}
               </div>
               
               <div>
@@ -595,7 +606,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
       $(".icon-plus").click(function(){
-        $(this).parent().after("<div><div><label class=\"item-title\"></label></div><input class=\"sql\" style='width:550px;margin-right:60px;' type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开\" value='{{res.sql}}'><input class='is_graph' style=\"width:auto;margin-right:-590px;\" type=\"checkbox\"></div>");
+        $(this).parent().after("<div><div><label class=\"item-title\"></label></div><input class=\"sql\" style='width:550px;margin-right:60px;' type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开\"><input class='is_graph' style=\"width:auto;margin-right:-590px;\" type=\"checkbox\"></div>");
         });
 
         $(".form_datetime").datetimepicker({
