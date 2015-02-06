@@ -309,15 +309,15 @@
                   <span>
                   <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句'" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
                   {% if isql.is_graph %}
-                    <input class="is-graph" type="checkbox" checked="checked">
+                    <input class="is-graph" type="checkbox" checked="checked" title='是否生成趋势图'>
                   {% else %}
-                    <input class="is-graph" type="checkbox">
+                    <input class="is-graph" type="checkbox" title='是否生成趋势图'>
                   {% endif %}
                   </span>
                 {% endfor %}
-                    <i class="icon-plus" ></i>
+                    <i class="icon-plus" title='再添加一条SQL'></i>
                 {% else %}
-                <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句'"><input class="is-graph" type="checkbox"><i class="icon-plus"></i>
+                <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句'"><input class="is-graph" type="checkbox" title='是否生成趋势图'><i class="icon-plus" title='再添加一条SQL'></i>
                 {% endif %}
               </div>
               
@@ -617,7 +617,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
       $(".icon-plus").click(function(){
-        $(this).parent().append("<span><input class=\"sql\"  type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开\"><input class='is-graph' type=\"checkbox\"><span>");
+        $(this).parent().append("<span><input class=\"sql\"  type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句'\"><input class='is-graph' type=\"checkbox\" title='是否生成趋势图'><span>");
         });
 
         $(".form_datetime").datetimepicker({
