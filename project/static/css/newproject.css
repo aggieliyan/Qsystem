@@ -181,3 +181,19 @@ position:relative;
 #psearch{
   margin: 0 0 10px 10px;
 }
+
+.sql{
+  width:550px !important;
+  margin-right:60px;
+}
+
+.is-graph{
+  width:auto !important;
+  margin-right:-590px !important;
+/*  margin-top:10px !important;*/
+  vertical-align:middle;
+}
+
+.icon-plus{
+  margin:-39px 742px;
+}

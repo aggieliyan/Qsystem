@@ -5,7 +5,7 @@
   <!-- Bootstrap -->
   <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <link href="/static/css/datetimepicker.css" rel="stylesheet" media="screen">
-  <link href="/static/css/newproject.min.css?v=20150106" rel='stylesheet' media='screen'>
+  <link href="/static/css/newproject.css?v=20150106" rel='stylesheet' media='screen'>
   {% endblock %}
   {% block content %}
     <div class="container-fluid">
@@ -298,25 +298,28 @@
                 <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}">
               </div>
               <div>
-                <input style="display:none;" name="countsql">
-                {% if res.sql %}
-                  {% for isql in res.sql%}
-                <div><label class="item-title">统计sql：</label></div><input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
-                  {% if isql.is_graph %}
-                    <input class="is_graph" style="width:auto;margin-right:-590px;" type="checkbox" checked="checked"><i class="icon-plus" style="margin:-52px 742px;"></i>
-                    {% else %}
-                    <input class="is_graph" style="width:auto;margin-right:-590px;" type="checkbox"><i class="icon-plus" style="margin:-52px 742px;"></i>
-                    {% endif %}
-                {% endfor %}
-                {% else %}
-                <div><label class="item-title">统计sql：</label></div><input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开"><input class="is_graph" style="width:auto;margin-right:-590px;" type="checkbox"><i class="icon-plus" style="margin:-52px 742px;"></i>
-                {% endif %}
-              </div>
-              
-              <div>
                 <div><label class="item-title">备注：</label></div>
                 <textarea style="width:610px;height:100px;resize:none;" type="text" name="remark_p" maxlength=5000 value="">{{res.pro.remark_p}}</textarea>              
             </div>
+              <div>
+                <input style="display:none;" name="countsql">
+                <div><label class="item-title sqlcss" style="margin-top: 65px;">统计sql：</label></div>
+                {% if res.sql %}
+                  {% for isql in res.sql%}
+                <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
+                  {% if isql.is_graph %}
+                    <input class="is-graph" type="checkbox" checked="checked">
+                    {% else %}
+                    <input class="is-graph" type="checkbox">
+                    {% endif %}
+                {% endfor %}
+                    <i class="icon-plus" ></i>
+                {% else %}
+                <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开"><input class="is-graph" type="checkbox"><i class="icon-plus"></i>
+                {% endif %}
+              </div>
+              
+ 
             {% else %}
             <div class="span6">
               <div id='short'>
@@ -573,13 +576,19 @@
                 <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}"readonly>
               </div>
               <div>
-                <input style="display:none;" name="countsql">
-                <div><label class="item-title">统计sql：</label></div><input class="sql" style="width:550px;margin-right:60px;" type="text"  maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{res.sql}}"readonly>
-
-              </div>
-              <div>
                 <div><label class="item-title">备注：</label></div>
                 <textarea style="width:610px;height:100px;resize:none;"  type="text" name="remark_p" maxlength=5000 value="">{{res.pro.remark_p}}</textarea>
+              </div>
+              <div>
+                <input style="display:none;" name="countsql">
+                <div><label class="item-title sqlcss" style="margin-top: 65px;">统计sql：</label></div>
+                {% if res.sql %}
+                  {% for isql in res.sql%}
+                <input class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}" readonly>
+                {% endfor %}
+                {% else %}
+                <input class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开"><input class="is-graph" type="checkbox" readonly>
+                {% endif %}
               </div>
             </div>            
             {% endif %}
@@ -606,7 +615,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
       $(".icon-plus").click(function(){
-        $(this).parent().after("<div><div><label class=\"item-title\"></label></div><input class=\"sql\" style='width:550px;margin-right:60px;' type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开\"><input class='is_graph' style=\"width:auto;margin-right:-590px;\" type=\"checkbox\"></div>");
+        $(this).parent().append("<input class=\"sql\"  type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个以上查询项以分号';'隔开\"><input class='is_graph' style=\"width:auto;margin-right:-590px;\" type=\"checkbox\">");
         });
 
         $(".form_datetime").datetimepicker({

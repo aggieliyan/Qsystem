@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.conf.urls import patterns, include, url
 from project.views import detail, new_project, register, project_feedback, feedback_comment
 from django.contrib import admin
