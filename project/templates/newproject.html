@@ -313,7 +313,7 @@
                     {% endif %}
                     {% if isql.is_editable %}
                   <span class="content">
-                     <input id={{isql.id}} class="sql" style="width:550px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
+                     <input id={{isql.id}} class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
                      {% if isql.is_graph %}
                      <input class="is-graph" type="checkbox" checked="checked" title='是否生成趋势图'>
                      {% else %}
@@ -338,7 +338,7 @@
                 {% else %}
                 <span class="title sqlcss">统计sql：</span>
                 <span class="content">
-                <input id="" class="sql" style="width:550px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句"><input class="is-graph" type="checkbox" title='是否生成趋势图'><i class="icon-plus" title='再添加一条SQL'></i>
+                <input id="" class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句"><input class="is-graph" type="checkbox" title='是否生成趋势图'><i class="icon-plus" title='再添加一条SQL'></i>
                 </span>
                 {% endif %}
               </div>
@@ -642,7 +642,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
       $(".icon-plus").click(function(){
-        $(this).parent().parent().append("<span class=\"title sqlcss\"></span><span class=\"content\"><input id='' class=\"sql\"  type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\"><input class='is-graph' type=\"checkbox\" title='是否生成趋势图'><i class=\"icon-plus\" title='再添加一条SQL'></i><span>");
+        $(this).parent().parent().append("<span class=\"title sqlcss\"></span><span class=\"content\"><input type=\"text\" class=\"sql\" id='' placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\" maxlength=\"2100\" ><input type=\"checkbox\" title=\"是否生成趋势图\" checked=\"checked\" class=\"is-graph\"><i title=\"再添加一条SQ\" class=\"icon-plus\"></i></span>");
         });
 
         $(".form_datetime").datetimepicker({
