@@ -2020,14 +2020,3 @@ def initdata(request):
     module8.save()
         
     return HttpResponse("恭喜你,初始化数据成功~")
-
-def initmodule(request):
-    pros = models.project_statistics.objects.distinct().values_list("project_id")
-    print pros
-    modules = []
-    for pro in pros:
-        print pro
-        modules.append(models.project_module(project_id=pro[0], module_id=100, isactived=1))
-    models.project_module.objects.bulk_create(modules)
-    
-    return HttpResponse("有sql的项目已全部归入综合类!")
