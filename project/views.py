@@ -370,12 +370,13 @@ def new_project(request, pid='', nid=''):
                     isgraph = int(sqlstr[4]) 
                     if sqlid:
                         project_statistics = models.project_statistics.objects.get(id=sqlid)
-                        if project_statistics.is_editable == 0:
-                            continue
-                        project_statistics.item=item 
                         project_statistics.db=db
                         project_statistics.sql=sql
                         project_statistics.is_graph=isgraph             #只更新可能变动的列就可以了.
+                        if project_statistics.is_editable == 0:
+                            continue
+                        project_statistics.item=item                    #不能编辑的sql就不能保存更改了
+                        
                     else:
                         project_statistics = models.project_statistics(
                                         project_id=pid, item=item, db=db, sql=sql, is_graph=isgraph, is_editable=1)
@@ -2017,3 +2018,14 @@ def initdata(request):
     module8.save()
         
     return HttpResponse("恭喜你,初始化数据成功~")
+
+def initmodule(request):
+    pros = models.project_statistics.objects.distinct().values_list("project_id")
+    print pros
+    modules = []
+    for pro in pros:
+        print pro
+        modules.append(models.project_module(project_id=pro[0], module_id=100, isactived=1))
+    models.project_module.objects.bulk_create(modules)
+    
+    return HttpResponse("有sql的项目已全部归入综合类!")
