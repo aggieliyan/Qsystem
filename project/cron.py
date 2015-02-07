@@ -16,6 +16,11 @@ def my_scheduled_job(request):
             results.append(models.project_statistics_result(project_id=item.project_id, sql_id=item.id,
                                                         date=datetime.datetime.now(), 
                                                         statistical_result=item.total, isactived=1))
+            print item.is_editable
+            if item.is_editable == 1:
+                item.is_editable = 0
+                item.save()
+                print item.is_editable
         except:
             ps = models.project_statistics.objects.get(id=item.id)
             ps.is_graph = 0

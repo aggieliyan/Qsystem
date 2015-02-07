@@ -368,12 +368,15 @@ def new_project(request, pid='', nid=''):
                     db = sqlstr[2]
                     sql = sqlstr[3]
                     isgraph = int(sqlstr[4])
-                    if sqlstr[0]:
-                        project_statistics = models.project_statistics(id=sqlid, 
-                                        project_id=pid, item=item, db=db, sql=sql, is_graph=isgraph)
+                    if sqlid:
+                        project_statistics = models.project_statistics.objects.get(id=sqlid)
+                        project_statistics.item=item 
+                        project_statistics.db=db
+                        project_statistics.sql=sql
+                        project_statistics.is_graph=isgraph             #只更新可能变动的列就可以了.
                     else:
                         project_statistics = models.project_statistics(
-                                        project_id=pid, item=item, db=db, sql=sql, is_graph=isgraph)
+                                        project_id=pid, item=item, db=db, sql=sql, is_graph=isgraph, is_editable=1)
                     project_statistics.save()
             
 
