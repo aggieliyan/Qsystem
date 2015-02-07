@@ -362,14 +362,16 @@ def new_project(request, pid='', nid=''):
                     sqlstr = sql.split(":")
                     #如果分隔不是4证明填写不规范不保存
                     if len(sqlstr) != 5 :
-                        continue;
+                        continue
                     sqlid = sqlstr[0]
                     item = sqlstr[1]
                     db = sqlstr[2]
                     sql = sqlstr[3]
-                    isgraph = int(sqlstr[4])
+                    isgraph = int(sqlstr[4]) 
                     if sqlid:
                         project_statistics = models.project_statistics.objects.get(id=sqlid)
+                        if project_statistics.is_editable == 0:
+                            continue
                         project_statistics.item=item 
                         project_statistics.db=db
                         project_statistics.sql=sql
