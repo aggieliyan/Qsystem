@@ -324,7 +324,7 @@ def new_project(request, pid='', nid=''):
                 
             else:
                 models.project_user.objects.filter(project_id=pid).delete()
-                models.project_statistics.objects.filter(project_id=pid).delete()   #先将本项目的sql删除
+
                 if request.POST['countsql']:
                     try:
                         project_module.objects.get(project_id=pid)
@@ -360,7 +360,6 @@ def new_project(request, pid='', nid=''):
             for sql in psql:
                 if ":" in sql:
                     sqlstr = sql.split(":")
-
                     #如果分隔不是4证明填写不规范不保存
                     if len(sqlstr) != 5 :
                         continue;

@@ -589,7 +589,7 @@
                 <input id={{isql.id}} class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}" readonly>
                 {% endfor %}
                 {% else %}
-                <input id="" class="sql" type="text" maxlength=2100 readonly>
+                <input  class="sql" type="text" maxlength=2100 readonly>
                 {% endif %}
               </div>
             </div>            
@@ -650,9 +650,10 @@
           for(i=0;i<sqlinput.length;i++){
             var sinput = sqlinput.eq(i);
             sqlstr = sinput.val().replace(";","");
+            var sqlid = sinput.attr("id")
             if(sqlstr.length != 0){
               var flag = sinput.next().attr("checked") ? 1 : 0;
-              allsql = allsql + sqlstr + ":"+ flag + ";";
+              allsql = allsql + sqlid + ":"+ sqlstr + ":"+ flag + ";";
 
             }
           }
