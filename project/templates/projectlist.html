@@ -180,10 +180,10 @@
                                             <div style="width:16px;float:left">
 {#                                          <input class="praise-add" type="image" data-id="{{ p.id }}" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px">#}
                                              <i class="icon-fire"  data-id="{{ p.id }}" style="cursor:pointer;height: 16px;width: 13px; margin-bottom:5px"></i>
-                                                                   
+                                                                    
                                                 {% for c in fproject %}
                                                 {% if c.project_id == p.id %}
-                                                    <span class="p-count" style="color:#339966">({{ c.total }})</span>
+                                                    <a href="/sdetail/?page=1&module_p=&kw={{p.project}}"><span class="p-count" style="color:#339966">({{ c.total }})</span></a>
                                                 {% endif %}
                                                 {% endfor %}
                                             </div>

@@ -45,6 +45,7 @@
 					 	<div>
 					 		<select name="module_p" id="protype">
 					 			<option select = 'selected' value="{{ module_p }}">{{ module_p }}</option>
+					 			<option value="">全部</option>
 					 			<option>机构后台</option>
                                 <option>机构前台</option>
                                 <option>AS平台(AS运营类)</option>
@@ -143,7 +144,7 @@
             第 {{ projectobj.number }} 页,共 {{ projectobj.paginator.num_pages }}页
         </span>
         {% if projectobj.has_next %}
-            <a href="?page={{ projectobj.next_page_number }}&&module_p={{ module_p }}&kw={{kw}}"> >> </a>
+            <a href="?page={{ projectobj.next_page_number }}&module_p={{ module_p }}&kw={{kw}}"> >> </a>
         {% endif %}
     </span>
     </div>

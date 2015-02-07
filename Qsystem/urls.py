@@ -76,7 +76,7 @@ urlpatterns = patterns('',
     url(r'^deletenotice',project.views.deletenotice),
     url(r'^approve',project.views.approve),
     #statistics_list
-    url(r'^sdetail',project.views.statistics_detail),
+    url(r'^sdetail/',project.views.statistics_detail),
     url(r'^statistics_operate', project.views.statistics_operate,name="addoperate'"),
     url(r'^statistics_operate', project.views.statistics_operate,name="\'addoperate\'"),
     url(r'^sflip/(\d+)/$', project.views.sdropdown),
