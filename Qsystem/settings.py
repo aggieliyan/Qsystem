@@ -212,5 +212,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CRONJOBS = [
-        ('0 0 * * * *', 'Qsystem.project.cron.my_scheduled_job')
+        ('0 0 * * *', 'Qsystem.project.cron.my_scheduled_job')
     ]
