@@ -23,10 +23,10 @@
 		    </div>
 	    </div> 
 	   {% if res.request %}
-	   		<div class="title" style="margin-left:40px; margin-bottom:10px;">编辑项目:
+	   		<div class="atitle" style="margin-left:40px; margin-bottom:10px;">编辑项目:
       </div>
 	   {% else %}
-			<div class="title" style="margin-left:40px; margin-bottom:10px;">新建项目:
+			<div class="atitle" style="margin-left:40px; margin-bottom:10px;">新建项目:
       </div>
 	   {% endif %}
      
@@ -282,42 +282,52 @@
               </div>
             </div>
             <div id='filepath' class="span12">
-              <div>
-                <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}">
+              <div class="list clearfix">
+                <span class="title">设计图：</span><input type="text" class="fp" name='ppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}">
               </div>
-              <div>
-                <div><label class="item-title">开发计划：</label></div><input type="text" name='dppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}">
+              <div class="list clearfix">
+                <span class="title">开发计划：</span><input type="text" class="fp" name='dppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}">
               </div>
-              <div>
-                <div><label class="item-title">测试计划：</label></div><input type="text" name='tppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}">
+              <div class="list clearfix">
+                <span class="title">测试计划：</span><input type="text" class="fp" name='tppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}">
               </div>
-              <div>
-                <div><label class="item-title">测试用例：</label></div><input type="text" name='tcpath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_case_p}}">
+              <div class="list clearfix">
+                <span class="title">测试用例：</span><input type="text" class="fp" name='tcpath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_case_p}}">
               </div>
-              <div>
-                <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}">
+              <div class="list clearfix">
+                <span class="title">测试报告：</span><input type="text" class="fp" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}">
               </div>
-              <div>
-                <div><label class="item-title">备注：</label></div>
-                <textarea style="width:610px;height:100px;resize:none;" type="text" name="remark_p" maxlength=5000 value="">{{res.pro.remark_p}}</textarea>              
+              <div class="list clearfix list-bz">
+                <span class="title">备注：</span>
+                <textarea type="text" name="remark_p" maxlength=5000 value="">{{res.pro.remark_p}}</textarea>              
             </div>
-              <div>
-                <input style="display:none;" name="countsql">
-                <div><label class="item-title sqlcss" style="margin-top: 65px;">统计sql：</label></div>
+              <div class="list clearfix csql">
+                <input type="hidden" name="countsql">
+                
                 {% if res.sql %}
                   {% for isql in res.sql%}
-                  <span>
-                  <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
-                  {% if isql.is_graph %}
-                    <input class="is-graph" type="checkbox" checked="checked" title='是否生成趋势图'>
-                  {% else %}
-                    <input class="is-graph" type="checkbox" title='是否生成趋势图'>
-                  {% endif %}
+                    {% if forloop.first %}
+                      <span class="title sqlcss">统计sql：</span>
+                    {% else %}
+                      <span class="title sqlcss"></span>
+                    {% endif %}
+                  <span class="content">
+                     <input class="sql" style="width:550px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
+                     {% if isql.is_graph %}
+                     <input class="is-graph" type="checkbox" checked="checked" title='是否生成趋势图'>
+                     {% else %}
+                     <input class="is-graph" type="checkbox" title='是否生成趋势图'>
+                     {% endif %}
+                     <i class="icon-plus" title='再添加一条SQL'></i>
                   </span>
+
                 {% endfor %}
-                    <i class="icon-plus" title='再添加一条SQL'></i>
+                  
                 {% else %}
-                <input class="sql" style="width:550px;margin-right:60px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句"><input class="is-graph" type="checkbox" title='是否生成趋势图'><i class="icon-plus" title='再添加一条SQL'></i>
+                <span class="title sqlcss">统计sql：</span>
+                <span class="content">
+                <input class="sql" style="width:550px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句"><input class="is-graph" type="checkbox" title='是否生成趋势图'><i class="icon-plus" title='再添加一条SQL'></i>
+                </span>
                 {% endif %}
               </div>
               
@@ -562,28 +572,28 @@
               </div>
             </div>
             <div id='filepath' class="span12">
-              <div>
-                <div><label class="item-title">设计图：</label></div><input type="text" name='ppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}" readonly>
+              <div class="list clearfix">
+                <span class="title">设计图：</span><input type="text" name='ppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.blueprint_p}}" readonly>
               </div>
-              <div>
-                <div><label class="item-title">开发计划：</label></div><input type="text" name='dppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}"readonly>
+              <div class="list clearfix">
+                <span class="title">开发计划：</span><input type="text" name='dppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.develop_plan_p}}"readonly>
               </div>
-              <div>
-                <div><label class="item-title">测试计划：</label></div><input type="text" name='tppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}"readonly>
+              <div class="list clearfix">
+                <span class="title">测试计划：</span><input type="text" name='tppath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_plan_p}}"readonly>
               </div>
-              <div>
-                <div><label class="item-title">测试用例：</label></div><input type="text" name='tcpath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_case_p}}"readonly>
+              <div class="list clearfix">
+                <span class="title">测试用例：</span><input type="text" name='tcpath' maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_case_p}}"readonly>
               </div>
-              <div>
-                <div><label class="item-title">测试报告：</label></div><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}"readonly>
+              <div class="list clearfix">
+                <span class="title">测试报告：</span><input type="text" name="trpath" maxlength=100 placeholder="请输入文件路径" value="{{res.pro.test_report_p}}"readonly>
               </div>
-              <div>
-                <div><label class="item-title">备注：</label></div>
+              <div class="list clearfix">
+                <span>备注：</span>
                 <textarea style="width:610px;height:100px;resize:none;"  type="text" name="remark_p" maxlength=5000 value="">{{res.pro.remark_p}}</textarea>
               </div>
               <div>
-                <input style="display:none;" name="countsql">
-                <div><label class="item-title sqlcss" style="margin-top: 65px;">统计sql：</label></div>
+                <input type="hidden" name="countsql" />
+              <div><span class="title sqlcss" style="margin-top: 65px;">统计sql：</span></div>
                 {% if res.sql %}
                   {% for isql in res.sql%}
                 <input class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}" readonly>
@@ -620,7 +630,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
       $(".icon-plus").click(function(){
-        $(this).parent().append("<span><input class=\"sql\"  type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\"><input class='is-graph' type=\"checkbox\" title='是否生成趋势图'><span>");
+        $(this).parent().parent().append("<span class=\"title sqlcss\"></span><span class=\"content\"><input class=\"sql\"  type='text' maxlength=2100 placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\"><input class='is-graph' type=\"checkbox\" title='是否生成趋势图'><i class=\"icon-plus\" title='再添加一条SQL'></i><span>");
         });
 
         $(".form_datetime").datetimepicker({
@@ -666,3 +676,11 @@
     
   </script>  
   {% endblock%}
+
+
+<!--   <input id="canEdit" value="true" />
+
+
+  $('#').val() === 'true'
+
+  $('input').prop('readonly',false) -->
