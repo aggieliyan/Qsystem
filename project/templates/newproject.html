@@ -312,7 +312,7 @@
                       <span class="title sqlcss"></span>
                     {% endif %}
                   <span class="content">
-                     <input class="sql" style="width:550px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
+                     <input id={{isql.id}} class="sql" style="width:550px;" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
                      {% if isql.is_graph %}
                      <input class="is-graph" type="checkbox" checked="checked" title='是否生成趋势图'>
                      {% else %}
