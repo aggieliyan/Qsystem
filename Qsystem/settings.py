@@ -62,7 +62,7 @@ if socket.gethostname() == 'test':
     'project',
     'south',
     'django_crontab',
-    'pipeline',
+#    'pipeline',
 )
     
 else:
@@ -81,12 +81,12 @@ else:
     # 'debug_toolbar',
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
-)
+#STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+#STATICFILES_FINDERS = (
+#    'django.contrib.staticfiles.finders.FileSystemFinder',
+#    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'pipeline.finders.PipelineFinder',
+#)
 
 # Application definition
 
