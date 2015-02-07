@@ -1900,7 +1900,7 @@ def statistics_operate(request):
                         pro_module.update(module = mid)
             models.project_module.objects.bulk_create(all_pro_module)
         else:
-           form = addmoduleForm()
+            form = addmoduleForm()
     return HttpResponseRedirect('/sdetail/')
 
 
