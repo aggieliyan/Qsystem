@@ -357,6 +357,7 @@ def new_project(request, pid='', nid=''):
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
+            print psql
             for sql in psql:
                 if ":" in sql:
                     sqlstr = sql.split(":")
@@ -369,13 +370,14 @@ def new_project(request, pid='', nid=''):
                     sql = sqlstr[3]
                     isgraph = int(sqlstr[4]) 
                     if sqlid:
-                        project_statistics = models.project_statistics.objects.get(id=sqlid)
-                        project_statistics.db=db
-                        project_statistics.sql=sql
+                        project_statistics = models.project_statistics.objects.get(id=sqlid)                        
                         project_statistics.is_graph=isgraph             #只更新可能变动的列就可以了.
                         if project_statistics.is_editable == 0:
+                            project_statistics.save()
                             continue
-                        project_statistics.item=item                    #不能编辑的sql就不能保存更改了
+                        project_statistics.item=item 
+                        project_statistics.db=db
+                        project_statistics.sql=sql                   #不能编辑的sql就不能保存更改了
                         
                     else:
                         project_statistics = models.project_statistics(
