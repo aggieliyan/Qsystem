@@ -962,7 +962,10 @@ def detail(request, pid='', nid=''):
     else:
         dt['ttime'] = 0
     editboolean = False
-    pro_sql = models.project_statistics.objects.filter(project_id=pid)
+    if nid == '1':
+        pro_sql = ""
+    else:
+        pro_sql = models.project_statistics.objects.filter(project_id=pid)
     # sql = ''
     # for p in pro_sql:
     #     sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 
