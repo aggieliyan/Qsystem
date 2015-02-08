@@ -81,7 +81,7 @@ class ProjectForm(forms.Form):
     relateduser5 = forms.CharField(required=False)
 
     countsql = forms.CharField(required=False)
-    is_graph = forms.ImageField(required=False)
+    sqlremoved = forms.CharField(required=False)
     remark_p = forms.CharField(required=False)
 
 class changedesignForm(forms.Form):

@@ -268,6 +268,7 @@ def new_project(request, pid='', nid=''):
             relateduser5 = form.cleaned_data['relateduser5']
             countsql = form.cleaned_data['countsql']
             countsql = strQ2B(countsql)
+            sqlremoved = form.cleaned_data['sqlremoved']
             remark_p = form.cleaned_data['remark_p']
 
             if pid == '' or nid == '1':
@@ -337,6 +338,14 @@ def new_project(request, pid='', nid=''):
                         project_module.objects.get(project_id=pid).delete()     #编辑项目时,若无sql,看是否有所属模块,有就删除
                     except:
                         pass
+
+                if sqlremoved:
+                    sqlid = sqlremoved.split(',');
+                    for sid in sqlid:
+                        if len(sid):
+                            asql = models.project_statistics.objects.get(id=int(sid))
+                            asql.isactived = 0
+                            asql.save()
             
             relateduser = [relateduser0, relateduser1, relateduser2, relateduser3, relateduser4, relateduser5]
             all_p_user = []
@@ -371,13 +380,13 @@ def new_project(request, pid='', nid=''):
                     isgraph = int(sqlstr[4]) 
                     if sqlid:
                         project_statistics = models.project_statistics.objects.get(id=sqlid)                        
-                        project_statistics.is_graph=isgraph             #只更新可能变动的列就可以了.
+                        project_statistics.is_graph = isgraph             #只更新可能变动的列就可以了.
                         if project_statistics.is_editable == 0:
                             project_statistics.save()
                             continue
-                        project_statistics.item=item 
-                        project_statistics.db=db
-                        project_statistics.sql=sql                   #不能编辑的sql就不能保存更改了
+                        project_statistics.item = item 
+                        project_statistics.db = db
+                        project_statistics.sql = sql                   #不能编辑的sql就不能保存更改了
                         
                     else:
                         project_statistics = models.project_statistics(
@@ -965,7 +974,7 @@ def detail(request, pid='', nid=''):
     if nid == '1':
         pro_sql = ""
     else:
-        pro_sql = models.project_statistics.objects.filter(project_id=pid)
+        pro_sql = models.project_statistics.objects.filter(project_id=pid, isactived=1)
     # sql = ''
     # for p in pro_sql:
     #     sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 

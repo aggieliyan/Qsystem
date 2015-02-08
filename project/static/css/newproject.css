@@ -118,7 +118,7 @@ position:relative;
 
 #filepath div{
   height:50px;
-  width:762px;
+  width:782px;
   margin-left: -2px;
 }
 
@@ -130,18 +130,18 @@ position:relative;
 #filepath .list textarea{width:610px;height:100px;resize:none;margin-left: 17px;}
 #filepath .csql{height:auto;}
 #filepath .is-graph{
-   width:20px;
    padding-right: 5px;
 }
 #filepath .icon-plus{
-  width:20px;
   margin-top:5px;
+}
 
-
+#filepath .icon-remove{
+    margin-top:6px;
 }
 #filepath .list .content{
   float:left;
-  width:630px;
+  width:650px;
   height:50px;
 }
 

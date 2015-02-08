@@ -100,6 +100,7 @@ class project_statistics(models.Model):
     total = models.TextField(max_length=9999999,blank=True, null=True) 
     is_graph = models.BooleanField(u'是否画图')   
     is_editable = models.BooleanField(u'是否可编辑')
+    isactived = models.IntegerField(max_length=1, blank=False, null=False, default=1) 
 
 class project_feedback(models.Model):
     project= models.ForeignKey(project)
