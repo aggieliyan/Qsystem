@@ -1,14 +1,15 @@
 $(document).ready(function(){
 	var id=0;
-	$(".flip").click(function(){
+	$(".sbox td").click(function(){
 		if ($(".panel").length != id){
 			id++;
 		}
-		$(this).toggleClass("drapdown");
-		pid = $(this).attr("value");
-		var panel = $(this).parent().parent().next(".panel");
+		var traicon = $(this).children('.flip');
+		traicon.toggleClass("drapdown");
+		pid = traicon.attr("value");
+		var panel = traicon.parent().parent().next(".panel");
 		if(panel.length == 0){
-		    $(this).parent().parent().after("<tr class='row panel'><td id='"+id+"'></td></tr>");
+		    traicon.parent().parent().after("<tr class='row panel'><td id='"+id+"'></td></tr>");
 			var url = "/sflip/" + pid;
 			$.get(url, function(data, status){
 				var datalist = eval ("(" + data + ")");
