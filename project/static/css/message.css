@@ -1,21 +1,4 @@
-       li{ 
-	    	list-style: none;
-	    	display: inline-block;
 
-	    }
-	    ul{
-	    	padding-left: 0;
-	    	margin: 0px;
-	    	display: inline-block;
-	    }
-	    body{
-	    	background: url(../img/top.jpg) repeat-x;
-
-	    }
-	    /*.p,a{
-	    	font-size: 12px;
-	    	text-decoration: none;
-	    }*/
 	   
 	    .breadcrumb > li {
     		text-shadow: none;
@@ -150,10 +133,12 @@
 a {
 	color: #333;
 }
-a:link {
-    text-decoration: none;}
+/*a:link {
+    text-decoration: none;}*/
 a:hover {
 	color:#339966;
+	text-decoration: underline;
+
 }
 .scheck_m{
 	text-align:left;
