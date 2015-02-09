@@ -166,3 +166,6 @@ ul{
 	margin: 0px;
 	display: inline-block;
 	    }
+.stable th, .stable td {
+    vertical-align: middle;
+}
