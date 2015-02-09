@@ -1899,26 +1899,16 @@ def statistics_operate(request):
         if form.is_valid():
             bulk_sid = form.cleaned_data['bulk_sid']
             modulename = form.cleaned_data['modulename'] 
-            try:
-                add_module = models.module.objects.get(module_name = modulename)
-                mid = add_module.id                      
-                bulk_sid = bulk_sid.split(",")
-                all_pro_module = []
-                for pid in bulk_sid:
-                    if pid:
-                        pro_module = models.project_module.objects.filter(project_id = int(pid))
-                        if  not pro_module: 
-                            add_pro_module = project_module(project_id = int(pid), module_id = mid, isactived = 1)
-                            all_pro_module.append(add_pro_module)
-                        else:
-                            pro_module.update(module = mid)
-                models.project_module.objects.bulk_create(all_pro_module)
-            except:
-                pass
+            add_module = models.module.objects.get(module_name = modulename)
+            mid = add_module.id                      
+            bulk_sid = bulk_sid.split(",")
+            all_pro_module = []
+            for pid in bulk_sid:
+                if pid:
+                    pro_module = models.project_module.objects.filter(project_id = pid).update(module = mid)
         else:
             form = addmoduleForm()
     return HttpResponseRedirect('/sdetail/')
-
 
 def show_slist(request):
     if not request.user.is_authenticated():
