@@ -161,3 +161,8 @@ a:hover {
 .sselect{
 	float:left;
 }
+ul{
+	padding-left: 0;
+	margin: 0px;
+	display: inline-block;
+	    }
