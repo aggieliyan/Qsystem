@@ -1848,7 +1848,8 @@ def statistics_detail(request):
     pm = 0
     if request.user.has_perm("auth.change_permission"):
         pm = 1
-    sproject_info = models.project_module.objects.all()
+    pros = models.project_statistics.objects.filter(isactived = 1).values_list("project_id", flat=True)
+    sproject_info = models.project_module.objects.filter(project__in = pros)
     if request.method == "POST":
         form = sdetailForm(request.POST)
         if form.is_valid():
@@ -1884,7 +1885,7 @@ def statistics_detail(request):
      "dic_list":dic_list, "projectobj":projectobj, "kw":kw, "module_p":module_p, 'pm':pm}))
 
 def sdropdown(request, pid):
-    total = models.project_statistics.objects.filter(project_id=pid).order_by("total")
+    total = models.project_statistics.objects.filter(project_id=pid, isactived = 1).order_by("total")
     sdetail = {}
     all_sp = []
     for s in total:        
@@ -1922,11 +1923,12 @@ def statistics_operate(request):
 def show_slist(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/nologin")
+    pros = models.project_statistics.objects.filter(isactived = 1).values_list("project_id", flat=True)
     module_info = models.module.objects.all()
     modele_list = []
     for item in module_info:
         tempdict = {}
-        mproject = models.project_module.objects.filter(module_id=item.id)[0:16]
+        mproject = models.project_module.objects.filter(module_id=item.id, project__in = pros)[0:16]
         tempdict = {'id':item.id, 'name':item.module_name, 'plist':mproject}
         modele_list.append(tempdict)
 
