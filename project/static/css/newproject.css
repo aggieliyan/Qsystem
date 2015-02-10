@@ -131,6 +131,7 @@ position:relative;
 #filepath .csql{height:auto;}
 #filepath .is-graph{
    padding-right: 5px;
+   width:20px;
 }
 #filepath .icon-plus{
   margin-top:5px;
