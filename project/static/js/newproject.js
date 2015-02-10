@@ -185,11 +185,11 @@ $(document).ready(function(){
       var url="/psearch";
       var para = {"key":"", "role":roles}
       $.get(url, para, function(data, status){
-        allperson = eval('('+data+')');//全局变量
+        allperson = eval('('+data+')');
         allperson = allperson.person;
 
         var num = allperson.length;
-        pagemaxnum = 30//全局变量
+        pagemaxnum = 30
         var pnum = num/pagemaxnum;
         var anum = Math.floor(pnum);
         anum < pnum ? pagenum = anum+1 : pagenum = anum
@@ -240,7 +240,7 @@ $(document).ready(function(){
 
 /*   选择人员框里搜索*/
   $("#psearch").click(function(){
-      var skey = $.trim($("#skey").val());//
+      var skey = $.trim($("#skey").val());
       var role = $("[title='1']").prev("button").attr("name");
       
       url = "/psearch"
@@ -276,7 +276,7 @@ $(document).ready(function(){
 /*    选择项目负责人*/
     $("#master").focus(function(){
       p = $(".role-item");  
-      //没有值的时候提示去添加人员
+/*      没有值的时候提示去添加人员*/
       if(p.length == 0){
         alert("请先在右侧添加人员");
         return;
@@ -292,11 +292,10 @@ $(document).ready(function(){
     
     $("#master").blur(function(){
       var p = $('#master option:selected').val();
-      //console.log(typeof(p));
       $("[name='leader']").attr("value",p);
 
-      //设置测试和产品负责人
-     // set_other_master();
+/*      设置测试和产品负责人
+     set_other_master();*/
 
     });
 
@@ -304,7 +303,7 @@ $(document).ready(function(){
       set_other_master();
     });
 
-    //计算天数
+/*    计算天数*/
     $(".range input").change(function(){
         var endtime = $(this).val().split("-", 3);
         var s = $(this).parent().prev("span").prev("span");
@@ -319,15 +318,6 @@ $(document).ready(function(){
           $(this).parent().siblings('div').children('span').text(days);
         }
     });
-/*    $(".is_graph").click(function(){
-    	if ($(this).attr("checked")=="checked"){
-    		$(this).attr("value", "1")
-    		
-    	}else {
-    		$(this).attr("value", "0")
-    	}
-    	return
-    });*/
 
 
 });
