@@ -314,10 +314,8 @@
                     <span class="content">
                       {% if isql.is_editable %}
                       <input id={{isql.id}} class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}">
-<!--                       <input id="" class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句"> -->
                       {% else %}
-                      <input id={{isql.id}} class="sql" title="已有统计数据的sql不能再编辑了哟,只能删除后再建~" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}" readonly>   
-<!--                       <input id="" class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句">   -->                
+                      <input id={{isql.id}} class="sql" title="已有统计数据的sql不能再编辑了哟,只能删除后再建~" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="{{isql.item}}:{{isql.db}}:{{isql.sql}}" readonly>                  
                       {% endif %}
 
                       {% if isql.is_graph %}
@@ -332,9 +330,13 @@
                     </span>
                   {% endfor %} 
                 {% else %}
+
                 <span class="title sqlcss">统计sql：</span>
+
                 <span class="content">
-                  <input id="" class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value=""><input class="is-graph" type="checkbox" title='是否生成趋势图'><i class="icon-plus" title='再添加一条SQL'></i>
+                  <input id="" class="sql" type="text" maxlength=2100 placeholder="请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句" value="">
+                  <input class="is-graph" type="checkbox" title='是否生成趋势图'>
+                  <i class="icon-plus" title='再添加一条SQL'></i>
                 </span>
                 {% endif %}
               </div>
@@ -639,7 +641,7 @@
     <script type="text/javascript">
     $(document).ready(function(){
       $(".icon-plus").live('click', function(){
-        $(this).parent().parent().append("<span class=\"title sqlcss\"></span><span class=\"content\"><input id ='' class=\"sql\" type=\"text\"  maxlength=\"2100\" placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\" ><input class=\"is-graph\" type=\"checkbox\" title=\"是否生成趋势图\" ><i class=\"icon-plus\" title=\"再添加一条SQL\" ></i><i class=\"icon-remove\"></i></span>");
+        $(this).parent().parent().append("<span class=\"title sqlcss\"></span><span class=\"content\"><input id ='' class=\"sql\" type=\"text\"  maxlength=\"2100\" placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\" > <input class=\"is-graph\" type=\"checkbox\" title=\"是否生成趋势图\" > <i class=\"icon-plus\" title=\"再添加一条SQL\" ></i> <i class=\"icon-remove\"></i></span>");
         });
 
       $(".icon-remove").live('click', function(){
