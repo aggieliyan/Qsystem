@@ -7,26 +7,28 @@ $(document).ready(function(){
 			}
 			$(this).toggleClass("drapdown");
 			pid = $(this).attr("value");
-			var panel = $(this).parent().parent().next(".panel");
-			if(panel.length == 0){
-				$(this).parent().parent().after("<tr class='panel'><td colspan=5 id='"+id+"'></td></tr>");
-				var url = "/sflip/" + pid;
-				$.get(url, function(data, status){
-					var datalist = eval ("(" + data + ")");
-					var num = datalist.length;
-					for(var i=0;i<num;i++){
-						$("#"+id).append("<ul><div style='float:left;width:454px;'><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='float:right;width:600px;'><div style='width:60%;'><canvas id='canvas"+id+datalist[i].sql+"' height='2' width='3'></canvas></div></div></ul>");
-						if(i<num-1){
-							$("#"+id).append("<div><hr style=\"border:1px dotted #7B7B7B;\" /></div>");
-						}
-					}				
-				});				
-				setTimeout(500);
-				show_graph(pid,id);			
-			}
-			else{
-				panel.toggle();
-				}
+			if (pid){
+				var panel = $(this).parent().parent().next(".panel");
+			    if(panel.length == 0){
+			    	$(this).parent().parent().after("<tr class='panel'><td colspan=5 id='"+id+"'></td></tr>");
+				    var url = "/sflip/" + pid;
+				    $.get(url, function(data, status){
+					    var datalist = eval ("(" + data + ")");
+					    var num = datalist.length;
+					    for(var i=0;i<num;i++){
+						    $("#"+id).append("<ul><div style='float:left;width:454px;'><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='float:right;width:600px;'><div style='width:60%;'><canvas id='canvas"+id+datalist[i].sql+"' height='2' width='3'></canvas></div></div></ul>");
+						    if(i<num-1){
+							    $("#"+id).append("<div><hr style=\"border:1px dotted #7B7B7B;\" /></div>");
+						    }
+					    }				
+				    });				
+				    setTimeout(500);
+				    show_graph(pid,id);			
+			    }
+			    else{
+				    panel.toggle();
+				    }
+			    }			
 			});
 		// 全选和取消全选
 		$("#chk_all").click(function(){
@@ -52,10 +54,36 @@ $(document).ready(function(){
 		});
 
 		var Referer = document.referrer;
-			if (Referer.indexOf('/projectlist/')){
+		var renum = 0;
+		if(renum==0){
+			if (Referer.indexOf('/projectlist/') != -1){
+				renum++;
 				$('.flip').addClass("drapdown");
-		}
-
+				pid = $('.flip').attr("value");
+				if(pid){
+					var panel = $('.flip').parent().parent().next(".panel");
+					if(panel.length == 0){
+						$('.flip').parent().parent().after("<tr class='panel'><td colspan=5 id='"+id+"'></td></tr>");
+						var url = "/sflip/" + pid;
+						$.get(url, function(data, status){
+							var datalist = eval ("(" + data + ")");
+							var num = datalist.length;
+							for(var i=0;i<num;i++){
+								$("#"+id).append("<ul><div style='float:left;width:454px;'><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='float:right;width:600px;'><div style='width:60%;'><canvas id='canvas"+id+datalist[i].sql+"' height='2' width='3'></canvas></div></div></ul>");
+						        if(i<num-1){
+						        	$("#"+id).append("<div><hr style=\"border:1px dotted #7B7B7B;\" /></div>");
+						        }
+					        }				
+				        });				
+				        setTimeout(500);
+				        show_graph(pid,id);		
+			        }
+			    else{
+				    panel.toggle();
+				    }
+			    }			
+		    }
+		}		
 	});
 
 	function s_operate(id){
