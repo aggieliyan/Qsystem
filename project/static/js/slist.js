@@ -21,7 +21,7 @@ $(document).ready(function(){
                     }
 				}				
 			});				
-			setTimeout(500);	
+			setTimeout(900);	
 			show_graph(pid,id);		
 		}
 		else{
