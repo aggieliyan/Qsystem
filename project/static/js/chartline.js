@@ -2,7 +2,7 @@ function show_graph(pid,id){
 	var url = "/getsdata/" + pid;
 	$.get(url, function(data, status){
 		var json = eval ("(" + data + ")");
-		var i = 0;
+		
 		for (var key in json){
 			var lineChartData = {
 
@@ -19,12 +19,13 @@ function show_graph(pid,id){
 							data : json[key].total
 						},		
 					]		
-			}; //endData			
-			var ctx = document.getElementById("canvas"+id+key).getContext("2d");
+			}; //endData
+			var canid = "canvas"+id+key;
+			var ctx = document.getElementById(canid).getContext("2d");
 			window.myLine = new Chart(ctx).Line(lineChartData, {
 				responsive: true
 			});
-			i = i+1;
+			
 			} //endfor
 		});
 	};
