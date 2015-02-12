@@ -23,11 +23,7 @@ $(document).ready(function(){
 					    }				
 				    });				
 				    setTimeout(900);
-				    if (id){
-				    	show_graph(pid,id);}else{
-				    		alert("please refresh");
-				    	}
-				    			
+				    show_graph(pid,id);			
 			    }
 			    else{
 				    panel.toggle();

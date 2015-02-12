@@ -2,6 +2,7 @@ function show_graph(pid,id){
 	var url = "/getsdata/" + pid;
 	$.get(url, function(data, status){
 		var json = eval ("(" + data + ")");
+		var i = 0;
 		for (var key in json){
 			var lineChartData = {
 
@@ -23,6 +24,7 @@ function show_graph(pid,id){
 			window.myLine = new Chart(ctx).Line(lineChartData, {
 				responsive: true
 			});
+			i = i+1;
 			} //endfor
 		});
 	};
