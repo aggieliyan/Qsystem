@@ -19,10 +19,9 @@ $(document).ready(function(){
                     if(i<num-1){
 					    $("#"+id).append("<div><hr style=\"border:1px dotted #7B7B7B\" /></div>");
                     }
-				}				
-			});				
-			setTimeout(500);	
-			show_graph(pid,id);		
+				}
+				show_graph(pid,id);				
+			});							
 		}
 		else{
 			panel.toggle();
