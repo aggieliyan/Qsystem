@@ -1,16 +1,17 @@
 $(document).ready(function(){
 		// 实现下拉、收起，并动态生成表格，异步展示数据
 		var id=0;
-		$(".flip").click(function(){
+		$(".statistic").click(function(){
 		    if ($(".panel").length != id){
 				id++;
 			}
-			$(this).toggleClass("drapdown");
-			pid = $(this).attr("value");
+			hotspot = $(this).children('.flip')
+			hotspot.toggleClass("drapdown");
+			pid = hotspot.attr("value");
 			if (pid){
-				var panel = $(this).parent().parent().next(".panel");
+				var panel = hotspot.parent().parent().next(".panel");
 			    if(panel.length == 0){
-			    	$(this).parent().parent().after("<tr class='panel'><td colspan=5 id='"+id+"'></td></tr>");
+			    	hotspot.parent().parent().after("<tr class='panel'><td colspan=5 id='"+id+"'></td></tr>");
 				    var url = "/sflip/" + pid;
 				    $.get(url, function(data, status){
 					    var datalist = eval ("(" + data + ")");
