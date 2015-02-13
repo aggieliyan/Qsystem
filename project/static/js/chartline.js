@@ -1,5 +1,4 @@
 function show_graph(pid,id){
-	if (id==""){alert("why??");};
 	var url = "/getsdata/" + pid;
 	$.get(url, function(data, status){
 		var json = eval ("(" + data + ")");
@@ -20,12 +19,8 @@ function show_graph(pid,id){
 							data : json[key].total
 						},		
 					]		
-			}; //endData
-			var el = document.getElementById("canvas"+id+key);
-			if (el=="null"){
-				alert("e....");
-			};
-			var ctx = el.getContext("2d");
+			}; //endData			
+			var ctx = document.getElementById("canvas"+id+key).getContext("2d");
 			window.myLine = new Chart(ctx).Line(lineChartData, {
 				responsive: true
 			});
