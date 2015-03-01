@@ -1935,9 +1935,10 @@ def sdata(request, pid):
         labels = []
         total = []
         datas = models.project_statistics_result.objects.filter(sql_id=sid).order_by("date")
-        for data in datas:
-                labels.append(str(data.date))
-                total.append(data.statistical_result)
+        for i in range(0, len(datas)+1, 7):
+                labels.append(str(datas[i].date))
+                total.append(datas[i].statistical_result)
+                
         if len(labels)==1:
             labels.append("")
         sdata[sid] = {'labels': labels, 'total': total}
