@@ -1936,9 +1936,11 @@ def sdata(request, pid):
         total = []
         datas = models.project_statistics_result.objects.filter(sql_id=sid).order_by("date")
         for i in range(0, len(datas)+1, 7):
+            try:
                 labels.append(str(datas[i].date))
                 total.append(datas[i].statistical_result)
-                
+            except:
+                pass                
         if len(labels)==1:
             labels.append("")
         sdata[sid] = {'labels': labels, 'total': total}
