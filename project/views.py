@@ -1918,7 +1918,7 @@ def show_slist(request):
     modele_list = []
     for item in module_info:
         tempdict = {}
-        mproject = models.project_module.objects.filter(module_id=item.id, project__in = pros)[0:16]
+        mproject = models.project_module.objects.filter(module_id=item.id, project__in = pros).order_by('-id')[0:16]
         tempdict = {'id':item.id, 'name':item.module_name, 'plist':mproject}
         modele_list.append(tempdict)
 
