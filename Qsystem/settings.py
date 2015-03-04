@@ -111,7 +111,7 @@ WSGI_APPLICATION = 'Qsystem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
+DATABASE_ROUTERS = ['Qsystem.dbsettings.dbrouter']
 if socket.gethostname() == 'test':
     DATABASES = {
         'default': {
@@ -162,9 +162,7 @@ if socket.gethostname() == 'test':
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                         
                 },      
-            }   
-        
-                                  
+            }            
                                   
                                      
 else:
@@ -192,7 +190,15 @@ else:
                 'PASSWORD':'mysqlpwd1',
                 'HOST':'192.168.120.201',
                 'PORT':'3306',                      
-                 },    
+                 },
+        'case': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'case',
+            'USER':'root',
+            'PASSWORD':'mysqlpwd1',
+            'HOST':'localhost',
+            'PORT':'3306',
+            },    
 }
 
 # Internationalization
