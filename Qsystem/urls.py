@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'Qsystem.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 #    url('^cron/$','project.cron.my_scheduled_job'), #for testing timing task~
-    #login    
+    #login  
     url('^$', 'project.views.project_list',name="index"),
     url('^login', 'project.views.login',name="login"),
 #    url('^register', 'project.views.register',name="register"),i
@@ -84,7 +84,11 @@ urlpatterns = patterns('',
     #statistics
     url(r'^slist/$', project.views.show_slist),
     url(r'^getsdata/(\d+)/$', project.views.sdata),
+
+    url(r'^case/', include('case.urls')),
 )
+
+
 from django.conf import settings 
 if settings.DEBUG is False:
     urlpatterns += patterns('',

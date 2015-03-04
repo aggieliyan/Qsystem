@@ -60,8 +60,10 @@ if socket.gethostname() == 'test':
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'project',
+    'case',
     'south',
     'django_crontab',
+
 #    'pipeline',
 )
     
@@ -76,6 +78,7 @@ else:
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'project',
+    'case',
     'pipeline',
     # 'django_crontab',
     # 'debug_toolbar',
@@ -210,6 +213,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    'project/static/',
+    'common/static/',
+    'case/satic/',
+    )
+
+TEMPLATE_LOADERS = (
+   'django.template.loaders.app_directories.Loader',
+)
+TEMPLATE_DIRS = ()
 
 CRONJOBS = [
         ('0 0 * * *', 'project.cron.my_scheduled_job')
