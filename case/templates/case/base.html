@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title> 
+    {% block head %}{% endblock %}
+    <link  href='/static/css/casebase.css?v=20150126' rel='stylesheet' media='screen'> 
+  </head>
+  <body>
+  	<div class="top">
+	 <ul>
+	   <li><a href=""> </a></li>
+	 </ul>
+	 <ul class="top_memu">
+		<li><a>case<i>(0)</i></a></li>	
+		<li><a>case</a></li>
+		<li><a>case</a></li>
+	 </ul>
+	 <ul class="top_bar">
+		  <li><a>User</a></li>
+      <li><i> | </i></li>
+      <li><a href="/logout/">退出</a></li>
+		</ul>
+	</div>
+    {% block content %}{% endblock %}
+    {% block footer %}
+    <div style="width:100%">
+    <p class="basefooter ">© 2014 Ablesky, Inc. 版权所有, 能力天空科技（北京）有限公司 </p>
+    </div>
+    {% endblock %}
+  {% block js %}
+  {% endblock %}
+</body>
+</html>
