@@ -1,0 +1,18 @@
+
+#caselist th{
+	text-align: center;
+}
+
+
+#caselist .edittx{
+	width:95%;
+}
+
+#caseall{
+	margin-top:0px;
+	margin-left: -6px;
+}
+
+#caselist .casecheck{
+	margin-top:0px;
+}
