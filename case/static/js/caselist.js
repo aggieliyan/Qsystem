@@ -25,8 +25,9 @@ $(document).ready(function(){
 
 	});
 
-   $("icon-plus").live("click", function(){
-   	   var casehtml = "<tr><td><input class=\"casecheck\" type=\"checkbox\">1</td>"+
+   $(".icon-plus").live("click", function(){
+   	    console.log("++");
+   	    var casehtml = "<tr><td><input class=\"casecheck\" type=\"checkbox\">1</td>"+
 	      		"<td class=\"editable\"></td>"+
 	      		"<td class=\"editable\"></td>"+
 	    		"<td class=\"editable\"></td>"+
@@ -37,15 +38,18 @@ $(document).ready(function(){
 	      		"<td>易璐璐</td>"+
 	      		"<td class=\"editable\">-</td>"+
 	      		"<td>"+
-	      			"<a class=\"icon-plus\"></a>"+
-	      			"<a class=\"icon-download-alt\"></a>"+
-	      			"<a class=\"icon-eye-open\"></a>"+
+	      			"<a class=\"icon-plus\"></a> "+
+	      			"<a class=\"icon-download-alt\"></a> "+
+	      			"<a class=\"icon-eye-open\"></a> "+
 	      			"<a class=\"icon-trash\"></a>"+
 	      		"</td>"+			
 	    	"</tr>";
-       console.log($(this));
-       $(this).parents("tbody").append(casehtml);
+        console.log($(this));
+        $(this).parents("tbody").append(casehtml);
 
    });
+
+
+
 
 });

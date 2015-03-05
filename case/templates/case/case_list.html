@@ -13,7 +13,7 @@
 	<p>
   		这里是列表那部分</p>
     <table id="caselist" class="table table-bordered">
-    	<theaad>
+    	<thead>
 	      	<tr>
 	    		<th style="width:50px;"><input id="caseall" type="checkbox">编号</th>
 	    		<th style="width:100px;">前置条件</th>
@@ -27,7 +27,7 @@
 	    		<th>备注</th>
 	    		<th style="width:100px;">操作</th>
 	    	</tr>
-        </theaad>
+        </thead>
         <tbody>
 	    	<tr>
 	    		<td><input class="casecheck" type="checkbox">1</td>
@@ -55,5 +55,5 @@
 
 {% endblock %}
 {% block js %}
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150210"></script>
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150211"></script>
 {% endblock %}
