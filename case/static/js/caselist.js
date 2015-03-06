@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    var casehtml = "<tr><td><input class=\"casecheck\" type=\"checkbox\">1</td>"+
+    var casehtml = "<tr class=\"mtr\"><td><input class=\"casecheck\" type=\"checkbox\">1</td>"+
 			      		"<td class=\"editable\"></td>"+
 			      		"<td class=\"editable\"></td>"+
 			    		"<td class=\"editable\"></td>"+
@@ -12,26 +12,35 @@ $(document).ready(function(){
 			      		"<td class=\"editable\">-</td>"+
 			      		"<td>"+
 			      			"<a class=\"icon-plus\"></a> "+
-			      			"<a class=\"icon-plus-sign\"></a> "+
 			      			"<a class=\"icon-download-alt\"></a> "+
 			      			"<a class=\"icon-eye-open\"></a> "+
 			      			"<a class=\"icon-trash\"></a>"+
 			      		"</td>"+			
 			    	"</tr>";
 
-    var modulehtml = "<tr class=\"cmodule success\">"+
-	    		"<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\"></td>"+
-	    		"<td colspan=\"9\" class=\"editable\"></td>"+
-	    		"<td >"+
-	    		    "<a class=\"icon-arrow-up\"></a> "+
-	      			"<a class=\"icon-arrow-down\"></a> "+
-	      		    "<a class=\"icon-plus\"></a> "+
-	      		    "<a class=\"icon-trash\"></a> "+
+    var modulehtml = "<tr class=\"cmodule\">"+
+	    		"<td colspan=\"11\">"+
+	    			"<div>"+
+	    				"<table >"+
+	    					"<tbody>"+
+	    						"<tr class=\"success\">"+
+						    		"<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\"></td>"+
+						    		"<td colspan=\"9\" class=\"editable\"></td>"+
+						    		"<td >"+
+						      			"<a class=\"icon-plus-sign\"></a> "+
+						      		    "<a class=\"icon-plus\"></a> "+
+						      		    "<a class=\"icon-trash\"></a> "+
+						    		"</td>"+
+	    						"</tr>"+
+	    						casehtml +
+	    					"</tbody>"+
+	    				"</table>"+
+	    			"</div>"+
 	    		"</td>"+
-	    	"<tr>"
+	    	"</tr>"
     // click create case
     $("#newcase").click(function(){
-        $("#caselist").children('tbody').append(casehtml);
+        $(".mtr").last().after(casehtml);
     });
 
 	$(".editable").live('dblclick', function(){
@@ -63,7 +72,7 @@ $(document).ready(function(){
    });
 
    $(".icon-plus-sign").live('click', function(){
-        $(this).parent().parent().after(modulehtml);
+        $(this).parents(".cmodule").after(modulehtml);
    });
 
     $("#caseall").click(function(){
@@ -79,9 +88,20 @@ $(document).ready(function(){
         }
     });
 
-    $(".icon-arrow-up").live("click", function(){
-
+    $("#caselist tbody").dragsort({
+    	dragSelector:".cmodule",
+    	dragEnd:function(){
+    		console.log("ok");
+    	},
     });
+
+     $(".cmodule tbody").dragsort({
+    	dragSelector:".mtr",
+    	dragEnd:function(){
+    		console.log("ok");
+    	},
+    });   
+/*    $(".cmodule").dragsort("destroy");*/
 
 
 
