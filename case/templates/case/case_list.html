@@ -10,8 +10,7 @@
   		这里是搜索那部分
   	</div>
 <div class="span12">
-	<p>
-  		这里是列表那部分</p>
+  	<div id="tbop"><span id="cnum">共2015条用例</span><buton id="newcase" class="btn btn-success">新建用例</button></div>
     <table id="caselist" class="table table-bordered">
     	<thead>
 	      	<tr>
@@ -29,6 +28,16 @@
 	    	</tr>
         </thead>
         <tbody>
+	    	<tr class="cmodule success">
+	    		<td colspan="1"><input class="modulecheck" type="checkbox"></td>
+	    		<td colspan="9" class="editable">点击我可以编辑我的名字的</td>
+	    		<td >
+	    		    <a class="icon-arrow-up"></a>
+	      			<a class="icon-arrow-down"></a>
+	      		    <a class="icon-plus"></a>
+	      		    <a class="icon-trash"></a>
+	    		</td>
+	    	<tr>
 	    	<tr>
 	    		<td><input class="casecheck" type="checkbox">1</td>
 	      		<td class="editable">总管理员操作</td>
@@ -42,11 +51,13 @@
 	      		<td class="editable">-</td>
 	      		<td>
 	      			<a class="icon-plus"></a>
+	      			<a class="icon-plus-sign"></a>
 	      			<a class="icon-download-alt"></a>
 	      			<a class="icon-eye-open"></a>
 	      			<a class="icon-trash"></a>
 	      		</td> 			
 	    	</tr>
+
         </tbody>
     </table>
   		
@@ -55,5 +66,5 @@
 
 {% endblock %}
 {% block js %}
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150211"></script>
+    <script type='text/javascript' src="/static/js/caselist.js?v=2015024"></script>
 {% endblock %}

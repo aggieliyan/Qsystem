@@ -1,6 +1,38 @@
 $(document).ready(function(){
-    
 
+    var casehtml = "<tr><td><input class=\"casecheck\" type=\"checkbox\">1</td>"+
+			      		"<td class=\"editable\"></td>"+
+			      		"<td class=\"editable\"></td>"+
+			    		"<td class=\"editable\"></td>"+
+			      		"<td>2</td>"+
+			      		"<td></td>"+
+			    		"<td class=\"editable\">-</td>"+
+			      		"<td></td>"+
+			      		"<td></td>"+
+			      		"<td class=\"editable\">-</td>"+
+			      		"<td>"+
+			      			"<a class=\"icon-plus\"></a> "+
+			      			"<a class=\"icon-plus-sign\"></a> "+
+			      			"<a class=\"icon-download-alt\"></a> "+
+			      			"<a class=\"icon-eye-open\"></a> "+
+			      			"<a class=\"icon-trash\"></a>"+
+			      		"</td>"+			
+			    	"</tr>";
+
+    var modulehtml = "<tr class=\"cmodule success\">"+
+	    		"<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\"></td>"+
+	    		"<td colspan=\"9\" class=\"editable\"></td>"+
+	    		"<td >"+
+	    		    "<a class=\"icon-arrow-up\"></a> "+
+	      			"<a class=\"icon-arrow-down\"></a> "+
+	      		    "<a class=\"icon-plus\"></a> "+
+	      		    "<a class=\"icon-trash\"></a> "+
+	    		"</td>"+
+	    	"<tr>"
+    // click create case
+    $("#newcase").click(function(){
+        $("#caselist").children('tbody').append(casehtml);
+    });
 
 	$(".editable").live('dblclick', function(){
 
@@ -25,30 +57,31 @@ $(document).ready(function(){
 
 	});
 
+   // click + 
    $(".icon-plus").live("click", function(){
-   	    console.log("++");
-   	    var casehtml = "<tr><td><input class=\"casecheck\" type=\"checkbox\">1</td>"+
-	      		"<td class=\"editable\"></td>"+
-	      		"<td class=\"editable\"></td>"+
-	    		"<td class=\"editable\"></td>"+
-	      		"<td>2</td>"+
-	      		"<td>PASS</td>"+
-	    		"<td class=\"editable\">-</td>"+
-	      		"<td>2015/01/01</td>"+
-	      		"<td>易璐璐</td>"+
-	      		"<td class=\"editable\">-</td>"+
-	      		"<td>"+
-	      			"<a class=\"icon-plus\"></a> "+
-	      			"<a class=\"icon-download-alt\"></a> "+
-	      			"<a class=\"icon-eye-open\"></a> "+
-	      			"<a class=\"icon-trash\"></a>"+
-	      		"</td>"+			
-	    	"</tr>";
-        console.log($(this));
-        $(this).parents("tbody").append(casehtml);
-
+        $(this).parent().parent().after(casehtml);
    });
 
+   $(".icon-plus-sign").live('click', function(){
+        $(this).parent().parent().after(modulehtml);
+   });
+
+    $("#caseall").click(function(){
+    	var a = $(".casecheck")
+        if($(this).attr("checked")=="checked"){ 
+        	for(var i=0;i<a.length;i++){
+        		a.eq(i).attr("checked","checked");
+        	}
+        }else{
+        	for(var i=0;i<a.length;i++){
+        		a.eq(i).removeAttr("checked");
+            }
+        }
+    });
+
+    $(".icon-arrow-up").live("click", function(){
+
+    });
 
 
 

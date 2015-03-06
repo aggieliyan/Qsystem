@@ -1,9 +1,12 @@
 
-#caselist th{
-	text-align: center;
+#tbop{
+	height: 35px;
 }
 
 
+#caselist th{
+	text-align: center;
+}
 #caselist .edittx{
 	width:95%;
 }
@@ -15,4 +18,8 @@
 
 #caselist .casecheck{
 	margin-top:0px;
+}
+
+#newcase {
+	float:right;
 }
