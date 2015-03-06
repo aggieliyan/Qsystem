@@ -5,14 +5,18 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
     <meta http-equiv="Content-Language" content="zh-cn" />
 	<link rel="icon" href="/static/img/favicon.ico"  type="image/x-icon">
-	<link href='/static/css/register.min.css?v=20150106' rel='stylesheet' media='screen'>
+	<link href='/static/css/register.min.css?v=20150306' rel='stylesheet' media='screen'>
     <script language="javascript" type="text/javascript" src="../static/js/register.min.js">
     </script>
 </head>
 <body style="margin:0px;">
 	<div class="backgroud">
 		<div align="center" class="top" >
-   			<div class="top_logo" align="center">
+   			<div align="center">
+   				<ul class="top_logo">
+                    <li class="logo" id="logo"></li>
+                    <li><a>项目管理系统</a></li>
+                </ul>
 			</div>
 			<form action="" method="post" onsubmit="return checkRegistMsg()">{% csrf_token %}
 		 		<div class="backgroud_white" align="center" style="overflow:hidden">

@@ -1,4 +1,14 @@
 ﻿$(document).ready(function(){
+  var today = new Date();
+    var weekday=new Array(7)
+    weekday[0]="Sat-Sun"
+    weekday[1]="Mon"
+    weekday[2]="Tue"
+    weekday[3]="Wed"
+    weekday[4]="Thu"
+    weekday[5]="Fri"
+    weekday[6]="Sat-Sun"                                    
+    $("#logo").addClass(weekday[today.getDay()]);
 
 	var url = "/user_info";
 	$.get(url, function(data){
@@ -95,7 +105,6 @@
     $(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(0).attr("title",project);
     $(".basecolor").eq(i).children().eq(table_list['项目成员']).attr("title",user_prolist);}
 });
-	      
 
 });
  (function(){

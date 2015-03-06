@@ -7,11 +7,29 @@
 	}
 	.top_logo
     {
-	    background: url(../img/logo.jpg) no-repeat;
+        margin-left:0px;
 	    height: 86px;
 	    width: 320px;
-        padding-left: 400px;
-    }
+        padding-left: 0px;
+    }    
+    .top_logo a {
+    color: #fff;
+    font-weight: bold;
+    font-size: 24px;
+    text-decoration: none;
+}
+.top_logo li {
+    float: left;
+    margin-top: 5px;
+    padding-right: 31px;
+    line-height: 85px;
+}
+    .logo{
+    background-image: url("/static/img/logo.png");    
+    width: 88px;
+    height: 86px;
+    background-position: 12px -10px;
+}
 	.backgroud
     {
         float: left;
