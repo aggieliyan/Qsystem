@@ -70,43 +70,75 @@ $(document).ready(function(){
 
 	});
 
-    // click + 
+	//插入模块后用例后，赋rank值
+
+    //添加用例
     $(".icon-plus").live("click", function(){
         $(this).parent().parent().after(casehtml);
     });
 
+    //添加模块
     $(".icon-plus-sign").live('click', function(){
         $(this).parents(".cmodule").after(modulehtml);
     });
 
+    function checkall(master, slave){
+        if(master.attr("checked")=="checked"){ 
+        	slave.each(function(){
+        		$(this).attr("checked","checked");
+        	});
+        }else{
+         	slave.each(function(){
+        		$(this).removeAttr("checked");
+        	});
+        }
+    }
+
     //全选
     $("#caseall").click(function(){
-    	var a = $(".casecheck")
-        if($(this).attr("checked")=="checked"){ 
-        	for(var i=0;i<a.length;i++){
-        		a.eq(i).attr("checked","checked");
-        	}
-        }else{
-        	for(var i=0;i<a.length;i++){
-        		a.eq(i).removeAttr("checked");
-            }
-        }
+    	var slave = $("#caselist").find("input");
+    	checkall($(this), slave);
     });
 
+    $(".modulecheck").live('click', function(){
+    	var slave = $(this).parents(".cmodule").find("input");
+    	checkall($(this), slave);
+    });
+
+    function update_rank(){
+
+    	var celement = $(this);
+    	var pelement = celement.prev();
+    	if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
+    		celement.attr("rank", "1");
+    	}
+    	else{
+    		celement.attr("rank", parseInt(pelement.attr("rank"))+1);
+
+    	}
+    	celement.find("input").eq(0).attr("checked", "checked");
+    	var classname = celement.attr("class")
+    	var nx = celement.nextAll().filter("."+classname);
+    	nx.each(function(){
+    		var newrank = parseInt($(this).attr("rank"))+1;
+    		$(this).attr("rank", newrank);
+    		$(this).find("input").eq(0).attr("checked", "checked");
+    	});
+
+    }
+
+    //模块拖拽
     $("#caselist tbody").dragsort({
     	dragSelector:".cmodule",
-    	dragEnd:function(){
-    		console.log("ok");
-    	},
+    	dragEnd:update_rank,
     });
-
+    //用例拖拽
     $(".cmodule tbody").dragsort({
     	dragSelector:".mtr",
-    	dragEnd:function(){
-    		console.log("ok");
-    	},
+    	dragEnd:update_rank,
     });
 
+    //删除
     $(".icon-trash").live('click', function(){
 
     	if(confirm("你确定要删除吗？")){
