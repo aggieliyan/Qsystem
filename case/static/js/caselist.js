@@ -38,9 +38,59 @@ $(document).ready(function(){
 	    			"</div>"+
 	    		"</td>"+
 	    	"</tr>"
+
+
+	function insert_update_rank(celement){	
+    	var pelement = celement.prev();
+    	if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
+    		celement.attr("rank", "1");
+    	}
+    	else{
+    		celement.attr("rank", parseInt(pelement.attr("rank"))+1);
+
+    	}
+    	celement.find("input").eq(0).attr("checked", "checked");
+    	var classname = celement.attr("class")
+    	var nx = celement.nextAll().filter("."+classname);
+    	nx.each(function(){
+    		var newrank = parseInt($(this).attr("rank"))+1;
+    		$(this).attr("rank", newrank);
+    		$(this).find("input").eq(0).attr("checked", "checked");
+    	});
+
+    }
+
+    function delete_update_rank(celement){
+    	var nextele = celement.next();
+    	if(nextele.length !== 0){
+	    	var classname = celement.attr("class")
+	    	var nx = celement.nextAll().filter("."+classname);
+	    	nx.each(function(){
+	    		var newrank = parseInt($(this).attr("rank"))-1;
+	    		$(this).attr("rank", newrank);
+	    		$(this).find("input").eq(0).attr("checked", "checked");
+	    	});
+	    	//如果删掉模块，模块下用例的rank值也要变化
+	    	if(classname == "cmodule"){
+	    		var ccase = celement.find(".mtr");
+	    		var cnum = celement.prev().find(".mtr").length;
+	    		var i = 1;
+
+		    	ccase.each(function(){
+		    		var newrank = cnum+i;
+		    		i = i+1;
+		    		$(this).attr("rank", newrank);
+		    		$(this).find("input").eq(0).attr("checked", "checked");
+		    	});	    		
+	    	}  	
+    	}
+    }
+
     // click create case
     $("#newcase").click(function(){
         $(".mtr").last().after(casehtml);
+        insert_update_rank($(".mtr").last());
+
     });
 
 	$(".editable").live('dblclick', function(){
@@ -74,12 +124,16 @@ $(document).ready(function(){
 
     //添加用例
     $(".icon-plus").live("click", function(){
-        $(this).parent().parent().after(casehtml);
+    	var ccase = $(this).parent().parent();
+        ccase.after(casehtml);
+        insert_update_rank(ccase.next());
     });
 
     //添加模块
     $(".icon-plus-sign").live('click', function(){
-        $(this).parents(".cmodule").after(modulehtml);
+        var cmodule = $(this).parents(".cmodule");
+        cmodule.after(modulehtml);
+        update_rank(cmodule.next());
     });
 
     function checkall(master, slave){
@@ -105,37 +159,24 @@ $(document).ready(function(){
     	checkall($(this), slave);
     });
 
-    function update_rank(){
 
-    	var celement = $(this);
-    	var pelement = celement.prev();
-    	if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
-    		celement.attr("rank", "1");
-    	}
-    	else{
-    		celement.attr("rank", parseInt(pelement.attr("rank"))+1);
 
-    	}
-    	celement.find("input").eq(0).attr("checked", "checked");
-    	var classname = celement.attr("class")
-    	var nx = celement.nextAll().filter("."+classname);
-    	nx.each(function(){
-    		var newrank = parseInt($(this).attr("rank"))+1;
-    		$(this).attr("rank", newrank);
-    		$(this).find("input").eq(0).attr("checked", "checked");
-    	});
 
+
+
+    function drag_update_rank(){
+    	insert_update_rank($(this));
     }
 
     //模块拖拽
     $("#caselist tbody").dragsort({
     	dragSelector:".cmodule",
-    	dragEnd:update_rank,
+    	dragEnd:drag_update_rank,
     });
     //用例拖拽
     $(".cmodule tbody").dragsort({
     	dragSelector:".mtr",
-    	dragEnd:update_rank,
+    	dragEnd:drag_update_rank,
     });
 
     //删除
@@ -144,6 +185,7 @@ $(document).ready(function(){
     	if(confirm("你确定要删除吗？")){
     		var node = $(this).parent().parent();
     		if(node.attr("class") == "mtr"){//删除用例
+    			delete_update_rank(node);
     			node.remove();
     		}else{//删除模块
     		  
@@ -152,6 +194,10 @@ $(document).ready(function(){
 	    		var prevmodule = currentm.prev().find('tbody');
 
 	    		if(prevmodule.length){
+
+	        		//更新rank值
+	        		delete_update_rank(currentm);
+
 	    			//克隆一份该模块下的用例
 	        		var snode = node.siblings().clone(true);
 
@@ -159,6 +205,8 @@ $(document).ready(function(){
 	        		snode.each(function(){
 	        			$(this).find(".casecheck").attr("checked", "checked");
 	        		});
+
+	        		//删掉
 
                     //删掉该模块,将模块下用例复制到前一个模块下
 	        		currentm.remove();
