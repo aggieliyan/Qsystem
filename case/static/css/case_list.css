@@ -9,15 +9,24 @@
 }
 #caselist .edittx{
 	width:95%;
+	margin-left:-6px;
 }
 
 #caseall{
 	margin-top:0px;
-	margin-left: -6px;
+	margin-left:-6px;
 }
 
 #caselist .casecheck{
 	margin-top:0px;
+}
+
+#caselist .cresult{
+	width:70px;
+}
+
+#caselist .lselect{
+	width:50px;
 }
 
 #newcase {
@@ -27,17 +36,21 @@
 .mtr td:nth-child(1),.mtr td:nth-child(9),.mtr td:nth-child(10){
 	width:50px;
 }
-.mtr td:nth-child(2), .mtr td:nth-child(11){
+.mtr td:nth-child(2){
 	width:100px;
 }
+
 .mtr td:nth-child(3),.mtr td:nth-child(4){
 	width:180px;
 }
 
-.mtr td:nth-child(5),.mtr td:nth-child(6),.mtr td:nth-child(7){
+.mtr td:nth-child(6){
+	width:60px;
+}
+.mtr td:nth-child(5),.mtr td:nth-child(7){
 	width:40px;
 }
 
-.mtr td:nth-child(8){
+.mtr td:nth-child(8), .mtr td:nth-child(11){
 	width:80px;
 }

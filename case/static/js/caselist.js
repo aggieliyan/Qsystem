@@ -1,16 +1,16 @@
 $(document).ready(function(){
 
-    var casehtml = "<tr class=\"mtr\"><td><input class=\"casecheck\" type=\"checkbox\" checked='checked'>1</td>"+
-			      		"<td class=\"editable\"></td>"+
-			      		"<td class=\"editable\"></td>"+
-			    		"<td class=\"editable\"></td>"+
-			      		"<td>2</td>"+
+    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck\" type=\"checkbox\" checked='checked'>1</td>"+
+			      		"<td class=\"editable nodrag\"></td>"+
+			      		"<td class=\"editable nodrag\"></td>"+
+			    		"<td class=\"editable nodrag\"></td>"+
+			      		"<td class=\"nodrag\">2</td>"+
+			      		"<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
+			    		"<td class=\"editable nodrag\">-</td>"+
 			      		"<td></td>"+
-			    		"<td class=\"editable\">-</td>"+
 			      		"<td></td>"+
-			      		"<td></td>"+
-			      		"<td class=\"editable\">-</td>"+
-			      		"<td>"+
+			      		"<td class=\"editable nodrag\">-</td>"+
+			      		"<td class=\"nodrag\">"+
 			      			"<a class=\"icon-plus\" title=\"添加用例\"></a> "+
 			      			"<a class=\"icon-download-alt\" title=\"引入用例\"></a> "+
 			      			"<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
@@ -38,6 +38,19 @@ $(document).ready(function(){
 	    			"</div>"+
 	    		"</td>"+
 	    	"</tr>"
+
+    var resulthtml = "<select class=\"cresult\">"+
+                        "<option>-</option>"+
+                        "<option>Pass</option>"+
+                        "<option>Fail</option>"+
+                        "<option>block</option>"+
+                    "</select>"
+
+    var levelhtml = "<select class=\"lselect\">"+
+                        "<option>1</option>"+
+                        "<option>2</option>"+
+                        "<option>3</option>"+
+                    "</select>"
 
 
 	function insert_update_rank(celement){	
@@ -120,6 +133,50 @@ $(document).ready(function(){
 
 	});
 
+
+    //点击选择级别
+    $(".level").live('dblclick', function(){
+        var tdnode = $(this);
+        var tdTest = tdnode.text();
+        tdnode.empty();
+        var tx = $(levelhtml);
+        tx.attr("value", tdTest);
+        tdnode.append(tx);
+    })
+
+    $(".lselect").live('change', function(){
+        var tx = $(this);
+        var etext = tx.val();
+        var tp = tx.parent();
+        tx.remove();
+        tp.attr("value", etext);
+        tp.html(etext);
+        tp.siblings().eq(0).find("input").attr("checked", "checked");    
+    })
+
+    //点击执行用例
+    $(".icon-play-circle").live('click', function(){
+        var caseid = $(this).parents(".mtr").attr("value");
+        if(caseid !== ""){//有用例id的才可以执行
+            $(this).next().next().remove();
+            var sel = $(this).next();
+            if(sel.length == 0){
+                $(this).after(resulthtml);
+                $(this).toggle();       
+            }else{
+                sel.toggle();
+                $(this).toggle();
+            }
+        }
+
+    });
+    $(".cresult").live('change', function(){
+        var result = $(this).val();
+        $(this).prev().toggle();
+        $(this).after("<span>"+result+"<span>");
+        $(this).toggle();
+    })
+
 	//插入模块后用例后，赋rank值
 
     //添加用例
@@ -176,6 +233,7 @@ $(document).ready(function(){
     //用例拖拽
     $(".cmodule tbody").dragsort({
     	dragSelector:".mtr",
+        dragSelectorExclude:".nodrag",
     	dragEnd:drag_update_rank,
     });
 
@@ -218,6 +276,9 @@ $(document).ready(function(){
     	}
     });
 
+/*    $(window).bind('beforeunload', function(){
 
-
+    });*/
+/*
+    window.onbeforeunload = function(event){return confirm("确定离开此页面吗？"); }*/
 });
