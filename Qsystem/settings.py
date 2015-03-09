@@ -222,7 +222,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     'project/static/',
     'common/static/',
-    'case/satic/',
+    'case/static/',
     )
 
 TEMPLATE_LOADERS = (
