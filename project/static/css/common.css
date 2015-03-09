@@ -83,11 +83,11 @@ p,a {
 	background-position: -559px -9px;
 	height: 86px;
 }
-}
 .s404{
 	background-position: -161px -381px;
 	width: 167px;
 	height: 162px;
+	display: inline-block;
 }
 .top_memu {
 	float: left;
