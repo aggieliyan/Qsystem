@@ -16,56 +16,7 @@
 	    	font-size: 14px;
 	    	text-decoration: none;
 	    }
-	    .top{
-	    	width: 1100px;
-	    	height: 86px;
-	    	margin: auto;
-	    }
-	    .top_logo{
-	    	float: left;
-	    	background: url(../img/logo.jpg) no-repeat;
-	    	height: 86px;
-	    	width: 300px;
-	    	padding-left: 40px;
-
-	    }
-	    .top_memu{
-	    	float: left;
-	    }
-	    .top_memu li{
-	    	float: left;
-	    	line-height: 85px;
-	    	padding-right: 113px;
-	    }
-	    .top_memu a{
-	    	color: #fff;	    	
-	    	font-size: 18px;
-	    	font-family: Verdana,?Microsoft YaHei,?����;
-	    	font-weight:bold;
-
-	    }
-	    .top_memu a:active{
-	    	color: #339966
-	    }
-	    .top_memu a:hover{
-	    	text-decoration: none;
-	    	color: #339966;
-	    }
-	   
-	    .top_bar{
-	    	float: right;
-	    	padding-right: 28px;
-
-	    }
-	    .top_bar li {
-	    	float: right;
-	    	line-height: 85px;
-	    	color: #fff;
-	    }
-	    .top_bar a{
-	    	color: #fff;
-	    	font-size: 18px;
-	    }
+	    
 .selfbody{font-family:"΢���ź�";width:1100px;margin-left:auto;margin-right:auto;margin-top:100px}
 .choose{background-color:#FFFFFF;width:1100px;height:130px;margin-left:auto;margin-right:auto;}
 .section{width:150px;height:30px;margin-left:0px;float:left}

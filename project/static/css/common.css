@@ -38,12 +38,57 @@ p,a {
 
 .top_logo {
 	float: left;
-	padding-left: 40px;
 	width: 300px;
 	height: 86px;
-	background-position: -0px -52px;
 }
-
+.top_logo a {
+	color: #fff;
+	font-weight: bold;
+	font-size: 20px;
+	text-decoration: none;
+}
+.top_logo li {
+	float: left;
+	margin-top: 5px;
+	margin-left: 0px;
+	padding-right: 31px;
+	line-height: 85px;
+	margin-right: 0px;
+}
+.logo{
+	background-image: url("/static/img/logo.png");
+	width:74px;	
+}
+.Mon{	
+	background-position: -85px -7px;
+	height: 86px;
+}
+.Tue{	
+	background-position: -789px -4px;
+	height: 86px;
+}
+.Wed{	
+	background-position: -369px -4px;
+	height: 86px;
+}
+.Thu{
+	background-position: -460px -8px;
+	height: 86px;
+}
+.Fri{	
+	background-position: -658px -5px;
+	height: 86px;
+}
+.Sat-Sun{	
+	background-position: -559px -9px;
+	height: 86px;
+}
+.s404{
+	background-position: -161px -381px;
+	width: 167px;
+	height: 162px;
+	display: inline-block;
+}
 .top_memu {
 	float: left;
 }
