@@ -16,7 +16,7 @@ urlpatterns = patterns('',
 #    url('^cron/$','project.cron.my_scheduled_job'), #for testing timing task~
     #login  
     url('^$', 'project.views.project_list',name="index"),
-    url('^login', 'project.views.login',name="login"),
+    url('^login', 'project.views.login',{"url":"../personal_homepage"},name="login"),
 #    url('^register', 'project.views.register',name="register"),i
     ('^register/$',register),
     ('^register/([^/]+)/$',register),

@@ -118,8 +118,9 @@ def no_login(request):
 
 def no_perm(request):
     return render_to_response("noperm.html")
-def login(request):
+def login(request,url):
     template_var = {}
+    template_var["url"] = url
     if "username" in request.COOKIES and "password" in request.COOKIES:
         username = request.COOKIES["username"]
         realname = request.COOKIES["realname"]
@@ -129,7 +130,7 @@ def login(request):
             _user = _userset[0]
             request.session['username'] = username
             request.session['realname'] = realname
-        return HttpResponseRedirect("/personal_homepage")
+        return HttpResponseRedirect(url)
     form = LoginForm()
     if request.method == 'POST':
         form = LoginForm(request.POST.copy())
@@ -152,7 +153,7 @@ def login(request):
                         return HttpResponseRedirect(link)
                     elif isldap[0].department_id == 100:
                         link = str("/register/" + username)
-                        return HttpResponseRedirect(link) 
+                        return HttpResponseRedirect(link)
                     
                     _userset = models.user.objects.filter(username__exact=username)    
                     if _userset.count() >= 1:
@@ -174,8 +175,7 @@ def login(request):
                 template_var["error"] = _(u'您输入的帐号或密码有误，请重新输入')
                 template_var["form"] = form
                 return render_to_response("login.html", template_var, context_instance=RequestContext(request))    
-            
-            response = HttpResponseRedirect("/personal_homepage")           
+            response = HttpResponseRedirect(url)
             if isautologin:
                 response.set_cookie("username", username, 3600)
                 response.set_cookie("password", password, 3600)   
@@ -1406,7 +1406,7 @@ def delayproject(request, url):
                     project_id = delayid, isactived = 0)
             delay_pm_message.save()                  
     return HttpResponseRedirect(url)
-def changedesign(request, url):          
+def changedesign(request, url):         
     if request.method == 'POST':
         form = changedesignForm(request.POST)
         if form.is_valid():

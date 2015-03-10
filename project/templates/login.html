@@ -1,17 +1,22 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+{% if url == '../caselist' %}
+<title >case系统</title>
+    <link rel="icon" href="/static/img/favicon.ico"  type="image/x-icon">
+{% else %}
 <title >Q系统</title>
     <link rel="icon" href="/static/img/favicon.ico"  type="image/x-icon">
+{% endif %}
     <!-- <LINK href="favicon.ico" type="image/x-icon" rel="shortcut icon"> -->        
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href='../static/css/login.min.css?v=20150106' rel='stylesheet' media='screen'>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href='/static/css/login.min.css?v=20150106' rel='stylesheet' media='screen'>
 </head>
 <body style="margin:0px;">
     <div class="backgroud">
         <div align="center" class="top">
             <div class="top_logo" align="center"></div>
-        <form action="/login" method="post">
+        <form action='' method="post">
             {% csrf_token %}
 	        <div class="backgroud_white" align="center" style="overflow:hidden">
 	            <table style="width:500px; height: 220px; margin-left: 60px; margin-top: 55px; cellspacing='1'; cellpadding='10'">
@@ -49,11 +54,20 @@
                       
                     </tr>
                     <tr>
+                        {% if url == '../caselist' %}  
+                        <td class="table-td">
+                            <input id="Button_login" type="submit" value="登  录"
+                                style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/>&nbsp;&nbsp;
+                        </td>
+                        {% else %}
                         <td class="table-td">
                             <input id="Button_login" type="submit" value="登  录"
                                 style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/>&nbsp;&nbsp;
                             <input id="Button_register" type="button" value="注  册" onclick="javascript: window.open('/register/')" 
-                                style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/></td>
+                                style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/>
+                        </td>
+                        {% endif %}
+
                         <td class="table-td">
                         </td>
                     </tr>
