@@ -220,8 +220,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
+    'project/static/',
     'common/static/',
-    'project/static/',    
     'case/static/',
     )
 
