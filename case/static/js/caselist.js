@@ -1,4 +1,8 @@
 $(document).ready(function(){
+/*    var swidth = $(window).width();
+    console.log(swidth);
+    console.log("width:"+swidth+"px;");
+    $(".fixbar").attr("style", "width:"+swidth+"px;");*/
 
     var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck\" type=\"checkbox\" checked='checked'>1</td>"+
 			      		"<td class=\"editable nodrag\"></td>"+
@@ -275,6 +279,8 @@ $(document).ready(function(){
             }
     	}
     });
+
+
 
 /*    $(window).bind('beforeunload', function(){
 
