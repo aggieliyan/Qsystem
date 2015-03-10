@@ -35,14 +35,6 @@
 	document.form1.submit();
 	});
 
-	$(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-        language:"zh-CN",
-        minView:2 
-      });
 
     // projectlist.js	
     $("#smalltable").click(function(){
