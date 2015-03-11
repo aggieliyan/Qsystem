@@ -220,9 +220,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    'project/static/',
-    'common/static/',
-    'case/static/',
+    'Qsystem/common/static/',
     )
 
 TEMPLATE_LOADERS = (

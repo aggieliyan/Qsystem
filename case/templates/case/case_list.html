@@ -33,26 +33,39 @@
 	    			<div>
 	    				<table >
 	    					<tbody>
+	    						{% for key,dic in case.items %}
 	    						<tr class="success">
 						    		<td colspan="1"><input class="modulecheck" type="checkbox"></td>
-						    		<td colspan="9" class="editable"></td>
+						    		<td colspan="9" class="editable">{{key}}</td>
 						    		<td >
 						      			<a class="icon-plus-sign" title="添加模块"></a>
 						      		    <a class="icon-plus" title="添加用例"></a>
 						      		    <a class="icon-trash"></a>
 						    		</td>
 	    						</tr>
+	    						{% for c in dic %}
 	    						<tr class="mtr" rank="1" value="201">
 						    		<td><input class="casecheck" type="checkbox">1</td>
-						      		<td class="editable nodrag"></td>
-						      		<td class="editable nodrag"></td>
-						    		<td class="editable nodrag"></td>
-						      		<td class="level nodrag">2</td>
+						      		<td class="editable nodrag">{{c.precondition}}</td>
+						      		<td class="editable nodrag">{{c.action}}</td>
+						    		<td class="editable nodrag">{{c.output}}</td>
+						      		<td class="level nodrag">{{c.priority}}</td>
+						      		{% for r in result %}
+						      		{% if c.id == r.testcase_id %}
+						      		<td class="nodrag"><a class="icon-play-circle"></a>{{r.result}}</td>
+						    		<td class="editable nodrag">{{r.wi}}</td>
+						      		<td>{{r.exec_date|date:"Y-m-d"}}</td>
+						      		<td>{{r.executor}}</td>
+						      		<td class="editable nodrag">{{r.r_remark}}</td>
+						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
 						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
 						    		<td class="editable nodrag"></td>
 						      		<td></td>
 						      		<td></td>
 						      		<td class="editable nodrag"></td>
+
+						      		{% endif %}
+						      		{% endfor %}
 						      		<td class="nodrag">
 						      			<a class="icon-plus" title="添加用例"></a>
 						      			<a class="icon-download-alt" title="引入用例"></a>
@@ -60,6 +73,8 @@
 						      			<a class="icon-trash"></a>
 						      		</td> 
 	    						</tr>
+	    						{% endfor %}
+	    						{% endfor %}
 	    					</tbody>
 	    				</table>
 	    			</div>
