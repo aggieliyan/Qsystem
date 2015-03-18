@@ -2,13 +2,113 @@
 {% block title %}case系统{% endblock %}
 {% block head %}
 <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link href="/static/css/case_list.css" rel="stylesheet" media="screen">
+
 {% endblock %}
 {% block content %}
 <div class="row-fluid">
-  	<div class="span12">
-  		这里是搜索那部分
+	
+  	<div class="span12" style="float:left; margin-top:10px;" id="searchbar">
+      <form>
+  		<ul class="selectList">
+  			<li class="item-title">
+  			<lable style="float:right">产品模块：</lable>
+  		</li>
+  		<li>
+  			<select class="category_select_1">
+            </select>
+            <select class="category_select_2">
+            </select>
+            <select class="category_select_3">
+            </select>
+           <li> 
+        </ul>
+        <ul class="testmodule">
+  			<li class="item-title">
+  				<lable style="float:right">所属模块：</lable>
+  			</li>
+  			<li>
+  				<select class="category_select_1">
+  					<option>一级</option>
+  				    <option>二级</option>
+  				    <option>三级</option>
+                </select>
+            </li>
+            <li class="filter">
+  			<lable>优先级：</lable></li>
+  			<li>
+  			<select class="category_select_1">
+  				<option>一级</option>
+  				<option>二级</option>
+  				<option>三级</option>
+            </select>
+        </li>
+        </ul>
+        <ul class="priority">
+  			<li class="item-title">
+  			<lable style="float:right">状态：</lable>
+  		</li>
+  			<select class="category_select_1">
+  				<option>一级</option>
+  				<option>二级</option>
+  				<option>三级</option>
+            </select>
+            <li class="filter"><lable>+</lable></li>
+            <li>
+  			<select class="category_select_1">
+  				<option>一级</option>
+  				<option>二级</option>
+  				<option>三级</option>
+            </select>
+            <li>
+        </ul>
+        
+        <ul class="priority">
+  			<li class="item-title">
+  			<lable style="float:right">作者：</lable>
+  		</li>
+  		<li>
+  			<select class="category_select_1">
+  				<option>一级</option>
+  				<option>二级</option>
+  				<option>三级</option>
+            </select>
+        </li>
+ 
+  			<li class="filter"><lable>执行人：</lable></li>
+  		
+  			<li><select class="category_select_1">
+  				<option>一级</option>
+  				<option>二级</option>
+  				<option>三级</option>
+            </select>
+        </li>
+        </ul>
+        <ul>              
+            <li class="item-title">
+  			    <lable style="float:right">执行时间：</lable>
+  		    </li>
+                    <li>
+                        <span class="input-append date form_datetime">
+                          <input type="text" class=" input-medium" value="{{start_date_s|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF">
+                          <span class="add-on"><i class="icon-calendar"></i></span>
+                        </span>&nbsp;&nbsp;至&nbsp; 
+                        <span class="input-append date form_datetime">
+                          <input type="text" class=" input-medium" value="{{end_date_s|date:"Y-m-d"|default:""}}" name="end_date_s" readonly="" style="background-color: #FFFFFF">
+                          <span class="add-on"><i class="icon-calendar"></i></span>
+                        </span>
+                    </li>
+                    <li style="padding-left:30px">
+                    	<input type="text" class="input-medium search-query" placeholder="请输入搜索关键字">
+                    	<button type="submit" class="btn">Search</button>
+                    </li>
+        </ul>
+      </form>
   	</div>
+  	<!-- <div  id="searchicon" style="margin-top:10px;">
+  		<img src="/static/img/praise.png" style="margin-left:500px">
+  	</div>  -->
 <div class="span12">
   	<div id="tbop"><span id="cnum">共2015条用例(后端同学注意！！写模版的时候在第一个模块这写啊 后面的模块class有不全 太多了懒得都粘一遍了)</span><buton id="newcase" class="btn btn-success">新建用例</button></div>
     <table id="caselist" class="table table-bordered">
@@ -205,5 +305,7 @@
 {% endblock %}
 {% block js %}
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=2015024"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150318"></script>   
 {% endblock %}

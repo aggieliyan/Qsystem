@@ -1,4 +1,11 @@
-
+ li {
+	display: inline-block;
+	list-style: none;
+}
+ ul {	
+	margin: 0px;
+	padding-left: 0px;
+}
 #tbop{
 	height: 35px;
 }
@@ -69,4 +76,16 @@
 .fixbar .savebtn{
 	margin-top: 5px;
 	opacity:1;
+}
+.item-title{
+	float: left;
+	width:88px;
+}
+.selectsearch{
+	float:right;
+	width:88px;
+}
+.filter{
+	width:56px;
+	padding-left:42px;
 }

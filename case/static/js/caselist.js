@@ -281,6 +281,87 @@ $(document).ready(function(){
     });
 
 
+    //搜索模块js
+        $(function(){
+        $(".selectList").each(function(){
+            var url = "/case/casecate/";
+            var areaJson;
+            var temp_html;
+            var category1 = $(this).find(".category_select_1");
+            var category2 = $(this).find(".category_select_2");
+            var category3 = $(this).find(".category_select_3");
+            category2.hide();
+            category3.hide();
+            //初始化一级类目
+            var category_select_1 = function(){
+                temp_html="<option value='"+category_select_2.masterid+"'>"+'请选择'+"</option>";
+                $.each(areaJson,function(i,category_select_1){
+                    temp_html+="<option value='"+category_select_1.masterid+"'>"+category_select_1.master+"</option>";
+                });
+                category1.html(temp_html);                
+            };
+            //赋值二级
+            var category_select_2 = function(){
+                temp_html="<option value='"+category_select_2.secondid+"'>"+'请选择'+"</option>"; 
+                var n = category1.get(0).selectedIndex;
+                if((areaJson[n-1].slist).length == 0){
+                    category2.css("display","none");
+                }else{
+                    $.each(areaJson[n-1].slist,function(i,category_select_2){
+                        temp_html+="<option value='"+category_select_2.secondid+"'>"+category_select_2.second+"</option>";
+                });
+                category2.html(temp_html); 
+                };                          
+            };
+            //赋值三级
+            var category_select_3 = function(){
+                temp_html="<option value='"+category_select_3.thirdid+"'>"+'请选择'+"</option>"; 
+                var m = category1.get(0).selectedIndex;
+                var n = category2.get(0).selectedIndex;
+                if((areaJson[m-1].slist[n-1].thirdlist).length == 0){
+                    category3.css("display","none");
+                }else{
+                    category3.css("display","inline");
+                    $.each(areaJson[m-1].slist[n-1].thirdlist,function(i,category_select_3){
+                        temp_html+="<option value='"+category_select_3.thirdid+"'>"+category_select_3.third+"</option>";
+                    });
+                    category3.html(temp_html);
+                };
+            };
+            //选择一级改变二级
+            category1.change(function(){
+                category2.show();
+                category3.hide();
+                category_select_2();
+            });
+            //选择二级改变三级
+            category2.change(function(){
+                category3.show();
+                category_select_3();
+            });
+            //获取json数据
+            $.getJSON(url,function(data){
+                areaJson = data;
+                category_select_1();
+            });
+        });
+    });
+    
+     $("#searchicon").click(function(){
+        $("#searchbar").toggle();
+
+     });
+
+     $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+        language:"zh-CN",
+        minView:2 
+      });
+
+
 
 /*    $(window).bind('beforeunload', function(){
 

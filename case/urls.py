@@ -7,4 +7,5 @@ urlpatterns = patterns('',
 	url(r'^caselist/(\d+)/$', cases_views.case_list, name='caselist'),
 	url(r'^procate/', category_views.product_category, name='procate'),
 	url(r'^pull/', casepull_views.case_pull, name='casepull'),
+	url(r'^casecate/', cases_views.categorysearch),
 )
