@@ -7,16 +7,17 @@
 
 {% endblock %}
 {% block content %}
-<div class="row-fluid">
-	
-  	<div class="span12" style="float:left; margin-top:10px;" id="searchbar">
-      <form>
+<div class="row-fluid">	
+  	<div class="span12" style="float:left; margin-top:10px;border:thin solid #ddd;" id="searchbar">
+      <div style="padding-top:10px;">
+      <form action=" " id="searchform" method="post">
   		<ul class="selectList">
   			<li class="item-title">
   			<lable style="float:right">产品模块：</lable>
   		</li>
   		<li>
-  			<select class="category_select_1">
+        <input  value="" type="hidden">
+  			<select class="category_select_1" name="categoryid">
             </select>
             <select class="category_select_2">
             </select>
@@ -29,19 +30,22 @@
   				<lable style="float:right">所属模块：</lable>
   			</li>
   			<li>
-  				<select class="category_select_1">
+  				<select class="category_select_1" name="testmodule">
+            <option value=""> </option>
   					<option>一级</option>
-  				    <option>二级</option>
-  				    <option>三级</option>
-                </select>
-            </li>
+  				  <option>二级</option>
+  				  <option>三级</option>
+          </select>
+        </li>
             <li class="filter">
   			<lable>优先级：</lable></li>
   			<li>
-  			<select class="category_select_1">
-  				<option>一级</option>
-  				<option>二级</option>
-  				<option>三级</option>
+  			<select class="category_select_1" name="priority">
+          <option select="selected" value=""></option>
+          <option value=""> </option>
+  				<option value="1">一级</option>
+  				<option value="2">二级</option>
+  				<option value="3">三级</option>
             </select>
         </li>
         </ul>
@@ -50,6 +54,8 @@
   			<lable style="float:right">状态：</lable>
   		</li>
   			<select class="category_select_1">
+          <option select="selected" value=""></option>
+          <option value=""> </option>
   				<option>一级</option>
   				<option>二级</option>
   				<option>三级</option>
@@ -57,6 +63,8 @@
             <li class="filter"><lable>+</lable></li>
             <li>
   			<select class="category_select_1">
+          <option select="selected" value=""></option>
+          <option value=""> </option>
   				<option>一级</option>
   				<option>二级</option>
   				<option>三级</option>
@@ -64,13 +72,15 @@
             <li>
         </ul>
         
-        <ul class="priority">
+        <ul class="">
   			<li class="item-title">
   			<lable style="float:right">作者：</lable>
   		</li>
   		<li>
-  			<select class="category_select_1">
-  				<option>一级</option>
+  			<select class="category_select_1" name="author">
+          <option select="selected" value=""></option>
+          <option value=""> </option>
+  				<option value="李稳">李稳</option>
   				<option>二级</option>
   				<option>三级</option>
             </select>
@@ -78,7 +88,9 @@
  
   			<li class="filter"><lable>执行人：</lable></li>
   		
-  			<li><select class="category_select_1">
+  			<li><select class="category_select_1" name="executor">
+          <option select="selected" value=""></option>
+          <option value=""> </option>
   				<option>一级</option>
   				<option>二级</option>
   				<option>三级</option>
@@ -91,20 +103,21 @@
   		    </li>
                     <li>
                         <span class="input-append date form_datetime">
-                          <input type="text" class=" input-medium" value="{{start_date_s|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF">
+                          <input type="text" class=" input-medium" value="{{start_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" name="start_date">
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>&nbsp;&nbsp;至&nbsp; 
                         <span class="input-append date form_datetime">
-                          <input type="text" class=" input-medium" value="{{end_date_s|date:"Y-m-d"|default:""}}" name="end_date_s" readonly="" style="background-color: #FFFFFF">
+                          <input type="text" class=" input-medium" value="{{end_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" name="end_date">
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>
                     </li>
                     <li style="padding-left:30px">
-                    	<input type="text" class="input-medium search-query" placeholder="请输入搜索关键字">
+                    	<input type="text" class="input-medium search-query" name="keyword" placeholder="请输入搜索关键字">
                     	<button type="submit" class="btn">Search</button>
                     </li>
         </ul>
       </form>
+    </div>
   	</div>
   	<!-- <div  id="searchicon" style="margin-top:10px;">
   		<img src="/static/img/praise.png" style="margin-left:500px">

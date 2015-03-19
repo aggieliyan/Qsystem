@@ -294,7 +294,7 @@ $(document).ready(function(){
             category3.hide();
             //初始化一级类目
             var category_select_1 = function(){
-                temp_html="<option value='"+category_select_2.masterid+"'>"+'请选择'+"</option>";
+                temp_html="<option value=''>"+'请选择'+"</option>";
                 $.each(areaJson,function(i,category_select_1){
                     temp_html+="<option value='"+category_select_1.masterid+"'>"+category_select_1.master+"</option>";
                 });
