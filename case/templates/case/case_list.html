@@ -10,15 +10,23 @@
 <div class="row-fluid">	
   	<div class="span12" style="float:left; margin-top:10px;border:thin solid #ddd;" id="searchbar">
       <div style="padding-top:10px;">
-      <form action=" " id="searchform" method="post">
+        {% if categoryid %}
+      <form action="{% url 'caselist' categoryid %}" id="searchform" method="post" class="next">
+        {% else %}
+        <form action="" id="searchform" method="post" class="next">
+        {% endif %}  
   		<ul class="selectList">
   			<li class="item-title">
   			<lable style="float:right">产品模块：</lable>
   		</li>
   		<li>
-        <input  value="" type="hidden">
-  			<select class="category_select_1" name="categoryid">
-            </select>
+        <input  value="{{categoryid}}" type="hidden" class="cate" name="categoryid">
+        <input  value="{{cate1}}" type="hidden" class="cate1" name="cate1">
+        <input  value="{{cate2}}" type="hidden" class="cate2" name="cate2">
+        <input  value="{{cate3}}" type="hidden" class="cate3" name="cate3">
+
+  			<select class="category_select_1">
+        </select>
             <select class="category_select_2">
             </select>
             <select class="category_select_3">
@@ -30,19 +38,19 @@
   				<lable style="float:right">所属模块：</lable>
   			</li>
   			<li>
-  				<select class="category_select_1" name="testmodule">
-            <option value=""> </option>
-  					<option>一级</option>
-  				  <option>二级</option>
-  				  <option>三级</option>
+  				<select class="" name="testmodule">
+            <option selected="selected" value="{{ctestmodule}}">{{ctestmodule}}</option>
+            <option value=""></option>
+            {% for m in testmodule %}
+            <option value="{{m.m_name}}">{{m.m_name}}</option>
+  					{% endfor %}
           </select>
         </li>
-            <li class="filter">
+          <li class="filter">
   			<lable>优先级：</lable></li>
   			<li>
-  			<select class="category_select_1" name="priority">
-          <option select="selected" value=""></option>
-          <option value=""> </option>
+  			<select class="" name="priority">
+          <option select="selected" value="{{cpriority}}">{{cpriority}}</option>
   				<option value="1">一级</option>
   				<option value="2">二级</option>
   				<option value="3">三级</option>
@@ -53,21 +61,21 @@
   			<li class="item-title">
   			<lable style="float:right">状态：</lable>
   		</li>
-  			<select class="category_select_1">
-          <option select="selected" value=""></option>
+  			<select class="">
+          <option select="selected" value="{{ctestmodule}}">{{ctestmodule}}</option>
           <option value=""> </option>
-  				<option>一级</option>
-  				<option>二级</option>
-  				<option>三级</option>
+  				<option>等于</option>
+  				<option>不等于</option>
             </select>
             <li class="filter"><lable>+</lable></li>
             <li>
-  			<select class="category_select_1">
+  			<select class="">
           <option select="selected" value=""></option>
           <option value=""> </option>
-  				<option>一级</option>
-  				<option>二级</option>
-  				<option>三级</option>
+  				<option>未执行</option>
+  				<option>PASS</option>
+  				<option>FAIL</option>
+          <option>BLOCK</option>
             </select>
             <li>
         </ul>
@@ -77,23 +85,22 @@
   			<lable style="float:right">作者：</lable>
   		</li>
   		<li>
-  			<select class="category_select_1" name="author">
-          <option select="selected" value=""></option>
+  			<select class="" name="author">
+          <option select="selected" value="{{cauthor}}">{{cauthor}}</option>
           <option value=""> </option>
   				<option value="李稳">李稳</option>
-  				<option>二级</option>
-  				<option>三级</option>
+  				<option>国玉玲</option>
+  				<option>易璐璐</option>
             </select>
         </li>
  
-  			<li class="filter"><lable>执行人：</lable></li>
-  		
-  			<li><select class="category_select_1" name="executor">
-          <option select="selected" value=""></option>
+  			<li class="filter"><lable>执行人：</lable></li>  		
+  			<li><select class="" name="executor">
+          <option select="selected" value="{{cexecutor}}">{{cexecutor}}</option>
           <option value=""> </option>
-  				<option>一级</option>
-  				<option>二级</option>
-  				<option>三级</option>
+  				<option value="李稳">李稳</option>
+          <option>国玉玲</option>
+          <option>易璐璐</option>
             </select>
         </li>
         </ul>
@@ -103,16 +110,18 @@
   		    </li>
                     <li>
                         <span class="input-append date form_datetime">
-                          <input type="text" class=" input-medium" value="{{start_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" name="start_date">
+                          <input type="text" class=" input-medium" value="{{cstart_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" 
+                          name="start_date" >
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>&nbsp;&nbsp;至&nbsp; 
                         <span class="input-append date form_datetime">
-                          <input type="text" class=" input-medium" value="{{end_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" name="end_date">
+                          <input type="text" class=" input-medium" value="{{cend_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" 
+                          name="end_date" placeholder="{{cend_date|date:"Y-m-d"|default:""}}">
                           <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>
                     </li>
                     <li style="padding-left:30px">
-                    	<input type="text" class="input-medium search-query" name="keyword" placeholder="请输入搜索关键字">
+                    	<input type="text" class="input-medium search-query" value="{{ckeyword}}" name="keyword" placeholder="请输入搜索关键字">
                     	<button type="submit" class="btn">Search</button>
                     </li>
         </ul>
@@ -146,6 +155,7 @@
 	    			<div>
 	    				<table >
 	    					<tbody>
+                  <!-- {% if case %} -->
 	    						{% for key,dic in case.items %}
 	    						<tr class="success">
 						    		<td colspan="1"><input class="modulecheck" type="checkbox"></td>
@@ -163,22 +173,31 @@
 						      		<td class="editable nodrag">{{c.action}}</td>
 						    		<td class="editable nodrag">{{c.output}}</td>
 						      		<td class="level nodrag">{{c.priority}}</td>
+                      {% if result %}
 						      		{% for r in result %}
 						      		{% if c.id == r.testcase_id %}
 						      		<td class="nodrag"><a class="icon-play-circle"></a>{{r.result}}</td>
-						    		<td class="editable nodrag">{{r.wi}}</td>
+						    		  <td class="editable nodrag">{{r.wi}}</td>
 						      		<td>{{r.exec_date|date:"Y-m-d"}}</td>
 						      		<td>{{r.executor}}</td>
 						      		<td class="editable nodrag">{{r.r_remark}}</td>
 						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
 						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
-						    		<td class="editable nodrag"></td>
+						    		  <td class="editable nodrag"></td>
 						      		<td></td>
 						      		<td></td>
 						      		<td class="editable nodrag"></td>
 
 						      		{% endif %}
 						      		{% endfor %}
+                      {% else %}
+                      <td class="nodrag"><a class="icon-play-circle"></a></td>
+                      <td class="editable nodrag"></td>
+                      <td></td>
+                      <td></td>
+                      <td class="editable nodrag"></td>
+                      {% endif %}
+
 						      		<td class="nodrag">
 						      			<a class="icon-plus" title="添加用例"></a>
 						      			<a class="icon-download-alt" title="引入用例"></a>
@@ -188,6 +207,11 @@
 	    						</tr>
 	    						{% endfor %}
 	    						{% endfor %}
+                 <!--  {% else %}
+                  <tr class="success">
+                  </tr>
+                  {% endif %} -->
+
 	    					</tbody>
 	    				</table>
 	    			</div>
@@ -320,5 +344,5 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150318"></script>   
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150325"></script>   
 {% endblock %}
