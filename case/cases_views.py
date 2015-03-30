@@ -48,10 +48,14 @@ def case_list(request,pid):
 				testmodule = testmodule.filter(m_name = ctestmodule)
 
 			args = [Q(result = cmold) , ~Q(result = cmold)] 
+			args2 = [~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct()),Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())]
 			if not isNone(cmold) and not isNone(cstatue):
-				caseresult = caseresult.filter(args[int(cstatue)])
-				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
-				print caseresult
+				if cmold == u"未执行":
+					cmodule = cmodule.filter(args2[int(cstatue)])
+					print cmodule
+				else:
+					caseresult = caseresult.filter(args[int(cstatue)])
+					cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
 			if not isNone(cexecutor):
 				caseresult = caseresult.filter(executor = cexecutor)
 				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
