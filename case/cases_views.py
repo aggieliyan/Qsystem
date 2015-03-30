@@ -7,8 +7,10 @@ from project.views import isNone
 from django.db.models import Q
 
 def case_list(request,pid):
+	kwargs={}
 	case = {}
-	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = cexecutor = cstart_date = cend_date = cexec_status = ckeyword = ''
+	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = \
+	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -18,6 +20,8 @@ def case_list(request,pid):
 			categoryid = search.cleaned_data['categoryid']
 			ctestmodule = search.cleaned_data['testmodule']
 			cpriority = search.cleaned_data['priority']
+			cstatue = search.cleaned_data['status']
+			cmold =  search.cleaned_data['mold']
 			cauthor = search.cleaned_data['author']
 			cexecutor = search.cleaned_data['executor']
 			cstart_date = search.cleaned_data['start_date']
@@ -27,75 +31,55 @@ def case_list(request,pid):
 			subset2 = list(category.objects.filter(parent_id = categoryid).values_list("id",flat=True))
 			subset3 = list(category.objects.filter(parent_id__in = subset2))
 			subset = list(set(subset2).union(set(subset3)))
-			subset.append(categoryid)
-			# casesearch = []
-			# modulesearch = []
-			# resultsearch = []
-			# print subset			
-			# if not isNone(categoryid):
-			# 	casesearch.append(Q(category__in = subset2))
-			# 	print casesearch
-			# else:
-			# 	cmodule = testcase.objects.filter(category = 0)					
-			# if not isNone(cauthor):
-			# 	casesearch.append(Q(author = cauthor))
-			# if not isNone(cpriority):
-			# 	casesearch.append(priority = cpriority)
-			# if not isNone(ckeyword):
-			# 	casesearch.append(action__search = ckeyword)
-			# cmodule = testcase.objects.filter(casesearch)
-			# testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
-			# casereslut = result.objects.filter(testcase__in = cmodule)
-			# if not isNone(ctestmodule):
-			# 	testmodule = testmodule.filter(m_name = ctestmodule)
-			# if not isNone(cexecutor):
-			# 	casereslut = casereslut.filter(executor = cexecutor)
-			# if not isNone(cstart_date) and not isNone(cend_date):
-			# 	casereslut = casereslut.filter(exec_date__range = (cstart_date, cend_date))
-			print subset			
+			subset.append(categoryid)			
 			if not isNone(categoryid):
-				cmodule = testcase.objects.filter(category__in = subset)
-			else:
-				cmodule = testcase.objects.filter(category = 0)					
+				kwargs['category__in'] =  subset				
 			if not isNone(cauthor):
-				cmodule = cmodule.filter(author = cauthor)
+				kwargs['author'] =  cauthor
+			cmodule = testcase.objects.filter(**kwargs)
 			if not isNone(cpriority):
-				cmodule = cmodule.filter(priority = cpriority)
+				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
-				cmodule = cmodule.filter(action__contains = ckeyword)
+				kwargs['action__contains'] = ckeyword
+			cmodule = testcase.objects.filter(**kwargs)
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
-			casereslut = result.objects.filter(testcase__in = cmodule)
+			caseresult = result.objects.filter(testcase__in = cmodule)
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
+
+			args = [Q(result = cmold) , ~Q(result = cmold)] 
+			if not isNone(cmold) and not isNone(cstatue):
+				caseresult = caseresult.filter(args[int(cstatue)])
+				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+				print caseresult
 			if not isNone(cexecutor):
-				casereslut = casereslut.filter(executor = cexecutor)
-			if not isNone(cstart_date) and not isNone(cend_date):
-				casereslut = casereslut.filter(exec_date__range = (cstart_date, cend_date))
-			# cdate = set(cmodule.values_list("id",flat = True))&(set(casereslut.values_list("testcase", flat=True)))
-			# cmodule = cmodule.filter(pk__in = cdate)
-			print cmodule
+				caseresult = caseresult.filter(executor = cexecutor)
+				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+			if not isNone(cstart_date) or not isNone(cend_date):
+				if not isNone(cstart_date):
+					caseresult = caseresult.filter(exec_date__gte = cstart_date)
+				if not isNone(cend_date):
+					caseresult = caseresult.filter(exec_date__lte = cend_date)
+				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
+				cmodule = cmodule.filter(pk__in = cdate)
 	else:
 		subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
 		subset3 = list(category.objects.filter(parent_id__in = subset2))
 		subset = list(set(subset2).union(set(subset3)))		
 		subset.append(pid)
-		print subset
 		cmodule = testcase.objects.filter(category__in = subset)
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
-		print "testmodule"
-		print testmodule
-		casereslut = result.objects.filter(testcase__in = cmodule)
-	listid = casereslut.values_list("testcase", flat=True).distinct()
-	print listid
+		caseresult = result.objects.filter(testcase__in = cmodule)
+	listid = caseresult.values_list("testcase", flat=True).distinct()
 	newresult = []
 	for c in listid:
-		p = casereslut.filter(testcase = c).order_by("-exec_date")[0]
+		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
 		case[m.m_name] = cmodule.filter(module = m.id)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
-		                      "cpriority":cpriority, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
-		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3,})
+		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
+		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
 
 def categorysearch(request):
 	clist = []

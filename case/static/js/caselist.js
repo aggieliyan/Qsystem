@@ -332,12 +332,10 @@ $(document).ready(function(){
             };
             //赋值三级
             var category_select_3 = function(){
-                console.log("33");
                 var c3=$(".cate3").val();
                 temp_html="<option>"+'请选择'+"</option>"; 
                 var m = category1.get(0).selectedIndex;
                 var n = category2.get(0).selectedIndex;
-                console.log(n);
                 if(c3){
                     category3.css("display","inline");
                     $.each(areaJson[m].slist[n-1].thirdlist,function(i,category_select_3){
@@ -346,9 +344,7 @@ $(document).ready(function(){
                     category3.html(temp_html);
                     $(".category_select_3 option[value="+c3+"]").attr("selected","true");
                 }else{
-                    console.log("bbb");
                     if(n != 0){
-                        console.log("aaa")
                         if((areaJson[m].slist[n-1].thirdlist).length == 0){
                             category3.css("display","none");
                         }else{
@@ -415,13 +411,30 @@ $(document).ready(function(){
 
         });
     });
-    
-
-
+     // 展开/收起搜索项
      $("#searchicon").click(function(){
         $("#searchbar").toggle();
+    });
+    //状态没有选中时，隐藏执行结果类型 
+    $('.statue option').click(function(){
+        if ($(this).val() !== ''){
+        num = $(".mold").show();            
+                }
+        else{
+            $(".mold").hide();
+        }
+    });
 
-     });
+    if($(".hide-statue").val()){
+        console.log($(".hide-statue").val());
+        $(".statue option").removeAttr("selected");
+        $(".statue option[value="+$(".hide-statue").val()+"]").attr("selected",true);
+        $(".mold").show();
+        if ($(".hide-mold").val()){
+            $(".mold option").removeAttr("selected");
+            $(".mold option[value="+$(".hide-mold").val()+"]").attr("selected",true);
+        }
+    }
 
      $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
@@ -436,11 +449,6 @@ $(document).ready(function(){
     url = window.location.host + '/' + '11';
 }
      
-
-     url = window.location.href;
-     console.log(url);
-
-
 
 /*    $(window).bind('beforeunload', function(){
 

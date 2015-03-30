@@ -93,3 +93,7 @@ p,a {
 	color: #fff;
 	line-height: 85px;
 }
+.top_bar a {
+	color: #fff;
+	font-size: 18px;
+}
