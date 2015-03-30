@@ -20,8 +20,16 @@
 	text-align: center;
 }
 
-#caselist .success{
-	width:100%;
+.success td:nth-child(1){
+	width: 65px;
+}
+
+.success td:nth-child(2){
+	width: 921px;
+}
+
+.success td:nth-child(3){
+	width: 96px;
 }
 
 #caselist .edittx{
