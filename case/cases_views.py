@@ -52,7 +52,6 @@ def case_list(request,pid):
 			if not isNone(cmold) and not isNone(cstatue):
 				if cmold == u"未执行":
 					cmodule = cmodule.filter(args2[int(cstatue)])
-					print cmodule
 				else:
 					caseresult = caseresult.filter(args[int(cstatue)])
 					cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
