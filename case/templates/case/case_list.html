@@ -156,7 +156,7 @@
 	    			<div>
 	    				<table >
 	    					<tbody>
-                  <!-- {% if case %} -->
+                  {% if case %}
 	    						{% for key,dic in case.items %}
 	    						<tr class="success">
 						    		<td colspan="1" ><input class="modulecheck" type="checkbox"></td>
@@ -208,10 +208,17 @@
 	    						</tr>
 	    						{% endfor %}
 	    						{% endfor %}
-                 <!--  {% else %}
+                  {% else %}
                   <tr class="success">
+                    <td colspan="1" ><input class="modulecheck" type="checkbox"></td>
+                    <td colspan="9" class="editable"></td>
+                    <td >
+                        <a class="icon-plus-sign" title="添加模块"></a>
+                          <a class="icon-plus" title="添加用例"></a>
+                          <a class="icon-trash"></a>
+                    </td>
                   </tr>
-                  {% endif %} -->
+                  {% endif %}
 
 	    					</tbody>
 	    				</table>
