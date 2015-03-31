@@ -10,124 +10,115 @@
 <div class="row-fluid">	
   	<div class="span12" style="float:left; margin-top:10px;border:thin solid #ddd;" id="searchbar">
       <div style="padding-top:10px;">
-        {% if categoryid %}
-      <form action="{% url 'caselist' categoryid %}" id="searchform" method="post" class="next">
-        {% else %}
+      {% if categoryid %}
+        <form action="{% url 'caselist' categoryid %}" id="searchform" method="post" class="next">
+      {% else %}
         <form action="" id="searchform" method="post" class="next">
-        {% endif %}  
-  		<ul class="selectList">
-  			<li class="item-title">
-  			<lable style="float:right">产品模块：</lable>
-  		</li>
-  		<li>
-        <input  value="{{categoryid}}" type="hidden" class="cate" name="categoryid">
-        <input  value="{{cate1}}" type="hidden" class="cate1" name="cate1">
-        <input  value="{{cate2}}" type="hidden" class="cate2" name="cate2">
-        <input  value="{{cate3}}" type="hidden" class="cate3" name="cate3">
-
-  			<select class="category_select_1">
-        </select>
-            <select class="category_select_2">
-            </select>
-            <select class="category_select_3">
-            </select>
-           <li> 
-        </ul>
-        <ul class="testmodule">
-  			<li class="item-title">
-  				<lable style="float:right">所属模块：</lable>
-  			</li>
-  			<li>
-  				<select class="" name="testmodule">
-            <option selected="selected" value="{{ctestmodule}}">{{ctestmodule}}</option>
-            <option value=""></option>
-            {% for m in testmodule %}
-            <option value="{{m.m_name}}">{{m.m_name}}</option>
-  					{% endfor %}
-          </select>
-        </li>
-          <li class="filter">
-  			<lable>优先级：</lable></li>
-  			<li>
-  			<select class="" name="priority">
-          <option select="selected" value="{{cpriority}}">{{cpriority}}</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-            </select>
-        </li>
-        </ul>
-        <ul class="priority">
-        <input  value="{{statue}}" type="hidden" class="hide-statue">
-        <input  value="{{mold}}" type="hidden" class="hide-mold">
-  			<li class="item-title">
-  			<lable style="float:right">状态：</lable>
-  		</li>
-      <li>
-  			<select class="statue" name="status">
-          <option value=""> </option>
-  				<option value="0">等于</option>
-  				<option value="1">不等于</option>
-            </select>
-      </li>
-      <li class="filter mold" style="display:none;"><lable>+</lable></li>
-      <li>
-  			<select class="mold" name="mold" style="display: none;">
-  				<option value="未执行">未执行</option>
-  				<option value="PASS">PASS</option>
-  				<option value="FAIL">FAIL</option>
-          <option value="BLOCK">BLOCK</option>
-            </select>
-            <li>
-        </ul>
-        
-        <ul class="">
-  			<li class="item-title">
-  			<lable style="float:right">作者：</lable>
-  		</li>
-  		<li>
-  			<select class="" name="author">
-          <option select="selected" value="{{cauthor}}">{{cauthor}}</option>
-          <option value=""> </option>
-  				<option value="李稳">李稳</option>
-  				<option>国玉玲</option>
-  				<option>易璐璐</option>
-            </select>
-        </li>
- 
-  			<li class="filter"><lable>执行人：</lable></li>  		
-  			<li><select class="" name="executor">
-          <option select="selected" value="{{cexecutor}}">{{cexecutor}}</option>
-          <option value=""> </option>
-  				<option value="李稳">李稳</option>
-          <option>国玉玲</option>
-          <option>易璐璐</option>
-            </select>
-        </li>
-        </ul>
-        <ul>              
+      {% endif %} 
+  		    <ul class="selectList">
             <li class="item-title">
-  			    <lable style="float:right">执行时间：</lable>
-  		    </li>
-                    <li>
-                        <span class="input-append date form_datetime">
-                          <input type="text" class=" input-medium" value="{{cstart_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" 
+              <lable style="float:right">产品模块：</lable>
+            </li>
+            <li>
+              <input  value="{{categoryid}}" type="hidden" class="cate" name="categoryid">
+              <input  value="{{cate1}}" type="hidden" class="cate1" name="cate1">
+              <input  value="{{cate2}}" type="hidden" class="cate2" name="cate2">
+              <input  value="{{cate3}}" type="hidden" class="cate3" name="cate3">
+              <select class="category_select_1">
+              </select>
+              <select class="category_select_2">
+              </select>
+              <select class="category_select_3">
+              </select>
+           </li> 
+          </ul>
+          <ul class="testmodule">
+            <li class="item-title">
+              <lable style="float:right">所属模块：</lable>
+            </li>
+            <li>
+              <select class="" name="testmodule">
+                <option selected="selected" value="{{ctestmodule}}">{{ctestmodule}}</option>
+                <option value=""></option>
+                {% for m in testmodule %}
+                <option value="{{m.m_name}}">{{m.m_name}}</option>
+                {% endfor %}
+              </select>
+            </li>
+            <li class="filter"><lable>优先级：</lable></li>
+            <li>
+              <select class="" name="priority">
+                <option select="selected" value="{{cpriority}}">{{cpriority}}</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </li>
+          </ul>
+          <ul class="priority">
+            <input  value="{{statue}}" type="hidden" class="hide-statue">
+            <input  value="{{mold}}" type="hidden" class="hide-mold">
+  			    <li class="item-title"><lable style="float:right">状态：</lable></li>
+            <li>
+              <select class="statue" name="status">
+                <option value=""> </option>
+                <option value="0">等于</option>
+                <option value="1">不等于</option>
+              </select>
+            </li>
+            <li class="filter mold" style="display:none;"><lable>+</lable></li>
+            <li>
+              <select class="mold" name="mold" style="display: none;">
+  			      	<option value="未执行">未执行</option>
+  			      	<option value="PASS">PASS</option>
+  				      <option value="FAIL">FAIL</option>
+                <option value="BLOCK">BLOCK</option>
+              </select>
+            <li>
+          </ul>     
+          <ul>
+            <li class="item-title"><lable style="float:right">作者：</lable></li>
+  		      <li>
+  			      <select class="" name="author">
+                <option select="selected" value="{{cauthor}}">{{cauthor}}</option>
+                <option value=""> </option>
+  			      	<option value="李稳">李稳</option>
+  				      <option>国玉玲</option>
+  				      <option>易璐璐</option>
+              </select>
+            </li>
+            <li class="filter"><lable>执行人：</lable></li> 		
+  		    	<li>
+              <select class="" name="executor">
+                <option select="selected" value="{{cexecutor}}">{{cexecutor}}</option>
+                <option value=""> </option>
+  				      <option value="李稳">李稳</option>
+                <option>国玉玲</option>
+                <option>易璐璐</option>
+              </select>
+            </li>
+          </ul>
+          <ul>              
+            <li class="item-title"><lable style="float:right">执行时间：</lable></li>
+            <li>
+              <span class="input-append date form_datetime">
+                <input type="text" class=" input-medium" value="{{cstart_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" 
                           name="start_date" >
-                          <span class="add-on"><i class="icon-calendar"></i></span>
-                        </span>&nbsp;&nbsp;至&nbsp; 
-                        <span class="input-append date form_datetime">
-                          <input type="text" class=" input-medium" value="{{cend_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" 
+                <span class="add-on"><i class="icon-calendar"></i></span>
+              </span>&nbsp;&nbsp;至&nbsp; 
+              <span class="input-append date form_datetime">
+                <input type="text" class=" input-medium" value="{{cend_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" 
                           name="end_date" placeholder="{{cend_date|date:"Y-m-d"|default:""}}">
-                          <span class="add-on"><i class="icon-calendar"></i></span>
-                        </span>
-                    </li>
-                    <li style="padding-left:30px">
-                    	<input type="text" class="input-medium search-query" value="{{ckeyword}}" name="keyword" placeholder="请输入搜索关键字">
-                    	<button type="submit" class="btn">Search</button>
-                    </li>
-        </ul>
-      </form>
-    </div>
+                <span class="add-on"><i class="icon-calendar"></i></span>
+              </span>
+            </li>
+            <li style="padding-left:30px">
+              <input type="text" class="input-medium search-query" value="{{ckeyword}}" name="keyword" placeholder="请输入搜索关键字">
+              <button type="submit" class="btn">Search</button>
+            </li>
+          </ul>
+        </form>
+      </div>
   	</div>
   	<!-- <div  id="searchicon" style="margin-top:10px;">
   		<img src="/static/img/praise.png" style="margin-left:500px">
@@ -344,7 +335,7 @@
     	<button class="btn btn-success savebtn">保存</button>
     </div>
   	</div>
-  </div>
+</div>
 
 
 {% endblock %}

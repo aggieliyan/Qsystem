@@ -4,6 +4,7 @@ from project import views
 
 urlpatterns = patterns('',
 	url(r'^login/', views.login, {"url":"../caselist"},name='login'),
+	url(r'^logout/', login_views.logout),
 	url(r'^caselist/(\d+)/$', cases_views.case_list, name='caselist'),
 	url(r'^procate/', category_views.product_category, name='procate'),
 	url(r'^pull/', casepull_views.case_pull, name='casepull'),

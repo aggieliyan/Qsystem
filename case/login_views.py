@@ -1,4 +1,19 @@
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
 
-def login(request):
-	return render_to_response("case/login.html")
+def logout(request):
+	try:
+		response = HttpResponseRedirect("/case/login")
+		response.delete_cookie("username")
+		response.delete_cookie("password")
+		session_key = request.session.session_key
+		Session.objects.get(session_key=session_key).delete()
+		return response
+	except:
+		pass
+	return HttpResponseRedirect("/case/login/")
+
+def no_login(request):
+    return render_to_response("nologin.html")
+
+def no_perm(request):
+    return render_to_response("noperm.html")
