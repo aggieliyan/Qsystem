@@ -1,7 +1,6 @@
 {% extends "case/base.html" %}
 {% block title %}case系统{% endblock %}
 {% block head %}
-<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link href="/static/css/case_list.css" rel="stylesheet" media="screen">
 
@@ -102,19 +101,19 @@
             <li class="item-title"><lable style="float:right">执行时间：</lable></li>
             <li>
               <span class="input-append date form_datetime">
-                <input type="text" class=" input-medium" value="{{cstart_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" 
+                <input type="text" value="{{cstart_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF;width:110px;" 
                           name="start_date" >
                 <span class="add-on"><i class="icon-calendar"></i></span>
               </span>&nbsp;&nbsp;至&nbsp; 
               <span class="input-append date form_datetime">
-                <input type="text" class=" input-medium" value="{{cend_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF" 
+                <input type="text" value="{{cend_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF;width:110px;" 
                           name="end_date" placeholder="{{cend_date|date:"Y-m-d"|default:""}}">
                 <span class="add-on"><i class="icon-calendar"></i></span>
               </span>
             </li>
-            <li style="padding-left:30px">
-              <input type="text" class="input-medium search-query" value="{{ckeyword}}" name="keyword" placeholder="请输入搜索关键字">
-              <button type="submit" class="btn">Search</button>
+            <li>
+              <input type="text" class="input-medium search-query search-input" value="{{ckeyword}}" name="keyword" placeholder="请输入搜索关键字">
+              <button type="submit" class="btn btn-success searchbtn">搜索</button>
             </li>
           </ul>
         </form>
@@ -172,7 +171,7 @@
 						    		  <td class="editable nodrag">{{r.wi}}</td>
 						      		<td>{{r.exec_date|date:"Y-m-d"}}</td>
 						      		<td>{{r.executor}}</td>
-						      		<td class="editable nodrag">{{r.r_remark}}</td>
+						      		<td class="editable nodrag">{{r.r_remark|default_if_none:""}}</td>
 						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
 						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
 						    		  <td class="editable nodrag"></td>

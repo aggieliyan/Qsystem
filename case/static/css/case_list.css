@@ -108,3 +108,11 @@
 	width:56px;
 	padding-left:42px;
 }
+.searchbtn{
+	margin-bottom:10px;
+	margin-left:60px;
+}
+.search-input{
+	margin-bottom:10px !important;
+	margin-left:30px !important;
+}

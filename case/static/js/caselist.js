@@ -382,7 +382,6 @@ $(document).ready(function(){
 
     $('.selectList select').live('click',function(){
         if ($(this).val() !== '请选择'){
-            console.log("bbb");
             $(".cate").attr("value",$(this).val());
             $(".next").attr("action","/case/caselist/" + $(this).val() + "/");
         }
