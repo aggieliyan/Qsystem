@@ -1,51 +1,35 @@
-$(document).ready(function(){
+	
+	//´¦ÀíÒ»¼¶Õ¹¿ªÊÕËõÍ¼±ê
+    function first_change_minadd(id){
+    	var firstid=$('#a1_first'+id);
+		var classname=firstid.attr("class");
+		//Èç¹ûÊÇÕ¹¿ªµÄ,µã»÷ºóÊÕËõ
+		if(classname=='procate-a1_minus'){
+			firstid.attr("class","procate-a1_add");
+			$("#contain-secthird"+id).attr("style","display:none")
+		}else{
+			//¾ÍÊÇÊÕËõµÄ£¬µã»÷ºóÕ¹¿ª
+			firstid.attr("class","procate-a1_minus");
+			$("#contain-secthird"+id).attr("style","display:block")		
+		}
+      }
+  
+    function sec_change_minadd(id){
+    	var secid=$('#a1_second'+id);
+		var classname=secid.attr("class");
+		//Èç¹ûÊÇÕ¹¿ªµÄ,µã»÷ºóÊÕËõ
+		if(classname=='procate-a1_add'){
+			secid.attr("class","procate-a1_minus");
+			$("#third"+id).attr("style","display:block")
+		}else{
+			//¾ÍÊÇÊÕËõµÄ£¬µã»÷ºóÕ¹¿ª
+			secid.attr("class","procate-a1_add");
+			$("#third"+id).attr("style","display:none")		
+		}
+      }
     
-
-
-	$(".editable").live('dblclick', function(){
-
-		var tdnode = $(this);
-		var tdTest = tdnode.text();
-   
-		tdnode.empty();
-		var tx = $("<textarea class='edittx'></textarea>");
-		tx.attr("value", tdTest);
-		tdnode.append(tx);
-		tx.focus();
-
-	});
-
-	$(".edittx").live('blur', function(){
-		var tx = $(this);
-		var etext = tx.val();
-		var tp = tx.parent();
-		tx.remove();
-		tp.attr("value", etext);
-		tp.html(etext);
-
-	});
-
-   $("icon-plus").live("click", function(){
-   	   var casehtml = "<tr><td><input class=\"casecheck\" type=\"checkbox\">1</td>"+
-	      		"<td class=\"editable\"></td>"+
-	      		"<td class=\"editable\"></td>"+
-	    		"<td class=\"editable\"></td>"+
-	      		"<td>2</td>"+
-	      		"<td>PASS</td>"+
-	    		"<td class=\"editable\">-</td>"+
-	      		"<td>2015/01/01</td>"+
-	      		"<td>æ˜“ç’ç’</td>"+
-	      		"<td class=\"editable\">-</td>"+
-	      		"<td>"+
-	      			"<a class=\"icon-plus\"></a>"+
-	      			"<a class=\"icon-download-alt\"></a>"+
-	      			"<a class=\"icon-eye-open\"></a>"+
-	      			"<a class=\"icon-trash\"></a>"+
-	      		"</td>"+			
-	    	"</tr>";
-       console.log($(this));
-       $(this).parents("tbody").append(casehtml);
-
-   });
-
-});
+    function add_firprocate(){
+    	alert($('#as').attr('name'));
+        $('#myModal').attr("style","display:block")	
+        
+      }
