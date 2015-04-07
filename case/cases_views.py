@@ -84,6 +84,23 @@ def case_list(request,pid):
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
 
+
+def allcaselist(request):
+	case = {}
+	cmodule = testcase.objects.all()
+	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+	caseresult = result.objects.filter(testcase__in = cmodule)
+	listid = caseresult.values_list("testcase", flat=True).distinct()
+	newresult = []
+	for c in listid:
+		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
+		newresult.append(p)
+	for m in testmodule:
+		case[m.m_name] = cmodule.filter(module = m.id)
+	print case
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
+
+
 def categorysearch(request):
 	clist = []
 	#一级

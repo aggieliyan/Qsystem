@@ -141,13 +141,13 @@
 	    	</tr>
         </thead>
         <tbody>
-	    	<tr class="cmodule" rank="1" value="10001">
+        {% if case %}
+        {% for key,dic in case.items %}
+	    	<tr class="cmodule" rank="{{key}}" value="10001">
 	    		<td colspan="11">
 	    			<div>
 	    				<table >
-	    					<tbody>
-                  {% if case %}
-	    						{% for key,dic in case.items %}
+	    					<tbody>                  
 	    						<tr class="success">
 						    		<td colspan="1" ><input class="modulecheck" type="checkbox"></td>
 						    		<td colspan="9" class="editable">{{key}}</td>
@@ -158,7 +158,7 @@
 						    		</td>
 	    						</tr>
 	    						{% for c in dic %}
-	    						<tr class="mtr" rank="1" value="201">
+	    						<tr class="mtr" rank="{{c.rank}}" value="201">
 						    		<td><input class="casecheck" type="checkbox">1</td>
 						      		<td class="editable nodrag">{{c.precondition}}</td>
 						      		<td class="editable nodrag">{{c.action}}</td>
@@ -197,8 +197,20 @@
 						      		</td> 
 	    						</tr>
 	    						{% endfor %}
-	    						{% endfor %}
-                  {% else %}
+	    						
+
+	    					</tbody>
+	    				</table>
+	    			</div>
+	    		</td>
+	    	</tr>
+        {% endfor %}
+        {% else %}
+        <tr class="cmodule" rank="{{key}}" value="10001">
+          <td colspan="11">
+            <div>
+              <table >
+                <tbody>                  
                   <tr class="success">
                     <td colspan="1" ><input class="modulecheck" type="checkbox"></td>
                     <td colspan="9" class="editable"></td>
@@ -208,13 +220,12 @@
                           <a class="icon-trash"></a>
                     </td>
                   </tr>
+                  </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
                   {% endif %}
-
-	    					</tbody>
-	    				</table>
-	    			</div>
-	    		</td>
-	    	</tr>
 	    	<tr class="cmodule" rank="2" value="10002">
 	    		<td colspan="11">
 	    			<div>

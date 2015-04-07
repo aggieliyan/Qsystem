@@ -291,34 +291,45 @@ $(document).ready(function(){
      //初始化一级类目
     var category_select_1 = function(){
         var c1=$(".cate1").val();
-        temp_html="";
+        temp_html="<option>"+'全部'+"</option>";
         $.each(areaJson,function(i,category_select_1){
              temp_html+="<option value='"+category_select_1.masterid+"'>"+category_select_1.master+"</option>";
         });
         category1.html(temp_html); 
         var n = category1.get(0).selectedIndex;
+        console.log(n);
         if(c1){
             $(".category_select_1 option[value="+c1+"]").attr("selected","true")
         }       
-        if((areaJson[n].slist).length != 0){
+        if(n != 0){
+            if((areaJson[n-1].slist).length != 0){
             category2.show();
-             category_select_2();
+            category_select_2();
+            console.log("mmm");
             if (!c1){
-                $(".cate").attr("value",category1.children().eq(n).val());
+                $(".cate").attr("value",'aa');
             }                    
             $(".cate1").attr("value",category1.children().eq(n).val());
-        };                 
+        };
+        }else{
+          category2.hide();
+          category3.hide();  
+        }
+
+                       
      };
     //赋值二级
     var category_select_2 = function(){
         var c2=$(".cate2").val();
         temp_html="<option>"+'请选择'+"</option>"; 
         var n = category1.get(0).selectedIndex;
-        if((areaJson[n].slist).length == 0){
+        console.log(n);
+        if(n !=0 ){
+            if((areaJson[n-1].slist).length == 0){
             category2.css("display","none");
             category3.css("display","none");
         }else{
-            $.each(areaJson[n].slist,function(i,category_select_2){
+            $.each(areaJson[n-1].slist,function(i,category_select_2){
                 temp_html+="<option value='"+category_select_2.secondid+"'>"+category_select_2.second+"</option>";
             });
             category2.html(temp_html);
@@ -326,7 +337,8 @@ $(document).ready(function(){
                 $(".category_select_2 option[value="+c2+"]").attr("selected","true");
             }
             category_select_3();
-        };             
+        };
+        }                    
     };
     //赋值三级
     var category_select_3 = function(){
@@ -336,18 +348,18 @@ $(document).ready(function(){
         var n = category2.get(0).selectedIndex;
         if(c3){
             category3.css("display","inline");
-            $.each(areaJson[m].slist[n-1].thirdlist,function(i,category_select_3){
+            $.each(areaJson[m-1].slist[n-1].thirdlist,function(i,category_select_3){
                 temp_html+="<option value='"+category_select_3.thirdid+"'>"+category_select_3.third+"</option>";
             });
             category3.html(temp_html);
             $(".category_select_3 option[value="+c3+"]").attr("selected","true");
         }else{
             if(n != 0){
-                if((areaJson[m].slist[n-1].thirdlist).length == 0){
+                if((areaJson[m-1].slist[n-1].thirdlist).length == 0){
                     category3.css("display","none");
                 }else{
                     category3.css("display","inline");
-                    $.each(areaJson[m].slist[n-1].thirdlist,function(i,category_select_3){
+                    $.each(areaJson[m-1].slist[n-1].thirdlist,function(i,category_select_3){
                         temp_html+="<option value='"+category_select_3.thirdid+"'>"+category_select_3.third+"</option>";
                     });
                     category3.html(temp_html);
