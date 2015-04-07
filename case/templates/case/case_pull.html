@@ -2,31 +2,192 @@
 <html>
 	<head>
 		<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="/static/css/checktree.css" rel="stylesheet" media="screen">
+		<link href="/static/css/case_pull.css" rel="stylesheet" media="screen">
 		<script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>
-	</head>>
+		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/static/js/checktree.js"></script>
+		<script>
+			$(document).ready(function(){
+				$("ul.tree").checkTree({
+					});
+			});
+		</script>
+	</head>
 	<body>
-		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-		  Launch demo modal
-		</button>
-		
-		<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-		      </div>
-		      <div class="modal-body">
-		        ...
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Save changes</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
+    <!-- Button to trigger modal -->
+    <a href="#casePullModal" role="button" class="btn" data-toggle="modal">引入用例</a>
+     
+    <!-- Modal -->
+    <div id="casePullModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="casePullModalLabel" aria-hidden="true">
+    	<div class="modal-header">
+    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    		<h3 id="casePullLabel">引入用例</h3>
+    	</div>
+    	<div class="modal-body">
+    		<div class="cases_selector">
+    			<div class="cases_category">
+    				<ul class="tree" style="margin-left: 3px;">
+						<li>
+						    <input type="checkbox">
+						    <label>United States</label>
+						    <ul>
+								<li>
+								<input type="checkbox" name="geo" value="pennsylvania">
+						        <label>类目太长挤下来肿么办你能有多长啊</label>
+							    </li>
+							</ul>
+						</li>
+						<li>
+							<input type="checkbox">
+							<label>Canadia</label>
+							<ul>
+								<li>
+									<input type="checkbox" name="geo" value="province in canadia">
+									<label>Province In Canadia</label>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<input type="checkbox" name="geo" value="afghanistan">
+							<label>Afghanistan</label>
+						</li>
+						<li>
+							<input type="checkbox">
+						    <label>Sealand</label>
+							<ul>
+								<li>
+									<input type="checkbox" name="geo" value="tree_city">
+									<label>Tree City</label>
+								</li>
+								<li>
+									<input type="checkbox" name="geo" value="oil_province">
+									<label>Oil Province</label>
+									<ul>
+										<li>
+											<input type="checkbox" name="geo" value="oil_city">
+											<label>Oil City</label>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<input type="checkbox" value="fun_province_checkbox">
+									<label>Fun Province</label>
+									<ul>
+										<li>
+											<input type="checkbox" name="geo" value="fun_city">
+											<label>Fun City</label>
+										</li>
+										<li>
+											<input type="checkbox" name="geo" value="not_fun_city">
+											<label>Not Fun City</label>
+										</li>
+									</ul>
+								</li>
+							</ul>
+					    </li>
+					    <li>
+		<input type="checkbox" name="geo" value="afghanistan">
+		<label>Afghanistan</label>
+	</li>
+	<li>
+		<input type="checkbox">
+	    <label>Sealand</label>
+		<ul>
+			<li>
+				<input type="checkbox" name="geo" value="tree_city">
+				<label>Tree City</label>
+			</li>
+			<li>
+				<input type="checkbox" name="geo" value="oil_province">
+				<label>Oil Province</label>
+				<ul>
+					<li>
+						<input type="checkbox" name="geo" value="oil_city">
+						<label>Oil City</label>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<input type="checkbox" value="fun_province_checkbox">
+				<label>Fun Province</label>
+				<ul>
+					<li>
+						<input type="checkbox" name="geo" value="fun_city">
+						<label>Fun City</label>
+					</li>
+					<li>
+						<input type="checkbox" name="geo" value="not_fun_city">
+						<label>Not Fun City</label>
+					</li>
+				</ul>
+			</li>
+		</ul>
+    </li>
+					</ul>
+    			</div>
+    			<div class="import_right">
+    				<div class="search_bar">
+    					<form id="combobox-container" class="combobox-container">
+							<div class="cc-box">
+							<select class="cc-textbox" type="text" name="inputbox" value="" style="width: 180px; cursor: pointer;" readonly="readonly">
+								<option>请选择模块</option>
+								<option>机构后台</option>
+								<option>机构前台</option>
+							</select>
+							
+							</div>
+							<input id="search_text" type="text" autocomplete="off" placeholder="请输入要搜索的用例">
+    						<button id="search_button" class="btn btn-success">搜索</button>
+						</form>    					
+    				</div>
+    				<div class="cases_list">
+    					<h3>
+    						<input id="select_all_btn" type="checkbox">
+    						<span id="pop_info_name">用例</span>
+    					</h3>
+    					<div id="import_list_wrapper" class="dataTables_wrapper" role="grid">
+    						<table id="import_list" class="import_list_con dataTable" aria-describedby="import_list_info" style="width:600px">
+    							<tr class="odd">
+									<td class="text-left first-cell">
+										<label class="import-list-item clearfix">
+											<input type="checkbox" value="269891" data-title="" checked="" style="margin-right:10px;">
+											<p>课程详情页面课程的学习总进度有缓存吗？多长时间？单个课件的学习进度有缓存吗？ </p>
+										</label>
+									</td>
+								</tr>
+    						</table>
+    						<div id="import_list_paginate" class="pagination">
+    							<a id="import_list_previous" class="previous paginate_button paginate_button_disabled" tabindex="0">
+									<em class="text"><</em>
+								</a>
+								<span class="paginate_num_wrapper">
+									<a class="paginate_active" tabindex="0">
+									<a class="paginate_button" tabindex="0">
+									<a class="paginate_button" tabindex="0">
+									<a class="paginate_button" tabindex="0">
+								</span>
+								<a id="import_list_next" class="next paginate_button" tabindex="0">
+									<em class="text">></em>
+								</a>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+    			
+    	</div>
+    	<div class="modal-footer">
+    		<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+    		<button class="btn btn-success">引入</button>
+    	</div>
+    </div>
+    <div class="cc-itemListContainer" style="background-color: #dff0d8 ;opacity: 0.95; display: none; top: 93px; left: 237px; width: 163px; height: 87px; position: absolute; border-width: medium 1px 1px; border-style: none solid solid; border-color: -moz-use-text-color rgb(221, 221, 221) rgb(221, 221, 221); -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; z-index: 10011;">
+		<ul class="cc-itemList">
+			<li class="cc-item" title="全部">全部</li>
+			<li class="cc-item" title="默认类目">默认类目</li>
+			<li class="cc-item selectedItem" title="网站机制问题">网站机制问题</li>
+		</ul>
+	</div>
 	</body>
+
 </html>
