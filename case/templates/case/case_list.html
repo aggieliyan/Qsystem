@@ -167,7 +167,7 @@
                       {% if result %}
 						      		{% for r in result %}
 						      		{% if c.id == r.testcase_id %}
-						      		<td class="nodrag"><a class="icon-play-circle"></a>{{r.result}}</td>
+						      		<td class="nodrag"><a class="icon-play-circle"></a><span>{{r.result}}</span></td>
 						    		  <td class="editable nodrag">{{r.wi}}</td>
 						      		<td>{{r.exec_date|date:"Y-m-d"}}</td>
 						      		<td>{{r.executor}}</td>
@@ -354,5 +354,5 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150325"></script>   
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150326"></script>   
 {% endblock %}

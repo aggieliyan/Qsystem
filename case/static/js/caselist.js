@@ -148,6 +148,7 @@ $(document).ready(function(){
         tdnode.append(tx);
     })
 
+    //选择用例级别
     $(".lselect").live('change', function(){
         var tx = $(this);
         var etext = tx.val();
@@ -168,17 +169,27 @@ $(document).ready(function(){
                 $(this).after(resulthtml);
                 $(this).toggle();       
             }else{
-                sel.toggle();
+                if(sel.attr("class") == "cresult"){
+                    sel.toggle();             
+                }else{
+                    $(this).after(resulthtml);
+                    sel.remove();//上一轮的结果删掉
+                }
                 $(this).toggle();
             }
+            //将这一次的执行结果保存到数据库
+            
         }
 
     });
+
+    //选择执行结果
     $(".cresult").live('change', function(){
         var result = $(this).val();
         $(this).prev().toggle();
-        $(this).after("<span>"+result+"<span>");
+        $(this).after("<span>"+result+"</span>");
         $(this).toggle();
+
     })
 
 	//插入模块后用例后，赋rank值
