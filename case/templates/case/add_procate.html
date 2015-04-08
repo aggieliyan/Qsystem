@@ -1,0 +1,30 @@
+<!-- Modal addprocate-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="test" class="navbar-form navbar-center" method='post' action="/case/add_procate/" id="test">
+      <div class="mymodal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">新建产品模块</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+			<div class="row-fluid" style='text-align: center'>
+				<input id="procate_id" name="procate_id" type="hidden">
+				<input id="procate_level" name="procate_level" type="hidden">
+				<input id="procate_title" name="procate_title" style='width:380px;'></input>
+			</div>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <div align="center">
+          <button id='procate_btn' type="button" class="btn mybtn-success" onclick="chk()">确定</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<!-- Le javascript ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->  

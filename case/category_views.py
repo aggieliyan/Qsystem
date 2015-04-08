@@ -2,6 +2,8 @@
 
 from django.shortcuts import render_to_response, redirect, RequestContext, HttpResponseRedirect
 from models import category   
+from case.forms import add_procateForm
+import datetime
 
 def product_category(request):
     #if not request.user.is_authenticated():
@@ -32,15 +34,25 @@ def product_category(request):
                             third_names[procate_third.id] = procate_third.name 
       
     return render_to_response("case/product_category.html",RequestContext(request, \
-    {'procate_firsts':procate_firsts, 'second_ids':second_ids.items(), 'second_names':second_names.items(), \
-     'third_ids':third_ids.items(), 'third_names':third_names.items(), 'first_secounts':first_secounts.items(), \
+    {'procate_firsts':procate_firsts, 'second_ids':second_ids.items(), \
+     'second_names':second_names.items(), 'third_ids':third_ids.items(), \
+     'third_names':third_names.items(), 'first_secounts':first_secounts.items(), \
      'second_thicounts':second_thicounts.items()}))
     
-def add_firstprocate(request, url):
+def add_procate(request, url):
     if request.method == 'POST':
-        None
-#        form = add_firstprocateForm(request.POST)
-#        if form.is_valid():
-#            None           
-#    return HttpResponseRedirect(url)
+        form = add_procateForm(request.POST)
+        if form.is_valid():
+            procate_id = form.cleaned_data['procate_id']
+            procate_level = form.cleaned_data['procate_level']
+            procate_name = form.cleaned_data['procate_title']
+            if procate_id == None:
+                pro_cate = category(name = procate_name, parent_id = 0, level = 1, \
+                           createdate = datetime.datetime.now(), isactived = 1)
+            else:
+                pro_cate = category(name = procate_name, parent_id = procate_id, \
+                           level = procate_level + 1, \
+                        createdate = datetime.datetime.now(), isactived = 1)
+            pro_cate.save()                  
+    return HttpResponseRedirect(url)
 

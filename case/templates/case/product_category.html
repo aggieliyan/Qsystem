@@ -3,11 +3,8 @@
 {% block head %}
 <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="/static/css/procate.css" rel="stylesheet" media="screen">
-<link href="/static/css/common.css" rel="stylesheet" media="screen">
-
 {% endblock %}
 {% block content %}
-<body id="mybody">
 <div class="row-fluid">
 
     <div class="span12" >
@@ -35,7 +32,7 @@
                 <div class='procate-div'>{{procate_first.name}}</div>
                 <a class='procate-a2'>管理用例</a>
                 <a class='procate-a3'>编辑</a>
-                <a class='procate-a4'>添加子模块</a>
+                <a class='procate-a4' onclick='add_subprocate({{procate_first.id}},1)'>添加子模块</a>
                 <a class='procate-a5'>删除</a>      
            </div>
             
@@ -57,12 +54,12 @@
                    {% endfor %}
                    <a class='procate-a2'>管理用例</a>
                    <a class='procate-a3'>编辑</a>
-                   <a class='procate-a4'>添加子模块</a>
+                   <a class='procate-a4' onclick='add_subprocate({{procate_first.id}},2)'>添加子模块</a>
                    <a class='procate-a5'>删除</a>   
                </div>
                        {% for thirid, secid1 in third_ids %}
                          {% if secid1 == secid %}
-                            <div class='procate-third' id='third{{secid1}}'>
+                            <div class='procate-third procate-third{{secid}}' >
                                 {% for third_id, thiname in third_names %}
                                     {% if third_id == thirid %} 
                                 <div class='procate-div'>{{ thiname }}</div>
@@ -70,11 +67,12 @@
                                 {% endfor %}
                                 <a class='procate-a2'>管理用例</a>
                                 <a class='procate-a3'>编辑</a>
-                                <a class='procate-a4'>添加子模块</a>
+                                <a class='procate-a4' onclick='add_subprocate({{procate_first.id}},3)'>添加子模块</a>
                                 <a class='procate-a5'>删除</a>   
-                            </div>              
+                           </div>              
                          {% endif %}
-                      {% endfor %} 
+                      {% endfor %}
+                      
             {% endif %}
            {% endfor %}               
            </div> 
@@ -84,8 +82,8 @@
     </div>
 	
 </div>
-{% include "case/add_firstprocate.html" %}
-</body>
+
+{% include "case/add_procate.html" %}
 {% endblock %}
 {% block js %}
     <script type='text/javascript' src="/static/js/procate.js?v=20150315"></script>   

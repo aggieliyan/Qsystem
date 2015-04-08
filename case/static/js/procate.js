@@ -1,14 +1,14 @@
-	
-	//´¦ÀíÒ»¼¶Õ¹¿ªÊÕËõÍ¼±ê
+
+	//å¤„ç†ä¸€çº§å±•å¼€æ”¶ç¼©å›¾æ ‡
     function first_change_minadd(id){
     	var firstid=$('#a1_first'+id);
 		var classname=firstid.attr("class");
-		//Èç¹ûÊÇÕ¹¿ªµÄ,µã»÷ºóÊÕËõ
+		//å¦‚æœæ˜¯å±•å¼€çš„,ç‚¹å‡»åæ”¶ç¼©
 		if(classname=='procate-a1_minus'){
 			firstid.attr("class","procate-a1_add");
 			$("#contain-secthird"+id).attr("style","display:none")
 		}else{
-			//¾ÍÊÇÊÕËõµÄ£¬µã»÷ºóÕ¹¿ª
+			//å°±æ˜¯æ”¶ç¼©çš„ï¼Œç‚¹å‡»åå±•å¼€
 			firstid.attr("class","procate-a1_minus");
 			$("#contain-secthird"+id).attr("style","display:block")		
 		}
@@ -17,19 +17,49 @@
     function sec_change_minadd(id){
     	var secid=$('#a1_second'+id);
 		var classname=secid.attr("class");
-		//Èç¹ûÊÇÕ¹¿ªµÄ,µã»÷ºóÊÕËõ
+		//å¦‚æœæ˜¯å±•å¼€çš„,ç‚¹å‡»åæ”¶ç¼©
 		if(classname=='procate-a1_add'){
 			secid.attr("class","procate-a1_minus");
-			$("#third"+id).attr("style","display:block")
+			$(".procate-third"+id).attr("style","display:block")
 		}else{
-			//¾ÍÊÇÊÕËõµÄ£¬µã»÷ºóÕ¹¿ª
+			//å°±æ˜¯æ”¶ç¼©çš„ï¼Œç‚¹å‡»åå±•å¼€
 			secid.attr("class","procate-a1_add");
-			$("#third"+id).attr("style","display:none")		
+			$(".procate-third"+id).attr("style","display:none")		
 		}
       }
-    
+    	
     function add_firprocate(){
-    	alert($('#as').attr('name'));
-        $('#myModal').attr("style","display:block")	
-        
+        $('#myModal').modal('show');
+    }
+
+    function chk(){
+        var title = document.test.procate_title.value.replace(/(^\s*)|(\s*$)/g,"");;
+        if(!title){
+            alert('äº§å“æ¨¡å—åç§°ä¸èƒ½ä¸ºç©ºï¼');
+        }
+        else if(title.length>30){
+            alert('äº§å“æ¨¡å—åç§°ä¸èƒ½è¶…è¿‡30ä¸ªå­—ç¬¦ï¼');
+        }
+        else{
+            $("#procate_btn").attr("disabled","true");
+            document.test.submit();
+        } 
       }
+    
+   function add_subprocate(id,level){
+	   if( level== 3){
+		  alert('ä¸‰çº§äº§å“æ¨¡æ¿ä¸èƒ½æ·»åŠ å­æ¨¡å—ï¼');
+		  return
+	   }
+       $('#procate_id').val(id);
+       $('#procate_level').val(level);
+       alert(('#procate_id').val());
+	   $('#myModal').modal('show');
+	      
+   }
+   
+   
+   
+   
+   
+   
