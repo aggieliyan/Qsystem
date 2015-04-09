@@ -34,10 +34,9 @@ def product_category(request):
                         for procate_third in procate_thirds:
                             third_ids[procate_third.id] = procate_second.id
                             third_names[procate_third.id] = procate_third.name 
-      
     return render_to_response("case/product_category.html",RequestContext(request, \
-    {'procate_firsts':procate_firsts, 'second_ids':second_ids.items(), \
-     'second_names':second_names.items(), 'third_ids':third_ids.items(), \
+    {'procate_firsts':procate_firsts, 'second_ids':sorted(second_ids.items()), \
+     'second_names':second_names.items(), 'third_ids':sorted(third_ids.items()), \
      'third_names':third_names.items(), 'first_secounts':first_secounts.items(), \
      'second_thicounts':second_thicounts.items()}))
     
