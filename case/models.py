@@ -28,6 +28,7 @@ class testcase(models.Model):
 	output = models.CharField(u'期望输出', max_length=100)
 	priority = models.IntegerField(u'优先级', max_length=1)
 	author = models.CharField(u'本条用例作者', max_length=10)
+	authorid = models.IntegerField(u'作者id', blank=False, null=False)
 	createdate = models.DateTimeField(u'创建时间', blank=True, null=True)
 	t_remark = models.CharField(u'备注', blank=True, null=True, max_length=100)
 	isactived = models.IntegerField(max_length=1)

@@ -79,26 +79,55 @@ $(document).ready(function(){
 
     function delete_update_rank(celement){
     	var nextele = celement.next();
-    	if(nextele.length !== 0){
-	    	var classname = celement.attr("class")
-	    	var nx = celement.nextAll().filter("."+classname);
-	    	nx.each(function(){
+        var classname = celement.attr("class");
+    	if(nextele.length !== 0 || classname == "cmodule"){	    	
+            console.log(classname);
+	    	var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
+	    	nx.each(function(){//rank值依次减1
 	    		var newrank = parseInt($(this).attr("rank"))-1;
 	    		$(this).attr("rank", newrank);
 	    		$(this).find("input").eq(0).attr("checked", "checked");
 	    	});
-	    	//如果删掉模块，模块下用例的rank值也要变化
+	    	//如果删掉的是模块，模块下用例的rank值也要变化
+            //删掉模块后，用例是直接接到上一个模块下，
+            //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
 	    	if(classname == "cmodule"){
-	    		var ccase = celement.find(".mtr");
-	    		var cnum = celement.prev().find(".mtr").length;
+	    		var ccase = celement.find(".mtr");//该模块下所有用例
+	    		var cnum = celement.prev().find(".mtr").last().attr("rank");
+                var mid = celement.prev().attr("value");
 	    		var i = 1;
 
+                var rankdic = {}
+
 		    	ccase.each(function(){
-		    		var newrank = cnum+i;
+		    		var newrank = parseInt(cnum)+i;
 		    		i = i+1;
+                    var cid = $(this).attr("value");
 		    		$(this).attr("rank", newrank);
-		    		$(this).find("input").eq(0).attr("checked", "checked");
-		    	});	    		
+                    if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                        rankdic[cid] = newrank;
+/*                        rankdic = rankdic +cid+":"+newrank+","*/
+
+                    }
+                    else{
+                        console.log("no id");
+                        $(this).find("input").eq(0).attr("checked", "checked");
+                    }
+		    	});
+                rankdic = JSON.stringify(rankdic);
+                url = "/case/updaterank/";
+                para = {"mid":mid, "rankdict":rankdic};
+                console.log(rankdic);
+                console.log(typeof(rankdic));
+                $.post(url, para, function(data){
+/*                    var rs = eval('('+data+')');
+                    if(rs.success){
+                        alert("ok");
+                    }else{
+                        alert("fail");
+                    }*/
+                    alert("ok");
+                });		
 	    	}  	
     	}
     }
@@ -138,7 +167,7 @@ $(document).ready(function(){
 	});
 
 
-    //点击选择级别
+    //双击选择级别
     $(".level").live('dblclick', function(){
         var tdnode = $(this);
         var tdTest = tdnode.text();
@@ -224,7 +253,7 @@ $(document).ready(function(){
     $(".icon-plus-sign").live('click', function(){
         var cmodule = $(this).parents(".cmodule");
         cmodule.after(modulehtml);
-        update_rank(cmodule.next());
+        insert_update_rank(cmodule.next());
     });
 
     function checkall(master, slave){

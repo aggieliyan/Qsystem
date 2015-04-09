@@ -155,3 +155,28 @@ def execute_case(request):
 		resp = json.dumps(resp)
 
 		return HttpResponse(resp)
+
+
+def update_rank(request):
+	resp = {}
+	try:
+		rank_dict = json.loads(request.POST['rankdict'])
+		module_id = request.POST['mid']
+		print rank_dict
+		print module_id
+		for key in rank_dict.keys():
+			tc = testcase.objects.get(id=key)
+			tc.rank = rank_dict[key]
+			tc.module_id = module_id
+			tc.save()
+		resp["success"] = True
+	except Exception,e:
+		resp["success"] = False
+		print e
+		# resp["message"] = e
+	finally:
+		resp = json.dumps(resp)
+		# print "resp==",resp
+
+		return HttpResponse(resp)
+

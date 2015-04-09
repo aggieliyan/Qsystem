@@ -15,4 +15,5 @@ urlpatterns = patterns('',
 	url(r'^pull/', casepull_views.case_pull, name='casepull'),
 	url(r'^casecate/', cases_views.categorysearch),
 	url(r'^executecase/', cases_views.execute_case),
+	url(r'^updaterank/', cases_views.update_rank),
 )
