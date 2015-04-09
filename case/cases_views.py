@@ -1,4 +1,5 @@
 # coding=utf-8
+import datetime
 from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse
 from models import testcase, casemodule, category, result
 from forms import searchForm
@@ -131,3 +132,26 @@ def categorysearch(request):
 		clist.append(categorydic)
 	# print clist
 	return HttpResponse(json.dumps(clist))
+
+def execute_case(request):
+	resp = {}
+	try:
+		caseid = request.POST['caseid']
+		cresult = request.POST['cresult']
+		executor = request.session['realname']
+		executorid = request.session['id']
+		exec_date = datetime.datetime.now()
+		cr = result(testcase_id=caseid, result=cresult, exec_date=exec_date, executor=executor, executorid=executorid, isactived=1)
+		cr.save()
+		exedetail = {}
+		exedetail['exec_date'] = exec_date.strftime("%Y-%m-%d %H:%M:%S")
+		exedetail['executor'] = executor 
+		resp["success"] = True
+		resp["exedetail"] = exedetail
+	except Exception, e:
+		resp["success"] = False
+		resp["message"] = e
+	finally:	
+		resp = json.dumps(resp)
+
+		return HttpResponse(resp)

@@ -10,4 +10,5 @@ urlpatterns = patterns('',
 	url(r'^procate/', category_views.product_category, name='procate'),
 	url(r'^pull/', casepull_views.case_pull, name='casepull'),
 	url(r'^casecate/', cases_views.categorysearch),
+	url(r'^executecase/', cases_views.execute_case),
 )

@@ -158,7 +158,7 @@
 						    		</td>
 	    						</tr>
 	    						{% for c in dic %}
-	    						<tr class="mtr" rank="{{c.rank}}" value="201">
+	    						<tr class="mtr" rank="{{c.rank}}" value="1">
 						    		<td><input class="casecheck" type="checkbox">1</td>
 						      		<td class="editable nodrag">{{c.precondition}}</td>
 						      		<td class="editable nodrag">{{c.action}}</td>
@@ -169,7 +169,7 @@
 						      		{% if c.id == r.testcase_id %}
 						      		<td class="nodrag"><a class="icon-play-circle"></a><span>{{r.result}}</span></td>
 						    		  <td class="editable nodrag">{{r.wi}}</td>
-						      		<td>{{r.exec_date|date:"Y-m-d"}}</td>
+						      		<td>{{r.exec_date|date:"Y-m-d H:i:s"}}</td>
 						      		<td>{{r.executor}}</td>
 						      		<td class="editable nodrag">{{r.r_remark|default_if_none:""}}</td>
 						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
@@ -182,7 +182,7 @@
 						      		{% endif %}
 						      		{% endfor %}
                       {% else %}
-                      <td class="nodrag"><a class="icon-play-circle"></a></td>
+                      <td class="nodrag"><a class="icon-play-circle"></a><span></span></td>
                       <td class="editable nodrag"></td>
                       <td></td>
                       <td></td>
