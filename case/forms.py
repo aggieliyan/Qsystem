@@ -18,6 +18,10 @@ class searchForm(forms.Form):
 	keyword = forms.CharField(required=False)
 	
 class add_procateForm(forms.Form):
-	procate_title = forms.CharField(required=True,error_messages={'required': u'变更内容不能为空'})
-	procate_id = forms.DateField(required=False)
-	procate_level = forms.DateField(required=False)
+	procate_id = forms.IntegerField(required=False)
+	procate_level = forms.IntegerField(required=False)
+	procate_title = forms.CharField(required=True,error_messages={'required': u'产品模块名称不能为空'})
+	
+class edit_procateForm(forms.Form):
+	procate_id1 = forms.IntegerField(required=False)
+	procate_title1 = forms.CharField(required=True,error_messages={'required': u'产品模块名称不能为空'})
