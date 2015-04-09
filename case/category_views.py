@@ -2,7 +2,7 @@
 
 from django.shortcuts import render_to_response, redirect, RequestContext, HttpResponseRedirect
 from models import category   
-from case.forms import add_procateForm, edit_procateForm
+from case.forms import add_procateForm, edit_procateForm, del_procateForm
 import datetime
 
 def product_category(request):
@@ -70,3 +70,11 @@ def edit_procate(request, url):
             pro_cate.save()                  
     return HttpResponseRedirect(url)
 
+def del_procate(request, url):
+    if request.method == 'POST':
+        form = del_procateForm(request.POST)
+        if form.is_valid():
+            procate_id = form.cleaned_data['procate_id_del']
+            pro_cate = category.objects.get(id = procate_id)
+            pro_cate.delete()       
+    return HttpResponseRedirect(url)

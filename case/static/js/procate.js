@@ -33,7 +33,7 @@
         $('#myModal').modal('show');
     }
 
-    //验证输入框
+    //添加验证输入框
     function chk(){
         var title = document.test.procate_title.value.replace(/(^\s*)|(\s*$)/g,"");;
         if(!title){
@@ -43,12 +43,11 @@
             alert('产品模块名称不能超过30个字符！');
         }
         else{
-            $(".procate_btn").attr("disabled","true");
             document.test.submit();
         } 
       }
    
-    //验证输入框
+    //编辑验证输入框
     function chk1(){
         var title = document.test1.procate_title1.value.replace(/(^\s*)|(\s*$)/g,"");;
         if(!title){
@@ -58,7 +57,6 @@
             alert('产品模块名称不能超过30个字符！');
         }
         else{
-            $(".procate_btn1").attr("disabled","true");
             document.test1.submit();
         } 
       }
@@ -90,7 +88,7 @@
 //删除产品模块
  function del_procate(id){
      $('#procate_id_del').val(id);
-	 $('#myModal_del').modal('show');	 
+	 $('#myModal_del').modal('show');
  }
    
    

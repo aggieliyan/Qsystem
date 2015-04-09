@@ -25,3 +25,6 @@ class add_procateForm(forms.Form):
 class edit_procateForm(forms.Form):
 	procate_id1 = forms.IntegerField(required=False)
 	procate_title1 = forms.CharField(required=True,error_messages={'required': u'产品模块名称不能为空'})
+
+class del_procateForm(forms.Form):
+	procate_id_del = forms.IntegerField(required=False)	

@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 	url(r'^procate/', category_views.product_category, name='procate'),
     url(r'^add_procate/', category_views.add_procate,{'url':'../procate/'},name="add_procate"),
     url(r'^edit_procate/', category_views.edit_procate,{'url':'../procate/'},name="edit_procate"),
+	url(r'^del_procate/', category_views.del_procate,{'url':'../procate/'},name="del_procate"),
 	url(r'^pull/', casepull_views.case_pull, name='casepull'),
 	url(r'^casecate/', cases_views.categorysearch),
 )
