@@ -87,8 +87,23 @@
 
 //删除产品模块
  function del_procate(id){
-     $('#procate_id_del').val(id);
-	 $('#myModal_del').modal('show');
+     url = "/case/delprocate_confirm"
+     para = {"procate_id":id}
+     $.get(url, para, function(data){
+         var according = eval('('+data+')');
+         if(according == "has_son"){
+            $('#lab_del').text('该模块有子模块，不能被删除！');    	
+            $('#myModal_del_no').modal('show'); 
+         }
+         else if(according == "has_case"){
+            $('#lab_del').text('该模块下包含用例，不能被删除！');    	
+            $('#myModal_del_no').modal('show'); 
+         }
+         else{
+           $('#procate_id_del').val(id);
+           $('#myModal_del').modal('show'); 
+         }
+     })      
  }
    
    
