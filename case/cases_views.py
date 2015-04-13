@@ -179,13 +179,25 @@ def update_rank(request):
 	try:
 		rank_dict = json.loads(request.POST['rankdict'])
 		module_id = request.POST['mid']
-		print rank_dict
-		print module_id
-		for key in rank_dict.keys():
-			tc = testcase.objects.get(id=key)
-			tc.rank = rank_dict[key]
-			tc.module_id = module_id
-			tc.save()
+
+		print "--------------!!"
+		print "mid", module_id
+		print "rank_dict",rank_dict
+
+		if int(module_id):#更新用例rank
+			for key in rank_dict.keys():
+				tc = testcase.objects.get(id=key)
+				tc.rank = rank_dict[key]
+				if int(module_id) != -1:
+					print "here\n"
+					tc.module_id = module_id
+				tc.save()
+		else:#更新模块rank
+			for key in rank_dict.keys():
+				md = casemodule.objects.get(id=key)
+				md.rank = rank_dict[key]
+				md.save()
+			
 		resp["success"] = True
 	except Exception,e:
 		resp["success"] = False

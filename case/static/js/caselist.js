@@ -59,21 +59,53 @@ $(document).ready(function(){
 
 	function insert_update_rank(celement){	
     	var pelement = celement.prev();
+        var rankdic = {}
+        var newrank = 1
     	if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
     		celement.attr("rank", "1");
     	}
     	else{
-    		celement.attr("rank", parseInt(pelement.attr("rank"))+1);
+            newrank = parseInt(pelement.attr("rank"))+1;
+    		celement.attr("rank", newrank);
 
     	}
+        var cid = celement.attr("value");
+        if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+            rankdic[cid] = newrank;
+        }
+        else{
+            celement.find("input").eq(0).attr("checked", "checked");
+        } 
+
+
     	celement.find("input").eq(0).attr("checked", "checked");
     	var classname = celement.attr("class")
     	var nx = celement.nextAll().filter("."+classname);
+        
+        var mid = 0
+        if(classname == "mtr"){
+            mid = -1
+        }
+
     	nx.each(function(){
-    		var newrank = parseInt($(this).attr("rank"))+1;
+    		newrank = parseInt($(this).attr("rank"))+1;
     		$(this).attr("rank", newrank);
-    		$(this).find("input").eq(0).attr("checked", "checked");
+            cid = $(this).attr("value");
+            if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                rankdic[cid] = newrank;
+            }
+            else{
+                $(this).find("input").eq(0).attr("checked", "checked");
+            }
     	});
+        rankdic = JSON.stringify(rankdic);
+        url = "/case/updaterank/";
+        para = {"mid":mid, "rankdict":rankdic};
+        $.post(url, para, function(data){
+            alert("ok");
+        }); 
+
+
 
     }
 
@@ -83,21 +115,39 @@ $(document).ready(function(){
     	if(nextele.length !== 0 || classname == "cmodule"){	    	
             console.log(classname);
 	    	var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
+            var rankdic = {}
+            var mid = 0
+            if(classname == "mtr"){
+                mid = -1
+            }
 	    	nx.each(function(){//rank值依次减1
 	    		var newrank = parseInt($(this).attr("rank"))-1;
+                var cid = $(this).attr("value");//取该模块/用例的id
 	    		$(this).attr("rank", newrank);
-	    		$(this).find("input").eq(0).attr("checked", "checked");
+                if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                    rankdic[cid] = newrank;
+                }
+                else{
+                    $(this).find("input").eq(0).attr("checked", "checked");
+                }
 	    	});
+            rankdic = JSON.stringify(rankdic);
+            url = "/case/updaterank/";
+            para = {"mid":mid, "rankdict":rankdic};
+            $.post(url, para, function(data){
+                alert("ok");
+            }); 
+
 	    	//如果删掉的是模块，模块下用例的rank值也要变化
             //删掉模块后，用例是直接接到上一个模块下，
             //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
 	    	if(classname == "cmodule"){
 	    		var ccase = celement.find(".mtr");//该模块下所有用例
 	    		var cnum = celement.prev().find(".mtr").last().attr("rank");
-                var mid = celement.prev().attr("value");
+                mid = celement.prev().attr("value");
 	    		var i = 1;
 
-                var rankdic = {}
+                rankdic = {}
 
 		    	ccase.each(function(){
 		    		var newrank = parseInt(cnum)+i;
@@ -106,19 +156,14 @@ $(document).ready(function(){
 		    		$(this).attr("rank", newrank);
                     if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
                         rankdic[cid] = newrank;
-/*                        rankdic = rankdic +cid+":"+newrank+","*/
-
                     }
                     else{
-                        console.log("no id");
                         $(this).find("input").eq(0).attr("checked", "checked");
                     }
 		    	});
                 rankdic = JSON.stringify(rankdic);
                 url = "/case/updaterank/";
                 para = {"mid":mid, "rankdict":rankdic};
-                console.log(rankdic);
-                console.log(typeof(rankdic));
                 $.post(url, para, function(data){
 /*                    var rs = eval('('+data+')');
                     if(rs.success){
