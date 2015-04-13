@@ -88,6 +88,7 @@ def case_list(request,pid):
 
 def allcaselist(request):
 	case = {}
+	mid = {}
 	cmodule = testcase.objects.all()
 	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 	caseresult = result.objects.filter(testcase__in = cmodule)
@@ -97,7 +98,7 @@ def allcaselist(request):
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.m_name] = cmodule.filter(module = m.id)
+		case[m.id] = cmodule.filter(module = m.id)
 	print case
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
 
@@ -157,7 +158,6 @@ def execute_case(request):
 		executor = request.session['realname']
 		executorid = request.session['id']
 		exec_date = datetime.datetime.now()
-		print exec_date
 		cr = result(testcase_id=caseid, result=cresult, exec_date=exec_date, executor=executor, executorid=executorid, isactived=1)
 		cr.save()
 		exedetail = {}

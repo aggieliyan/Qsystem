@@ -497,6 +497,14 @@ $(document).ready(function(){
         }
     };
 
+    cmid = $(".cmoduleid").length;
+    console.log(cmid);
+    for (i=0;i<cmid;i++){
+        $(".cmodule").eq(i).attr("rank",$(".cmoduleid").eq(i).val());
+
+    }
+    
+
      $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         autoclose: true,
