@@ -79,26 +79,55 @@ $(document).ready(function(){
 
     function delete_update_rank(celement){
     	var nextele = celement.next();
-    	if(nextele.length !== 0){
-	    	var classname = celement.attr("class")
-	    	var nx = celement.nextAll().filter("."+classname);
-	    	nx.each(function(){
+        var classname = celement.attr("class");
+    	if(nextele.length !== 0 || classname == "cmodule"){	    	
+            console.log(classname);
+	    	var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
+	    	nx.each(function(){//rank值依次减1
 	    		var newrank = parseInt($(this).attr("rank"))-1;
 	    		$(this).attr("rank", newrank);
 	    		$(this).find("input").eq(0).attr("checked", "checked");
 	    	});
-	    	//如果删掉模块，模块下用例的rank值也要变化
+	    	//如果删掉的是模块，模块下用例的rank值也要变化
+            //删掉模块后，用例是直接接到上一个模块下，
+            //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
 	    	if(classname == "cmodule"){
-	    		var ccase = celement.find(".mtr");
-	    		var cnum = celement.prev().find(".mtr").length;
+	    		var ccase = celement.find(".mtr");//该模块下所有用例
+	    		var cnum = celement.prev().find(".mtr").last().attr("rank");
+                var mid = celement.prev().attr("value");
 	    		var i = 1;
 
+                var rankdic = {}
+
 		    	ccase.each(function(){
-		    		var newrank = cnum+i;
+		    		var newrank = parseInt(cnum)+i;
 		    		i = i+1;
+                    var cid = $(this).attr("value");
 		    		$(this).attr("rank", newrank);
-		    		$(this).find("input").eq(0).attr("checked", "checked");
-		    	});	    		
+                    if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                        rankdic[cid] = newrank;
+/*                        rankdic = rankdic +cid+":"+newrank+","*/
+
+                    }
+                    else{
+                        console.log("no id");
+                        $(this).find("input").eq(0).attr("checked", "checked");
+                    }
+		    	});
+                rankdic = JSON.stringify(rankdic);
+                url = "/case/updaterank/";
+                para = {"mid":mid, "rankdict":rankdic};
+                console.log(rankdic);
+                console.log(typeof(rankdic));
+                $.post(url, para, function(data){
+/*                    var rs = eval('('+data+')');
+                    if(rs.success){
+                        alert("ok");
+                    }else{
+                        alert("fail");
+                    }*/
+                    alert("ok");
+                });		
 	    	}  	
     	}
     }
@@ -138,7 +167,7 @@ $(document).ready(function(){
 	});
 
 
-    //点击选择级别
+    //双击选择级别
     $(".level").live('dblclick', function(){
         var tdnode = $(this);
         var tdTest = tdnode.text();
@@ -159,25 +188,26 @@ $(document).ready(function(){
         tp.siblings().eq(0).find("input").attr("checked", "checked");    
     })
 
-    //点击执行用例
+    //点击执行用例，主要是把下拉框显示出来供用户选择，图标和下拉框不能同时显示
     $(".icon-play-circle").live('click', function(){
-        var caseid = $(this).parents(".mtr").attr("value");
+        var exeico = $(this);
+        var caseid = exeico.parents(".mtr").attr("value");
+        
         if(caseid !== ""){//有用例id的才可以执行
-            $(this).next().next().remove();
-            var sel = $(this).next();
-            if(sel.length == 0){
-                $(this).after(resulthtml);
-                $(this).toggle();       
+            exeico.next().next().remove();
+            var sel = exeico.next();//执行图标后面的元素可能是下拉框，也可能是上回的执行结果,或者什么也没有
+            if(sel.length == 0){//什么也没有的情况下，就生成一个下拉框供用户选择执行结果，并把执行图标隐藏
+                exeico.after(resulthtml);
+                exeico.toggle();       
             }else{
-                if(sel.attr("class") == "cresult"){
+                if(sel.attr("class") == "cresult"){//如果后面是下拉框，则把下拉框显示出来
                     sel.toggle();             
-                }else{
-                    $(this).after(resulthtml);
+                }else{//如果后面是执行结果，则生成下拉框，并把执行结果删掉
+                    exeico.after(resulthtml);
                     sel.remove();//上一轮的结果删掉
                 }
-                $(this).toggle();
+                exeico.toggle();//隐藏执行图标
             }
-            //将这一次的执行结果保存到数据库
             
         }
 
@@ -185,12 +215,30 @@ $(document).ready(function(){
 
     //选择执行结果
     $(".cresult").live('change', function(){
-        var result = $(this).val();
-        $(this).prev().toggle();
-        $(this).after("<span>"+result+"</span>");
-        $(this).toggle();
+        var rsdrop = $(this);
+        var result = rsdrop.val();
+        var caseid = rsdrop.parents(".mtr").attr("value");
+        $(this).prev().toggle();//把前面的执行图标显示出来
+        //将结果存入数据库
+        url = "/case/executecase/";
+        para = {"caseid":caseid, "cresult":result};
+        $.post(url, para, function(data){
+            var rs = eval('('+data+')');
+            if(rs.success){
+                rsdrop.after("<span>"+result+"</span>");//在后面生成结果
+                rsdrop.toggle();//隐藏下拉选择框               
 
-    })
+                //更新后端返回的执行时间和执行人
+                rsdrop.parent().next().next().text(rs.exedetail.exec_date);
+                rsdrop.parent().next().next().next().text(rs.exedetail.executor);
+/*                alert("执行成功！");*/
+
+            }else{
+                alert("执行失败！请重试");
+            }
+        });
+
+    });
 
 	//插入模块后用例后，赋rank值
 
@@ -205,7 +253,7 @@ $(document).ready(function(){
     $(".icon-plus-sign").live('click', function(){
         var cmodule = $(this).parents(".cmodule");
         cmodule.after(modulehtml);
-        update_rank(cmodule.next());
+        insert_update_rank(cmodule.next());
     });
 
     function checkall(master, slave){

@@ -1,5 +1,10 @@
 # coding=utf-8
+<<<<<<< HEAD
 from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse,get_object_or_404
+=======
+import datetime
+from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse
+>>>>>>> origin/case
 from models import testcase, casemodule, category, result
 from forms import searchForm
 import json
@@ -132,6 +137,7 @@ def categorysearch(request):
 	# print clist
 	return HttpResponse(json.dumps(clist))
 
+<<<<<<< HEAD
 def exec_log(request,pid):
 	clist={}
 	record = []
@@ -147,3 +153,52 @@ def exec_log(request,pid):
 		recorddic["remark"] = item.r_remark
 		record.append(recorddic)
 	return HttpResponse(json.dumps(record))
+=======
+def execute_case(request):
+	resp = {}
+	try:
+		caseid = request.POST['caseid']
+		cresult = request.POST['cresult']
+		executor = request.session['realname']
+		executorid = request.session['id']
+		exec_date = datetime.datetime.now()
+		cr = result(testcase_id=caseid, result=cresult, exec_date=exec_date, executor=executor, executorid=executorid, isactived=1)
+		cr.save()
+		exedetail = {}
+		exedetail['exec_date'] = exec_date.strftime("%Y-%m-%d %H:%M:%S")
+		exedetail['executor'] = executor 
+		resp["success"] = True
+		resp["exedetail"] = exedetail
+	except Exception, e:
+		resp["success"] = False
+		resp["message"] = e
+	finally:	
+		resp = json.dumps(resp)
+
+		return HttpResponse(resp)
+
+
+def update_rank(request):
+	resp = {}
+	try:
+		rank_dict = json.loads(request.POST['rankdict'])
+		module_id = request.POST['mid']
+		print rank_dict
+		print module_id
+		for key in rank_dict.keys():
+			tc = testcase.objects.get(id=key)
+			tc.rank = rank_dict[key]
+			tc.module_id = module_id
+			tc.save()
+		resp["success"] = True
+	except Exception,e:
+		resp["success"] = False
+		print e
+		# resp["message"] = e
+	finally:
+		resp = json.dumps(resp)
+		# print "resp==",resp
+
+		return HttpResponse(resp)
+
+>>>>>>> origin/case

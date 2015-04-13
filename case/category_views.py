@@ -1,10 +1,11 @@
 # coding=utf-8
 
-from django.shortcuts import render_to_response, redirect, RequestContext, HttpResponseRedirect
-from models import category   
-from case.forms import add_procateForm, edit_procateForm
+from django.shortcuts import render_to_response, \
+RequestContext, HttpResponseRedirect, HttpResponse
+from models import category, testcase   
+from case.forms import add_procateForm, edit_procateForm, del_procateForm
 import datetime
-
+import json
 def product_category(request):
     #if not request.user.is_authenticated():
 		#return HttpResponseRedirect("/nologin")
@@ -33,10 +34,9 @@ def product_category(request):
                         for procate_third in procate_thirds:
                             third_ids[procate_third.id] = procate_second.id
                             third_names[procate_third.id] = procate_third.name 
-      
     return render_to_response("case/product_category.html",RequestContext(request, \
-    {'procate_firsts':procate_firsts, 'second_ids':second_ids.items(), \
-     'second_names':second_names.items(), 'third_ids':third_ids.items(), \
+    {'procate_firsts':procate_firsts, 'second_ids':sorted(second_ids.items()), \
+     'second_names':second_names.items(), 'third_ids':sorted(third_ids.items()), \
      'third_names':third_names.items(), 'first_secounts':first_secounts.items(), \
      'second_thicounts':second_thicounts.items()}))
     
@@ -62,11 +62,34 @@ def edit_procate(request, url):
         form = edit_procateForm(request.POST)
         if form.is_valid():
             procate_id = form.cleaned_data['procate_id1']
-            old_level = category.objects.filter(id = procate_id)[0].level
-            old_parentid = category.objects.filter(id = procate_id)[0].parent_id
             procate_name = form.cleaned_data['procate_title1']
-            pro_cate = category(id = procate_id, name = procate_name, \
-                                parent_id = old_parentid, level = old_level, isactived = 1)            
+            pro_cate = category.objects.get(id = procate_id)
+            pro_cate.name = procate_name          
             pro_cate.save()                  
     return HttpResponseRedirect(url)
 
+def delprocate_confirm(request): 
+    procate_id = request.GET['procate_id']
+    son_category = category.objects.filter(parent_id = procate_id, isactived = 1)   
+    son_count = son_category.count()
+    testcases = testcase.objects.filter(category_id = procate_id, isactived = 1)
+    cast_count = testcases.count()
+    if son_count > 0:
+        according = "has_son"
+    elif cast_count > 0:
+        according = "has_case"
+    else:
+        according = "no"  
+    accord = json.dumps(according)
+    print accord
+    return HttpResponse(accord)
+       
+def del_procate(request, url):
+    if request.method == 'POST':
+        form = del_procateForm(request.POST)
+        if form.is_valid():
+            procate_id = form.cleaned_data['procate_id_del']
+            pro_cate = category.objects.get(id = procate_id)
+            pro_cate.isactived = 0
+            pro_cate.save()  
+    return HttpResponseRedirect(url)
