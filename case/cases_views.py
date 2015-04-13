@@ -1,10 +1,6 @@
 # coding=utf-8
-<<<<<<< HEAD
-from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse,get_object_or_404
-=======
 import datetime
 from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse
->>>>>>> origin/case
 from models import testcase, casemodule, category, result
 from forms import searchForm
 import json
@@ -137,7 +133,6 @@ def categorysearch(request):
 	# print clist
 	return HttpResponse(json.dumps(clist))
 
-<<<<<<< HEAD
 def exec_log(request,pid):
 	clist={}
 	record = []
@@ -153,7 +148,6 @@ def exec_log(request,pid):
 		recorddic["remark"] = item.r_remark
 		record.append(recorddic)
 	return HttpResponse(json.dumps(record))
-=======
 def execute_case(request):
 	resp = {}
 	try:
@@ -200,5 +194,3 @@ def update_rank(request):
 		# print "resp==",resp
 
 		return HttpResponse(resp)
-
->>>>>>> origin/case
