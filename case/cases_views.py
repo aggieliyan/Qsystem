@@ -105,21 +105,22 @@ def allcaselist(request):
 def categorysearch(request):
 	clist = []
 	#一级
-	master = category.objects.filter(parent_id__isnull=True)
+	# master = category.objects.filter(parent_id__isnull=True)
+	master = category.objects.filter(parent_id = 0, isactived = 1)
 	#二级
 	for m in master:
 		categorydic = {}
 		s = {}
 		categorydic["master"]=m.name
 		categorydic["masterid"] = m.id
-		second = category.objects.filter(parent_id = m.id)
+		second = category.objects.filter(parent_id = m.id, isactived = 1)
 		slist = []
 		ms = []
 		for s in second:
 			msdic = {}					
 			msdic["second"] = s.name
 			msdic["secondid"] = s.id			
-			third = category.objects.filter(parent_id = s.id)			
+			third = category.objects.filter(parent_id = s.id, isactived = 1)			
 			td = []
 			for t in third:
 				thirdic = {}			
@@ -142,7 +143,7 @@ def exec_log(request,pid):
 	record.append(clist);
 	for item in loglist:
 		recorddic = {}
-		recorddic["date"] = str(item.exec_date)
+		recorddic["date"] = (item.exec_date).strftime("%Y-%m-%d %H:%M:%S")
 		recorddic["executor"] = item.executor
 		recorddic["result"] = item.result
 		recorddic["remark"] = item.r_remark
@@ -156,6 +157,7 @@ def execute_case(request):
 		executor = request.session['realname']
 		executorid = request.session['id']
 		exec_date = datetime.datetime.now()
+		print exec_date
 		cr = result(testcase_id=caseid, result=cresult, exec_date=exec_date, executor=executor, executorid=executorid, isactived=1)
 		cr.save()
 		exedetail = {}
