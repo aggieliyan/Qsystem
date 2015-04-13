@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse
+from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse,get_object_or_404
 from models import testcase, casemodule, category, result
 from forms import searchForm
 import json
@@ -131,3 +131,19 @@ def categorysearch(request):
 		clist.append(categorydic)
 	# print clist
 	return HttpResponse(json.dumps(clist))
+
+def exec_log(request,pid):
+	clist={}
+	record = []
+	loglist = result.objects.filter(testcase_id = int(pid))
+	execrecord = list(loglist.values_list("result", flat = True))
+	clist["Pass"] = execrecord.count("Pass")
+	record.append(clist);
+	for item in loglist:
+		recorddic = {}
+		recorddic["date"] = str(item.exec_date)
+		recorddic["executor"] = item.executor
+		recorddic["result"] = item.result
+		recorddic["remark"] = item.r_remark
+		record.append(recorddic)
+	return HttpResponse(json.dumps(record))

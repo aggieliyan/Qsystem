@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^edit_procate/', category_views.edit_procate,{'url':'../procate/'},name="edit_procate"),
 	url(r'^pull/', casepull_views.case_pull, name='casepull'),
 	url(r'^casecate/', cases_views.categorysearch),
+	url(r'^execlog/(\d+)/$', cases_views.exec_log,name="execlog"),
 )

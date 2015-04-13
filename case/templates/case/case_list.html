@@ -3,6 +3,7 @@
 {% block head %}
 <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link href="/static/css/case_list.css" rel="stylesheet" media="screen">
+<link href="/static/css/case_box.css" rel="stylesheet" media="screen">
 
 {% endblock %}
 {% block content %}
@@ -194,10 +195,11 @@
 						      			<a class="icon-download-alt" title="引入用例"></a>
 						      			<a class="icon-eye-open" title="查看结果"></a>
 						      			<a class="icon-trash"></a>
+                        <input  value="{{c.id}}" class="checkresult" type="hidden">
 						      		</td> 
+
 	    						</tr>
-	    						{% endfor %}
-	    						
+	    						{% endfor %}						
 
 	    					</tbody>
 	    				</table>
@@ -347,6 +349,7 @@
     </div>
   	</div>
 </div>
+ {% include "case/exec_log.html" %}
 
 
 {% endblock %}
