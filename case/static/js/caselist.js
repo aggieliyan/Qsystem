@@ -496,15 +496,6 @@ $(document).ready(function(){
             $(".mold option[value="+$(".hide-mold").val()+"]").attr("selected",true);
         }
     };
-
-    cmid = $(".cmoduleid").length;
-    console.log(cmid);
-    for (i=0;i<cmid;i++){
-        $(".cmodule").eq(i).attr("rank",$(".cmoduleid").eq(i).val());
-
-    }
-    
-
      $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         autoclose: true,
