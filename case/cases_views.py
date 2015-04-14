@@ -1,6 +1,7 @@
 # coding=utf-8
 import datetime
-from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse
+from django.shortcuts import render_to_response, redirect, RequestContext, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from models import testcase, casemodule, category, result
 from forms import searchForm
 import json
@@ -80,7 +81,7 @@ def case_list(request,pid):
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id)
+		case[m.id] = cmodule.filter(module = m.id, isactived = 1)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
@@ -98,7 +99,7 @@ def allcaselist(request):
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id)
+		case[m.id] = cmodule.filter(module = m.id, isactived = 1)
 	print case
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
 
@@ -179,13 +180,25 @@ def update_rank(request):
 	try:
 		rank_dict = json.loads(request.POST['rankdict'])
 		module_id = request.POST['mid']
-		print rank_dict
-		print module_id
-		for key in rank_dict.keys():
-			tc = testcase.objects.get(id=key)
-			tc.rank = rank_dict[key]
-			tc.module_id = module_id
-			tc.save()
+
+		print "--------------!!"
+		print "mid", module_id
+		print "rank_dict",rank_dict
+
+		if int(module_id):#更新用例rank
+			for key in rank_dict.keys():
+				tc = testcase.objects.get(id=key)
+				tc.rank = rank_dict[key]
+				if int(module_id) != -1:
+					print "here\n"
+					tc.module_id = module_id
+				tc.save()
+		else:#更新模块rank
+			for key in rank_dict.keys():
+				md = casemodule.objects.get(id=key)
+				md.rank = rank_dict[key]
+				md.save()
+			
 		resp["success"] = True
 	except Exception,e:
 		resp["success"] = False
@@ -196,3 +209,10 @@ def update_rank(request):
 		# print "resp==",resp
 
 		return HttpResponse(resp)
+
+def singledel(request,pid):
+	ua = request.META['HTTP_REFERER']
+	delcase = get_object_or_404(testcase,pk=int(pid))
+	delcase.isactived = 0
+	delcase.save()
+	return HttpResponseRedirect(ua)

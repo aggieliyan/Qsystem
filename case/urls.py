@@ -17,4 +17,6 @@ urlpatterns = patterns('',
 	url(r'^execlog/(\d+)/$', cases_views.exec_log,name="execlog"),
 	url(r'^executecase/', cases_views.execute_case),
 	url(r'^updaterank/', cases_views.update_rank),
+	url(r'^singledel/(\d+)/$', cases_views.singledel,name='singledel'),
+	url(r'^singledel/(\d+)/$', cases_views.singledel,name="\'singledel\'"),
 )
