@@ -120,3 +120,8 @@ button, input, {
     text-overflow: ellipsis;
     margin-left: -25px;
 }
+
+.pager li span input {
+	width: 20px;
+	height: 14px;
+}
