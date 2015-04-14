@@ -4,7 +4,7 @@ $(document).ready(function(){
     console.log("width:"+swidth+"px;");
     $(".fixbar").attr("style", "width:"+swidth+"px;");*/
 
-    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck\" type=\"checkbox\" checked='checked'>1</td>"+
+    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked'>1</td>"+
 			      		"<td class=\"editable nodrag\"></td>"+
 			      		"<td class=\"editable nodrag\"></td>"+
 			    		"<td class=\"editable nodrag\"></td>"+
