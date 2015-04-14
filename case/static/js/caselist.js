@@ -556,7 +556,7 @@ $(document).ready(function(){
     });*/
 /*
     window.onbeforeunload = function(event){return confirm("确定离开此页面吗？"); }*/
-
+  //备注弹框信息显示
     $(".icon-eye-open").click(function(){
         $('#myModal').modal('show');
         cpid = $(this).parent().children().eq(4).val();
@@ -579,4 +579,20 @@ $(document).ready(function(){
             $(".boxtable").html(recordhtml);          
         });
     })
+
+    //保存用例
+    // $(".savebtn").click(function(){
+    //         var arrChk=$("input[class='casecheck']:checked");
+    //         var caselist = {"precon":}
+    //         $(arrChk).each(function(){
+    //             value=this.value + "," + value;
+    //         });
+    //         if (value) {
+    //             $("#bulk_sid").val(value);
+    //             $("#addmodule").modal('show')
+    //         }           
+    //         else{
+    //             alert("请勾选项目后再进行批量操作！");
+    //         }               
+    //     });
 });

@@ -198,7 +198,7 @@
 						      			<a class="icon-plus" title="添加用例"></a>
 						      			<a class="icon-download-alt" title="引入用例"></a>
 						      			<a class="icon-eye-open" title="查看结果"></a>
-						      			<a class="icon-trash"></a>
+						      			<a class="icon-trash" href="{% url 'singledel' c.id %}"></a>
                         <input  value="{{c.id}}" class="checkresult" type="hidden">
 						      		</td> 
 
@@ -349,7 +349,7 @@
         </tbody>
     </table>
     <div class="fixbar">
-    	<button class="btn btn-success savebtn">保存</button>
+    	<button class="btn btn-success savebtn" onclick="accept()">保存</button>
     </div>
   	</div>
 </div>
@@ -361,5 +361,5 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150406"></script>   
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150406"></script> 
 {% endblock %}
