@@ -349,6 +349,7 @@ $(document).ready(function(){
     $(".icon-trash").live('click', function(){
 
     	if(confirm("你确定要删除吗？")){
+            return true;
     		var node = $(this).parent().parent();
     		if(node.attr("class") == "mtr"){//删除用例
     			delete_update_rank(node);
@@ -382,6 +383,9 @@ $(document).ready(function(){
     		    }
             }
     	}
+        else{
+            return false;
+        }            
     });
 
 
