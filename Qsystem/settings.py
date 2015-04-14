@@ -79,7 +79,7 @@ else:
     'django.contrib.staticfiles',
     'project',
     'case',
-    'pipeline',
+    #'pipeline',
     # 'django_crontab',
     # 'debug_toolbar',
 )

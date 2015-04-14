@@ -1,0 +1,18 @@
+.mybtn-success{color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25);background-color:#339966;*background-color:#51a351;background-image:linear-gradient(to bottom,#62c462,#51a351);background-image:-webkit-gradient(linear,0 0,0 100%,from(#62c462),to(#51a351));background-image:-webkit-linear-gradient(top,#62c462,#51a351);background-image:-o-linear-gradient(top,#62c462,#51a351);background-image:linear-gradient(to bottom,#62c462,#51a351);background-repeat:repeat-x;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff51a351',GradientType=0);filter:progid:DXImageTransform.Microsoft.gradient(enabled=false)}.mybtn-success:hover,.mybtn-success:focus,.mybtn-success:active,.mybtn-success.active,.mybtn-success.disabled,.mybtn-success[disabled]{color:#fff;background-color:#51a351;*background-color:#499249}.mybtn-success:active,.mybtn-success.active{background-color:#408140 \9}
+.mymodal-header{
+	padding:3px 15px;
+	border-bottom:1px solid #eee;
+	background-color: #339966;
+}
+.mymodal-header .close{margin-top:2px}.mymodal-header h3{margin:0;line-height:30px}
+.boxtable{
+	width:auto;
+}
+.boxtable td{
+	border-top: 0px;
+}
+.myinput{
+	display:inline-block;
+	margin-bottom:0;
+	width: auto;
+}

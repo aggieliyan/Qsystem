@@ -6,14 +6,87 @@
 {% endblock %}
 {% block content %}
 <div class="row-fluid">
-  	<div class="span12">
-  	<span style='color:red'>您正在进行中的项目：项目1 项目2 项目3</span>	
-  	</div>
-  		
-  	</div>
-  </div>
 
+    <div class="span12" >
+  	    <div class='nowpro'>
+  	        <span style='color:red;'>您正在进行中的项目：项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
+  	                                项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
+  	                               项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
+  	        </span>
+  	    </div>
+  	    <div class='creatfirst'>
+  	        <a id='add_firstprocate' class='add-first-procate' onclick="add_firprocate()">新建一级产品模块</a>
+  	    </div>	
+   </div>
+   
+    <div class='show_procate' style='float:left;width:100%;'>
+        {% if procate_firsts %}
+        {% for procate_first in procate_firsts %}
+           <div class='procate-one'>
+                {% for firstid, value in first_secounts %}
+                    {% if firstid == procate_first.id and value == 1 %}
+                <a class='procate-a1_minus' id='a1_first{{procate_first.id}}' onclick="first_change_minadd({{procate_first.id}})" ></a>
+                    {% else %}        
+                    {% endif %}
+                {% endfor %}
+                <div class='procate-div'>{{procate_first.name}}</div>
+                <a class='procate-a2' href="{% url 'caselist' procate_first.id %}" >管理用例</a>
+                <a class='procate-a3' onclick='edit_procate({{procate_first.id}},"{{procate_first.name}}")'>编辑</a>
+                <a class='procate-a4' onclick='add_procate({{procate_first.id}},1)'>添加子模块</a>
+                <a class='procate-a5' onclick='del_procate({{procate_first.id}})'>删除</a>      
+           </div>
+            
+           <div id='contain-secthird{{procate_first.id}}'>
+           {% for secid, firstid in second_ids %}
+            {% if firstid == procate_first.id  %}
+               <div class='procate-second'>
+                   {% for second_id, value in second_thicounts %}
+                       {% if second_id == secid and value == 1 %}
+                   <a class='procate-a1_add' id='a1_second{{secid}}' onclick="sec_change_minadd({{secid}})"></a>
+                       {% else %}            
+                       {% endif %}
+                   {% endfor %}
+                   
+                   {% for second_id, secname in second_names %}
+                      {% if second_id == secid %}     
+                      <div class='procate-div'>{{ secname }}</div>
+                      <a class='procate-a2' href="{% url 'caselist' secid %}">管理用例</a>
+                      <a class='procate-a3' onclick='edit_procate({{secid}},"{{secname}}")'>编辑</a>
+                      <a class='procate-a4' onclick='add_procate({{secid}},2)'>添加子模块</a>
+                      <a class='procate-a5' onclick='del_procate({{secid}})'>删除</a>
+                      {% endif %}
+                   {% endfor %}   
+               </div>
+               
+                       {% for thirid, secid1 in third_ids %}
+                         {% if secid1 == secid %}
+                            <div class='procate-third procate-third{{secid}}' >
+                                {% for third_id, thiname in third_names %}
+                                   {% if third_id == thirid %} 
+                                   <div class='procate-div'>{{ thiname }}</div>
+                                   <a class='procate-a2' href="{% url 'caselist' thirid %}">管理用例</a>
+                                   <a class='procate-a3' onclick='edit_procate({{thirid}},"{{thiname}}")'>编辑</a>
+                                   <a class='procate-a4' onclick='add_procate({{thirid}},3)'>添加子模块</a>
+                                   <a class='procate-a5' onclick='del_procate({{thirid}})'>删除</a>  
+                                   {% endif %}
+                                {% endfor %} 
+                           </div>              
+                         {% endif %}
+                      {% endfor %}
+                      
+            {% endif %}
+           {% endfor %}               
+           </div> 
+                      
+       {% endfor %}               
+       {% endif %}
+    </div>
+	
+</div>
+
+{% include "case/procate_relateWindow.html" %}
 {% endblock %}
 {% block js %}
     <script type='text/javascript' src="/static/js/procate.js?v=20150315"></script>
+    <script type='text/javascript' src="/static/js/bootstrap.min.js"></script>
 {% endblock %}

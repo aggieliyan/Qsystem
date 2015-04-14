@@ -4,7 +4,7 @@ $(document).ready(function(){
     console.log("width:"+swidth+"px;");
     $(".fixbar").attr("style", "width:"+swidth+"px;");*/
 
-    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck\" type=\"checkbox\" checked='checked'>1</td>"+
+    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked'>1</td>"+
 			      		"<td class=\"editable nodrag\"></td>"+
 			      		"<td class=\"editable nodrag\"></td>"+
 			    		"<td class=\"editable nodrag\"></td>"+
@@ -59,46 +59,120 @@ $(document).ready(function(){
 
 	function insert_update_rank(celement){	
     	var pelement = celement.prev();
+        var rankdic = {}
+        var newrank = 1
     	if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
     		celement.attr("rank", "1");
     	}
     	else{
-    		celement.attr("rank", parseInt(pelement.attr("rank"))+1);
+            newrank = parseInt(pelement.attr("rank"))+1;
+    		celement.attr("rank", newrank);
 
     	}
+        var cid = celement.attr("value");
+        if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+            rankdic[cid] = newrank;
+        }
+        else{
+            celement.find("input").eq(0).attr("checked", "checked");
+        } 
+
+
     	celement.find("input").eq(0).attr("checked", "checked");
     	var classname = celement.attr("class")
     	var nx = celement.nextAll().filter("."+classname);
+        
+        var mid = 0
+        if(classname == "mtr"){
+            mid = -1
+        }
+
     	nx.each(function(){
-    		var newrank = parseInt($(this).attr("rank"))+1;
+    		newrank = parseInt($(this).attr("rank"))+1;
     		$(this).attr("rank", newrank);
-    		$(this).find("input").eq(0).attr("checked", "checked");
+            cid = $(this).attr("value");
+            if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                rankdic[cid] = newrank;
+            }
+            else{
+                $(this).find("input").eq(0).attr("checked", "checked");
+            }
     	});
+        rankdic = JSON.stringify(rankdic);
+        url = "/case/updaterank/";
+        para = {"mid":mid, "rankdict":rankdic};
+        $.post(url, para, function(data){
+            alert("ok");
+        }); 
+
+
 
     }
 
     function delete_update_rank(celement){
     	var nextele = celement.next();
-    	if(nextele.length !== 0){
-	    	var classname = celement.attr("class")
-	    	var nx = celement.nextAll().filter("."+classname);
-	    	nx.each(function(){
+        var classname = celement.attr("class");
+    	if(nextele.length !== 0 || classname == "cmodule"){	    	
+            console.log(classname);
+	    	var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
+            var rankdic = {}
+            var mid = 0
+            if(classname == "mtr"){
+                mid = -1
+            }
+	    	nx.each(function(){//rank值依次减1
 	    		var newrank = parseInt($(this).attr("rank"))-1;
+                var cid = $(this).attr("value");//取该模块/用例的id
 	    		$(this).attr("rank", newrank);
-	    		$(this).find("input").eq(0).attr("checked", "checked");
+                if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                    rankdic[cid] = newrank;
+                }
+                else{
+                    $(this).find("input").eq(0).attr("checked", "checked");
+                }
 	    	});
-	    	//如果删掉模块，模块下用例的rank值也要变化
+            rankdic = JSON.stringify(rankdic);
+            url = "/case/updaterank/";
+            para = {"mid":mid, "rankdict":rankdic};
+            $.post(url, para, function(data){
+                alert("ok");
+            }); 
+
+	    	//如果删掉的是模块，模块下用例的rank值也要变化
+            //删掉模块后，用例是直接接到上一个模块下，
+            //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
 	    	if(classname == "cmodule"){
-	    		var ccase = celement.find(".mtr");
-	    		var cnum = celement.prev().find(".mtr").length;
+	    		var ccase = celement.find(".mtr");//该模块下所有用例
+	    		var cnum = celement.prev().find(".mtr").last().attr("rank");
+                mid = celement.prev().attr("value");
 	    		var i = 1;
 
+                rankdic = {}
+
 		    	ccase.each(function(){
-		    		var newrank = cnum+i;
+		    		var newrank = parseInt(cnum)+i;
 		    		i = i+1;
+                    var cid = $(this).attr("value");
 		    		$(this).attr("rank", newrank);
-		    		$(this).find("input").eq(0).attr("checked", "checked");
-		    	});	    		
+                    if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                        rankdic[cid] = newrank;
+                    }
+                    else{
+                        $(this).find("input").eq(0).attr("checked", "checked");
+                    }
+		    	});
+                rankdic = JSON.stringify(rankdic);
+                url = "/case/updaterank/";
+                para = {"mid":mid, "rankdict":rankdic};
+                $.post(url, para, function(data){
+/*                    var rs = eval('('+data+')');
+                    if(rs.success){
+                        alert("ok");
+                    }else{
+                        alert("fail");
+                    }*/
+                    alert("ok");
+                });		
 	    	}  	
     	}
     }
@@ -138,7 +212,7 @@ $(document).ready(function(){
 	});
 
 
-    //点击选择级别
+    //双击选择级别
     $(".level").live('dblclick', function(){
         var tdnode = $(this);
         var tdTest = tdnode.text();
@@ -148,6 +222,7 @@ $(document).ready(function(){
         tdnode.append(tx);
     })
 
+    //选择用例级别
     $(".lselect").live('change', function(){
         var tx = $(this);
         var etext = tx.val();
@@ -158,28 +233,57 @@ $(document).ready(function(){
         tp.siblings().eq(0).find("input").attr("checked", "checked");    
     })
 
-    //点击执行用例
+    //点击执行用例，主要是把下拉框显示出来供用户选择，图标和下拉框不能同时显示
     $(".icon-play-circle").live('click', function(){
-        var caseid = $(this).parents(".mtr").attr("value");
+        var exeico = $(this);
+        var caseid = exeico.parents(".mtr").attr("value");
+        
         if(caseid !== ""){//有用例id的才可以执行
-            $(this).next().next().remove();
-            var sel = $(this).next();
-            if(sel.length == 0){
-                $(this).after(resulthtml);
-                $(this).toggle();       
+            exeico.next().next().remove();
+            var sel = exeico.next();//执行图标后面的元素可能是下拉框，也可能是上回的执行结果,或者什么也没有
+            if(sel.length == 0){//什么也没有的情况下，就生成一个下拉框供用户选择执行结果，并把执行图标隐藏
+                exeico.after(resulthtml);
+                exeico.toggle();       
             }else{
-                sel.toggle();
-                $(this).toggle();
+                if(sel.attr("class") == "cresult"){//如果后面是下拉框，则把下拉框显示出来
+                    sel.toggle();             
+                }else{//如果后面是执行结果，则生成下拉框，并把执行结果删掉
+                    exeico.after(resulthtml);
+                    sel.remove();//上一轮的结果删掉
+                }
+                exeico.toggle();//隐藏执行图标
             }
+            
         }
 
     });
+
+    //选择执行结果
     $(".cresult").live('change', function(){
-        var result = $(this).val();
-        $(this).prev().toggle();
-        $(this).after("<span>"+result+"<span>");
-        $(this).toggle();
-    })
+        var rsdrop = $(this);
+        var result = rsdrop.val();
+        var caseid = rsdrop.parents(".mtr").attr("value");
+        $(this).prev().toggle();//把前面的执行图标显示出来
+        //将结果存入数据库
+        url = "/case/executecase/";
+        para = {"caseid":caseid, "cresult":result};
+        $.post(url, para, function(data){
+            var rs = eval('('+data+')');
+            if(rs.success){
+                rsdrop.after("<span>"+result+"</span>");//在后面生成结果
+                rsdrop.toggle();//隐藏下拉选择框               
+
+                //更新后端返回的执行时间和执行人
+                rsdrop.parent().next().next().text(rs.exedetail.exec_date);
+                rsdrop.parent().next().next().next().text(rs.exedetail.executor);
+/*                alert("执行成功！");*/
+
+            }else{
+                alert("执行失败！请重试");
+            }
+        });
+
+    });
 
 	//插入模块后用例后，赋rank值
 
@@ -194,7 +298,7 @@ $(document).ready(function(){
     $(".icon-plus-sign").live('click', function(){
         var cmodule = $(this).parents(".cmodule");
         cmodule.after(modulehtml);
-        update_rank(cmodule.next());
+        insert_update_rank(cmodule.next());
     });
 
     function checkall(master, slave){
@@ -291,34 +395,45 @@ $(document).ready(function(){
      //初始化一级类目
     var category_select_1 = function(){
         var c1=$(".cate1").val();
-        temp_html="";
+        temp_html="<option>"+'全部'+"</option>";
         $.each(areaJson,function(i,category_select_1){
              temp_html+="<option value='"+category_select_1.masterid+"'>"+category_select_1.master+"</option>";
         });
         category1.html(temp_html); 
         var n = category1.get(0).selectedIndex;
+        console.log(n);
         if(c1){
             $(".category_select_1 option[value="+c1+"]").attr("selected","true")
         }       
-        if((areaJson[n].slist).length != 0){
+        if(n != 0){
+            if((areaJson[n-1].slist).length != 0){
             category2.show();
-             category_select_2();
+            category_select_2();
+            console.log("mmm");
             if (!c1){
-                $(".cate").attr("value",category1.children().eq(n).val());
+                $(".cate").attr("value",'aa');
             }                    
             $(".cate1").attr("value",category1.children().eq(n).val());
-        };                 
+        };
+        }else{
+          category2.hide();
+          category3.hide();  
+        }
+
+                       
      };
     //赋值二级
     var category_select_2 = function(){
         var c2=$(".cate2").val();
         temp_html="<option>"+'请选择'+"</option>"; 
         var n = category1.get(0).selectedIndex;
-        if((areaJson[n].slist).length == 0){
+        console.log(n);
+        if(n !=0 ){
+            if((areaJson[n-1].slist).length == 0){
             category2.css("display","none");
             category3.css("display","none");
         }else{
-            $.each(areaJson[n].slist,function(i,category_select_2){
+            $.each(areaJson[n-1].slist,function(i,category_select_2){
                 temp_html+="<option value='"+category_select_2.secondid+"'>"+category_select_2.second+"</option>";
             });
             category2.html(temp_html);
@@ -326,7 +441,8 @@ $(document).ready(function(){
                 $(".category_select_2 option[value="+c2+"]").attr("selected","true");
             }
             category_select_3();
-        };             
+        };
+        }                    
     };
     //赋值三级
     var category_select_3 = function(){
@@ -336,18 +452,18 @@ $(document).ready(function(){
         var n = category2.get(0).selectedIndex;
         if(c3){
             category3.css("display","inline");
-            $.each(areaJson[m].slist[n-1].thirdlist,function(i,category_select_3){
+            $.each(areaJson[m-1].slist[n-1].thirdlist,function(i,category_select_3){
                 temp_html+="<option value='"+category_select_3.thirdid+"'>"+category_select_3.third+"</option>";
             });
             category3.html(temp_html);
             $(".category_select_3 option[value="+c3+"]").attr("selected","true");
         }else{
             if(n != 0){
-                if((areaJson[m].slist[n-1].thirdlist).length == 0){
+                if((areaJson[m-1].slist[n-1].thirdlist).length == 0){
                     category3.css("display","none");
                 }else{
                     category3.css("display","inline");
-                    $.each(areaJson[m].slist[n-1].thirdlist,function(i,category_select_3){
+                    $.each(areaJson[m-1].slist[n-1].thirdlist,function(i,category_select_3){
                         temp_html+="<option value='"+category_select_3.thirdid+"'>"+category_select_3.third+"</option>";
                     });
                     category3.html(temp_html);
@@ -425,7 +541,6 @@ $(document).ready(function(){
             $(".mold option[value="+$(".hide-mold").val()+"]").attr("selected",true);
         }
     };
-
      $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         autoclose: true,
@@ -441,4 +556,43 @@ $(document).ready(function(){
     });*/
 /*
     window.onbeforeunload = function(event){return confirm("确定离开此页面吗？"); }*/
+  //备注弹框信息显示
+    $(".icon-eye-open").click(function(){
+        $('#myModal').modal('show');
+        cpid = $(this).parent().children().eq(4).val();
+        console.log(cpid);
+        var url = "/case/execlog/" + cpid;
+        $.get(url, function(data, status){
+            var datalist = eval ("(" + data + ")");
+            var num = datalist.length;
+            $(".title").html("<h5>测试结果：共执行<span>"+(num-1)+"次</span>,通过<span>"+datalist[0].Pass+"次</span></h5>");
+            recordhtml = ''
+            for(var i=1;i<num;i++){
+                recordhtml+="<tr>"+
+                     "<td>#"+i+"</td>"+
+                     "<td>日期："+datalist[i].date+"</td>"+
+                     "<td>执行人："+datalist[i].executor+"</td>"+
+                     "<td>结果："+datalist[i].result+"</td>"+
+                     "<td>备注："+datalist[i].remark+"</td>"+
+                    "</tr>"
+            }  
+            $(".boxtable").html(recordhtml);          
+        });
+    })
+
+    //保存用例
+    // $(".savebtn").click(function(){
+    //         var arrChk=$("input[class='casecheck']:checked");
+    //         var caselist = {"precon":}
+    //         $(arrChk).each(function(){
+    //             value=this.value + "," + value;
+    //         });
+    //         if (value) {
+    //             $("#bulk_sid").val(value);
+    //             $("#addmodule").modal('show')
+    //         }           
+    //         else{
+    //             alert("请勾选项目后再进行批量操作！");
+    //         }               
+    //     });
 });

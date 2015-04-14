@@ -1,5 +1,7 @@
 # coding=utf-8
-from django.shortcuts import render_to_response, redirect, RequestContext,HttpResponse
+import datetime
+from django.shortcuts import render_to_response, redirect, RequestContext, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from models import testcase, casemodule, category, result
 from forms import searchForm
 import json
@@ -79,29 +81,48 @@ def case_list(request,pid):
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.m_name] = cmodule.filter(module = m.id)
+		case[m.id] = cmodule.filter(module = m.id, isactived = 1)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
 
+
+def allcaselist(request):
+	case = {}
+	mid = {}
+	cmodule = testcase.objects.all()
+	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+	caseresult = result.objects.filter(testcase__in = cmodule)
+	listid = caseresult.values_list("testcase", flat=True).distinct()
+	newresult = []
+	for c in listid:
+		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
+		newresult.append(p)
+	for m in testmodule:
+		case[m.id] = cmodule.filter(module = m.id, isactived = 1)
+	print case
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
+
+
 def categorysearch(request):
 	clist = []
 	#一级
-	master = category.objects.filter(parent_id__isnull=True)
+	# master = category.objects.filter(parent_id__isnull=True)
+	master = category.objects.filter(parent_id = 0, isactived = 1)
 	#二级
 	for m in master:
 		categorydic = {}
 		s = {}
 		categorydic["master"]=m.name
 		categorydic["masterid"] = m.id
-		second = category.objects.filter(parent_id = m.id)
+		second = category.objects.filter(parent_id = m.id, isactived = 1)
 		slist = []
 		ms = []
 		for s in second:
 			msdic = {}					
 			msdic["second"] = s.name
 			msdic["secondid"] = s.id			
-			third = category.objects.filter(parent_id = s.id)			
+			third = category.objects.filter(parent_id = s.id, isactived = 1)			
 			td = []
 			for t in third:
 				thirdic = {}			
@@ -114,3 +135,84 @@ def categorysearch(request):
 		clist.append(categorydic)
 	# print clist
 	return HttpResponse(json.dumps(clist))
+
+def exec_log(request,pid):
+	clist={}
+	record = []
+	loglist = result.objects.filter(testcase_id = int(pid))
+	execrecord = list(loglist.values_list("result", flat = True))
+	clist["Pass"] = execrecord.count("Pass")
+	record.append(clist);
+	for item in loglist:
+		recorddic = {}
+		recorddic["date"] = (item.exec_date).strftime("%Y-%m-%d %H:%M:%S")
+		recorddic["executor"] = item.executor
+		recorddic["result"] = item.result
+		recorddic["remark"] = item.r_remark
+		record.append(recorddic)
+	return HttpResponse(json.dumps(record))
+def execute_case(request):
+	resp = {}
+	try:
+		caseid = request.POST['caseid']
+		cresult = request.POST['cresult']
+		executor = request.session['realname']
+		executorid = request.session['id']
+		exec_date = datetime.datetime.now()
+		cr = result(testcase_id=caseid, result=cresult, exec_date=exec_date, executor=executor, executorid=executorid, isactived=1)
+		cr.save()
+		exedetail = {}
+		exedetail['exec_date'] = exec_date.strftime("%Y-%m-%d %H:%M:%S")
+		exedetail['executor'] = executor 
+		resp["success"] = True
+		resp["exedetail"] = exedetail
+	except Exception, e:
+		resp["success"] = False
+		resp["message"] = e
+	finally:	
+		resp = json.dumps(resp)
+
+		return HttpResponse(resp)
+
+
+def update_rank(request):
+	resp = {}
+	try:
+		rank_dict = json.loads(request.POST['rankdict'])
+		module_id = request.POST['mid']
+
+		print "--------------!!"
+		print "mid", module_id
+		print "rank_dict",rank_dict
+
+		if int(module_id):#更新用例rank
+			for key in rank_dict.keys():
+				tc = testcase.objects.get(id=key)
+				tc.rank = rank_dict[key]
+				if int(module_id) != -1:
+					print "here\n"
+					tc.module_id = module_id
+				tc.save()
+		else:#更新模块rank
+			for key in rank_dict.keys():
+				md = casemodule.objects.get(id=key)
+				md.rank = rank_dict[key]
+				md.save()
+			
+		resp["success"] = True
+	except Exception,e:
+		resp["success"] = False
+		print e
+		# resp["message"] = e
+	finally:
+		resp = json.dumps(resp)
+		# print "resp==",resp
+
+		return HttpResponse(resp)
+
+def singledel(request,pid):
+	ua = request.META['HTTP_REFERER']
+	delcase = get_object_or_404(testcase,pk=int(pid))
+	delcase.isactived = 0
+	delcase.save()
+	return HttpResponseRedirect(ua)

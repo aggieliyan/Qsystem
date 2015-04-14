@@ -3,6 +3,7 @@
 {% block head %}
 <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link href="/static/css/case_list.css" rel="stylesheet" media="screen">
+<link href="/static/css/case_box.css" rel="stylesheet" media="screen">
 
 {% endblock %}
 {% block content %}
@@ -141,35 +142,39 @@
 	    	</tr>
         </thead>
         <tbody>
-	    	<tr class="cmodule" rank="1" value="10001">
+        {% if case %}
+        {% for key,dic in case.items %}
+        {% for i in testmodule %}
+        {% if key == i.id %}
+	    	<tr class="cmodule" rank="{{key}}" value="1">
 	    		<td colspan="11">
 	    			<div>
 	    				<table >
-	    					<tbody>
-                  {% if case %}
-	    						{% for key,dic in case.items %}
+	    					<tbody>                  
 	    						<tr class="success">
 						    		<td colspan="1" ><input class="modulecheck" type="checkbox"></td>
-						    		<td colspan="9" class="editable">{{key}}</td>
+						    		<td colspan="9" class="editable">{{i.m_name}}</td>
 						    		<td >
 						      			<a class="icon-plus-sign" title="添加模块"></a>
 						      		    <a class="icon-plus" title="添加用例"></a>
 						      		    <a class="icon-trash"></a>
 						    		</td>
 	    						</tr>
+                  {% endif %}
+                  {% endfor %}
 	    						{% for c in dic %}
-	    						<tr class="mtr" rank="1" value="201">
-						    		<td><input class="casecheck" type="checkbox">1</td>
-						      		<td class="editable nodrag">{{c.precondition}}</td>
+	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
+						    		<td><input class="casecheck nodrag" type="checkbox">1</td>
+						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
 						      		<td class="editable nodrag">{{c.action}}</td>
 						    		<td class="editable nodrag">{{c.output}}</td>
 						      		<td class="level nodrag">{{c.priority}}</td>
                       {% if result %}
 						      		{% for r in result %}
 						      		{% if c.id == r.testcase_id %}
-						      		<td class="nodrag"><a class="icon-play-circle"></a>{{r.result}}</td>
-						    		  <td class="editable nodrag">{{r.wi}}</td>
-						      		<td>{{r.exec_date|date:"Y-m-d"}}</td>
+						      		<td class="nodrag"><a class="icon-play-circle"></a><span>{{r.result}}</span></td>
+						    		  <td class="editable nodrag">{{r.wi|default_if_none:""}}</td>
+						      		<td>{{r.exec_date|date:"Y-m-d H:i:s"}}</td>
 						      		<td>{{r.executor}}</td>
 						      		<td class="editable nodrag">{{r.r_remark|default_if_none:""}}</td>
 						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
@@ -182,7 +187,7 @@
 						      		{% endif %}
 						      		{% endfor %}
                       {% else %}
-                      <td class="nodrag"><a class="icon-play-circle"></a></td>
+                      <td class="nodrag"><a class="icon-play-circle"></a><span></span></td>
                       <td class="editable nodrag"></td>
                       <td></td>
                       <td></td>
@@ -193,12 +198,25 @@
 						      			<a class="icon-plus" title="添加用例"></a>
 						      			<a class="icon-download-alt" title="引入用例"></a>
 						      			<a class="icon-eye-open" title="查看结果"></a>
-						      			<a class="icon-trash"></a>
+						      			<a class="icon-trash" href="{% url 'singledel' c.id %}"></a>
+                        <input  value="{{c.id}}" class="checkresult" type="hidden">
 						      		</td> 
+
 	    						</tr>
-	    						{% endfor %}
-	    						{% endfor %}
-                  {% else %}
+	    						{% endfor %}						
+
+	    					</tbody>
+	    				</table>
+	    			</div>
+	    		</td>
+	    	</tr>
+        {% endfor %}
+        {% else %}
+        <tr class="cmodule" rank="{{key}}" value="10001">
+          <td colspan="11">
+            <div>
+              <table >
+                <tbody>                  
                   <tr class="success">
                     <td colspan="1" ><input class="modulecheck" type="checkbox"></td>
                     <td colspan="9" class="editable"></td>
@@ -208,14 +226,14 @@
                           <a class="icon-trash"></a>
                     </td>
                   </tr>
-                  {% endif %}
+                  </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+      {% endif %}
 
-	    					</tbody>
-	    				</table>
-	    			</div>
-	    		</td>
-	    	</tr>
-	    	<tr class="cmodule" rank="2" value="10002">
+	    	<!-- <tr class="cmodule" rank="2" value="10002">
 	    		<td colspan="11">
 	    			<div>
 	    				<table >
@@ -326,15 +344,16 @@
 	    			</div>
 	    		</td>
 	    	</tr>
-
+ -->
 
         </tbody>
     </table>
     <div class="fixbar">
-    	<button class="btn btn-success savebtn">保存</button>
+    	<button class="btn btn-success savebtn" onclick="accept()">保存</button>
     </div>
   	</div>
 </div>
+ {% include "case/exec_log.html" %}
 
 
 {% endblock %}
@@ -342,5 +361,5 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150325"></script>   
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150406"></script> 
 {% endblock %}
