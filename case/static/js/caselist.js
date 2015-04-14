@@ -511,7 +511,7 @@ $(document).ready(function(){
     });*/
 /*
     window.onbeforeunload = function(event){return confirm("确定离开此页面吗？"); }*/
-
+    
     $(".icon-eye-open").click(function(){
         $('#myModal').modal('show');
         cpid = $(this).parent().children().eq(4).val();
