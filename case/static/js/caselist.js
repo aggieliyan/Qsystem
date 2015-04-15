@@ -571,8 +571,10 @@ $(document).ready(function(){
             var num = datalist.length;
             $(".title").html("<h5>测试结果：共执行<span>"+(num-1)+"次</span>,通过<span>"+datalist[0].Pass+"次</span></h5>");
             recordhtml = ''
-            for(var i=1;i<num;i++){
-                recordhtml+="<tr>"+
+            for(var i=1;i<num;i++)
+            {
+                recordhtml+=
+                    "<tr>"+
                      "<td>#"+i+"</td>"+
                      "<td>日期："+datalist[i].date+"</td>"+
                      "<td>执行人："+datalist[i].executor+"</td>"+
