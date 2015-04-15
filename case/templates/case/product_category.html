@@ -9,9 +9,11 @@
 
     <div class="span12" >
   	    <div class='nowpro'>
-  	        <span style='color:red;'>您正在进行中的项目：项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
-  	                                项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
-  	                               项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
+  	        <span style='color:red;'>您正在进行中的项目：
+  	        {% for my_onproject in my_onprojects %}
+  	        <span id='proname'>{{my_onproject.project}}</span>
+  	        &nbsp;
+  	        {% endfor %}
   	        </span>
   	    </div>
   	    <div class='creatfirst'>
@@ -89,4 +91,5 @@
 {% block js %}
     <script type='text/javascript' src="/static/js/procate.js?v=20150315"></script>
     <script type='text/javascript' src="/static/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
 {% endblock %}

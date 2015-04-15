@@ -6,10 +6,22 @@ from models import category, testcase
 from case.forms import add_procateForm, edit_procateForm, del_procateForm
 import datetime
 import json
-def product_category(request):
-    #if not request.user.is_authenticated():
-		#return HttpResponseRedirect("/nologin")
+from project.models import user, project_user, project
+from django.db.models import Q
 
+def product_category(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/login")
+    else:
+        useid = request.session['id']
+    my_projects = project_user.objects.filter(username_id = useid)
+    count  =  0
+    if my_projects.count > 0:
+        my_proids = []
+        for my_project in my_projects:
+            my_proids.append(my_project.project_id)
+        my_projectlist = project.objects.filter(pk__in = my_proids)
+        my_onprojects = my_projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
     #查询出parent_id = 0 的一级产品模块
     first_secounts = {}
     second_thicounts = {}
@@ -38,7 +50,7 @@ def product_category(request):
     {'procate_firsts':procate_firsts, 'second_ids':sorted(second_ids.items()), \
      'second_names':second_names.items(), 'third_ids':sorted(third_ids.items()), \
      'third_names':third_names.items(), 'first_secounts':first_secounts.items(), \
-     'second_thicounts':second_thicounts.items()}))
+     'second_thicounts':second_thicounts.items(), 'my_onprojects':my_onprojects}))
     
 def add_procate(request, url):
     if request.method == 'POST':
@@ -91,5 +103,9 @@ def del_procate(request, url):
             procate_id = form.cleaned_data['procate_id_del']
             pro_cate = category.objects.get(id = procate_id)
             pro_cate.isactived = 0
-            pro_cate.save()  
+            pro_cate.save()
     return HttpResponseRedirect(url)
+
+ 
+
+        
