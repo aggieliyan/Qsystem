@@ -106,9 +106,6 @@
      })      
  }
    
- $(function(){
-	 proname=$('#proname').text()
-	 
- }
    
+
    

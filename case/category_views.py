@@ -10,12 +10,15 @@ from project.models import user, project_user, project
 from django.db.models import Q
 
 def product_category(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect("/login")
-    else:
+    try:
         useid = request.session['id']
+    except KeyError:
+        return HttpResponseRedirect("/login")
+    #获取登录用户所属部门
+    myuser = user.objects.filter(id = useid)
+    departid = myuser[0].department_id
+    #获取登录用户正在进行中的项目
     my_projects = project_user.objects.filter(username_id = useid)
-    count  =  0
     if my_projects.count > 0:
         my_proids = []
         for my_project in my_projects:
@@ -50,7 +53,7 @@ def product_category(request):
     {'procate_firsts':procate_firsts, 'second_ids':sorted(second_ids.items()), \
      'second_names':second_names.items(), 'third_ids':sorted(third_ids.items()), \
      'third_names':third_names.items(), 'first_secounts':first_secounts.items(), \
-     'second_thicounts':second_thicounts.items(), 'my_onprojects':my_onprojects}))
+     'second_thicounts':second_thicounts.items(), 'my_onprojects':my_onprojects, 'departid':departid}))
     
 def add_procate(request, url):
     if request.method == 'POST':
@@ -93,7 +96,6 @@ def delprocate_confirm(request):
     else:
         according = "no"  
     accord = json.dumps(according)
-    print accord
     return HttpResponse(accord)
        
 def del_procate(request, url):
@@ -102,8 +104,7 @@ def del_procate(request, url):
         if form.is_valid():
             procate_id = form.cleaned_data['procate_id_del']
             pro_cate = category.objects.get(id = procate_id)
-            pro_cate.isactived = 0
-            pro_cate.save()
+            pro_cate.delete()       
     return HttpResponseRedirect(url)
 
  
