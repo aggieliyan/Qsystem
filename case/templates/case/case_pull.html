@@ -8,15 +8,6 @@
 		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/static/js/checktree.js"></script>
 		<script type="text/javascript" src="/static/js/casepull.js"></script>
-		<script>
-			$(document).ready(function(){
-				$("ul.tree").checkTree({
-					});
-				function abc(){
-					var a="b";
-				}
-			});
-		</script>
 	</head>
 	<body>
     <!-- Button to trigger modal -->
@@ -31,103 +22,7 @@
     	<div class="modal-body">
     		<div class="cases_selector">
     			<div class="cases_category">
-    				<ul class="tree" style="margin-left: 3px;">
-						<li>
-						    <input type="checkbox">
-						    <label>United States</label>
-						    <ul>
-								<li>
-								<input type="checkbox" name="geo" value="pennsylvania">
-						        <label>类目太长挤下来肿么办你能有多长啊</label>
-							    </li>
-							</ul>
-						</li>
-						<li>
-							<input type="checkbox">
-							<label>Canadia</label>
-							<ul>
-								<li>
-									<input type="checkbox" name="geo" value="province in canadia">
-									<label>Province In Canadia</label>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<input type="checkbox" name="geo" value="afghanistan">
-							<label>Afghanistan</label>
-						</li>
-						<li>
-							<input type="checkbox">
-						    <label>Sealand</label>
-							<ul>
-								<li>
-									<input type="checkbox" name="geo" value="tree_city">
-									<label>Tree City</label>
-								</li>
-								<li>
-									<input type="checkbox" name="geo" value="oil_province">
-									<label>Oil Province</label>
-									<ul>
-										<li>
-											<input type="checkbox" name="geo" value="oil_city">
-											<label>Oil City</label>
-										</li>
-									</ul>
-								</li>
-								<li>
-									<input type="checkbox" value="fun_province_checkbox">
-									<label>Fun Province</label>
-									<ul>
-										<li>
-											<input type="checkbox" name="geo" value="fun_city">
-											<label>Fun City</label>
-										</li>
-										<li>
-											<input type="checkbox" name="geo" value="not_fun_city">
-											<label>Not Fun City</label>
-										</li>
-									</ul>
-								</li>
-							</ul>
-					    </li>
-					    <li>
-		<input type="checkbox" name="geo" value="afghanistan">
-		<label>Afghanistan</label>
-	</li>
-	<li>
-		<input type="checkbox">
-	    <label>Sealand</label>
-		<ul>
-			<li>
-				<input type="checkbox" name="geo" value="tree_city">
-				<label>Tree City</label>
-			</li>
-			<li>
-				<input type="checkbox" name="geo" value="oil_province">
-				<label>Oil Province</label>
-				<ul>
-					<li>
-						<input type="checkbox" name="geo" value="oil_city">
-						<label>Oil City</label>
-					</li>
-				</ul>
-			</li>
-			<li>
-				<input type="checkbox" value="fun_province_checkbox">
-				<label>Fun Province</label>
-				<ul>
-					<li>
-						<input type="checkbox" name="geo" value="fun_city">
-						<label>Fun City</label>
-					</li>
-					<li>
-						<input type="checkbox" name="geo" value="not_fun_city">
-						<label>Not Fun City</label>
-					</li>
-				</ul>
-			</li>
-		</ul>
-    </li>
+    				<ul class="tree" style="margin-left: 3px;">						
 					</ul>
     			</div>
     			<div class="import_right">
@@ -158,7 +53,7 @@
 								    <a href="javascript:void(0)">&larr; 上一页</a>
 								  </li>
 								  <li class="gotopage">
-								  	<span>第&nbsp<input id="pagenum"/>&nbsp页</span>
+								  	<span>第&nbsp<input id="pagenum"/>&nbsp页，共&nbsp<span id="totalpage"></span>&nbsp页</span>
 								  	<a id="go">Go!</a>
 								  </li>
 								  <li class="next">
