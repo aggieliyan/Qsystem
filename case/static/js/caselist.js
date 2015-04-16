@@ -612,28 +612,30 @@ $(document).ready(function(){
                 tmodule = -1;
             }
             mchk[i] = tmodule;
-            // console.log(mchk);
+            console.log(mchk);
             datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"mid":tmodule,"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text()};
             if(i==0){
                 // console.log("i=0");
                 casejson[k] = datadic;
+                // console.log(casejson);
+                j=0;
+                diclist[j] = dic;
             }else{
                 if(i>=1 & mchk[i-1] == tmodule){
-                // console.log("i>=1"); 
-                casejson[k] = datadic;
-                // console.log(casejson);
-            
-            }else{
-                console.log("else");
-                j=0;
-                dic[mchk[i-1]] = casejson;
+                    // console.log("i>=1"); 
+                    casejson[k] = datadic;
+                    // console.log(casejson);
+                }else{
+                    // console.log("else");
+                    j=0;
+                    dic[mchk[i-1]] = casejson;
                 diclist[j] = dic;
-                console.log(dic);                
+                // console.log(dic);                
                 casejson = [];
                 k=0;
                 casejson[k] = datadic;
                 j++;
-                console.log(casejson);
+                // console.log(casejson);
             }
         }
             if(chklen == 1){
@@ -641,7 +643,6 @@ $(document).ready(function(){
                 dic[mchk[i]] = casejson;
                 // console.log(dic);
             }
-            // casejson[tmodule] = {"mid":tmodule,"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text()};
             i++;
             k++;
             chklen--;
