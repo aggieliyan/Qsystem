@@ -28,7 +28,7 @@ $(document).ready(function(){
 	    				"<table >"+
 	    					"<tbody>"+
 	    						"<tr class=\"success\">"+
-						    		"<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\" checked='checked'></td>"+
+						    		"<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
 						    		"<td colspan=\"9\" class=\"editable\"></td>"+
 						    		"<td >"+
 						      			"<a class=\"icon-plus-sign\" title=\"添加模块\"></a> "+
@@ -593,69 +593,52 @@ $(document).ready(function(){
         });
     })
 
-    //保存用例
+   //保存用例
     $(".savebtn").click(function(){
-        i=0;
-        k=0
-        dic = {}
-        diclist = []
-        mchk = [];
-        var arrChk=$("input[name=\"checklist\"]:checked");
-        var chklen = arrChk.length;
+        i = 1;
         var casejson = [];
-        $(arrChk).each(function(){
-            // console.log(i);
-            tdata = $(this).parent().parent().children();
+        var dic = {};
+        var diclist = [dic];
+        var mmid = [];
+        var mchk = [-2];
+        var node = $("input[name=\"checklist\"]:checked");
+        var nlen = node.length;        
+        $(node).each(function(){             
+            var node = $(this).parent().parent();
+            tdata = node.children();
             cm = $(this).parents(".cmodule")
             tmodule = cm.attr("value");
             if (tmodule == undefined){
-                tmodule = -1;
+                    tmodule = -1;
             }
             mchk[i] = tmodule;
-            console.log(mchk);
-            datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"mid":tmodule,"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text()};
-            if(i==0){
-                // console.log("i=0");
-                casejson[k] = datadic;
-                // console.log(casejson);
-                j=0;
-                diclist[j] = dic;
-            }else{
-                if(i>=1 & mchk[i-1] == tmodule){
-                    // console.log("i>=1"); 
-                    casejson[k] = datadic;
-                    // console.log(casejson);
-                }else{
-                    // console.log("else");
+            if(node.attr("class") == "mtr"){//判断是用例还是模块
+                datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text()};
+                if(mchk[i-1] != tmodule){
                     j=0;
-                    dic[mchk[i-1]] = casejson;
-                diclist[j] = dic;
-                // console.log(dic);                
-                casejson = [];
-                k=0;
-                casejson[k] = datadic;
-                j++;
-                // console.log(casejson);
-            }
-        }
-            if(chklen == 1){
-                // console.log("chklen=1");
-                dic[mchk[i]] = casejson;
-                // console.log(dic);
+                    casejson = []; 
+                    dic[tmodule] = casejson;
+                    casejson[j] = datadic;
+                }else{
+                    casejson[j] = datadic;
+                }
+            }else{//模块下没有用例的模块
+                mtrnode = (node.parent(".cmodule").find(".mtr").find("input[name=\"checklist\"]:checked"));
+                if (mtrnode.length == 0){
+                    datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"id":-3};
+                    j=0;
+                    casejson = []; 
+                    casejson[j] = datadic;
+                    dic[tmodule] = casejson;                    
+                }
             }
             i++;
-            k++;
-            chklen--;
-            // console.log(dic);
-            // console.log("end");
-        });
+            j++;
+        });            
         diclist = JSON.stringify(diclist);
         casedic = {"datas":diclist};
-        // casedic = JSON.stringify(casedic);
-        console.log(casedic);
         $.post("/case/savecase/",casedic,function(data){
             alert("ok");
         });
     });
-
 });

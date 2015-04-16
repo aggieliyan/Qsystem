@@ -241,23 +241,25 @@ def savecase(request):
 						# print "key:",key
 					else:
 						updatemodule = casemodule.objects.filter(pk = key).update(m_name = ddata['mname'])
-					mmid = ddata['mid']
 					caseid = ddata['id']
-					cpre = ddata['precon']
-					cinput = ddata['action']
-					couput = ddata['output']
-					cpriority = ddata['priory']
-					if caseid:
-						updatecase = testcase.objects.filter(pk = caseid).update(precondition = cpre, \
-							action = cinput, output = couput, priority = cpriority)
-					else:
-						newcase = testcase(category_id = pid, rank = 100, module_id = key, precondition = cpre, \
-							action = cinput, output = couput, priority = cpriority, author = request.session['username'], \
-							authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
-						newcase.save()
+					if caseid != -3:
+						cpre = ddata['precon']
+						cinput = ddata['action']
+						couput = ddata['output']
+						cpriority = ddata['priory']
+						if caseid:
+							updatecase = testcase.objects.filter(pk = caseid).update(precondition = cpre, \
+								action = cinput, output = couput, priority = cpriority)
+						else:
+							newcase = testcase(category_id = pid, rank = 100, module_id = key, precondition = cpre, \
+								action = cinput, output = couput, priority = cpriority, author = request.session['username'], \
+								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
+							newcase.save()
+		dict['message']= True
 	except: 
 		import sys 
-		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])   
+		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
 		dict['message']=info 
-	cjson=json.dumps(dict) 
+	finally:
+		cjson=json.dumps(dict) 
 	return HttpResponse(cjson)
