@@ -9,6 +9,7 @@
 	width:auto;
 }
 .boxtable td{
+	
 	border-top: 0px;
 }
 .myinput{
@@ -26,7 +27,7 @@
 	margin-left: 150px;
 	outline:  0 none;
 	position: fixed;
-	width: 800px;
+	width: 600px;
 	top:20px;
 	z-index: 1050;
 }
