@@ -81,7 +81,7 @@ def case_list(request,pid):
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id, isactived = 1)
+		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
@@ -99,7 +99,7 @@ def allcaselist(request):
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id, isactived = 1)
+		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
 	print case
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
 
@@ -216,3 +216,48 @@ def singledel(request,pid):
 	delcase.isactived = 0
 	delcase.save()
 	return HttpResponseRedirect(ua)
+
+def moduledel(request,mid):
+	ua = request.META['HTTP_REFERER']
+	delmodule = get_object_or_404(casemodule,pk=int(mid))
+	delmodule.delete()
+	return HttpResponseRedirect(ua)
+
+def savecase(request):
+	pid = 1;
+	dict = {} 
+	try:
+		dt = json.loads(request.POST.get('datas',False))
+		for data in dt:
+			for key,value in data.items():
+				for ddata in value:
+					# print "---------------------------------"
+					# print ddata
+					if key == "-1":
+						cm = casemodule(m_name = ddata['mname'],m_rank = ddata['mrank'], isactived = 1)
+						cm.save()
+						key = cm.id
+						# print  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+						# print "key:",key
+					else:
+						updatemodule = casemodule.objects.filter(pk = key).update(m_name = "aa")
+					mmid = ddata['mid']
+					caseid = ddata['id']
+					cpre = ddata['precon']
+					cinput = ddata['action']
+					couput = ddata['output']
+					cpriority = ddata['priory']
+					if caseid:
+						updatecase = testcase.objects.filter(pk = caseid).update(precondition = cpre, \
+							action = cinput, output = couput, priority = cpriority)
+					else:
+						newcase = testcase(category_id = pid, rank = 100, module_id = key, precondition = cpre, \
+							action = cinput, output = couput, priority = cpriority, author = request.session['username'], \
+							authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
+						newcase.save()
+	except: 
+		import sys 
+		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])   
+		dict['message']=info 
+	cjson=json.dumps(dict) 
+	return HttpResponse(cjson)

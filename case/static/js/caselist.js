@@ -4,7 +4,7 @@ $(document).ready(function(){
     console.log("width:"+swidth+"px;");
     $(".fixbar").attr("style", "width:"+swidth+"px;");*/
 
-    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked'>1</td>"+
+    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\">1</td>"+
 			      		"<td class=\"editable nodrag\"></td>"+
 			      		"<td class=\"editable nodrag\"></td>"+
 			    		"<td class=\"editable nodrag\"></td>"+
@@ -349,6 +349,7 @@ $(document).ready(function(){
     $(".icon-trash").live('click', function(){
 
     	if(confirm("你确定要删除吗？")){
+            return true;
     		var node = $(this).parent().parent();
     		if(node.attr("class") == "mtr"){//删除用例
     			delete_update_rank(node);
@@ -381,7 +382,9 @@ $(document).ready(function(){
     		    	alert("抱歉~第一个模块不能删除。");
     		    }
             }
-    	}
+    	}else{
+            return false;
+        }
     });
 
 
@@ -581,18 +584,67 @@ $(document).ready(function(){
     })
 
     //保存用例
-    // $(".savebtn").click(function(){
-    //         var arrChk=$("input[class='casecheck']:checked");
-    //         var caselist = {"precon":}
-    //         $(arrChk).each(function(){
-    //             value=this.value + "," + value;
-    //         });
-    //         if (value) {
-    //             $("#bulk_sid").val(value);
-    //             $("#addmodule").modal('show')
-    //         }           
-    //         else{
-    //             alert("请勾选项目后再进行批量操作！");
-    //         }               
-    //     });
+    $(".savebtn").click(function(){
+        i=0;
+        k=0
+        dic = {}
+        diclist = []
+        mchk = [];
+        var arrChk=$("input[name=\"checklist\"]:checked");
+        var chklen = arrChk.length;
+        var casejson = [];
+        $(arrChk).each(function(){
+            // console.log(i);
+            tdata = $(this).parent().parent().children();
+            cm = $(this).parents(".cmodule")
+            tmodule = cm.attr("value");
+            if (tmodule == undefined){
+                tmodule = -1;
+            }
+            mchk[i] = tmodule;
+            // console.log(mchk);
+            datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"mid":tmodule,"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text()};
+            if(i==0){
+                // console.log("i=0");
+                casejson[k] = datadic;
+            }else{
+                if(i>=1 & mchk[i-1] == tmodule){
+                // console.log("i>=1"); 
+                casejson[k] = datadic;
+                // console.log(casejson);
+            
+            }else{
+                console.log("else");
+                j=0;
+                dic[mchk[i-1]] = casejson;
+                diclist[j] = dic;
+                console.log(dic);                
+                casejson = [];
+                k=0;
+                casejson[k] = datadic;
+                j++;
+                console.log(casejson);
+            }
+        }
+            if(chklen == 1){
+                // console.log("chklen=1");
+                dic[mchk[i]] = casejson;
+                // console.log(dic);
+            }
+            // casejson[tmodule] = {"mid":tmodule,"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text()};
+            i++;
+            k++;
+            chklen--;
+            // console.log(dic);
+            // console.log("end");
+        });
+        diclist = JSON.stringify(diclist);
+        casedic = {"datas":diclist};
+        // casedic = JSON.stringify(casedic);
+        console.log(casedic);
+        $.post("/case/savecase/",casedic,function(data){
+            alert("ok");
+        });
+    });
+
 });

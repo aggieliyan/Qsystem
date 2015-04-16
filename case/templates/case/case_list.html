@@ -146,7 +146,7 @@
         {% for key,dic in case.items %}
         {% for i in testmodule %}
         {% if key == i.id %}
-	    	<tr class="cmodule" rank="{{key}}" value="1">
+	    	<tr class="cmodule" rank="{{i.m_rank}}" value="{{key}}">
 	    		<td colspan="11">
 	    			<div>
 	    				<table >
@@ -157,14 +157,14 @@
 						    		<td >
 						      			<a class="icon-plus-sign" title="添加模块"></a>
 						      		    <a class="icon-plus" title="添加用例"></a>
-						      		    <a class="icon-trash"></a>
+						      		    <a class="icon-trash" href="{% url 'moduledel' key %}"></a>
 						    		</td>
 	    						</tr>
                   {% endif %}
                   {% endfor %}
 	    						{% for c in dic %}
 	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
-						    		<td><input class="casecheck nodrag" type="checkbox">1</td>
+						    		<td><input class="casecheck nodrag" type="checkbox" name="checklist">1</td>
 						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
 						      		<td class="editable nodrag">{{c.action}}</td>
 						    		<td class="editable nodrag">{{c.output}}</td>
@@ -349,7 +349,7 @@
         </tbody>
     </table>
     <div class="fixbar">
-    	<button class="btn btn-success savebtn" onclick="accept()">保存</button>
+    	<button class="btn btn-success savebtn">保存</button>
     </div>
   	</div>
 </div>
@@ -361,5 +361,6 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150406"></script> 
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150406"></script>
+
 {% endblock %}
