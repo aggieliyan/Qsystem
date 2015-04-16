@@ -382,9 +382,10 @@ $(document).ready(function(){
     		    	alert("抱歉~第一个模块不能删除。");
     		    }
             }
+
     	}else{
             return false;
-        }
+        }            
     });
 
 
@@ -569,14 +570,23 @@ $(document).ready(function(){
             var datalist = eval ("(" + data + ")");
             var num = datalist.length;
             $(".title").html("<h5>测试结果：共执行<span>"+(num-1)+"次</span>,通过<span>"+datalist[0].Pass+"次</span></h5>");
-            recordhtml = ''
-            for(var i=1;i<num;i++){
-                recordhtml+="<tr>"+
+            recordhtml = "<thead><tr>"+
+                     "<th>&nbsp</th>"+
+                     "<th>日期</th>"+
+                     "<th>执行人</th>"+
+                     "<th>结果</th>"+
+                     "<th>备注</th>"+
+                    "</tr></thead>"
+            /*recordhtml = ''*/
+            for(var i=1;i<num;i++)
+            {
+                recordhtml+=
+                    "<tr>"+
                      "<td>#"+i+"</td>"+
-                     "<td>日期："+datalist[i].date+"</td>"+
-                     "<td>执行人："+datalist[i].executor+"</td>"+
-                     "<td>结果："+datalist[i].result+"</td>"+
-                     "<td>备注："+datalist[i].remark+"</td>"+
+                     "<td>"+datalist[i].date+"</td>"+
+                     "<td>"+datalist[i].executor+"</td>"+
+                     "<td>"+datalist[i].result+"</td>"+
+                     "<td>"+datalist[i].remark+"</td>"+
                     "</tr>"
             }  
             $(".boxtable").html(recordhtml);          

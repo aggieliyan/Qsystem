@@ -7,16 +7,11 @@
 		<script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>
 		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/static/js/checktree.js"></script>
-		<script>
-			$(document).ready(function(){
-				$("ul.tree").checkTree({
-					});
-			});
-		</script>
+		<script type="text/javascript" src="/static/js/casepull.js"></script>
 	</head>
 	<body>
     <!-- Button to trigger modal -->
-    <a href="#casePullModal" role="button" class="btn" data-toggle="modal">引入用例</a>
+    <a href="#casePullModal" role="button" class="btn" data-toggle="modal" id="pullbutton">引入用例</a>
      
     <!-- Modal -->
     <div id="casePullModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="casePullModalLabel" aria-hidden="true">
@@ -27,103 +22,7 @@
     	<div class="modal-body">
     		<div class="cases_selector">
     			<div class="cases_category">
-    				<ul class="tree" style="margin-left: 3px;">
-						<li>
-						    <input type="checkbox">
-						    <label>United States</label>
-						    <ul>
-								<li>
-								<input type="checkbox" name="geo" value="pennsylvania">
-						        <label>类目太长挤下来肿么办你能有多长啊</label>
-							    </li>
-							</ul>
-						</li>
-						<li>
-							<input type="checkbox">
-							<label>Canadia</label>
-							<ul>
-								<li>
-									<input type="checkbox" name="geo" value="province in canadia">
-									<label>Province In Canadia</label>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<input type="checkbox" name="geo" value="afghanistan">
-							<label>Afghanistan</label>
-						</li>
-						<li>
-							<input type="checkbox">
-						    <label>Sealand</label>
-							<ul>
-								<li>
-									<input type="checkbox" name="geo" value="tree_city">
-									<label>Tree City</label>
-								</li>
-								<li>
-									<input type="checkbox" name="geo" value="oil_province">
-									<label>Oil Province</label>
-									<ul>
-										<li>
-											<input type="checkbox" name="geo" value="oil_city">
-											<label>Oil City</label>
-										</li>
-									</ul>
-								</li>
-								<li>
-									<input type="checkbox" value="fun_province_checkbox">
-									<label>Fun Province</label>
-									<ul>
-										<li>
-											<input type="checkbox" name="geo" value="fun_city">
-											<label>Fun City</label>
-										</li>
-										<li>
-											<input type="checkbox" name="geo" value="not_fun_city">
-											<label>Not Fun City</label>
-										</li>
-									</ul>
-								</li>
-							</ul>
-					    </li>
-					    <li>
-		<input type="checkbox" name="geo" value="afghanistan">
-		<label>Afghanistan</label>
-	</li>
-	<li>
-		<input type="checkbox">
-	    <label>Sealand</label>
-		<ul>
-			<li>
-				<input type="checkbox" name="geo" value="tree_city">
-				<label>Tree City</label>
-			</li>
-			<li>
-				<input type="checkbox" name="geo" value="oil_province">
-				<label>Oil Province</label>
-				<ul>
-					<li>
-						<input type="checkbox" name="geo" value="oil_city">
-						<label>Oil City</label>
-					</li>
-				</ul>
-			</li>
-			<li>
-				<input type="checkbox" value="fun_province_checkbox">
-				<label>Fun Province</label>
-				<ul>
-					<li>
-						<input type="checkbox" name="geo" value="fun_city">
-						<label>Fun City</label>
-					</li>
-					<li>
-						<input type="checkbox" name="geo" value="not_fun_city">
-						<label>Not Fun City</label>
-					</li>
-				</ul>
-			</li>
-		</ul>
-    </li>
+    				<ul class="tree" style="margin-left: 3px;">						
 					</ul>
     			</div>
     			<div class="import_right">
@@ -147,29 +46,20 @@
     						<span id="pop_info_name">用例</span>
     					</h3>
     					<div id="import_list_wrapper" class="dataTables_wrapper" role="grid">
-    						<table id="import_list" class="import_list_con dataTable" aria-describedby="import_list_info" style="width:600px">
-    							<tr class="odd">
-									<td class="text-left first-cell">
-										<label class="import-list-item clearfix">
-											<input type="checkbox" value="269891" data-title="" checked="" style="margin-right:10px;">
-											<p>课程详情页面课程的学习总进度有缓存吗？多长时间？单个课件的学习进度有缓存吗？ </p>
-										</label>
-									</td>
-								</tr>
-    						</table>
-    						<div id="import_list_paginate" class="pagination">
-    							<a id="import_list_previous" class="previous paginate_button paginate_button_disabled" tabindex="0">
-									<em class="text"><</em>
-								</a>
-								<span class="paginate_num_wrapper">
-									<a class="paginate_active" tabindex="0">
-									<a class="paginate_button" tabindex="0">
-									<a class="paginate_button" tabindex="0">
-									<a class="paginate_button" tabindex="0">
-								</span>
-								<a id="import_list_next" class="next paginate_button" tabindex="0">
-									<em class="text">></em>
-								</a>
+    						<table id="import_list" class="import_list_con dataTable" aria-describedby="import_list_info" style="width:600px"></table>
+    						<div id="import_list_paginate">
+    							<ul class="pager">
+								  <li class="previous">
+								    <a href="javascript:void(0)">&larr; 上一页</a>
+								  </li>
+								  <li class="gotopage">
+								  	<span>第&nbsp<input id="pagenum"/>&nbsp页，共&nbsp<span id="totalpage"></span>&nbsp页</span>
+								  	<a id="go">Go!</a>
+								  </li>
+								  <li class="next">
+								    <a href="javascript:void(0)">下一页 &rarr;</a>
+								  </li>
+								</ul>
     						</div>
     					</div>
     				</div>

@@ -1,16 +1,16 @@
 .nowpro{
-    width:800px;
-    height:50px;
-    padding-top:20px;
-    padding-bottom:20px; 
+    width:900px;
+    height:55px;
+    padding-top:10px;
+    padding-bottom:5px; 
     float:left;	
 }
 
 .creatfirst{
     height:50px;
     line-height:25px; 
-    padding-top:20px;
-    padding-bottom:20px; 
+    padding-top:10px;
+    padding-bottom:5px; 
     float:right;
 }
 
@@ -174,4 +174,12 @@ myinput {
 	display: inline-block;
 	margin-bottom: 0;
 	width: auto;
+}
+
+.nowpro span{
+	color:red;
+}
+
+.gray{
+	color:#555;
 }

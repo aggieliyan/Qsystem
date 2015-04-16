@@ -9,13 +9,21 @@
 
     <div class="span12" >
   	    <div class='nowpro'>
-  	        <span style='color:red;'>您正在进行中的项目：项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
-  	                                项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
-  	                               项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3项目1 项目2 项目3
-  	        </span>
+  	        <span>您正在进行中的项目：
+  	        {% if my_onprojects %}
+  	            {% for my_onproject in my_onprojects %}
+  	            {{my_onproject.project}}
+  	            &nbsp;
+  	            {% endfor %}
+  	        {% else %}
+  	                          暂无进行中的项目！
+  	        {% endif %} 
+           </span>
   	    </div>
   	    <div class='creatfirst'>
+  	    {% if departid == 1 %}
   	        <a id='add_firstprocate' class='add-first-procate' onclick="add_firprocate()">新建一级产品模块</a>
+  	    {% endif %}
   	    </div>	
    </div>
    
@@ -31,9 +39,15 @@
                 {% endfor %}
                 <div class='procate-div'>{{procate_first.name}}</div>
                 <a class='procate-a2' href="{% url 'caselist' procate_first.id %}" >管理用例</a>
+                {% if departid == 1 %}
                 <a class='procate-a3' onclick='edit_procate({{procate_first.id}},"{{procate_first.name}}")'>编辑</a>
                 <a class='procate-a4' onclick='add_procate({{procate_first.id}},1)'>添加子模块</a>
-                <a class='procate-a5' onclick='del_procate({{procate_first.id}})'>删除</a>      
+                <a class='procate-a5' onclick='del_procate({{procate_first.id}})'>删除</a>
+                {% else %}
+                <a class='procate-a3 gray' title='没权限'>编辑</a>
+                <a class='procate-a4 gray' title='没权限'>添加子模块</a>
+                <a class='procate-a5 gray' title='没权限'>删除</a>     
+                {% endif %}     
            </div>
             
            <div id='contain-secthird{{procate_first.id}}'>
@@ -48,13 +62,19 @@
                    {% endfor %}
                    
                    {% for second_id, secname in second_names %}
-                      {% if second_id == secid %}     
+                     {% if second_id == secid %}     
                       <div class='procate-div'>{{ secname }}</div>
                       <a class='procate-a2' href="{% url 'caselist' secid %}">管理用例</a>
+                      {% if departid == 1 %}
                       <a class='procate-a3' onclick='edit_procate({{secid}},"{{secname}}")'>编辑</a>
                       <a class='procate-a4' onclick='add_procate({{secid}},2)'>添加子模块</a>
                       <a class='procate-a5' onclick='del_procate({{secid}})'>删除</a>
+                      {% else %}
+                      <a class='procate-a3 gray' title='没权限'>编辑</a>
+                      <a class='procate-a4 gray' title='没权限'>添加子模块</a>
+                      <a class='procate-a5 gray' title='没权限'>删除</a>  
                       {% endif %}
+                     {% endif %}
                    {% endfor %}   
                </div>
                
@@ -62,13 +82,19 @@
                          {% if secid1 == secid %}
                             <div class='procate-third procate-third{{secid}}' >
                                 {% for third_id, thiname in third_names %}
-                                   {% if third_id == thirid %} 
+                                  {% if third_id == thirid %} 
                                    <div class='procate-div'>{{ thiname }}</div>
                                    <a class='procate-a2' href="{% url 'caselist' thirid %}">管理用例</a>
+                                   {% if departid == 1 %}
                                    <a class='procate-a3' onclick='edit_procate({{thirid}},"{{thiname}}")'>编辑</a>
                                    <a class='procate-a4' onclick='add_procate({{thirid}},3)'>添加子模块</a>
-                                   <a class='procate-a5' onclick='del_procate({{thirid}})'>删除</a>  
-                                   {% endif %}
+                                   <a class='procate-a5' onclick='del_procate({{thirid}})'>删除</a>
+                                   {% else %}
+                                   <a class='procate-a3 gray' title='没权限'>编辑</a>
+                                   <a class='procate-a4 gray' title='没权限'>添加子模块</a>
+                                   <a class='procate-a5 gray' title='没权限'>删除</a>  
+                                   {% endif %}  
+                                  {% endif %}
                                 {% endfor %} 
                            </div>              
                          {% endif %}
@@ -89,4 +115,5 @@
 {% block js %}
     <script type='text/javascript' src="/static/js/procate.js?v=20150315"></script>
     <script type='text/javascript' src="/static/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
 {% endblock %}

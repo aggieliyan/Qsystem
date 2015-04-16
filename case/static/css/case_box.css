@@ -9,10 +9,25 @@
 	width:auto;
 }
 .boxtable td{
+	
 	border-top: 0px;
 }
 .myinput{
 	display:inline-block;
 	margin-bottom:0;
 	width: auto;
+}
+.mycasemodal{
+	background-clip: padding-box;
+	background-color: #fff;
+	border: 1px solid rgba(0,0,0.3);
+	border-radius:6px;
+	box-shadow: 0 3px 7px  rgba(0,0,0.3)
+	right:200px;
+	margin-left: 150px;
+	outline:  0 none;
+	position: fixed;
+	width: 600px;
+	top:20px;
+	z-index: 1050;
 }
