@@ -240,7 +240,7 @@ def savecase(request):
 						# print  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 						# print "key:",key
 					else:
-						updatemodule = casemodule.objects.filter(pk = key).update(m_name = "aa")
+						updatemodule = casemodule.objects.filter(pk = key).update(m_name = ddata['mname'])
 					mmid = ddata['mid']
 					caseid = ddata['id']
 					cpre = ddata['precon']
