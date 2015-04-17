@@ -95,12 +95,10 @@
             </li>
             <li class="filter"><lable>执行人：</lable></li> 		
   		    	<li>
-              <select class="" name="executor">
-                <option select="selected" value="{{cexecutor}}">{{cexecutor}}</option>
-                <option value=""> </option>
-  				      <option value="李稳">李稳</option>
-                <option>国玉玲</option>
-                <option>易璐璐</option>
+              <select class="executor" name="executor">
+                {% for exec in executor %}
+                <option value="{{exec}}">{{exec.realname}}</option>
+  				      {% endfor %}
               </select>
             </li>
           </ul>

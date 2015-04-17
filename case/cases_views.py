@@ -99,7 +99,7 @@ def allcaselist(request):
 		newresult.append(p)
 	for m in testmodule:
 		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
-	print case
+	# print case
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
 
 

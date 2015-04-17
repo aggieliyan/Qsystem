@@ -685,10 +685,15 @@ $(document).ready(function(){
             var resp = eval('('+data+')');
             if(resp.message){
                 $("input[name=\"checklist\"]:checked").removeAttr("checked");
-                alert("用例保存成功！");
             }else{
                 alert("保存失败，请重新保存！");
             }
         });
     });
+
+//动态添加用例执行人
+// $(".executor").click(function(){
+//     pid = $()
+// });
+
 });
