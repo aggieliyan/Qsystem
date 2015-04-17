@@ -367,15 +367,13 @@ $(document).ready(function(){
 
     		}else{//删除模块
     		  
-    		    //找到该模块的前一个模块下的
+    		    //找到该模块的前一个模块下的 
     		    var currentm = node.parents(".cmodule")
 	    		var prevmodule = currentm.prev().find('tbody');
 
 	    		if(prevmodule.length){
                     var url = "/case/moduledel/"
-                    var mid = currentm.attr("value");
-                    console.log("mid=");
-                    console.log(mid);          
+                    var mid = currentm.attr("value");     
                     var para = {"mid": mid,};
                     //更新rank值
                     delete_update_rank(currentm);
