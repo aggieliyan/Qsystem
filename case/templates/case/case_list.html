@@ -164,7 +164,7 @@
                   {% endfor %}
 	    						{% for c in dic %}
 	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
-						    		<td><input class="casecheck nodrag" type="checkbox" name="checklist">1</td>
+						    		<td><input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.id}}</td>
 						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
 						      		<td class="editable nodrag">{{c.action}}</td>
 						    		<td class="editable nodrag">{{c.output}}</td>

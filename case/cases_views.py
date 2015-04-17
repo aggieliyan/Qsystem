@@ -89,7 +89,6 @@ def case_list(request,pid):
 
 def allcaselist(request):
 	case = {}
-	mid = {}
 	cmodule = testcase.objects.all()
 	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 	caseresult = result.objects.filter(testcase__in = cmodule)
@@ -276,11 +275,12 @@ def savecase(request):
 						cinput = ddata['action']
 						couput = ddata['output']
 						cpriority = ddata['priory']
+						crank = ddata['rank']
 						if caseid:
 							updatecase = testcase.objects.filter(pk = caseid).update(precondition = cpre, \
 								action = cinput, output = couput, priority = cpriority)
 						else:
-							newcase = testcase(category_id = pid, rank = 100, module_id = key, precondition = cpre, \
+							newcase = testcase(category_id = pid, rank = crank, module_id = key, precondition = cpre, \
 								action = cinput, output = couput, priority = cpriority, author = request.session['username'], \
 								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
 							newcase.save()
@@ -288,7 +288,7 @@ def savecase(request):
 	except: 
 		import sys 
 		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-		dict['message']=info 
+		dict['message']=False 
 	finally:
 		cjson=json.dumps(dict) 
 	return HttpResponse(cjson)

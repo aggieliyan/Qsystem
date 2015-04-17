@@ -656,7 +656,7 @@ $(document).ready(function(){
             }
             mchk[i] = tmodule;
             if(node.attr("class") == "mtr"){//判断是用例还是模块
-                datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text()};
+                datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text(),"rank":node.attr("rank")};
                 if(mchk[i-1] != tmodule){
                     j=0;
                     casejson = []; 
@@ -681,7 +681,13 @@ $(document).ready(function(){
         diclist = JSON.stringify(diclist);
         casedic = {"datas":diclist};
         $.post("/case/savecase/",casedic,function(data){
-            alert("ok");
+            var resp = eval('('+data+')');
+            if(resp.message){
+                $("input[name=\"checklist\"]:checked").removeAttr("checked");
+                alert("用例保存成功！");
+            }else{
+                alert("保存失败，请重新保存！");
+            }
         });
     });
 });
