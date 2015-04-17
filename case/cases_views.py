@@ -43,6 +43,7 @@ def case_list(request,pid):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword
+			kwargs['isactived'] = 1
 			cmodule = testcase.objects.filter(**kwargs)
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
 			caseresult = result.objects.filter(testcase__in = cmodule)
@@ -72,56 +73,59 @@ def case_list(request,pid):
 		subset3 = list(category.objects.filter(parent_id__in = subset2))
 		subset = list(set(subset2).union(set(subset3)))		
 		subset.append(pid)
-		cmodule = testcase.objects.filter(category__in = subset)
+		cmodule = testcase.objects.filter(category__in = subset,isactived = 1)
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+	count = len(cmodule);
 	newresult = []
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
+		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
+	print case
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
 
 
 def allcaselist(request):
 	case = {}
-	cmodule = testcase.objects.all()
+	cmodule = testcase.objects.filter(isactived = 1)
 	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 	caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+	count = len(cmodule);
 	newresult = []
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
+		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
 	# print case
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid, "count":count,})
 
 
 def categorysearch(request):
 	clist = []
 	#一级
 	# master = category.objects.filter(parent_id__isnull=True)
-	master = category.objects.filter(parent_id = 0, isactived = 1)
+	master = category.objects.filter(parent_id = 0)
 	#二级
 	for m in master:
 		categorydic = {}
 		s = {}
 		categorydic["master"]=m.name
 		categorydic["masterid"] = m.id
-		second = category.objects.filter(parent_id = m.id, isactived = 1)
+		second = category.objects.filter(parent_id = m.id)
 		slist = []
 		ms = []
 		for s in second:
 			msdic = {}					
 			msdic["second"] = s.name
 			msdic["secondid"] = s.id			
-			third = category.objects.filter(parent_id = s.id, isactived = 1)			
+			third = category.objects.filter(parent_id = s.id)			
 			td = []
 			for t in third:
 				thirdic = {}			
