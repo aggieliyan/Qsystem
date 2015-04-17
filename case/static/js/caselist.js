@@ -117,8 +117,9 @@ $(document).ready(function(){
     function delete_update_rank(celement){
     	var nextele = celement.next();
         var classname = celement.attr("class");
-    	if(nextele.length !== 0 || classname == "cmodule"){	    	
-            console.log(classname);
+    	if(nextele.length !== 0 || classname == "cmodule"){	
+        //删除用例/模块后他们后面的用例/模块rank值先不变了 反正相对位置没有变 要不然批量删除的时候好麻烦    	
+/*            console.log(classname);
 	    	var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
             var rankdic = {}
             var mid = 0
@@ -141,7 +142,7 @@ $(document).ready(function(){
             para = {"mid":mid, "rankdict":rankdic};
             $.post(url, para, function(data){
                 alert("ok");
-            }); 
+            }); */
 
 	    	//如果删掉的是模块，模块下用例的rank值也要变化
             //删掉模块后，用例是直接接到上一个模块下，
