@@ -37,7 +37,7 @@ def case_list(request,pid):
 			if not isNone(categoryid):
 				kwargs['category__in'] =  subset				
 			if not isNone(cauthor):
-				kwargs['author'] =  cauthor
+				kwargs['authorid'] =  cauthor
 			cmodule = testcase.objects.filter(**kwargs)
 			if not isNone(cpriority):
 				kwargs['priority'] = cpriority
@@ -281,7 +281,7 @@ def savecase(request):
 								action = cinput, output = couput, priority = cpriority)
 						else:
 							newcase = testcase(category_id = pid, rank = crank, module_id = key, precondition = cpre, \
-								action = cinput, output = couput, priority = cpriority, author = request.session['username'], \
+								action = cinput, output = couput, priority = cpriority, author = request.session['realname'], \
 								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
 							newcase.save()
 		dict['message']= True
