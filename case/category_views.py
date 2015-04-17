@@ -13,7 +13,7 @@ def product_category(request):
     try:
         useid = request.session['id']
     except KeyError:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/case/login")
     #获取登录用户所属部门
     myuser = user.objects.filter(id = useid)
     departid = myuser[0].department_id
@@ -34,21 +34,14 @@ def product_category(request):
     third_names = {}
     procate_firsts = category.objects.filter(parent_id = '0', isactived = '1')
     fircount = procate_firsts.count()
-    #引入用例弹框要用到的数据
-    first_level = {}
-    second_level = {}
-    third_level ={}    
-    
     if fircount > 0:
         for procate_first in procate_firsts:
-            first_level[procate_first.id] = procate_first.name
             procate_seconds = category.objects.filter(parent_id = procate_first.id, isactived = '1')
             if procate_seconds.count() > 0:
                 first_secounts[procate_first.id] = 1
                 for procate_second in procate_seconds:
                     second_ids[procate_second.id] = procate_first.id
                     second_names[procate_second.id] = procate_second.name
-                    second_level[procate_second.id] = [procate_first.id, procate_second.name]
                     procate_thirds = category.objects.filter(parent_id = procate_second.id, \
                                                              isactived = '1')
                     if procate_thirds .count() > 0:
@@ -56,11 +49,6 @@ def product_category(request):
                         for procate_third in procate_thirds:
                             third_ids[procate_third.id] = procate_second.id
                             third_names[procate_third.id] = procate_third.name 
-                            third_level[procate_third.id] = [procate_second.id, procate_third.name]
-    if '/getprocate' in request.path:
-        res = {'1': first_level, '2': second_level, '3': third_level}
-        print res
-        return HttpResponse(json.dumps(res))
     return render_to_response("case/product_category.html",RequestContext(request, \
     {'procate_firsts':procate_firsts, 'second_ids':sorted(second_ids.items()), \
      'second_names':second_names.items(), 'third_ids':sorted(third_ids.items()), \
