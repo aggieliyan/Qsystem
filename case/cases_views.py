@@ -181,16 +181,11 @@ def update_rank(request):
 		rank_dict = json.loads(request.POST['rankdict'])
 		module_id = request.POST['mid']
 
-		print "--------------!!"
-		print "mid", module_id
-		print "rank_dict",rank_dict
-
 		if int(module_id):#更新用例rank
 			for key in rank_dict.keys():
 				tc = testcase.objects.get(id=key)
 				tc.rank = rank_dict[key]
 				if int(module_id) != -1:
-					print "here\n"
 					tc.module_id = module_id
 				tc.save()
 		else:#更新模块rank
@@ -217,11 +212,45 @@ def singledel(request,pid):
 	delcase.save()
 	return HttpResponseRedirect(ua)
 
-def moduledel(request,mid):
-	ua = request.META['HTTP_REFERER']
-	delmodule = get_object_or_404(casemodule,pk=int(mid))
-	delmodule.delete()
-	return HttpResponseRedirect(ua)
+def moduledel(request):
+	resp = {}
+	mid = request.POST['mid']
+	try:
+		delmodule = get_object_or_404(casemodule,pk=int(mid))
+		delmodule.isactived = 0
+		delmodule.save()
+		# delmodule.delete()
+		resp["success"] = True
+	except Exception,e:
+		resp["success"] = False
+	finally:
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
+def delete_case(request):
+
+	resp = {}
+	deleteid = request.POST['did']
+	deleteid = deleteid.replace(" ", "").split(",")
+	# print deleteid
+	# return
+	
+	try:
+		for did in deleteid:
+			if len(did):
+				delcase = get_object_or_404(testcase,pk=int(did))
+				delcase.isactived = 0
+				delcase.save()
+		resp["success"] = True
+	except Exception, e:
+		resp["success"] = False
+	finally:
+		resp = json.dumps(resp)
+		# print "resp==",resp
+
+		return HttpResponse(resp)
+
+
 
 def savecase(request):
 	pid = 1;

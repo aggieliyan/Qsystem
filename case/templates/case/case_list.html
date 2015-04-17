@@ -157,7 +157,7 @@
 						    		<td >
 						      			<a class="icon-plus-sign" title="添加模块"></a>
 						      		    <a class="icon-plus" title="添加用例"></a>
-						      		    <a class="icon-trash" href="{% url 'moduledel' key %}"></a>
+						      		    <a class="icon-trash"></a>
 						    		</td>
 	    						</tr>
                   {% endif %}
@@ -198,7 +198,7 @@
 						      			<a class="icon-plus" title="添加用例"></a>
 						      			<a class="icon-download-alt" title="引入用例"></a>
 						      			<a class="icon-eye-open" title="查看结果"></a>
-						      			<a class="icon-trash" href="{% url 'singledel' c.id %}"></a>
+						      			<a class="icon-trash"></a>
                         <input  value="{{c.id}}" class="checkresult" type="hidden">
 						      		</td> 
 
@@ -212,7 +212,7 @@
 	    	</tr>
         {% endfor %}
         {% else %}
-        <tr class="cmodule" rank="{{key}}" value="10001">
+        <tr class="cmodule" rank="{{key}}" value="">
           <td colspan="11">
             <div>
               <table >
@@ -236,6 +236,7 @@
         </tbody>
     </table>
     <div class="fixbar">
+      <button class="btn btn-warning" id="delbtn">批量删除</button>
     	<button class="btn btn-success savebtn">保存</button>
     </div>
   	</div>

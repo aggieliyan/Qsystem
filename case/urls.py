@@ -22,6 +22,7 @@ urlpatterns = patterns('',
 	url(r'^updaterank/', cases_views.update_rank),
 	url(r'^singledel/(\d+)/$', cases_views.singledel,name='singledel'),
 	url(r'^singledel/(\d+)/$', cases_views.singledel,name="\'singledel\'"),
-	url(r'^moduledel/(\d+)/$', cases_views.moduledel, name= 'moduledel'),
+	url(r'^moduledel/', cases_views.moduledel, name= 'moduledel'),
 	url(r'^savecase/', cases_views.savecase),
+	url(r'^deletecase/', cases_views.delete_case),
 )

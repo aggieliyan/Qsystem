@@ -102,7 +102,12 @@ $(document).ready(function(){
         url = "/case/updaterank/";
         para = {"mid":mid, "rankdict":rankdic};
         $.post(url, para, function(data){
-            alert("ok");
+            var rs = eval('('+data+')');
+            if(rs.success){
+                alert("排序更新成功!");
+            }else{
+                alert("sorry,排序更新失败~");
+            }
         }); 
 
 
@@ -165,13 +170,12 @@ $(document).ready(function(){
                 url = "/case/updaterank/";
                 para = {"mid":mid, "rankdict":rankdic};
                 $.post(url, para, function(data){
-/*                    var rs = eval('('+data+')');
+                    var rs = eval('('+data+')');
                     if(rs.success){
-                        alert("ok");
+                        alert("排序更新成功!");
                     }else{
-                        alert("fail");
-                    }*/
-                    alert("ok");
+                        alert("sorry,排序更新失败~");
+                    }
                 });		
 	    	}  	
     	}
@@ -324,11 +328,6 @@ $(document).ready(function(){
     	checkall($(this), slave);
     });
 
-
-
-
-
-
     function drag_update_rank(){
     	insert_update_rank($(this));
     }
@@ -349,11 +348,23 @@ $(document).ready(function(){
     $(".icon-trash").live('click', function(){
 
     	if(confirm("你确定要删除吗？")){
-            return true;
+            
     		var node = $(this).parent().parent();
+            
     		if(node.attr("class") == "mtr"){//删除用例
-    			delete_update_rank(node);
-    			node.remove();
+ /*   			delete_update_rank(node);*/
+                var url = "/case/deletecase/";
+                var delid = node.attr("value");           
+                var para = {"did": delid,};
+                $.post(url, para, function(data, status){
+                    var rs = eval('('+data+')');
+                    if(rs.success){
+                        node.remove();
+                    }else{
+                        alert("删除失败");
+                    }
+                });
+
     		}else{//删除模块
     		  
     		    //找到该模块的前一个模块下的
@@ -361,31 +372,65 @@ $(document).ready(function(){
 	    		var prevmodule = currentm.prev().find('tbody');
 
 	    		if(prevmodule.length){
+                    var url = "/case/moduledel/"
+                    var mid = currentm.attr("value");
+                    console.log("mid=");
+                    console.log(mid);          
+                    var para = {"mid": mid,};
+                    //更新rank值
+                    delete_update_rank(currentm);
+                    //克隆一份该模块下的用例
+                    var snode = node.siblings().clone(true);
+                    $.post(url, para, function(data, status){
+                        var rs = eval('('+data+')');
 
-	        		//更新rank值
-	        		delete_update_rank(currentm);
+                        if(rs.success){
+                            //删掉该模块,将模块下用例复制到前一个模块下
+                            currentm.remove();
+                            prevmodule.append(snode);
+                        }else{
+                            alert("删除失败");
+                        }
+                    });
 
-	    			//克隆一份该模块下的用例
-	        		var snode = node.siblings().clone(true);
 
-	        		//将这些将被转移的用例checkbox都勾上因为父级模块变了
-	        		snode.each(function(){
-	        			$(this).find(".casecheck").attr("checked", "checked");
-	        		});
 
-	        		//删掉
-
-                    //删掉该模块,将模块下用例复制到前一个模块下
-	        		currentm.remove();
-	        		prevmodule.append(snode);
     		    }else{
     		    	alert("抱歉~第一个模块不能删除。");
     		    }
             }
 
+
+            return true;
     	}else{
             return false;
         }            
+    });
+
+    $("#delbtn").click(function(){
+        if(confirm("你确定要删除吗？")){
+            var caseChk=$("input[class='casecheck nodrag']:checked");
+            var delids = "";
+            $(caseChk).each(function(){
+                delids += $(this).parent().parent().attr("value");
+                delids += ",";
+
+            });
+            
+            url = "/case/deletecase/";
+            para = {"did": delids,};
+            $.post(url, para, function(data, status){
+                var rs = eval('('+data+')');
+                if(rs.success){
+                    $(caseChk).each(function(){
+                        $(this).parent().parent().remove();
+                    });
+                }else{
+                    alert("删除失败");
+                }
+            });
+        }
+
     });
 
 
