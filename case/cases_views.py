@@ -251,24 +251,22 @@ def update_case_related(request):
 	tcnt = request.POST['tcnt']
 	cid = request.POST['tid']
 		
-	# try:
-	trs = result.objects.filter(testcase_id=cid).order_by("-id")[0]
-	if tname == "wi":
-		trs.wi = tcnt
-	else:
-		trs.r_remark = tcnt
+	try:
+		trs = result.objects.filter(testcase_id=cid).order_by("-id")[0]
+		if tname == "wi":
+			trs.wi = tcnt
+		else:
+			trs.r_remark = tcnt
 
-	print "222"
+		trs.save()
 
-	trs.save()
-
-	resp["success"] = True
-	# except Exception, e:
-	# 	resp["success"] = False
-	# 	print e
-	# finally:
-	resp = json.dumps(resp)
-	return HttpResponse(resp)
+		resp["success"] = True
+	except Exception, e:
+		resp["success"] = False
+		print e
+	finally:
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
 
 
 
