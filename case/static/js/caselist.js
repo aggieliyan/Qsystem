@@ -640,11 +640,13 @@ $(document).ready(function(){
    //保存用例
     $(".savebtn").click(function(){
         i = 1;
+        j = 0; 
         var casejson = [];
         var dic = {};
         var diclist = [dic];
         var mmid = [];
         var mchk = [-2];
+        var flag = true;
         var node = $("input[name=\"checklist\"]:checked");
         var nlen = node.length;        
         $(node).each(function(){             
@@ -657,38 +659,59 @@ $(document).ready(function(){
             }
             mchk[i] = tmodule;
             if(node.attr("class") == "mtr"){//判断是用例还是模块
-                datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":tdata.eq(2).text(),"output":tdata.eq(3).text(),"priory":tdata.eq(4).text(),"rank":node.attr("rank")};
-                if(mchk[i-1] != tmodule){
-                    j=0;
-                    casejson = []; 
-                    dic[tmodule] = casejson;
-                    casejson[j] = datadic;
+                input = tdata.eq(2).text();
+                output = tdata.eq(3).text();
+                mname = $.trim(cm.find(".success").children().eq(1).text());
+                console.log(mname);
+                console.log(input);
+                console.log(output);
+                if(!input || !output || !mname ){
+                    alert("用例必填项没有填写，请填写后再保存！");
+                    flag = false;
+                    return false;
                 }else{
-                    casejson[j] = datadic;
+                    datadic = {"mname":mname,"mrank":cm.attr("rank"),"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":input,"output":output,"priory":tdata.eq(4).text(),"rank":node.attr("rank")};
+                    if(mchk[i-1] != tmodule){
+                        j=0;
+                        casejson = []; 
+                        dic[tmodule] = casejson;
+                        casejson[j] = datadic;
+                    }else{
+                        casejson[j] = datadic;
+                    }
                 }
-            }else{//模块下没有用例的模块
+            }else{//勾选的模块下没有勾选用例时，保存模块
                 mtrnode = (node.parent(".cmodule").find(".mtr").find("input[name=\"checklist\"]:checked"));
                 if (mtrnode.length == 0){
-                    datadic = {"mname":$.trim(cm.find(".success").children().eq(1).text()),"mrank":cm.attr("rank"),"id":-3};
-                    j=0;
-                    casejson = []; 
-                    casejson[j] = datadic;
-                    dic[tmodule] = casejson;                    
+                    cmname = $.trim(cm.find(".success").children().eq(1).text());
+                    if(cmname){
+                        datadic = {"mname":cmname,"mrank":cm.attr("rank"),"id":-3};
+                        j=0;
+                        casejson = []; 
+                        casejson[j] = datadic;
+                       dic[tmodule] = casejson;
+                    }else{
+                        alert("模块名称没有填写，请填写后再保存！");
+                        flag = false;
+                        return false;
+                    }                                       
                 }
             }
             i++;
             j++;
-        });            
-        diclist = JSON.stringify(diclist);
-        casedic = {"datas":diclist};
-        $.post("/case/savecase/",casedic,function(data){
-            var resp = eval('('+data+')');
-            if(resp.message){
-                $("input[name=\"checklist\"]:checked").removeAttr("checked");
-            }else{
-                alert("保存失败，请重新保存！");
-            }
-        });
+        }); 
+        if(flag == true){
+            diclist = JSON.stringify(diclist);
+            casedic = {"datas":diclist};
+            $.post("/case/savecase/",casedic,function(data){
+                var resp = eval('('+data+')');
+                if(resp.message){
+                    $("input[name=\"checklist\"]:checked").removeAttr("checked");
+                }else{
+                    alert("保存失败，请重新保存！");
+                }
+            });
+        }      
     });
 
 //动态添加用例执行人
