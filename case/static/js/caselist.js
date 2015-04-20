@@ -651,7 +651,7 @@ $(document).ready(function(){
                      "<td>"+datalist[i].date+"</td>"+
                      "<td>"+datalist[i].executor+"</td>"+
                      "<td>"+datalist[i].result+"</td>"+
-                     "<td>"+datalist[i].remark+"</td>"+
+                     "<td>"+(datalist[i].remark?datalist[i].remark:"")+"</td>"+
                     "</tr>"
             }  
             $(".boxtable").html(recordhtml);          
