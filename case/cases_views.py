@@ -316,14 +316,14 @@ def update_case_related(request):
 		
 	try:
 		trs = result.objects.filter(testcase_id=cid).order_by("-id")[0]
-		if tname == "wi":
-			trs.wi = tcnt
-		else:
-			trs.r_remark = tcnt
+		if trs:
+			if tname == "wi":
+				trs.wi = tcnt
+			else:
+				trs.r_remark = tcnt
 
-		trs.save()
-
-		resp["success"] = True
+			trs.save()
+			resp["success"] = True
 	except Exception, e:
 		resp["success"] = False
 		print e

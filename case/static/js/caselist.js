@@ -173,7 +173,7 @@ $(document).ready(function(){
                 $.post(url, para, function(data){
                     var rs = eval('('+data+')');
                     if(rs.success){
-                        alert("排序更新成功!");
+                        //alert("排序更新成功!");
                     }else{
                         alert("sorry,排序更新失败~");
                     }
@@ -194,12 +194,18 @@ $(document).ready(function(){
 		var tdTest = tdnode.text();
 		//before属性用来存点击时文本域的值
 		tdnode.attr("before", tdTest);
+
+        //如果还没有执行结果，那点BUG和备注没反应
+        var crs = tdnode.parent().children().eq(5).find("span")
+        if(crs.length){
+            tdnode.empty();
+            var tx = $("<textarea class='edittx'></textarea>");
+            tx.attr("value", tdTest);
+            tdnode.append(tx);
+            tx.focus();
+        }
    
-		tdnode.empty();
-		var tx = $("<textarea class='edittx'></textarea>");
-		tx.attr("value", tdTest);
-		tdnode.append(tx);
-		tx.focus();
+
 	});
 
 	$(".edittx").live('blur', function(){
@@ -215,16 +221,16 @@ $(document).ready(function(){
             //如果是BUG和备注部分,而且用例是保存的用例则实时保存
             var tid = tp.parent().attr("value");
             var tname = tp.attr("name");
-            if(tp.hasClass('save') && tid){
+            var crs = tp.parent().children().eq(5).find("span")//看有没有执行结果，有执行结果的才可以保存BUG和备注
+            if(tp.hasClass('save') && tid && crs.length){
                 var url = "/case/updateresult/"
                 var para = {"tname": tname, "tid":tid, "tcnt":etext}
                 $.post(url, para, function(data){
                     var rs = eval('('+data+')');
                     if(rs.success){
-                        alert("ok");
- 
+                        //alert("ok");
                     }else{
-                        alert("fail");
+                        alert("所填内容更新失败");
                     }
                 }); 
 
