@@ -250,7 +250,6 @@ def update_case_related(request):
 	tname = request.POST['tname']
 	tcnt = request.POST['tcnt']
 	cid = request.POST['tid']
-	print "1111111"
 		
 	# try:
 	trs = result.objects.filter(testcase_id=cid).order_by("-id")[0]
