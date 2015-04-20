@@ -179,16 +179,16 @@
 						      		{% for r in result %}
 						      		{% if c.id == r.testcase_id %}
 						      		<td class="nodrag"><a class="icon-play-circle"></a><span>{{r.result}}</span></td>
-						    		  <td class="editable nodrag">{{r.wi|default_if_none:""}}</td>
+						    		  <td class="editable nodrag save" name="wi">{{r.wi|default_if_none:""}}</td>
 						      		<td>{{r.exec_date|date:"Y-m-d H:i:s"}}</td>
 						      		<td>{{r.executor}}</td>
-						      		<td class="editable nodrag">{{r.r_remark|default_if_none:""}}</td>
+						      		<td class="editable nodrag save" name="remark">{{r.r_remark|default_if_none:""}}</td>
 						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
 						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
-						    		  <td class="editable nodrag"></td>
+						    		  <td class="editable nodrag save" name="wi"></td>
 						      		<td></td>
 						      		<td></td>
-						      		<td class="editable nodrag"></td>
+						      		<td class="editable nodrag save" name="remark"></td>
 
 						      		{% endif %}
 						      		{% endfor %}

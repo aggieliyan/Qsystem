@@ -144,7 +144,7 @@ $(document).ready(function(){
                 alert("ok");
             }); */
 
-	    	//如果删掉的是模块，模块下用例的rank值也要变化
+	    	//如果删掉的是模块，模块下用例的rank值要变化
             //删掉模块后，用例是直接接到上一个模块下，
             //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
 	    	if(classname == "cmodule"){
@@ -212,6 +212,26 @@ $(document).ready(function(){
 		//文本框的值与原来的值不同时，勾上checkbox
 		if(tp.attr("before") !== etext){
 			tp.siblings().eq(0).find("input").attr("checked", "checked");
+            //如果是BUG和备注部分,而且用例是保存的用例则实时保存
+            var tid = tp.parent().attr("value");
+            var tname = tp.attr("name");
+            console.log("aaaaaaaaaaa");
+            console.log(tp.hasClass('save'));
+            console.log(tid);
+            if(tp.hasClass('save') && tid){
+                var url = "/case/updateresult/"
+                var para = {"tname": tname, "tid":tid, "tcnt":etext}
+                $.post(url, para, function(data){
+                    var rs = eval('('+data+')');
+                    if(rs.success){
+                        alert("ok");
+ 
+                    }else{
+                        alert("fail");
+                    }
+                }); 
+
+            }
 		}
 
 	});
@@ -303,6 +323,7 @@ $(document).ready(function(){
     $(".icon-plus-sign").live('click', function(){
         var cmodule = $(this).parents(".cmodule");
         cmodule.after(modulehtml);
+        insert_update_rank(cmodule.next().find(".mtr"))
         insert_update_rank(cmodule.next());
     });
 

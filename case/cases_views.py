@@ -206,7 +206,7 @@ def update_rank(request):
 
 def singledel(request,pid):
 	ua = request.META['HTTP_REFERER']
-	delcase = get_object_or_404(testcase,pk=int(pid))
+	delcase = get_object_or_404(testcase, pk=int(pid))
 	delcase.isactived = 0
 	delcase.save()
 	return HttpResponseRedirect(ua)
@@ -215,7 +215,7 @@ def moduledel(request):
 	resp = {}
 	mid = request.POST['mid']
 	try:
-		delmodule = get_object_or_404(casemodule,pk=int(mid))
+		delmodule = get_object_or_404(casemodule, pk=int(mid))
 		delmodule.isactived = 0
 		delmodule.save()
 		# delmodule.delete()
@@ -231,13 +231,11 @@ def delete_case(request):
 	resp = {}
 	deleteid = request.POST['did']
 	deleteid = deleteid.replace(" ", "").split(",")
-	# print deleteid
-	# return
 	
 	try:
 		for did in deleteid:
 			if len(did):
-				delcase = get_object_or_404(testcase,pk=int(did))
+				delcase = get_object_or_404(testcase, pk=int(did))
 				delcase.isactived = 0
 				delcase.save()
 		resp["success"] = True
@@ -245,9 +243,33 @@ def delete_case(request):
 		resp["success"] = False
 	finally:
 		resp = json.dumps(resp)
-		# print "resp==",resp
-
 		return HttpResponse(resp)
+
+def update_case_related(request):
+	resp = {}
+	tname = request.POST['tname']
+	tcnt = request.POST['tcnt']
+	cid = request.POST['tid']
+	print "1111111"
+		
+	# try:
+	trs = result.objects.filter(testcase_id=cid).order_by("-id")[0]
+	if tname == "wi":
+		trs.wi = tcnt
+	else:
+		trs.r_remark = tcnt
+
+	print "222"
+
+	trs.save()
+
+	resp["success"] = True
+	# except Exception, e:
+	# 	resp["success"] = False
+	# 	print e
+	# finally:
+	resp = json.dumps(resp)
+	return HttpResponse(resp)
 
 
 

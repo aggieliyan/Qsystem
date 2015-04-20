@@ -25,4 +25,5 @@ urlpatterns = patterns('',
 	url(r'^moduledel/', cases_views.moduledel, name= 'moduledel'),
 	url(r'^savecase/', cases_views.savecase),
 	url(r'^deletecase/', cases_views.delete_case),
+	url(r'^updateresult/', cases_views.update_case_related),
 )
