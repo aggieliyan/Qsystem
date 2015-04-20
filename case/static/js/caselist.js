@@ -104,7 +104,7 @@ $(document).ready(function(){
         $.post(url, para, function(data){
             var rs = eval('('+data+')');
             if(rs.success){
-                alert("排序更新成功!");
+                //alert("排序更新成功!");
             }else{
                 alert("sorry,排序更新失败~");
             }
@@ -197,7 +197,7 @@ $(document).ready(function(){
 
         //如果还没有执行结果，那点BUG和备注没反应
         var crs = tdnode.parent().children().eq(5).find("span")
-        if(crs.length){
+        if(crs.length || tdnode.parent().hasClass("success")){
             tdnode.empty();
             var tx = $("<textarea class='edittx'></textarea>");
             tx.attr("value", tdTest);
