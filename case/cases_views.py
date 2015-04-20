@@ -13,6 +13,7 @@ def case_list(request,pid):
 	case = {}
 	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = \
 	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
+	cmodule = testcase.objects.filter(isactived =1)
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -43,7 +44,7 @@ def case_list(request,pid):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword
-			cmodule = testcase.objects.filter(**kwargs)
+			cmodule = cmodule.filter(**kwargs)
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			if not isNone(ctestmodule):
@@ -76,31 +77,93 @@ def case_list(request,pid):
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+	count = len(cmodule)
 	newresult = []
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
+		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
 
 
+# def allcaselist(request):
+# 	case = {}
+# 	cmodule = testcase.objects.all()
+# 	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+# 	caseresult = result.objects.filter(testcase__in = cmodule)
+# 	listid = caseresult.values_list("testcase", flat=True).distinct()
+# 	newresult = []
+# 	for c in listid:
+# 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
+# 		newresult.append(p)
+# 	for m in testmodule:
+# 		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
+# 	print case
+# 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
 def allcaselist(request):
+	kwargs={}
 	case = {}
-	cmodule = testcase.objects.all()
-	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
-	caseresult = result.objects.filter(testcase__in = cmodule)
+	ctestmodule = 	cpriority = cauthor = cexecutor = cstart_date = cend_date = \
+	cexec_status = ckeyword =  cstatue = cmold = ''
+	cmodule = testcase.objects.filter(isactived = 1)
+	if request.method == "POST":
+		search = searchForm(request.POST)
+		if search.is_valid():
+			ctestmodule = search.cleaned_data['testmodule']
+			cpriority = search.cleaned_data['priority']
+			cstatue = search.cleaned_data['status']
+			cmold =  search.cleaned_data['mold']
+			cauthor = search.cleaned_data['author']
+			cexecutor = search.cleaned_data['executor']
+			cstart_date = search.cleaned_data['start_date']
+			cend_date = search.cleaned_data['end_date']
+			cexec_status = search.cleaned_data['exec_status']
+			ckeyword = search.cleaned_data['keyword']
+			if not isNone(cauthor):
+				kwargs['author'] =  cauthor
+			cmodule = testcase.objects.filter(**kwargs)
+			if not isNone(cpriority):
+				kwargs['priority'] = cpriority
+			if not isNone(ckeyword):
+				kwargs['action__contains'] = ckeyword
+			cmodule = cmodule.filter(**kwargs)
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
+			caseresult = result.objects.filter(testcase__in = cmodule)
+			if not isNone(ctestmodule):
+				testmodule = testmodule.filter(m_name = ctestmodule)
+			args = [Q(result = cmold) , ~Q(result = cmold)] 
+			args2 = [~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct()),Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())]
+			if not isNone(cmold) and not isNone(cstatue):
+				if cmold == u"未执行":
+					cmodule = cmodule.filter(args2[int(cstatue)])
+				else:
+					caseresult = caseresult.filter(args[int(cstatue)])
+					cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+			if not isNone(cexecutor):
+				caseresult = caseresult.filter(executor = cexecutor)
+				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+			if not isNone(cstart_date) or not isNone(cend_date):
+				if not isNone(cstart_date):
+					caseresult = caseresult.filter(exec_date__gte = cstart_date)
+				if not isNone(cend_date):
+					caseresult = caseresult.filter(exec_date__lte = cend_date)
+				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
+				cmodule = cmodule.filter(pk__in = cdate)
+	else:
+		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+	count =len(cmodule)
 	newresult = []
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
-	print case
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
+		case[m.id] = cmodule.filter(module = m.id)
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid, "count":count})
 
 
 def categorysearch(request):
@@ -278,14 +341,10 @@ def savecase(request):
 		for data in dt:
 			for key,value in data.items():
 				for ddata in value:
-					# print "---------------------------------"
-					# print ddata
 					if key == "-1":
 						cm = casemodule(m_name = ddata['mname'],m_rank = ddata['mrank'], isactived = 1)
 						cm.save()
 						key = cm.id
-						# print  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-						# print "key:",key
 					else:
 						updatemodule = casemodule.objects.filter(pk = key).update(m_name = ddata['mname'])
 					caseid = ddata['id']
