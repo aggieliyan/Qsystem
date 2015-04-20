@@ -211,13 +211,10 @@ $(document).ready(function(){
 		tp.html(etext);
 		//文本框的值与原来的值不同时，勾上checkbox
 		if(tp.attr("before") !== etext){
-			tp.siblings().eq(0).find("input").attr("checked", "checked");
+			
             //如果是BUG和备注部分,而且用例是保存的用例则实时保存
             var tid = tp.parent().attr("value");
             var tname = tp.attr("name");
-            console.log("aaaaaaaaaaa");
-            console.log(tp.hasClass('save'));
-            console.log(tid);
             if(tp.hasClass('save') && tid){
                 var url = "/case/updateresult/"
                 var para = {"tname": tname, "tid":tid, "tcnt":etext}
@@ -231,6 +228,8 @@ $(document).ready(function(){
                     }
                 }); 
 
+            }else{//其他的需要勾上checkbox等待点保存
+                tp.siblings().eq(0).find("input").attr("checked", "checked");
             }
 		}
 
