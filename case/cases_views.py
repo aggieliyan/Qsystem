@@ -1,12 +1,32 @@
 # coding=utf-8
 import datetime
+import json
+
 from django.shortcuts import render_to_response, redirect, RequestContext, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from models import testcase, casemodule, category, result
 from forms import searchForm
-import json
+from project.models import user, department
 from project.views import isNone
 from django.db.models import Q
+
+#判断是否是技术部分的测试或者开发
+def is_dev(uid):
+	depid = user.objects.get(id=int(uid)).department_id
+	if depid not in [1, 2, 4, 5, 12]:
+		return False
+	else:
+		return True
+
+#判断是否是测试部门的
+def is_tester(uid):
+	depid = user.objects.get(id=int(uid)).department_id
+	print depid
+	if depid != 1:
+		return False
+	else:
+		return True
+
 
 def case_list(request,pid):
 	kwargs={}
@@ -213,8 +233,16 @@ def exec_log(request,pid):
 		recorddic["remark"] = item.r_remark
 		record.append(recorddic)
 	return HttpResponse(json.dumps(record))
+
 def execute_case(request):
 	resp = {}
+	#判断下权限
+	if not is_dev(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
 	try:
 		caseid = request.POST['caseid']
 		cresult = request.POST['cresult']
@@ -239,6 +267,12 @@ def execute_case(request):
 
 def update_rank(request):
 	resp = {}
+	#判断下权限
+	if not is_tester(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
 	try:
 		rank_dict = json.loads(request.POST['rankdict'])
 		module_id = request.POST['mid']
@@ -269,6 +303,13 @@ def update_rank(request):
 
 def moduledel(request):
 	resp = {}
+	#判断下权限
+	if not is_tester(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
 	mid = request.POST['mid']
 	try:
 		delmodule = get_object_or_404(casemodule, pk=int(mid))
@@ -285,6 +326,13 @@ def moduledel(request):
 def delete_case(request):
 
 	resp = {}
+	#判断下权限
+	if not is_tester(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
 	deleteid = request.POST['did']
 	deleteid = deleteid.replace(" ", "").split(",")
 	
@@ -303,6 +351,12 @@ def delete_case(request):
 
 def update_case_related(request):
 	resp = {}
+	#判断下权限
+	if not is_dev(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
 	tname = request.POST['tname']
 	tcnt = request.POST['tcnt']
 	cid = request.POST['tid']
@@ -326,7 +380,7 @@ def update_case_related(request):
 
 def savecase(request):
 	pid = 1;
-	dict = {} 
+	dict = {}
 	try:
 		dt = json.loads(request.POST.get('datas',False))
 		for data in dt:
