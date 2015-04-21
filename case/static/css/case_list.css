@@ -19,6 +19,22 @@
 #caselist th{
 	text-align: center;
 }
+#caselist td{
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#caselist .Pass{
+	color:#5bb75b;
+}
+
+#caselist .Fail{
+	color:red;
+}
+
+#caselist .Block{
+	color:grey;	
+}
 
 .success td:nth-child(1){
 	width: 65px;
@@ -58,11 +74,11 @@
 	float:right;
 }
 
-.mtr td:nth-child(1),.mtr td:nth-child(9),.mtr td:nth-child(10){
+.mtr td:nth-child(1),.mtr td:nth-child(9){
 	width:50px;
 }
 .mtr td:nth-child(2){
-	width:100px;
+	width:110px;
 }
 
 .mtr td:nth-child(3),.mtr td:nth-child(4){
@@ -70,14 +86,25 @@
 }
 
 .mtr td:nth-child(6){
-	width:60px;
+	width:55px;
 }
-.mtr td:nth-child(5),.mtr td:nth-child(7){
+.mtr td:nth-child(5){
 	width:40px;
 }
 
-.mtr td:nth-child(8), .mtr td:nth-child(11){
+.mtr td:nth-child(7){
 	width:80px;
+}
+.mtr td:nth-child(10){
+	width:100px;
+}
+
+.mtr td:nth-child(8){
+	width:80px;
+}
+
+.mtr td:nth-child(11){
+    width:80px;
 }
 
 .fixbar{

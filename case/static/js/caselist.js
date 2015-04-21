@@ -47,7 +47,7 @@ $(document).ready(function(){
                         "<option>-</option>"+
                         "<option>Pass</option>"+
                         "<option>Fail</option>"+
-                        "<option>block</option>"+
+                        "<option>Block</option>"+
                     "</select>"
 
     var levelhtml = "<select class=\"lselect\">"+
@@ -203,8 +203,12 @@ $(document).ready(function(){
         tdnode.attr("before", tdTest);
 
         //如果还没有执行结果，那点BUG和备注没反应
-        var crs = tdnode.parent().children().eq(5).find("span")
-        if(crs.length || tdnode.parent().hasClass("success")){
+        var crs = tdnode.parent().children().eq(5).find("span");
+
+        if(tdnode.hasClass("save") && crs.length == 0 ){
+
+        }
+        else{
             tdnode.empty();
             var tx = $("<textarea class='edittx'></textarea>");
             tx.attr("value", tdTest);
@@ -307,7 +311,7 @@ $(document).ready(function(){
         $.post(url, para, function(data){
             var rs = eval('('+data+')');
             if(rs.success){
-                rsdrop.after("<span>"+result+"</span>");//在后面生成结果
+                rsdrop.after("<span class=\""+result+"\">"+result+"</span>");//在后面生成结果
                 rsdrop.toggle();//隐藏下拉选择框               
 
                 //更新后端返回的执行时间和执行人

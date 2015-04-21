@@ -132,14 +132,14 @@
     <table id="caselist" class="table table-bordered">
     	<thead>
 	      	<tr>
-	    		<th style="width:50px;"><input id="caseall" type="checkbox">编号</th>
-	    		<th style="width:100px;">前置条件</th>
-	    		<th style="width:180px;">输入/动作</th>
-	    		<th style="width:180px;">期望输出</th>
-	    		<th style="width:40px;">级别</th>
-	    		<th style="width:60px;">结果</th>
-	    		<th style="width:40px;">BUG</th>
-	    		<th style="width:80px;">执行日期</th>
+	    		<th style="width:52px;"><input id="caseall" type="checkbox">编号</th>
+	    		<th style="width:93px;">前置条件</th>
+	    		<th style="width:165px;">输入/动作</th>
+	    		<th style="width:165px;">期望输出</th>
+	    		<th style="width:30px;">级别</th>
+	    		<th style="width:50px;">结果</th>
+	    		<th style="width:68px;">BUG</th>
+	    		<th style="width:75px;">执行日期</th>
 	    		<th style="width:50px;">执行人</th>
 	    		<th>备注</th>
 	    		<th style="width:80px;">操作</th>
@@ -176,9 +176,9 @@
                       {% if result %}
 						      		{% for r in result %}
 						      		{% if c.id == r.testcase_id %}
-						      		<td class="nodrag"><a class="icon-play-circle"></a><span>{{r.result}}</span></td>
+						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">{{r.result}}</span></td>
 						    		  <td class="editable nodrag save" name="wi">{{r.wi|default_if_none:""}}</td>
-						      		<td>{{r.exec_date|date:"Y-m-d H:i:s"}}</td>
+						      		<td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
 						      		<td>{{r.executor}}</td>
 						      		<td class="editable nodrag save" name="remark">{{r.r_remark|default_if_none:""}}</td>
 						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
@@ -253,6 +253,6 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150406"></script>
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150407"></script>
 
 {% endblock %}
