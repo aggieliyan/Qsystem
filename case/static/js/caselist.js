@@ -5,43 +5,43 @@ $(document).ready(function(){
     $(".fixbar").attr("style", "width:"+swidth+"px;");*/
 
     var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\">1</td>"+
-			      		"<td class=\"editable nodrag\"></td>"+
-			      		"<td class=\"editable nodrag\"></td>"+
-			    		"<td class=\"editable nodrag\"></td>"+
-			      		"<td class=\"nodrag\">2</td>"+
-			      		"<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
-			    		"<td class=\"editable nodrag\">-</td>"+
-			      		"<td></td>"+
-			      		"<td></td>"+
-			      		"<td class=\"editable nodrag\">-</td>"+
-			      		"<td class=\"nodrag\">"+
-			      			"<a class=\"icon-plus\" title=\"添加用例\"></a> "+
-			      			"<a class=\"icon-download-alt\" title=\"引入用例\"></a> "+
-			      			"<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
-			      			"<a class=\"icon-trash\"></a>"+
-			      		"</td>"+			
-			    	"</tr>";
+                          "<td class=\"editable nodrag\"></td>"+
+                          "<td class=\"editable nodrag\"></td>"+
+                        "<td class=\"editable nodrag\"></td>"+
+                          "<td class=\"nodrag\">2</td>"+
+                          "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
+                        "<td class=\"editable nodrag\">-</td>"+
+                          "<td></td>"+
+                          "<td></td>"+
+                          "<td class=\"editable nodrag\">-</td>"+
+                          "<td class=\"nodrag\">"+
+                              "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
+                              "<a class=\"icon-download-alt\" title=\"引入用例\"></a> "+
+                              "<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
+                              "<a class=\"icon-trash\"></a>"+
+                          "</td>"+            
+                    "</tr>";
 
     var modulehtml = "<tr class=\"cmodule\">"+
-	    		"<td colspan=\"11\">"+
-	    			"<div>"+
-	    				"<table >"+
-	    					"<tbody>"+
-	    						"<tr class=\"success\">"+
-						    		"<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
-						    		"<td colspan=\"9\" class=\"editable\"></td>"+
-						    		"<td >"+
-						      			"<a class=\"icon-plus-sign\" title=\"添加模块\"></a> "+
-						      		    "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
-						      		    "<a class=\"icon-trash\"></a> "+
-						    		"</td>"+
-	    						"</tr>"+
-	    						casehtml +
-	    					"</tbody>"+
-	    				"</table>"+
-	    			"</div>"+
-	    		"</td>"+
-	    	"</tr>"
+                "<td colspan=\"11\">"+
+                    "<div>"+
+                        "<table >"+
+                            "<tbody>"+
+                                "<tr class=\"success\">"+
+                                    "<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
+                                    "<td colspan=\"9\" class=\"editable\"></td>"+
+                                    "<td >"+
+                                          "<a class=\"icon-plus-sign\" title=\"添加模块\"></a> "+
+                                          "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
+                                          "<a class=\"icon-trash\"></a> "+
+                                    "</td>"+
+                                "</tr>"+
+                                casehtml +
+                            "</tbody>"+
+                        "</table>"+
+                    "</div>"+
+                "</td>"+
+            "</tr>"
 
     var resulthtml = "<select class=\"cresult\">"+
                         "<option>-</option>"+
@@ -57,18 +57,27 @@ $(document).ready(function(){
                     "</select>"
 
 
-	function insert_update_rank(celement){	
-    	var pelement = celement.prev();
+    function insert_update_rank(celement, cnum){
+        var cnum = arguments[1] ? arguments[1] : 1;//设置cnum参数默认值为1，代表当次新插入的个数
+        var pelement = celement.prev();
         var rankdic = {}
         var newrank = 1
-    	if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
-    		celement.attr("rank", "1");
-    	}
-    	else{
+        if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
+            celement.attr("rank", "1");
+        }
+        else{
             newrank = parseInt(pelement.attr("rank"))+1;
-    		celement.attr("rank", newrank);
+            celement.attr("rank", newrank);
 
-    	}
+        }
+        //批量插入多个用例后，该第一个插入用例后面的新用例rank值也要更新
+        var tempele;
+        for(var i=1;i<cnum;i++){
+            tempele = celement.next();
+            newrank = newrank + 1;
+            tempele.attr("rank", newrank);
+        }
+
         var cid = celement.attr("value");
         if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
             rankdic[cid] = newrank;
@@ -77,19 +86,17 @@ $(document).ready(function(){
             celement.find("input").eq(0).attr("checked", "checked");
         } 
 
-
-    	celement.find("input").eq(0).attr("checked", "checked");
-    	var classname = celement.attr("class")
-    	var nx = celement.nextAll().filter("."+classname);
+        var classname = celement.attr("class")
+        var nx = celement.nextAll().filter("."+classname);
         
         var mid = 0
         if(classname == "mtr"){
             mid = -1
         }
 
-    	nx.each(function(){
-    		newrank = parseInt($(this).attr("rank"))+1;
-    		$(this).attr("rank", newrank);
+        nx.each(function(){
+            newrank = parseInt($(this).attr("rank")) + cnum;
+            $(this).attr("rank", newrank);
             cid = $(this).attr("value");
             if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
                 rankdic[cid] = newrank;
@@ -97,7 +104,7 @@ $(document).ready(function(){
             else{
                 $(this).find("input").eq(0).attr("checked", "checked");
             }
-    	});
+        });
         rankdic = JSON.stringify(rankdic);
         url = "/case/updaterank/";
         para = {"mid":mid, "rankdict":rankdic};
@@ -115,28 +122,28 @@ $(document).ready(function(){
     }
 
     function delete_update_rank(celement){
-    	var nextele = celement.next();
+        var nextele = celement.next();
         var classname = celement.attr("class");
-    	if(nextele.length !== 0 || classname == "cmodule"){	
-        //删除用例/模块后他们后面的用例/模块rank值先不变了 反正相对位置没有变 要不然批量删除的时候好麻烦    	
+        if(nextele.length !== 0 || classname == "cmodule"){    
+        //删除用例/模块后他们后面的用例/模块rank值先不变了 反正相对位置没有变 要不然批量删除的时候好麻烦        
 /*            console.log(classname);
-	    	var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
+            var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
             var rankdic = {}
             var mid = 0
             if(classname == "mtr"){
                 mid = -1
             }
-	    	nx.each(function(){//rank值依次减1
-	    		var newrank = parseInt($(this).attr("rank"))-1;
+            nx.each(function(){//rank值依次减1
+                var newrank = parseInt($(this).attr("rank"))-1;
                 var cid = $(this).attr("value");//取该模块/用例的id
-	    		$(this).attr("rank", newrank);
+                $(this).attr("rank", newrank);
                 if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
                     rankdic[cid] = newrank;
                 }
                 else{
                     $(this).find("input").eq(0).attr("checked", "checked");
                 }
-	    	});
+            });
             rankdic = JSON.stringify(rankdic);
             url = "/case/updaterank/";
             para = {"mid":mid, "rankdict":rankdic};
@@ -144,29 +151,29 @@ $(document).ready(function(){
                 alert("ok");
             }); */
 
-	    	//如果删掉的是模块，模块下用例的rank值要变化
+            //如果删掉的是模块，模块下用例的rank值要变化
             //删掉模块后，用例是直接接到上一个模块下，
             //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
-	    	if(classname == "cmodule"){
-	    		var ccase = celement.find(".mtr");//该模块下所有用例
-	    		var cnum = celement.prev().find(".mtr").last().attr("rank");
+            if(classname == "cmodule"){
+                var ccase = celement.find(".mtr");//该模块下所有用例
+                var cnum = celement.prev().find(".mtr").last().attr("rank");
                 mid = celement.prev().attr("value");
-	    		var i = 1;
+                var i = 1;
 
                 rankdic = {}
 
-		    	ccase.each(function(){
-		    		var newrank = parseInt(cnum)+i;
-		    		i = i+1;
+                ccase.each(function(){
+                    var newrank = parseInt(cnum)+i;
+                    i = i+1;
                     var cid = $(this).attr("value");
-		    		$(this).attr("rank", newrank);
+                    $(this).attr("rank", newrank);
                     if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
                         rankdic[cid] = newrank;
                     }
                     else{
                         $(this).find("input").eq(0).attr("checked", "checked");
                     }
-		    	});
+                });
                 rankdic = JSON.stringify(rankdic);
                 url = "/case/updaterank/";
                 para = {"mid":mid, "rankdict":rankdic};
@@ -177,9 +184,9 @@ $(document).ready(function(){
                     }else{
                         alert("sorry,排序更新失败~");
                     }
-                });		
-	    	}  	
-    	}
+                });        
+            }      
+        }
     }
 
     // click create case
@@ -189,11 +196,11 @@ $(document).ready(function(){
 
     });
 
-	$(".editable").live('dblclick', function(){
-		var tdnode = $(this);
-		var tdTest = tdnode.text();
-		//before属性用来存点击时文本域的值
-		tdnode.attr("before", tdTest);
+    $(".editable").live('dblclick', function(){
+        var tdnode = $(this);
+        var tdTest = tdnode.text();
+        //before属性用来存点击时文本域的值
+        tdnode.attr("before", tdTest);
 
         //如果还没有执行结果，那点BUG和备注没反应
         var crs = tdnode.parent().children().eq(5).find("span")
@@ -206,18 +213,18 @@ $(document).ready(function(){
         }
    
 
-	});
+    });
 
-	$(".edittx").live('blur', function(){
-		var tx = $(this);
-		var etext = tx.val();
-		var tp = tx.parent();
-		tx.remove();
-		tp.attr("value", etext);
-		tp.html(etext);
-		//文本框的值与原来的值不同时，勾上checkbox
-		if(tp.attr("before") !== etext){
-			
+    $(".edittx").live('blur', function(){
+        var tx = $(this);
+        var etext = tx.val();
+        var tp = tx.parent();
+        tx.remove();
+        tp.attr("value", etext);
+        tp.html(etext);
+        //文本框的值与原来的值不同时，勾上checkbox
+        if(tp.attr("before") !== etext){
+            
             //如果是BUG和备注部分,而且用例是保存的用例则实时保存
             var tid = tp.parent().attr("value");
             var tname = tp.attr("name");
@@ -237,9 +244,9 @@ $(document).ready(function(){
             }else{//其他的需要勾上checkbox等待点保存
                 tp.siblings().eq(0).find("input").attr("checked", "checked");
             }
-		}
+        }
 
-	});
+    });
 
 
     //双击选择级别
@@ -315,11 +322,11 @@ $(document).ready(function(){
 
     });
 
-	//插入模块后用例后，赋rank值
+    //插入模块后用例后，赋rank值
 
     //添加用例
     $(".icon-plus").live("click", function(){
-    	var ccase = $(this).parent().parent();
+        var ccase = $(this).parent().parent();
         ccase.after(casehtml);
         insert_update_rank(ccase.next());
     });
@@ -334,52 +341,52 @@ $(document).ready(function(){
 
     function checkall(master, slave){
         if(master.attr("checked")=="checked"){ 
-        	slave.each(function(){
-        		$(this).attr("checked","checked");
-        	});
+            slave.each(function(){
+                $(this).attr("checked","checked");
+            });
         }else{
-         	slave.each(function(){
-        		$(this).removeAttr("checked");
-        	});
+             slave.each(function(){
+                $(this).removeAttr("checked");
+            });
         }
     }
 
     //全选
     $("#caseall").click(function(){
-    	var slave = $("#caselist").find("input");
-    	checkall($(this), slave);
+        var slave = $("#caselist").find("input");
+        checkall($(this), slave);
     });
 
     $(".modulecheck").live('click', function(){
-    	var slave = $(this).parents(".cmodule").find("input");
-    	checkall($(this), slave);
+        var slave = $(this).parents(".cmodule").find("input");
+        checkall($(this), slave);
     });
 
     function drag_update_rank(){
-    	insert_update_rank($(this));
+        insert_update_rank($(this));
     }
 
     //模块拖拽
     $("#caselist tbody").dragsort({
-    	dragSelector:".cmodule",
-    	dragEnd:drag_update_rank,
+        dragSelector:".cmodule",
+        dragEnd:drag_update_rank,
     });
     //用例拖拽
     $(".cmodule tbody").dragsort({
-    	dragSelector:".mtr",
+        dragSelector:".mtr",
         dragSelectorExclude:".nodrag",
-    	dragEnd:drag_update_rank,
+        dragEnd:drag_update_rank,
     });
 
     //删除
     $(".icon-trash").live('click', function(){
 
-    	if(confirm("你确定要删除吗？")){
+        if(confirm("你确定要删除吗？")){
             
-    		var node = $(this).parent().parent();
+            var node = $(this).parent().parent();
             
-    		if(node.attr("class") == "mtr"){//删除用例
- /*   			delete_update_rank(node);*/
+            if(node.attr("class") == "mtr"){//删除用例
+ /*               delete_update_rank(node);*/
                 var url = "/case/deletecase/";
                 var delid = node.attr("value");           
                 var para = {"did": delid,};
@@ -392,13 +399,13 @@ $(document).ready(function(){
                     }
                 });
 
-    		}else{//删除模块
-    		  
-    		    //找到该模块的前一个模块下的 
-    		    var currentm = node.parents(".cmodule")
-	    		var prevmodule = currentm.prev().find('tbody');
+            }else{//删除模块
+              
+                //找到该模块的前一个模块下的 
+                var currentm = node.parents(".cmodule")
+                var prevmodule = currentm.prev().find('tbody');
 
-	    		if(prevmodule.length){
+                if(prevmodule.length){
                     var url = "/case/moduledel/"
                     var mid = currentm.attr("value");     
                     var para = {"mid": mid,};
@@ -420,14 +427,14 @@ $(document).ready(function(){
 
 
 
-    		    }else{
-    		    	alert("抱歉~第一个模块不能删除。");
-    		    }
+                }else{
+                    alert("抱歉~第一个模块不能删除。");
+                }
             }
 
 
             return true;
-    	}else{
+        }else{
             return false;
         }            
     });
