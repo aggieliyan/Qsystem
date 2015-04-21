@@ -70,6 +70,9 @@
 	width:50px;
 }
 
+.must{
+	color:red;
+}
 #newcase {
 	float:right;
 }
