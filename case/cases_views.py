@@ -267,13 +267,6 @@ def update_rank(request):
 
 		return HttpResponse(resp)
 
-def singledel(request,pid):
-	ua = request.META['HTTP_REFERER']
-	delcase = get_object_or_404(testcase, pk=int(pid))
-	delcase.isactived = 0
-	delcase.save()
-	return HttpResponseRedirect(ua)
-
 def moduledel(request):
 	resp = {}
 	mid = request.POST['mid']
@@ -330,8 +323,6 @@ def update_case_related(request):
 	finally:
 		resp = json.dumps(resp)
 		return HttpResponse(resp)
-
-
 
 def savecase(request):
 	pid = 1;
