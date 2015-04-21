@@ -29,11 +29,25 @@ def is_tester(uid):
 
 
 def case_list(request,pid):
+	#没登陆的提示去登录
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect("/login")
+	#权限判断
+	canope = True
+	if not is_tester(request.session['id']):
+		canope =  False
+	else:
+		child = category.objects.filter(parent_id = int(pid))
+		if len(child):
+			canope =  False
+
+
 	kwargs={}
 	case = {}
 	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = \
 	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
 	cmodule = testcase.objects.filter(isactived =1)
+
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -106,7 +120,7 @@ def case_list(request,pid):
 		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
-		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
+		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope })
 
 
 # def allcaselist(request):
@@ -124,6 +138,11 @@ def case_list(request,pid):
 # 	print case
 # 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
 def allcaselist(request):
+
+	#没登陆的提示去登录
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect("/login")
+
 	kwargs={}
 	case = {}
 	ctestmodule = 	cpriority = cauthor = cexecutor = cstart_date = cend_date = \
@@ -183,7 +202,7 @@ def allcaselist(request):
 		newresult.append(p)
 	for m in testmodule:
 		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid, "count":count})
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid, "count":count, "canope": False})
 
 
 def categorysearch(request):
@@ -381,6 +400,12 @@ def update_case_related(request):
 def savecase(request):
 	pid = 1;
 	dict = {}
+	#判断下权限
+	if not is_tester(request.session['id']):
+		dict["message"] = False
+		dict = json.dumps(dict)
+		return HttpResponse(dict)
+
 	try:
 		dt = json.loads(request.POST.get('datas',False))
 		for data in dt:

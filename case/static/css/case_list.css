@@ -98,17 +98,17 @@
 .mtr td:nth-child(7){
 	width:80px;
 }
-.mtr td:nth-child(10){
+/*.mtr td:nth-child(10){
 	width:100px;
-}
+}*/
 
 .mtr td:nth-child(8){
 	width:80px;
 }
 
-.mtr td:nth-child(11){
+/*.mtr td:nth-child(11){
     width:80px;
-}
+}*/
 
 .fixbar{
 	position: fixed;
