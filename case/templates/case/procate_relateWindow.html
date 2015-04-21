@@ -8,13 +8,30 @@
         <h4 class="modal-title" id="myModalLabel">新建产品模块</h4>
       </div>
       <div class="modal-body">
-        <div class="container-fluid">
-			<div class="row-fluid" style='text-align: center'>
-				<input id="procate_id" name="procate_id" type="hidden">
-				<input id="procate_level" name="procate_level" type="hidden">
-				<input id="procate_title" name="procate_title" style='width:380px;'></input>
-			</div>
-		</div>
+               
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3" style="width:15%">
+             <div class="title">
+                <label class="item-title" style="margin-top:6px;">项目编号：</label>
+              </div>
+             <div class="title">
+                <label class="item-title" style="margin-top:12px;"> 模块名称：</label>
+             </div>
+    </div>
+    <div class="span9" style="width:75%">     
+       <div> 
+       <input id="project_id" name="project_id" style='width:100px;'></input> 
+       </div>
+     <div> 
+		<input id="procate_title" name="procate_title" style='width:380px;'></input>
+      </div>    
+		<input id="procate_id" name="procate_id" type="hidden">
+		<input id="procate_level" name="procate_level" type="hidden">
+    </div>
+  </div>
+</div> 
+   
       </div>
       <div class="modal-footer">
         <div align="center">
@@ -36,13 +53,31 @@
         <h4 class="modal-title" id="myModalLabel">编辑产品模块</h4>
       </div>
       <div class="modal-body">
-        <div class="container-fluid">
-			<div class="row-fluid" style='text-align: center'>
-				<input id="procate_id1" name="procate_id1" type="hidden">
-				<input id="procate_title1" name="procate_title1" style='width:380px;'></input>
-			</div>
-		</div>
+      
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3" style="width:15%">
+             <div class="title">
+                <label class="item-title" style="margin-top:6px;">项目编号：</label>
+              </div>
+             <div class="title">
+                <label class="item-title" style="margin-top:12px;"> 模块名称：</label>
+             </div>
+    </div>
+    <div class="span9" style="width:75%">     
+       <div> 
+       <input id="project_id1" name="project_id1" style='width:100px;'></input> 
+       </div>
+     <div> 
+		<input id="procate_title1" name="procate_title1" style='width:380px;'></input>
+      </div>    
+		<input id="procate_id1" name="procate_id1" type="hidden">
+    </div>
+  </div>
+</div> 
+		
       </div>
+      
       <div class="modal-footer">
         <div align="center">
           <button id='procate_btn1' type="button" class="btn mybtn-success" onclick="chk1()">确定</button>
