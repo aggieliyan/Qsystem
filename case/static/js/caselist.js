@@ -715,13 +715,13 @@ $(document).ready(function(){
         var mchk = [-2];
         var flag = true;
         var node = $("input[name=\"checklist\"]:checked");
-        var nlen = node.length;        
+        var nlen = node.length;
         $(node).each(function(){             
             var node = $(this).parent().parent();
             tdata = node.children();
             cm = $(this).parents(".cmodule")
             tmodule = cm.attr("value");
-            if (tmodule == undefined){
+            if (tmodule == ''){
                     tmodule = -1;
             }
             mchk[i] = tmodule;
@@ -729,9 +729,6 @@ $(document).ready(function(){
                 input = tdata.eq(2).text();
                 output = tdata.eq(3).text();
                 mname = $.trim(cm.find(".success").children().eq(1).text());
-                console.log(mname);
-                console.log(input);
-                console.log(output);
                 if(!input || !output || !mname ){
                     alert("用例必填项没有填写，请填写后再保存！");
                     flag = false;
