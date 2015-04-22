@@ -31,7 +31,7 @@ def is_tester(uid):
 def case_list(request,pid):
 	#没登陆的提示去登录
 	if not request.user.is_authenticated():
-		return HttpResponseRedirect("/login")
+		return HttpResponseRedirect("/case/login")
 	#权限判断
 	canope = True
 	if not is_tester(request.session['id']):
@@ -141,7 +141,7 @@ def allcaselist(request):
 
 	#没登陆的提示去登录
 	if not request.user.is_authenticated():
-		return HttpResponseRedirect("/login")
+		return HttpResponseRedirect("/case/login")
 
 	kwargs={}
 	case = {}
