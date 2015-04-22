@@ -18,14 +18,14 @@
 	color:#FFF;
 }
 
-a{
+.show_procate a{
     font-size: 14px;
     margin:3px;
     display:block;
 	color:#005fc8;
 }
 
-a:hover{
+.show_procate a:hover{
     text-decoration: none;
 	color:#005fc8;
 }
@@ -82,6 +82,7 @@ a:hover{
 	float:left;
 	position:relative;
 	left:5px;
+	top:4px;
 	background:url("/static/img/contract.png");
 }
 
@@ -94,6 +95,7 @@ a:hover{
 	float:left;
 	position:relative;
 	left:5px;
+	top:4px;
 	background:url("/static/img/expand.png");	
 }
 
@@ -180,6 +182,19 @@ myinput {
 	color:red;
 }
 
+.nowpro a:hover{
+    text-decoration: none;
+	color:red;
+}
+
 .gray{
 	color:#555;
+}
+
+.on_myproject{
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 300px;
 }

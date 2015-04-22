@@ -14,7 +14,7 @@
   	            {% for my_onproject in my_onprojects %}
   	               {% for proid, procateid in pro_cate_ids %}
   	               {% if proid == my_onproject.id %}
-  	               <a href="{% url 'caselist' procateid %}">{{my_onproject.id}}:{{my_onproject.project}}</a>
+  	               <a class='on_myproject' title='点击可定位此项目下的用例' href="{% url 'caselist' procateid %}">{{my_onproject.id}}:{{my_onproject.project}}</a>
   	                &nbsp;
   	                {% endif %}
   	               {% endfor %} 
@@ -120,4 +120,5 @@
     <script type='text/javascript' src="/static/js/procate.js?v=20150315"></script>
     <script type='text/javascript' src="/static/js/bootstrap.min.js"></script>
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
+
 {% endblock %}
