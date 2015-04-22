@@ -133,18 +133,16 @@
     	<thead>
 	      	<tr>
 	    		<th style="width:60px;"><input id="caseall" type="checkbox">编号</th>
-	    		<th style="width:100px;">前置条件</th>
-	    		<th style="width:173px;"><span class="must">*</span>输入/动作</th>
-	    		<th style="width:173px;"><span class="must">*</span>期望输出</th>
+	    		<th style="width:90px;">前置条件</th>
+	    		<th style="width:165px;"><span class="must">*</span>输入/动作</th>
+	    		<th style="width:165px;"><span class="must">*</span>期望输出</th>
 	    		<th style="width:30px;">级别</th>
 	    		<th style="width:50px;">结果</th>
 	    		<th style="width:60px;">BUG</th>
 	    		<th style="width:75px;">执行日期</th>
 	    		<th style="width:50px;">执行人</th>
 	    		<th>备注</th>
-          {% if canope %}
 	    		<th>操作</th>
-          {% endif %}
 	    	</tr>
         </thead>
         <tbody>
@@ -160,13 +158,14 @@
 	    						<tr class="success">
 						    		<td colspan="1" ><input class="modulecheck" type="checkbox" name="checklist"></td>
 						    		<td colspan="9" class="editable">{{i.m_name}}</td>
-                    {% if canope %}
 						    		<td >
+                      {% if canope %}
 						      			<a class="icon-plus-sign" title="添加模块"></a>
-						      		    <a class="icon-plus" title="添加用例"></a>
-						      		    <a class="icon-trash"></a>
+						      		  <a class="icon-plus" title="添加用例"></a>
+						      		  <a class="icon-trash"></a>
+                      {% endif %}
 						    		</td>
-                    {% endif %}
+                    
 	    						</tr>
                   {% endif %}
                   {% endfor %}
@@ -201,15 +200,17 @@
                       <td></td>
                       <td class="editable nodrag"></td>
                       {% endif %}
-                      {% if canope %}
+                      
 						      		<td class="nodrag">
+                        {% if canope %}
 						      			<a class="icon-plus" title="添加用例"></a>
 						      			<a class="icon-download-alt" title="引入用例"></a>
 						      			<a class="icon-eye-open" title="查看结果"></a>
 						      			<a class="icon-trash"></a>
                         <input  value="{{c.id}}" class="checkresult" type="hidden">
+                        {% endif %}
 						      		</td>
-                      {% endif %}
+                      
 
 	    						</tr>
 	    						{% endfor %}						
