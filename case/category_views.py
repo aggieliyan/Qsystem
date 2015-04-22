@@ -24,7 +24,7 @@ def product_category(request):
         for my_project in my_projects:
             my_proids.append(my_project.project_id)
         my_projectlist = project.objects.filter(pk__in = my_proids)
-        my_onprojects = my_projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")
+        my_onprojects = my_projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")[:5]
         #项目id和产品模块id对应关系
         pro_cate_ids = {}
         if my_onprojects.count > 0:

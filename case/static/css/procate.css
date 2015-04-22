@@ -192,9 +192,5 @@ myinput {
 }
 
 .on_myproject{
-    
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 300px;
+	color:#005fc8;
 }

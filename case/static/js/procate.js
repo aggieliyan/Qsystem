@@ -37,8 +37,9 @@
     function chk(){
         var title = document.test.procate_title.value.replace(/(^\s*)|(\s*$)/g,"");;
         var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,"");;
-        if(!title || title.length>30 || proid.length>10){
-            alert('编号不能超过10位数；模块名称不能为空且不能超过30个字符！');
+        var r = /^[1-999999999]+\d*$/;
+        if(r.test(title) || !title || title.length>30 || proid.length>10){
+            alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
         }
         else{
             document.test.submit();
@@ -49,11 +50,12 @@
     function chk1(){
         var title = document.test1.procate_title1.value.replace(/(^\s*)|(\s*$)/g,"");;
         var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");;
-        if(!title || title.length>30 || proid.length>10){
-            alert('编号不能超过10位数；模块名称不能为空且不能超过30个字符！');
+        var r = /^[1-999999999]+\d*$/;
+        if(r.test(title) || !title || title.length>30 || proid.length>10){
+            alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
         }
         else{
-            document.test1.submit();
+            document.test.submit();
         } 
       }
     
@@ -117,5 +119,13 @@
  //    });
    
    
-
+ $(document).ready(function(){
+	 $(".on_myproject").each(function(){
+		 val = $(this).text();
+		 if(val.length > 30){
+			 newval = val.substring(0,30)+"...";
+			 $(this).text(newval);
+		 }	 
+     }); 
+});
    
