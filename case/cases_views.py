@@ -1,7 +1,6 @@
 # coding=utf-8
 import datetime
-import json
-
+import json, re
 from django.shortcuts import render_to_response, redirect, RequestContext, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from models import testcase, casemodule, category, result
@@ -398,7 +397,6 @@ def update_case_related(request):
 		return HttpResponse(resp)
 
 def savecase(request):
-	pid = 1;
 	dict = {}
 	#判断下权限
 	if not is_tester(request.session['id']):
@@ -407,6 +405,9 @@ def savecase(request):
 		return HttpResponse(dict)
 
 	try:
+		url = request.META['HTTP_REFERER']
+		p = re.compile(r'\d+')
+		pid = (p.findall(url))[-1]
 		dt = json.loads(request.POST.get('datas',False))
 		for data in dt:
 			for key,value in data.items():
@@ -433,10 +434,11 @@ def savecase(request):
 								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
 							newcase.save()
 		dict['message']= True
-	except: 
+	except Exception,e: 
 		import sys 
 		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-		dict['message']=False 
+		dict['message']=False
+		print e 
 	finally:
 		cjson=json.dumps(dict) 
 	return HttpResponse(cjson)
