@@ -9,9 +9,9 @@
   </head>
   <body>
   	<div class="top">
-	 <ul>
-	   <li><img src="/static/img/case/logo.png"></li>
-	 </ul>
+   <ul class="top_logo">
+    <li class="logo" id="logo"><img src="/static/img/case/logo.png"></li>
+   </ul>
 	 <ul class="top_memu">
 		<li><a href="/case/procate/">产品管理</a></li>	
 		<li><a  href="/case/caselist/">用例管理</a></li>
@@ -21,7 +21,7 @@
 		  <li><a></a></li>
       <li><i> | </i></li>
       <li><a href="/case/logout/">退出</a></li>
-      <li>&nbsp;&nbsp;<a href="/projectlist/"><img src="/static/img/favicon.ico"></a></li>
+      <li style="padding-left:10px"><a href="/projectlist/"><img src="/static/img/favicon.ico"></a></li>
 		</ul>
 	</div>
     {% block content %}{% endblock %}
