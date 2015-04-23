@@ -653,6 +653,12 @@ $(document).ready(function(){
             $(".mold option[value="+$(".hide-mold").val()+"]").attr("selected",true);
         }
     };
+    
+    if($(".cauthor").val()){
+        $(".author").removeAttr("selected");
+        $(".author option[value="+$(".cauthor").val()+"]").attr("selected",true);
+    };
+
      $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         autoclose: true,
