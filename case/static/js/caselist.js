@@ -4,11 +4,11 @@ $(document).ready(function(){
     console.log("width:"+swidth+"px;");
     $(".fixbar").attr("style", "width:"+swidth+"px;");*/
 
-    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\">1</td>"+
+    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
                           "<td class=\"editable nodrag\"></td>"+
                           "<td class=\"editable nodrag\"></td>"+
                         "<td class=\"editable nodrag\"></td>"+
-                          "<td class=\"nodrag\">2</td>"+
+                          "<td class=\"level nodrag\">2</td>"+
                           "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
                         "<td class=\"editable nodrag\">-</td>"+
                           "<td></td>"+
@@ -216,7 +216,6 @@ $(document).ready(function(){
             tx.focus();
         }
    
-
     });
 
     $(".edittx").live('blur', function(){
@@ -255,6 +254,7 @@ $(document).ready(function(){
 
     //双击选择级别
     $(".level").live('dblclick', function(){
+        console.log("yeeeee");
         var tdnode = $(this);
         var tdTest = tdnode.text();
         tdnode.empty();
