@@ -35,28 +35,55 @@
 
     //添加验证输入框
     function chk(){
-        var title = document.test.procate_title.value.replace(/(^\s*)|(\s*$)/g,"");;
-        var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,"");;
-        var r = /^[1-999999999]+\d*$/;
-        if(r.test(title) || !title || title.length>30 || proid.length>10){
+        var title = document.test.procate_title.value.replace(/(^\s*)|(\s*$)/g,"");
+        var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,""); 
+        //先判断填写项是否符合规格
+        if(proid <= 0 || proid!=parseInt(proid) || !title || title.length>30 || proid.length>10){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
-        }
+        }   
         else{
-            document.test.submit();
+            //再判断项目编号之前是否填写过
+            url = "/case/has_proid";
+            para = {"proid":proid};
+            var has_pro = "";
+            $.get(url, para, function(data){
+                has_pro = eval('('+data+')');
+                if(has_pro != "no"){
+                	getname = has_pro.split("has")[0];
+                	alert("项目编号已被模块名称为“"+getname+"”关联！");	
+                } 	
+                else{
+                    document.test.submit();	
+                }
+            });
         } 
       }
    
     //编辑验证输入框
     function chk1(){
-        var title = document.test1.procate_title1.value.replace(/(^\s*)|(\s*$)/g,"");;
-        var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");;
-        var r = /^[1-999999999]+\d*$/;
-        if(r.test(title) || !title || title.length>30 || proid.length>10){
+        var title = document.test1.procate_title1.value.replace(/(^\s*)|(\s*$)/g,"");
+        var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");
+        var procate_id = document.test1.procate_id1.value;
+        //先判断填写项是否符合规格
+        if(proid <= 0 || proid!=parseInt(proid) || !title || title.length>30 || proid.length>10){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
-        }
+        }   
         else{
-            document.test1.submit();
-        } 
+            //再判断项目编号之前是否填写过
+            url = "/case/has_proid";
+            para = {"proid":proid};
+            $.get(url, para, function(data){
+                has_pro = eval('('+data+')');
+                getid = has_pro.split("has")[1];
+                if(has_pro != "no" && procate_id != getid){
+                	getname = has_pro.split("has")[0];
+                	alert("项目编号已被模块名称为“"+getname+"”关联！");	
+                } 	
+                else{
+                    document.test1.submit();	
+                }
+            });
+        }     
       }
     
    //添加产品模块

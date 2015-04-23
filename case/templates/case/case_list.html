@@ -82,8 +82,8 @@
           <ul>
             <li class="item-title"><lable style="float:right">作者：</lable></li>
   		      <li>
-  			      <select class="" name="author">
-                <option select="selected" value="{{cauthor}}">{{cauthor}}</option>
+              <input value="{{cauthor}}" type="hidden" class="cauthor">
+  			      <select class="author" name="author">
                 <option value=""> </option>
                 <option value="2">范峤</option>
   			      	<option value="3">李燕</option>
@@ -98,9 +98,11 @@
             </li>
             <li class="filter"><lable>执行人：</lable></li> 		
   		    	<li>
+              <input value="{{cexecutor}}" type="hidden" class="cexecutor">
               <select class="executor" name="executor">
-                {% for exec in executor %}
-                <option value="{{exec}}">{{exec.realname}}</option>
+                <option value=""> </option>
+                {% for exec in executorlist %}
+                <option value="{{exec}}">{{exec}}</option>
   				      {% endfor %}
               </select>
             </li>
@@ -135,7 +137,7 @@
     <table id="caselist" class="table table-bordered">
     	<thead>
 	      	<tr>
-	    		<th style="width:60px;"><input id="caseall" type="checkbox">编号</th>
+	    		<th style="width:60px;"><input id="caseall" type="checkbox">&nbsp;编号</th>
 	    		<th style="width:100px;">前置条件</th>
 	    		<th style="width:163px;"><span class="must">*</span>输入/动作</th>
 	    		<th style="width:163px;"><span class="must">*</span>期望输出</th>

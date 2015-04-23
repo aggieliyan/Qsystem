@@ -14,7 +14,7 @@
   	            {% for my_onproject in my_onprojects %}
   	               {% for proid, procateid in pro_cate_ids %}
   	               {% if proid == my_onproject.id %}
-  	               <a class='on_myproject' title='显示项目编号和名称，点击可定位此项目下的用例' href="{% url 'caselist' procateid %}">{{my_onproject.id}}:{{my_onproject.project}}</a>
+  	               <a class='on_myproject' title='显示项目编号和名称，点击可查看此项目下的用例' href="{% url 'caselist' procateid %}">{{my_onproject.id}}:{{my_onproject.project}}</a>
   	                &nbsp;
   	                {% endif %}
   	               {% endfor %} 
