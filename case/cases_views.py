@@ -127,6 +127,7 @@ def case_list(request,pid):
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+	executorlist = caseresult.values_list("executor",flat = True).distinct()
 	count = len(cmodule)
 	newresult = []
 	for c in listid:
@@ -136,7 +137,7 @@ def case_list(request,pid):
 		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
-		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope })
+		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "executorlist":executorlist})
 
 def allcaselist(request):
 
@@ -196,6 +197,7 @@ def allcaselist(request):
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+	executorlist = caseresult.values_list("executor",flat = True).distinct()
 	count =len(cmodule)
 	newresult = []
 	for c in listid:
@@ -205,7 +207,7 @@ def allcaselist(request):
 		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
-		                      "cend_date":cend_date, "canope": False})
+		                      "cend_date":cend_date, "canope": False, "executorlist":executorlist})
 
 
 def categorysearch(request):

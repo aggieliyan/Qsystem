@@ -653,10 +653,14 @@ $(document).ready(function(){
             $(".mold option[value="+$(".hide-mold").val()+"]").attr("selected",true);
         }
     };
-    
+
     if($(".cauthor").val()){
         $(".author").removeAttr("selected");
         $(".author option[value="+$(".cauthor").val()+"]").attr("selected",true);
+    };
+    if($(".cexecutor").val()){
+        $(".executor").removeAttr("selected");
+        $(".executor option[value="+$(".cexecutor").val()+"]").attr("selected",true);
     };
 
      $(".form_datetime").datetimepicker({

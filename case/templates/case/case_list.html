@@ -95,9 +95,11 @@
             </li>
             <li class="filter"><lable>执行人：</lable></li> 		
   		    	<li>
+              <input value="{{cexecutor}}" type="hidden" class="cexecutor">
               <select class="executor" name="executor">
-                {% for exec in executor %}
-                <option value="{{exec}}">{{exec.realname}}</option>
+                <option value=""> </option>
+                {% for exec in executorlist %}
+                <option value="{{exec}}">{{exec}}</option>
   				      {% endfor %}
               </select>
             </li>
