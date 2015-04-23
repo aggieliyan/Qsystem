@@ -673,11 +673,11 @@ $(document).ready(function(){
             var num = datalist.length;
             $(".title").html("<h5>测试结果：共执行<span>"+(num-1)+"次</span>,通过<span>"+datalist[0].Pass+"次</span></h5>");
             recordhtml = "<thead><tr>"+
-                     "<th>&nbsp</th>"+
-                     "<th>日期</th>"+
-                     "<th>执行人</th>"+
-                     "<th>结果</th>"+
-                     "<th>备注</th>"+
+                     "<th width=\"15px\">&nbsp</th>"+
+                     "<th width=\"88px\">日期</th>"+
+                     "<th width=\"30px\">执行人</th>"+
+                     "<th width=\"15px\">结果</th>"+
+                     "<th width=\"94px\">备注</th>"+
                     "</tr></thead>"
             /*recordhtml = ''*/
             for(var i=1;i<num;i++)
