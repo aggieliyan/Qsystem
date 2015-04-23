@@ -102,6 +102,23 @@ def case_list(request,pid):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate)
 	else:
+		clist = []
+		first = category.objects.get(pk = int(pid))
+		clist.append(int(pid))
+		if first.parent_id != 0:
+			clist.append(first.parent_id)
+			second = category.objects.get(pk = first.parent_id)
+			if second.parent_id !=0:
+				clist.append(second.parent_id)
+		catelen = len(clist)
+		if catelen:
+			cate1 = clist[-1]
+			catelen = catelen-1;
+		if catelen:
+			cate2 = clist[-2]
+			catelen = catelen-1;
+		if catelen:
+			catelen = catelen-1;
 		subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
 		subset3 = list(category.objects.filter(parent_id__in = subset2))
 		subset = list(set(subset2).union(set(subset3)))		
@@ -121,21 +138,6 @@ def case_list(request,pid):
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope })
 
-
-# def allcaselist(request):
-# 	case = {}
-# 	cmodule = testcase.objects.all()
-# 	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
-# 	caseresult = result.objects.filter(testcase__in = cmodule)
-# 	listid = caseresult.values_list("testcase", flat=True).distinct()
-# 	newresult = []
-# 	for c in listid:
-# 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
-# 		newresult.append(p)
-# 	for m in testmodule:
-# 		case[m.id] = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
-# 	print case
-# 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
 def allcaselist(request):
 
 	#没登陆的提示去登录

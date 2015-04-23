@@ -109,14 +109,6 @@
          }
      })      
  }
- //点击时将父级id写入cookie
- // var cate1 = $.cookie("c1");
- // var cate2 = $.cookie("c2");
- // var cate3 = $.cookie("c3");
- //    //alert("tabcookievalue="+tabcookievalue); v 
- //    $(".procate-a2").click(function(){
- //      $.cookie("mytab", $(this).index());
- //    });
    
    
  $(document).ready(function(){

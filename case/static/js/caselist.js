@@ -486,10 +486,10 @@ $(document).ready(function(){
         });
         category1.html(temp_html); 
         var n = category1.get(0).selectedIndex;
-        console.log("n");
-        console.log(n);
-        console.log("c1");
-        console.log(c1);
+        // console.log("n");
+        // console.log(n);
+        // console.log("c1");
+        // console.log(c1);
         if(c1){
             $(".category_select_1 option[value="+c1+"]").attr("selected","true")
             var preoption = $(".category_select_1 option[value="+c1+"]").prevAll("option")
@@ -498,7 +498,7 @@ $(document).ready(function(){
             if((areaJson[n-1].slist).length != 0){
                 category2.show();
                 category_select_2();
-                console.log("mmm");
+                // console.log("mmm");
                 if (!c1){
                     $(".cate").attr("value",'aa');
                 }
@@ -507,22 +507,19 @@ $(document).ready(function(){
         }else{
             if(n==0&c1){
                 if((areaJson[preoption.length-1].slist).length != 0){
-                category2.show();
-                category_select_2();
-                console.log("mmm");
-                if (!c1){
-                    $(".cate").attr("value",'aa');
+                    category2.show();
+                    category_select_2();
+                    // console.log("mmm");
+                    $(".cate1").attr("value",category1.children().eq(preoption.length).val());
+                }else{
+                    category2.hide();
+                    category3.hide();
                 }
-                $(".cate1").attr("value",category1.children().eq(preoption.length).val());
-            };
-
             }else{
-                console.log("else");
+                // console.log("else");
                 category2.hide();
-          category3.hide(); 
-
-            }
-           
+                category3.hide();
+            }           
         }                       
      };
     //赋值二级
@@ -530,12 +527,12 @@ $(document).ready(function(){
         var c2=$(".cate2").val();
         temp_html="<option>"+'请选择'+"</option>"; 
         var n = category1.get(0).selectedIndex;
-        console.log("n");
-        console.log(n);
-        console.log("c2");
-        console.log(c2);
+        // console.log("n");
+        // console.log(n);
+        // console.log("c2");
+        // console.log(c2);
         if(n==0){
-            console.log("ddd");
+            // console.log("ddd");
             category2.css("display","none");
             category3.css("display","none");
         }else{
@@ -548,7 +545,7 @@ $(document).ready(function(){
                 });
                 category2.html(temp_html);
                 if(c2){
-                    console.log("aaa");
+                    // console.log("aaa");
                     $(".category_select_2 option[value="+c2+"]").attr("selected","true")
                 }
                 category_select_3();
@@ -665,12 +662,6 @@ $(document).ready(function(){
         minView:2 
       });
      
-
-/*    $(window).bind('beforeunload', function(){
-
-    });*/
-/*
-    window.onbeforeunload = function(event){return confirm("确定离开此页面吗？"); }*/
   //备注弹框信息显示
     $(".icon-eye-open").click(function(){
         $('#myModal').modal('show');
