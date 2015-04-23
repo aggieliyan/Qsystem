@@ -118,7 +118,7 @@ def case_list(request,pid):
 			cate2 = clist[-2]
 			catelen = catelen-1;
 		if catelen:
-			catelen = catelen-1;
+			cate3 = clist[-3]
 		subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
 		subset3 = list(category.objects.filter(parent_id__in = subset2))
 		subset = list(set(subset2).union(set(subset3)))		
