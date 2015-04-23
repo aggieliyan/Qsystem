@@ -82,19 +82,23 @@
   			      <select class="" name="author">
                 <option select="selected" value="{{cauthor}}">{{cauthor}}</option>
                 <option value=""> </option>
-  			      	<option value="李稳">李稳</option>
-  				      <option>国玉玲</option>
-  				      <option>易璐璐</option>
+                <option value="2">范峤</option>
+  			      	<option value="3">李燕</option>
+  				      <option value="4">易璐璐</option>
+                <option value="5">国玉玲</option>
+                <option value="6">刘红蛟</option>
+                <option value="9">高岳</option>
+                <option value="10">杜永红</option>
+                <option value="14">李稳</option>                
+                <option value="37">胡图图</option>
               </select>
             </li>
             <li class="filter"><lable>执行人：</lable></li> 		
   		    	<li>
-              <select class="" name="executor">
-                <option select="selected" value="{{cexecutor}}">{{cexecutor}}</option>
-                <option value=""> </option>
-  				      <option value="李稳">李稳</option>
-                <option>国玉玲</option>
-                <option>易璐璐</option>
+              <select class="executor" name="executor">
+                {% for exec in executor %}
+                <option value="{{exec}}">{{exec.realname}}</option>
+  				      {% endfor %}
               </select>
             </li>
           </ul>
@@ -124,21 +128,21 @@
   		<img src="/static/img/praise.png" style="margin-left:500px">
   	</div>  -->
 <div class="span12">
-  	<div id="tbop"><span id="cnum">共2015条用例(后端同学注意！！写模版的时候在第一个模块这写啊 后面的模块class有不全 太多了懒得都粘一遍了)</span><buton id="newcase" class="btn btn-success">新建用例</button></div>
+  	<div id="tbop"><span id="cnum">共{{count}}条用例</span>{% if canope %} <buton id="newcase" class="btn btn-success">新建用例</button>{% endif %} </div>
     <table id="caselist" class="table table-bordered">
     	<thead>
 	      	<tr>
-	    		<th style="width:50px;"><input id="caseall" type="checkbox">编号</th>
+	    		<th style="width:60px;"><input id="caseall" type="checkbox">编号</th>
 	    		<th style="width:100px;">前置条件</th>
-	    		<th style="width:180px;">输入/动作</th>
-	    		<th style="width:180px;">期望输出</th>
-	    		<th style="width:40px;">级别</th>
-	    		<th style="width:60px;">结果</th>
-	    		<th style="width:40px;">BUG</th>
-	    		<th style="width:80px;">执行日期</th>
-	    		<th style="width:50px;">执行人</th>
-	    		<th>备注</th>
-	    		<th style="width:80px;">操作</th>
+	    		<th style="width:163px;"><span class="must">*</span>输入/动作</th>
+	    		<th style="width:163px;"><span class="must">*</span>期望输出</th>
+	    		<th style="width:30px;">级别</th>
+	    		<th style="width:50px;">结果</th>
+	    		<th style="width:55px;">BUG</th>
+	    		<th style="width:75px;">执行日期</th>
+	    		<th style="width:46px;">执行人</th>
+	    		<th style="width:80px;">备注</th>
+	    		<th>操作</th>
 	    	</tr>
         </thead>
         <tbody>
@@ -146,25 +150,28 @@
         {% for key,dic in case.items %}
         {% for i in testmodule %}
         {% if key == i.id %}
-	    	<tr class="cmodule" rank="{{key}}" value="1">
+	    	<tr class="cmodule" rank="{{i.m_rank}}" value="{{key}}">
 	    		<td colspan="11">
 	    			<div>
 	    				<table >
 	    					<tbody>                  
 	    						<tr class="success">
-						    		<td colspan="1" ><input class="modulecheck" type="checkbox"></td>
+						    		<td colspan="1" ><input class="modulecheck" type="checkbox" name="checklist"></td>
 						    		<td colspan="9" class="editable">{{i.m_name}}</td>
 						    		<td >
+                      {% if canope %}
 						      			<a class="icon-plus-sign" title="添加模块"></a>
-						      		    <a class="icon-plus" title="添加用例"></a>
-						      		    <a class="icon-trash"></a>
+						      		  <a class="icon-plus" title="添加用例"></a>
+						      		  <a class="icon-trash"></a>
+                      {% endif %}
 						    		</td>
+                    
 	    						</tr>
                   {% endif %}
                   {% endfor %}
 	    						{% for c in dic %}
 	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
-						    		<td><input class="casecheck nodrag" type="checkbox">1</td>
+						    		<td><input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.id}}</td>
 						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
 						      		<td class="editable nodrag">{{c.action}}</td>
 						    		<td class="editable nodrag">{{c.output}}</td>
@@ -172,17 +179,17 @@
                       {% if result %}
 						      		{% for r in result %}
 						      		{% if c.id == r.testcase_id %}
-						      		<td class="nodrag"><a class="icon-play-circle"></a><span>{{r.result}}</span></td>
-						    		  <td class="editable nodrag">{{r.wi|default_if_none:""}}</td>
-						      		<td>{{r.exec_date|date:"Y-m-d H:i:s"}}</td>
+						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">{{r.result}}</span></td>
+						    		  <td class="editable nodrag save" name="wi">{{r.wi|default_if_none:""}}</td>
+						      		<td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
 						      		<td>{{r.executor}}</td>
-						      		<td class="editable nodrag">{{r.r_remark|default_if_none:""}}</td>
+						      		<td class="editable nodrag save" name="remark">{{r.r_remark|default_if_none:""}}</td>
 						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
 						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
-						    		  <td class="editable nodrag"></td>
+						    		  <td class="editable nodrag save" name="wi"></td>
 						      		<td></td>
 						      		<td></td>
-						      		<td class="editable nodrag"></td>
+						      		<td class="editable nodrag save" name="remark"></td>
 
 						      		{% endif %}
 						      		{% endfor %}
@@ -193,14 +200,17 @@
                       <td></td>
                       <td class="editable nodrag"></td>
                       {% endif %}
-
+                      
 						      		<td class="nodrag">
+                        {% if canope %}
 						      			<a class="icon-plus" title="添加用例"></a>
 						      			<a class="icon-download-alt" title="引入用例"></a>
 						      			<a class="icon-eye-open" title="查看结果"></a>
-						      			<a class="icon-trash" href="{% url 'singledel' c.id %}"></a>
+						      			<a class="icon-trash"></a>
                         <input  value="{{c.id}}" class="checkresult" type="hidden">
-						      		</td> 
+                        {% endif %}
+						      		</td>
+                      
 
 	    						</tr>
 	    						{% endfor %}						
@@ -212,19 +222,21 @@
 	    	</tr>
         {% endfor %}
         {% else %}
-        <tr class="cmodule" rank="{{key}}" value="10001">
+        <tr class="cmodule" rank="1" value="">
           <td colspan="11">
             <div>
               <table >
                 <tbody>                  
                   <tr class="success">
-                    <td colspan="1" ><input class="modulecheck" type="checkbox"></td>
+                    <td colspan="1" ><input class="modulecheck" type="checkbox" name="checklist"></td>
                     <td colspan="9" class="editable"></td>
+                    {% if canope %}
                     <td >
                         <a class="icon-plus-sign" title="添加模块"></a>
                           <a class="icon-plus" title="添加用例"></a>
                           <a class="icon-trash"></a>
                     </td>
+                    {% endif %}
                   </tr>
                   </tbody>
               </table>
@@ -235,9 +247,12 @@
 
         </tbody>
     </table>
+    {% if canope %}
     <div class="fixbar">
-    	<button class="btn btn-success savebtn" onclick="accept()">保存</button>
+      <button class="btn btn-warning" id="delbtn">批量删除</button>
+    	<button class="btn btn-success savebtn">保存</button>
     </div>
+    {% endif %}
   	</div>
 </div>
  {% include "case/exec_log.html" %}
@@ -248,5 +263,6 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150406"></script> 
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150408"></script>
+
 {% endblock %}

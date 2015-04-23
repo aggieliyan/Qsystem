@@ -39,7 +39,7 @@ p,a {
 .top_logo {
 	float: left;
 	padding-left: 40px;
-	width: 300px;
+	width: 194px;
 	height: 86px;
 	background-position: -0px -52px;
 }
@@ -84,7 +84,6 @@ p,a {
 
 .top_bar {
 	float: right;
-	padding-right: 18px;
 }
 
 .top_bar li {
@@ -97,3 +96,7 @@ p,a {
 	color: #fff;
 	font-size: 18px;
 }
+
+.basefooter {
+margin-top: 60px;
+text-align: center;

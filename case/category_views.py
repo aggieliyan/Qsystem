@@ -13,7 +13,7 @@ def product_category(request):
     try:
         useid = request.session['id']
     except KeyError:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/case/login")
     #获取登录用户所属部门
     myuser = user.objects.filter(id = useid)
     departid = myuser[0].department_id
@@ -24,7 +24,16 @@ def product_category(request):
         for my_project in my_projects:
             my_proids.append(my_project.project_id)
         my_projectlist = project.objects.filter(pk__in = my_proids)
-        my_onprojects = my_projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
+        my_onprojects = my_projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")[:5]
+        #项目id和产品模块id对应关系
+        pro_cate_ids = {}
+        if my_onprojects.count > 0:
+            for my_onproject in my_onprojects:
+                try:
+                    my_procate = category.objects.get(project_id = my_onproject.id)
+                    pro_cate_ids[my_onproject.id] = my_procate.id  
+                except:
+                    pro_cate_ids[my_onproject.id] = 0
     #查询出parent_id = 0 的一级产品模块
     first_secounts = {}
     second_thicounts = {}
@@ -34,10 +43,10 @@ def product_category(request):
     third_names = {}
     procate_firsts = category.objects.filter(parent_id = '0', isactived = '1')
     fircount = procate_firsts.count()
-    #引入用例弹框要用到的数据
+    # Don't delete. Added by YanLi
     first_level = {}
     second_level = {}
-    third_level ={}    
+    third_level = {}
     
     if fircount > 0:
         for procate_first in procate_firsts:
@@ -65,28 +74,30 @@ def product_category(request):
                 T = testcase.objects.filter(category_id=cate)
                 module_ids = T.values('module_id').distinct()
                 for item in module_ids:
-                    level[cate][-1][item['module_id']] = casemodule.objects.get(id=item['module_id']).m_name
+                    level[cate][-1][item['module_id']] = casemodule.objects.get(id=item['module_id']).m_name        
         print res
-        
         return HttpResponse(json.dumps(res))
+
     return render_to_response("case/product_category.html",RequestContext(request, \
     {'procate_firsts':procate_firsts, 'second_ids':sorted(second_ids.items()), \
      'second_names':second_names.items(), 'third_ids':sorted(third_ids.items()), \
      'third_names':third_names.items(), 'first_secounts':first_secounts.items(), \
-     'second_thicounts':second_thicounts.items(), 'my_onprojects':my_onprojects, 'departid':departid}))
+     'second_thicounts':second_thicounts.items(), 'my_onprojects':my_onprojects, \
+     'departid':departid,'pro_cate_ids':pro_cate_ids.items()}))
     
 def add_procate(request, url):
     if request.method == 'POST':
         form = add_procateForm(request.POST)
         if form.is_valid():
             procate_id = form.cleaned_data['procate_id']
+            proid = form.cleaned_data['project_id']
             procate_level = form.cleaned_data['procate_level']
             procate_name = form.cleaned_data['procate_title']
             if procate_id == None:
-                pro_cate = category(name = procate_name, parent_id = 0, level = 1, \
+                pro_cate = category(name = procate_name, parent_id = 0, project_id = proid, level = 1, \
                            createdate = datetime.datetime.now(), isactived = 1)
             else:
-                pro_cate = category(name = procate_name, parent_id = procate_id, \
+                pro_cate = category(name = procate_name, parent_id = procate_id, project_id = proid,\
                            level = procate_level + 1, \
                            createdate = datetime.datetime.now(), isactived = 1)
             pro_cate.save()                  
@@ -98,8 +109,10 @@ def edit_procate(request, url):
         if form.is_valid():
             procate_id = form.cleaned_data['procate_id1']
             procate_name = form.cleaned_data['procate_title1']
+            proid1 = form.cleaned_data['project_id1'] 
             pro_cate = category.objects.get(id = procate_id)
-            pro_cate.name = procate_name          
+            pro_cate.name = procate_name
+            pro_cate.project_id = proid1              
             pro_cate.save()                  
     return HttpResponseRedirect(url)
 
@@ -117,7 +130,15 @@ def delprocate_confirm(request):
         according = "no"  
     accord = json.dumps(according)
     return HttpResponse(accord)
-       
+
+def get_proid(request): 
+    procate_id = request.GET['procate_id']
+    pro_cate = category.objects.get(id = procate_id)   
+    proid = pro_cate.project_id 
+    pro_id = json.dumps(proid)
+    print pro_id
+    return HttpResponse(pro_id)
+      
 def del_procate(request, url):
     if request.method == 'POST':
         form = del_procateForm(request.POST)
@@ -127,6 +148,5 @@ def del_procate(request, url):
             pro_cate.delete()       
     return HttpResponseRedirect(url)
 
- 
 
         

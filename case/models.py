@@ -10,10 +10,11 @@ RESULT_CHOICES = (
 class category(models.Model):
 	name = models.CharField(u'testcase项目名称', max_length=30)
 	parent_id = models.IntegerField(u'父级id', max_length=20, blank=True, null=True)
+	project_id = models.IntegerField(u'项目id', max_length=20, blank=True, null=True)
 	level = models.IntegerField(u'级数', max_length=3)
 	createdate = models.DateTimeField(u'创建时间', blank=True, null=True)
 	isactived = models.IntegerField(max_length=1)
-
+    
 class casemodule(models.Model):
 	m_name = models.CharField(u'test模块名称', max_length=30)
 	m_rank = models.IntegerField(u'编号', max_length=5)

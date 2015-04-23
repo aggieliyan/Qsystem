@@ -12,8 +12,12 @@
   	        <span>您正在进行中的项目：
   	        {% if my_onprojects %}
   	            {% for my_onproject in my_onprojects %}
-  	            {{my_onproject.project}}
-  	            &nbsp;
+  	               {% for proid, procateid in pro_cate_ids %}
+  	               {% if proid == my_onproject.id %}
+  	               <a class='on_myproject' title='显示项目编号和名称，点击可定位此项目下的用例' href="{% url 'caselist' procateid %}">{{my_onproject.id}}:{{my_onproject.project}}</a>
+  	                &nbsp;
+  	                {% endif %}
+  	               {% endfor %} 
   	            {% endfor %}
   	        {% else %}
   	                          暂无进行中的项目！
@@ -115,5 +119,4 @@
 {% block js %}
     <script type='text/javascript' src="/static/js/procate.js?v=20150315"></script>
     <script type='text/javascript' src="/static/js/bootstrap.min.js"></script>
-    <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
 {% endblock %}

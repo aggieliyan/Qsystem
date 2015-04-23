@@ -4,50 +4,50 @@ $(document).ready(function(){
     console.log("width:"+swidth+"px;");
     $(".fixbar").attr("style", "width:"+swidth+"px;");*/
 
-    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked'>1</td>"+
-			      		"<td class=\"editable nodrag\"></td>"+
-			      		"<td class=\"editable nodrag\"></td>"+
-			    		"<td class=\"editable nodrag\"></td>"+
-			      		"<td class=\"nodrag\">2</td>"+
-			      		"<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
-			    		"<td class=\"editable nodrag\">-</td>"+
-			      		"<td></td>"+
-			      		"<td></td>"+
-			      		"<td class=\"editable nodrag\">-</td>"+
-			      		"<td class=\"nodrag\">"+
-			      			"<a class=\"icon-plus\" title=\"添加用例\"></a> "+
-			      			"<a class=\"icon-download-alt\" title=\"引入用例\"></a> "+
-			      			"<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
-			      			"<a class=\"icon-trash\"></a>"+
-			      		"</td>"+			
-			    	"</tr>";
+    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
+                          "<td class=\"editable nodrag\"></td>"+
+                          "<td class=\"editable nodrag\"></td>"+
+                        "<td class=\"editable nodrag\"></td>"+
+                          "<td class=\"level nodrag\">2</td>"+
+                          "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
+                        "<td class=\"editable nodrag\">-</td>"+
+                          "<td></td>"+
+                          "<td></td>"+
+                          "<td class=\"editable nodrag\">-</td>"+
+                          "<td class=\"nodrag\">"+
+                              "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
+                              "<a class=\"icon-download-alt\" title=\"引入用例\"></a> "+
+                              "<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
+                              "<a class=\"icon-trash\"></a>"+
+                          "</td>"+            
+                    "</tr>";
 
     var modulehtml = "<tr class=\"cmodule\">"+
-	    		"<td colspan=\"11\">"+
-	    			"<div>"+
-	    				"<table >"+
-	    					"<tbody>"+
-	    						"<tr class=\"success\">"+
-						    		"<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\" checked='checked'></td>"+
-						    		"<td colspan=\"9\" class=\"editable\"></td>"+
-						    		"<td >"+
-						      			"<a class=\"icon-plus-sign\" title=\"添加模块\"></a> "+
-						      		    "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
-						      		    "<a class=\"icon-trash\"></a> "+
-						    		"</td>"+
-	    						"</tr>"+
-	    						casehtml +
-	    					"</tbody>"+
-	    				"</table>"+
-	    			"</div>"+
-	    		"</td>"+
-	    	"</tr>"
+                "<td colspan=\"11\">"+
+                    "<div>"+
+                        "<table >"+
+                            "<tbody>"+
+                                "<tr class=\"success\">"+
+                                    "<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
+                                    "<td colspan=\"9\" class=\"editable\"></td>"+
+                                    "<td >"+
+                                          "<a class=\"icon-plus-sign\" title=\"添加模块\"></a> "+
+                                          "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
+                                          "<a class=\"icon-trash\"></a> "+
+                                    "</td>"+
+                                "</tr>"+
+                                casehtml +
+                            "</tbody>"+
+                        "</table>"+
+                    "</div>"+
+                "</td>"+
+            "</tr>"
 
     var resulthtml = "<select class=\"cresult\">"+
                         "<option>-</option>"+
                         "<option>Pass</option>"+
                         "<option>Fail</option>"+
-                        "<option>block</option>"+
+                        "<option>Block</option>"+
                     "</select>"
 
     var levelhtml = "<select class=\"lselect\">"+
@@ -57,18 +57,27 @@ $(document).ready(function(){
                     "</select>"
 
 
-	function insert_update_rank(celement){	
-    	var pelement = celement.prev();
+    function insert_update_rank(celement, cnum){
+        var cnum = arguments[1] ? arguments[1] : 1;//设置cnum参数默认值为1，代表当次新插入的个数
+        var pelement = celement.prev();
         var rankdic = {}
         var newrank = 1
-    	if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
-    		celement.attr("rank", "1");
-    	}
-    	else{
+        if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
+            celement.attr("rank", "1");
+        }
+        else{
             newrank = parseInt(pelement.attr("rank"))+1;
-    		celement.attr("rank", newrank);
+            celement.attr("rank", newrank);
 
-    	}
+        }
+        //批量插入多个用例后，该第一个插入用例后面的新用例rank值也要更新
+        var tempele;
+        for(var i=1;i<cnum;i++){
+            tempele = celement.next();
+            newrank = newrank + 1;
+            tempele.attr("rank", newrank);
+        }
+
         var cid = celement.attr("value");
         if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
             rankdic[cid] = newrank;
@@ -77,19 +86,17 @@ $(document).ready(function(){
             celement.find("input").eq(0).attr("checked", "checked");
         } 
 
-
-    	celement.find("input").eq(0).attr("checked", "checked");
-    	var classname = celement.attr("class")
-    	var nx = celement.nextAll().filter("."+classname);
+        var classname = celement.attr("class")
+        var nx = celement.nextAll().filter("."+classname);
         
         var mid = 0
         if(classname == "mtr"){
             mid = -1
         }
 
-    	nx.each(function(){
-    		newrank = parseInt($(this).attr("rank"))+1;
-    		$(this).attr("rank", newrank);
+        nx.each(function(){
+            newrank = parseInt($(this).attr("rank")) + cnum;
+            $(this).attr("rank", newrank);
             cid = $(this).attr("value");
             if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
                 rankdic[cid] = newrank;
@@ -97,12 +104,17 @@ $(document).ready(function(){
             else{
                 $(this).find("input").eq(0).attr("checked", "checked");
             }
-    	});
+        });
         rankdic = JSON.stringify(rankdic);
         url = "/case/updaterank/";
         para = {"mid":mid, "rankdict":rankdic};
         $.post(url, para, function(data){
-            alert("ok");
+            var rs = eval('('+data+')');
+            if(rs.success){
+                //alert("排序更新成功!");
+            }else{
+                alert("sorry,排序更新失败~");
+            }
         }); 
 
 
@@ -110,71 +122,71 @@ $(document).ready(function(){
     }
 
     function delete_update_rank(celement){
-    	var nextele = celement.next();
+        var nextele = celement.next();
         var classname = celement.attr("class");
-    	if(nextele.length !== 0 || classname == "cmodule"){	    	
-            console.log(classname);
-	    	var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
+        if(nextele.length !== 0 || classname == "cmodule"){    
+        //删除用例/模块后他们后面的用例/模块rank值先不变了 反正相对位置没有变 要不然批量删除的时候好麻烦        
+/*            console.log(classname);
+            var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
             var rankdic = {}
             var mid = 0
             if(classname == "mtr"){
                 mid = -1
             }
-	    	nx.each(function(){//rank值依次减1
-	    		var newrank = parseInt($(this).attr("rank"))-1;
+            nx.each(function(){//rank值依次减1
+                var newrank = parseInt($(this).attr("rank"))-1;
                 var cid = $(this).attr("value");//取该模块/用例的id
-	    		$(this).attr("rank", newrank);
+                $(this).attr("rank", newrank);
                 if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
                     rankdic[cid] = newrank;
                 }
                 else{
                     $(this).find("input").eq(0).attr("checked", "checked");
                 }
-	    	});
+            });
             rankdic = JSON.stringify(rankdic);
             url = "/case/updaterank/";
             para = {"mid":mid, "rankdict":rankdic};
             $.post(url, para, function(data){
                 alert("ok");
-            }); 
+            }); */
 
-	    	//如果删掉的是模块，模块下用例的rank值也要变化
+            //如果删掉的是模块，模块下用例的rank值要变化
             //删掉模块后，用例是直接接到上一个模块下，
             //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
-	    	if(classname == "cmodule"){
-	    		var ccase = celement.find(".mtr");//该模块下所有用例
-	    		var cnum = celement.prev().find(".mtr").last().attr("rank");
+            if(classname == "cmodule"){
+                var ccase = celement.find(".mtr");//该模块下所有用例
+                var cnum = celement.prev().find(".mtr").last().attr("rank");
                 mid = celement.prev().attr("value");
-	    		var i = 1;
+                var i = 1;
 
                 rankdic = {}
 
-		    	ccase.each(function(){
-		    		var newrank = parseInt(cnum)+i;
-		    		i = i+1;
+                ccase.each(function(){
+                    var newrank = parseInt(cnum)+i;
+                    i = i+1;
                     var cid = $(this).attr("value");
-		    		$(this).attr("rank", newrank);
+                    $(this).attr("rank", newrank);
                     if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
                         rankdic[cid] = newrank;
                     }
                     else{
                         $(this).find("input").eq(0).attr("checked", "checked");
                     }
-		    	});
+                });
                 rankdic = JSON.stringify(rankdic);
                 url = "/case/updaterank/";
                 para = {"mid":mid, "rankdict":rankdic};
                 $.post(url, para, function(data){
-/*                    var rs = eval('('+data+')');
+                    var rs = eval('('+data+')');
                     if(rs.success){
-                        alert("ok");
+                        //alert("排序更新成功!");
                     }else{
-                        alert("fail");
-                    }*/
-                    alert("ok");
-                });		
-	    	}  	
-    	}
+                        alert("sorry,排序更新失败~");
+                    }
+                });        
+            }      
+        }
     }
 
     // click create case
@@ -184,36 +196,65 @@ $(document).ready(function(){
 
     });
 
-	$(".editable").live('dblclick', function(){
-		var tdnode = $(this);
-		var tdTest = tdnode.text();
-		//before属性用来存点击时文本域的值
-		tdnode.attr("before", tdTest);
+    $(".editable").live('dblclick', function(){
+        var tdnode = $(this);
+        var tdTest = tdnode.text();
+        //before属性用来存点击时文本域的值
+        tdnode.attr("before", tdTest);
+
+        //如果还没有执行结果，那点BUG和备注没反应
+        var crs = tdnode.parent().children().eq(5).find("span");
+
+        if(tdnode.hasClass("save") && crs.length == 0 ){
+
+        }
+        else{
+            tdnode.empty();
+            var tx = $("<textarea class='edittx'></textarea>");
+            tx.attr("value", tdTest);
+            tdnode.append(tx);
+            tx.focus();
+        }
    
-		tdnode.empty();
-		var tx = $("<textarea class='edittx'></textarea>");
-		tx.attr("value", tdTest);
-		tdnode.append(tx);
-		tx.focus();
-	});
+    });
 
-	$(".edittx").live('blur', function(){
-		var tx = $(this);
-		var etext = tx.val();
-		var tp = tx.parent();
-		tx.remove();
-		tp.attr("value", etext);
-		tp.html(etext);
-		//文本框的值与原来的值不同时，勾上checkbox
-		if(tp.attr("before") !== etext){
-			tp.siblings().eq(0).find("input").attr("checked", "checked");
-		}
+    $(".edittx").live('blur', function(){
+        var tx = $(this);
+        var etext = tx.val();
+        var tp = tx.parent();
+        tx.remove();
+        tp.attr("value", etext);
+        tp.html(etext);
+        //文本框的值与原来的值不同时，勾上checkbox
+        if(tp.attr("before") !== etext){
+            
+            //如果是BUG和备注部分,而且用例是保存的用例则实时保存
+            var tid = tp.parent().attr("value");
+            var tname = tp.attr("name");
+            var crs = tp.parent().children().eq(5).find("span")//看有没有执行结果，有执行结果的才可以保存BUG和备注
+            if(tp.hasClass('save') && tid && crs.length){
+                var url = "/case/updateresult/"
+                var para = {"tname": tname, "tid":tid, "tcnt":etext}
+                $.post(url, para, function(data){
+                    var rs = eval('('+data+')');
+                    if(rs.success){
+                        //alert("ok");
+                    }else{
+                        alert("所填内容更新失败");
+                    }
+                }); 
 
-	});
+            }else{//其他的需要勾上checkbox等待点保存
+                tp.siblings().eq(0).find("input").attr("checked", "checked");
+            }
+        }
+
+    });
 
 
     //双击选择级别
     $(".level").live('dblclick', function(){
+        console.log("yeeeee");
         var tdnode = $(this);
         var tdTest = tdnode.text();
         tdnode.empty();
@@ -270,7 +311,7 @@ $(document).ready(function(){
         $.post(url, para, function(data){
             var rs = eval('('+data+')');
             if(rs.success){
-                rsdrop.after("<span>"+result+"</span>");//在后面生成结果
+                rsdrop.after("<span class=\""+result+"\">"+result+"</span>");//在后面生成结果
                 rsdrop.toggle();//隐藏下拉选择框               
 
                 //更新后端返回的执行时间和执行人
@@ -285,11 +326,11 @@ $(document).ready(function(){
 
     });
 
-	//插入模块后用例后，赋rank值
+    //插入模块后用例后，赋rank值
 
     //添加用例
     $(".icon-plus").live("click", function(){
-    	var ccase = $(this).parent().parent();
+        var ccase = $(this).parent().parent();
         ccase.after(casehtml);
         insert_update_rank(ccase.next());
     });
@@ -298,94 +339,134 @@ $(document).ready(function(){
     $(".icon-plus-sign").live('click', function(){
         var cmodule = $(this).parents(".cmodule");
         cmodule.after(modulehtml);
+        insert_update_rank(cmodule.next().find(".mtr"))
         insert_update_rank(cmodule.next());
     });
 
     function checkall(master, slave){
         if(master.attr("checked")=="checked"){ 
-        	slave.each(function(){
-        		$(this).attr("checked","checked");
-        	});
+            slave.each(function(){
+                $(this).attr("checked","checked");
+            });
         }else{
-         	slave.each(function(){
-        		$(this).removeAttr("checked");
-        	});
+             slave.each(function(){
+                $(this).removeAttr("checked");
+            });
         }
     }
 
     //全选
     $("#caseall").click(function(){
-    	var slave = $("#caselist").find("input");
-    	checkall($(this), slave);
+        var slave = $("#caselist").find("input");
+        checkall($(this), slave);
     });
 
     $(".modulecheck").live('click', function(){
-    	var slave = $(this).parents(".cmodule").find("input");
-    	checkall($(this), slave);
+        var slave = $(this).parents(".cmodule").find("input");
+        checkall($(this), slave);
     });
 
-
-
-
-
-
     function drag_update_rank(){
-    	insert_update_rank($(this));
+        insert_update_rank($(this));
     }
 
     //模块拖拽
     $("#caselist tbody").dragsort({
-    	dragSelector:".cmodule",
-    	dragEnd:drag_update_rank,
+        dragSelector:".cmodule",
+        dragEnd:drag_update_rank,
     });
     //用例拖拽
     $(".cmodule tbody").dragsort({
-    	dragSelector:".mtr",
+        dragSelector:".mtr",
         dragSelectorExclude:".nodrag",
-    	dragEnd:drag_update_rank,
+        dragEnd:drag_update_rank,
     });
 
     //删除
     $(".icon-trash").live('click', function(){
 
-    	if(confirm("你确定要删除吗？")){
-            return true;
-    		var node = $(this).parent().parent();
-    		if(node.attr("class") == "mtr"){//删除用例
-    			delete_update_rank(node);
-    			node.remove();
-    		}else{//删除模块
-    		  
-    		    //找到该模块的前一个模块下的
-    		    var currentm = node.parents(".cmodule")
-	    		var prevmodule = currentm.prev().find('tbody');
+        if(confirm("你确定要删除吗？")){
+            
+            var node = $(this).parent().parent();
+            
+            if(node.attr("class") == "mtr"){//删除用例
+ /*               delete_update_rank(node);*/
+                var url = "/case/deletecase/";
+                var delid = node.attr("value");           
+                var para = {"did": delid,};
+                $.post(url, para, function(data, status){
+                    var rs = eval('('+data+')');
+                    if(rs.success){
+                        node.remove();
+                    }else{
+                        alert("删除失败");
+                    }
+                });
 
-	    		if(prevmodule.length){
+            }else{//删除模块
+              
+                //找到该模块的前一个模块下的 
+                var currentm = node.parents(".cmodule")
+                var prevmodule = currentm.prev().find('tbody');
 
-	        		//更新rank值
-	        		delete_update_rank(currentm);
+                if(prevmodule.length){
+                    var url = "/case/moduledel/"
+                    var mid = currentm.attr("value");     
+                    var para = {"mid": mid,};
+                    //更新rank值
+                    delete_update_rank(currentm);
+                    //克隆一份该模块下的用例
+                    var snode = node.siblings().clone(true);
+                    $.post(url, para, function(data, status){
+                        var rs = eval('('+data+')');
 
-	    			//克隆一份该模块下的用例
-	        		var snode = node.siblings().clone(true);
+                        if(rs.success){
+                            //删掉该模块,将模块下用例复制到前一个模块下
+                            currentm.remove();
+                            prevmodule.append(snode);
+                        }else{
+                            alert("删除失败");
+                        }
+                    });
 
-	        		//将这些将被转移的用例checkbox都勾上因为父级模块变了
-	        		snode.each(function(){
-	        			$(this).find(".casecheck").attr("checked", "checked");
-	        		});
 
-	        		//删掉
 
-                    //删掉该模块,将模块下用例复制到前一个模块下
-	        		currentm.remove();
-	        		prevmodule.append(snode);
-    		    }else{
-    		    	alert("抱歉~第一个模块不能删除。");
-    		    }
+                }else{
+                    alert("抱歉~第一个模块不能删除。");
+                }
             }
-    	}
-        else{
+
+
+            return true;
+        }else{
             return false;
         }            
+    });
+
+    $("#delbtn").click(function(){
+        if(confirm("你确定要删除吗？")){
+            var caseChk=$("input[class='casecheck nodrag']:checked");
+            var delids = "";
+            $(caseChk).each(function(){
+                delids += $(this).parent().parent().attr("value");
+                delids += ",";
+
+            });
+            
+            url = "/case/deletecase/";
+            para = {"did": delids,};
+            $.post(url, para, function(data, status){
+                var rs = eval('('+data+')');
+                if(rs.success){
+                    $(caseChk).each(function(){
+                        $(this).parent().parent().remove();
+                    });
+                }else{
+                    alert("删除失败");
+                }
+            });
+        }
+
     });
 
 
@@ -405,47 +486,70 @@ $(document).ready(function(){
         });
         category1.html(temp_html); 
         var n = category1.get(0).selectedIndex;
-        console.log(n);
+        // console.log("n");
+        // console.log(n);
+        // console.log("c1");
+        // console.log(c1);
         if(c1){
             $(".category_select_1 option[value="+c1+"]").attr("selected","true")
+            var preoption = $(".category_select_1 option[value="+c1+"]").prevAll("option")
         }       
         if(n != 0){
             if((areaJson[n-1].slist).length != 0){
-            category2.show();
-            category_select_2();
-            console.log("mmm");
-            if (!c1){
-                $(".cate").attr("value",'aa');
-            }                    
-            $(".cate1").attr("value",category1.children().eq(n).val());
-        };
+                category2.show();
+                category_select_2();
+                // console.log("mmm");
+                if (!c1){
+                    $(".cate").attr("value",'aa');
+                }
+                $(".cate1").attr("value",category1.children().eq(preoption.length).val());
+            };
         }else{
-          category2.hide();
-          category3.hide();  
-        }
-
-                       
+            if(n==0&c1){
+                if((areaJson[preoption.length-1].slist).length != 0){
+                    category2.show();
+                    category_select_2();
+                    // console.log("mmm");
+                    $(".cate1").attr("value",category1.children().eq(preoption.length).val());
+                }else{
+                    category2.hide();
+                    category3.hide();
+                }
+            }else{
+                // console.log("else");
+                category2.hide();
+                category3.hide();
+            }           
+        }                       
      };
     //赋值二级
     var category_select_2 = function(){
         var c2=$(".cate2").val();
         temp_html="<option>"+'请选择'+"</option>"; 
         var n = category1.get(0).selectedIndex;
-        console.log(n);
-        if(n !=0 ){
-            if((areaJson[n-1].slist).length == 0){
+        // console.log("n");
+        // console.log(n);
+        // console.log("c2");
+        // console.log(c2);
+        if(n==0){
+            // console.log("ddd");
             category2.css("display","none");
             category3.css("display","none");
         }else{
-            $.each(areaJson[n-1].slist,function(i,category_select_2){
-                temp_html+="<option value='"+category_select_2.secondid+"'>"+category_select_2.second+"</option>";
-            });
-            category2.html(temp_html);
-            if(c2){
-                $(".category_select_2 option[value="+c2+"]").attr("selected","true");
-            }
-            category_select_3();
-        };
+            if((areaJson[n-1].slist).length == 0){
+                category2.css("display","none");
+                category3.css("display","none");
+            }else{
+                $.each(areaJson[n-1].slist,function(i,category_select_2){
+                    temp_html+="<option value='"+category_select_2.secondid+"'>"+category_select_2.second+"</option>";
+                });
+                category2.html(temp_html);
+                if(c2){
+                    // console.log("aaa");
+                    $(".category_select_2 option[value="+c2+"]").attr("selected","true")
+                }
+                category_select_3();
+            };
         }                    
     };
     //赋值三级
@@ -500,10 +604,14 @@ $(document).ready(function(){
         category_select_1();
     });
 
+
+
     $('.selectList select').live('click',function(){
-        if ($(this).val() !== '请选择'){
+        if ($(this).val() !== '全部'){
             $(".cate").attr("value",$(this).val());
             $(".next").attr("action","/case/caselist/" + $(this).val() + "/");
+        }else{
+            $(".next").attr("action","/case/caselist/");
         }
     });
 
@@ -554,12 +662,6 @@ $(document).ready(function(){
         minView:2 
       });
      
-
-/*    $(window).bind('beforeunload', function(){
-
-    });*/
-/*
-    window.onbeforeunload = function(event){return confirm("确定离开此页面吗？"); }*/
   //备注弹框信息显示
     $(".icon-eye-open").click(function(){
         $('#myModal').modal('show');
@@ -570,35 +672,106 @@ $(document).ready(function(){
             var datalist = eval ("(" + data + ")");
             var num = datalist.length;
             $(".title").html("<h5>测试结果：共执行<span>"+(num-1)+"次</span>,通过<span>"+datalist[0].Pass+"次</span></h5>");
-            recordhtml = ''
+            recordhtml = "<thead><tr>"+
+                     "<th>&nbsp</th>"+
+                     "<th>日期</th>"+
+                     "<th>执行人</th>"+
+                     "<th>结果</th>"+
+                     "<th>备注</th>"+
+                    "</tr></thead>"
+            /*recordhtml = ''*/
             for(var i=1;i<num;i++)
             {
                 recordhtml+=
                     "<tr>"+
                      "<td>#"+i+"</td>"+
-                     "<td>日期："+datalist[i].date+"</td>"+
-                     "<td>执行人："+datalist[i].executor+"</td>"+
-                     "<td>结果："+datalist[i].result+"</td>"+
-                     "<td>备注："+datalist[i].remark+"</td>"+
+                     "<td>"+datalist[i].date+"</td>"+
+                     "<td>"+datalist[i].executor+"</td>"+
+                     "<td>"+datalist[i].result+"</td>"+
+                     "<td>"+(datalist[i].remark?datalist[i].remark:"")+"</td>"+
                     "</tr>"
             }  
             $(".boxtable").html(recordhtml);          
         });
     })
 
-    //保存用例
-    // $(".savebtn").click(function(){
-    //         var arrChk=$("input[class='casecheck']:checked");
-    //         var caselist = {"precon":}
-    //         $(arrChk).each(function(){
-    //             value=this.value + "," + value;
-    //         });
-    //         if (value) {
-    //             $("#bulk_sid").val(value);
-    //             $("#addmodule").modal('show')
-    //         }           
-    //         else{
-    //             alert("请勾选项目后再进行批量操作！");
-    //         }               
-    //     });
+   //保存用例
+    $(".savebtn").click(function(){
+        i = 1;
+        j = 0; 
+        var casejson = [];
+        var dic = {};
+        var diclist = [dic];
+        var mmid = [];
+        var mchk = [-2];
+        var flag = true;
+        var node = $("input[name=\"checklist\"]:checked");
+        var nlen = node.length;
+        $(node).each(function(){             
+            var node = $(this).parent().parent();
+            tdata = node.children();
+            cm = $(this).parents(".cmodule")
+            tmodule = cm.attr("value");
+            if (tmodule == ''){
+                    tmodule = -1;
+            }
+            mchk[i] = tmodule;
+            if(node.attr("class") == "mtr"){//判断是用例还是模块
+                input = tdata.eq(2).text();
+                output = tdata.eq(3).text();
+                mname = $.trim(cm.find(".success").children().eq(1).text());
+                if(!input || !output || !mname ){
+                    alert("用例必填项没有填写，请填写后再保存！");
+                    flag = false;
+                    return false;
+                }else{
+                    datadic = {"mname":mname,"mrank":cm.attr("rank"),"id":$(this).parent().parent().attr("value"),"precon":tdata.eq(1).text(),"action":input,"output":output,"priory":tdata.eq(4).text(),"rank":node.attr("rank")};
+                    if(mchk[i-1] != tmodule){
+                        j=0;
+                        casejson = []; 
+                        dic[tmodule] = casejson;
+                        casejson[j] = datadic;
+                    }else{
+                        casejson[j] = datadic;
+                    }
+                }
+            }else{//勾选的模块下没有勾选用例时，保存模块
+                mtrnode = (node.parent(".cmodule").find(".mtr").find("input[name=\"checklist\"]:checked"));
+                if (mtrnode.length == 0){
+                    cmname = $.trim(cm.find(".success").children().eq(1).text());
+                    if(cmname){
+                        datadic = {"mname":cmname,"mrank":cm.attr("rank"),"id":-3};
+                        j=0;
+                        casejson = []; 
+                        casejson[j] = datadic;
+                       dic[tmodule] = casejson;
+                    }else{
+                        alert("模块名称没有填写，请填写后再保存！");
+                        flag = false;
+                        return false;
+                    }                                       
+                }
+            }
+            i++;
+            j++;
+        }); 
+        if(flag == true){
+            diclist = JSON.stringify(diclist);
+            casedic = {"datas":diclist};
+            $.post("/case/savecase/",casedic,function(data){
+                var resp = eval('('+data+')');
+                if(resp.message){
+                    $("input[name=\"checklist\"]:checked").removeAttr("checked");
+                }else{
+                    alert("保存失败，请重新保存！");
+                }
+            });
+        }      
+    });
+
+//动态添加用例执行人
+// $(".executor").click(function(){
+//     pid = $()
+// });
+
 });

@@ -1,18 +1,52 @@
 # coding=utf-8
 import datetime
+import json, re
 from django.shortcuts import render_to_response, redirect, RequestContext, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from models import testcase, casemodule, category, result
 from forms import searchForm
-import json
+from project.models import user, department
 from project.views import isNone
 from django.db.models import Q
 
+#判断是否是技术部分的测试或者开发
+def is_dev(uid):
+	depid = user.objects.get(id=int(uid)).department_id
+	if depid not in [1, 2, 4, 5, 12]:
+		return False
+	else:
+		return True
+
+#判断是否是测试部门的
+def is_tester(uid):
+	depid = user.objects.get(id=int(uid)).department_id
+	print depid
+	if depid != 1:
+		return False
+	else:
+		return True
+
+
 def case_list(request,pid):
+	#没登陆的提示去登录
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect("/case/login")
+	#权限判断
+	canope = True
+	if not is_tester(request.session['id']):
+		canope =  False
+	else:
+		child = category.objects.filter(parent_id = int(pid))
+		if len(child):
+			canope =  False
+
+
 	kwargs={}
 	case = {}
 	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = \
 	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
+	cmodule = testcase.objects.filter(isactived =1)
+
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -37,13 +71,13 @@ def case_list(request,pid):
 			if not isNone(categoryid):
 				kwargs['category__in'] =  subset				
 			if not isNone(cauthor):
-				kwargs['author'] =  cauthor
+				kwargs['authorid'] =  cauthor
 			cmodule = testcase.objects.filter(**kwargs)
 			if not isNone(cpriority):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword
-			cmodule = testcase.objects.filter(**kwargs)
+			cmodule = cmodule.filter(**kwargs)
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			if not isNone(ctestmodule):
@@ -68,6 +102,23 @@ def case_list(request,pid):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate)
 	else:
+		clist = []
+		first = category.objects.get(pk = int(pid))
+		clist.append(int(pid))
+		if first.parent_id != 0:
+			clist.append(first.parent_id)
+			second = category.objects.get(pk = first.parent_id)
+			if second.parent_id !=0:
+				clist.append(second.parent_id)
+		catelen = len(clist)
+		if catelen:
+			cate1 = clist[-1]
+			catelen = catelen-1;
+		if catelen:
+			cate2 = clist[-2]
+			catelen = catelen-1;
+		if catelen:
+			cate3 = clist[-3]
 		subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
 		subset3 = list(category.objects.filter(parent_id__in = subset2))
 		subset = list(set(subset2).union(set(subset3)))		
@@ -76,32 +127,83 @@ def case_list(request,pid):
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+	count = len(cmodule)
 	newresult = []
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id, isactived = 1)
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
+		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
-		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3})
-
+		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope })
 
 def allcaselist(request):
+
+	#没登陆的提示去登录
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect("/case/login")
+
+	kwargs={}
 	case = {}
-	mid = {}
-	cmodule = testcase.objects.all()
-	testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
-	caseresult = result.objects.filter(testcase__in = cmodule)
+	ctestmodule = 	cpriority = cauthor = cexecutor = cstart_date = cend_date = \
+	cexec_status = ckeyword =  cstatue = cmold = ''
+	cmodule = testcase.objects.filter(isactived = 1)
+	if request.method == "POST":
+		search = searchForm(request.POST)
+		if search.is_valid():
+			ctestmodule = search.cleaned_data['testmodule']
+			cpriority = search.cleaned_data['priority']
+			cstatue = search.cleaned_data['status']
+			cmold =  search.cleaned_data['mold']
+			cauthor = search.cleaned_data['author']
+			cexecutor = search.cleaned_data['executor']
+			cstart_date = search.cleaned_data['start_date']
+			cend_date = search.cleaned_data['end_date']
+			cexec_status = search.cleaned_data['exec_status']
+			ckeyword = search.cleaned_data['keyword']
+			if not isNone(cauthor):
+				kwargs['author'] =  cauthor
+			cmodule = testcase.objects.filter(**kwargs)
+			if not isNone(cpriority):
+				kwargs['priority'] = cpriority
+			if not isNone(ckeyword):
+				kwargs['action__contains'] = ckeyword
+			cmodule = cmodule.filter(**kwargs)
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
+			caseresult = result.objects.filter(testcase__in = cmodule)
+			if not isNone(ctestmodule):
+				testmodule = testmodule.filter(m_name = ctestmodule)
+			args = [Q(result = cmold) , ~Q(result = cmold)] 
+			args2 = [~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct()),Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())]
+			if not isNone(cmold) and not isNone(cstatue):
+				if cmold == u"未执行":
+					cmodule = cmodule.filter(args2[int(cstatue)])
+				else:
+					caseresult = caseresult.filter(args[int(cstatue)])
+					cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+			if not isNone(cexecutor):
+				caseresult = caseresult.filter(executor = cexecutor)
+				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+			if not isNone(cstart_date) or not isNone(cend_date):
+				if not isNone(cstart_date):
+					caseresult = caseresult.filter(exec_date__gte = cstart_date)
+				if not isNone(cend_date):
+					caseresult = caseresult.filter(exec_date__lte = cend_date)
+				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
+				cmodule = cmodule.filter(pk__in = cdate)
+	else:
+		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+	count =len(cmodule)
 	newresult = []
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id, isactived = 1)
-	print case
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid})
+		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid, "count":count, "canope": False})
 
 
 def categorysearch(request):
@@ -151,8 +253,16 @@ def exec_log(request,pid):
 		recorddic["remark"] = item.r_remark
 		record.append(recorddic)
 	return HttpResponse(json.dumps(record))
+
 def execute_case(request):
 	resp = {}
+	#判断下权限
+	if not is_dev(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
 	try:
 		caseid = request.POST['caseid']
 		cresult = request.POST['cresult']
@@ -177,20 +287,21 @@ def execute_case(request):
 
 def update_rank(request):
 	resp = {}
+	#判断下权限
+	if not is_tester(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
 	try:
 		rank_dict = json.loads(request.POST['rankdict'])
 		module_id = request.POST['mid']
-
-		print "--------------!!"
-		print "mid", module_id
-		print "rank_dict",rank_dict
 
 		if int(module_id):#更新用例rank
 			for key in rank_dict.keys():
 				tc = testcase.objects.get(id=key)
 				tc.rank = rank_dict[key]
 				if int(module_id) != -1:
-					print "here\n"
 					tc.module_id = module_id
 				tc.save()
 		else:#更新模块rank
@@ -210,9 +321,126 @@ def update_rank(request):
 
 		return HttpResponse(resp)
 
-def singledel(request,pid):
-	ua = request.META['HTTP_REFERER']
-	delcase = get_object_or_404(testcase,pk=int(pid))
-	delcase.isactived = 0
-	delcase.save()
-	return HttpResponseRedirect(ua)
+def moduledel(request):
+	resp = {}
+	#判断下权限
+	if not is_tester(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
+	mid = request.POST['mid']
+	try:
+		delmodule = get_object_or_404(casemodule, pk=int(mid))
+		delmodule.isactived = 0
+		delmodule.save()
+		# delmodule.delete()
+		resp["success"] = True
+	except Exception,e:
+		resp["success"] = False
+	finally:
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
+def delete_case(request):
+
+	resp = {}
+	#判断下权限
+	if not is_tester(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
+	deleteid = request.POST['did']
+	deleteid = deleteid.replace(" ", "").split(",")
+	
+	try:
+		for did in deleteid:
+			if len(did):
+				delcase = get_object_or_404(testcase, pk=int(did))
+				delcase.isactived = 0
+				delcase.save()
+		resp["success"] = True
+	except Exception, e:
+		resp["success"] = False
+	finally:
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
+def update_case_related(request):
+	resp = {}
+	#判断下权限
+	if not is_dev(request.session['id']):
+		resp["success"] = False
+		resp["message"] = "no permit"
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+	tname = request.POST['tname']
+	tcnt = request.POST['tcnt']
+	cid = request.POST['tid']
+		
+	try:
+		trs = result.objects.filter(testcase_id=cid).order_by("-id")[0]
+		if trs:
+			if tname == "wi":
+				trs.wi = tcnt
+			else:
+				trs.r_remark = tcnt
+
+			trs.save()
+			resp["success"] = True
+	except Exception, e:
+		resp["success"] = False
+		print e
+	finally:
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
+
+def savecase(request):
+	dict = {}
+	#判断下权限
+	if not is_tester(request.session['id']):
+		dict["message"] = False
+		dict = json.dumps(dict)
+		return HttpResponse(dict)
+
+	try:
+		url = request.META['HTTP_REFERER']
+		p = re.compile(r'\d+')
+		pid = (p.findall(url))[-1]
+		dt = json.loads(request.POST.get('datas',False))
+		for data in dt:
+			for key,value in data.items():
+				for ddata in value:
+					if key == "-1":
+						cm = casemodule(m_name = ddata['mname'],m_rank = ddata['mrank'], isactived = 1)
+						cm.save()
+						key = cm.id
+					else:
+						updatemodule = casemodule.objects.filter(pk = key).update(m_name = ddata['mname'])
+					caseid = ddata['id']
+					if caseid != -3:
+						cpre = ddata['precon']
+						cinput = ddata['action']
+						couput = ddata['output']
+						cpriority = ddata['priory']
+						crank = ddata['rank']
+						if caseid:
+							updatecase = testcase.objects.filter(pk = caseid).update(precondition = cpre, \
+								action = cinput, output = couput, priority = cpriority)
+						else:
+							newcase = testcase(category_id = pid, rank = crank, module_id = key, precondition = cpre, \
+								action = cinput, output = couput, priority = cpriority, author = request.session['realname'], \
+								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
+							newcase.save()
+		dict['message']= True
+	except Exception,e: 
+		import sys 
+		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
+		dict['message']=False
+		print e 
+	finally:
+		cjson=json.dumps(dict) 
+	return HttpResponse(cjson)
