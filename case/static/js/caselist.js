@@ -607,11 +607,29 @@ $(document).ready(function(){
 
 
     $('.selectList select').live('click',function(){
-        if ($(this).val() !== '全部'){
+        if ($(this).val() !== '全部' & $(this).val() !== '请选择'){
             $(".cate").attr("value",$(this).val());
             $(".next").attr("action","/case/caselist/" + $(this).val() + "/");
-        }else{
-            $(".next").attr("action","/case/caselist/");
+        }else{ 
+            if($(this).val() == '请选择'){
+                $(".cate").attr("value",$(this).prev().val());
+                $(".next").attr("action","/case/caselist/" + $(this).prev().val() + "/");
+                cateval = $(".cate").val();
+                cate1val = $(".cate1").val();
+                cate2val = $(".cate2").val();
+                if (cateval == cate2val){
+                    $(".cate3").attr("value",'')
+                }
+                if (cateval == cate1val){
+                    $(".cate2").attr("value",'');
+                    $(".cate3").attr("value",'')
+                }
+            }else{
+                $(".next").attr("action","/case/caselist/");
+                $(".cate1").attr("value",'');
+                $(".cate2").attr("value",'');
+                $(".cate3").attr("value",'')
+            }            
         }
     });
 
