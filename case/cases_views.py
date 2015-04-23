@@ -20,6 +20,7 @@ def is_dev(uid):
 #判断是否是测试部门的
 def is_tester(uid):
 	depid = user.objects.get(id=int(uid)).department_id
+	print "depid------"
 	print depid
 	if depid != 1:
 		return False

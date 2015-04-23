@@ -1,13 +1,4 @@
-html {
-	background-color: #f7f7f7;
-}
-body {
-	width: 800px;
-	margin: 10px auto;
-	padding: 10px 30px;
-	background-color: #fff;
-	border: 1px dashed #888;
-}
+
 ul.tree, ul.tree * {
 	list-style-type: none;
 	margin: 0;
