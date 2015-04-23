@@ -152,8 +152,8 @@ def has_proid(request):
     proid = request.GET['proid']
     procates = category.objects.filter(project_id = proid)
     if procates.count() > 0:
-        accordname = procates[0].name
+        accordname = procates[0].name + "has" + str(procates[0].id)
     else:
-        accordname = "no"   
+        accordname = "no"
     accord_name = json.dumps(accordname)
     return HttpResponse(accord_name)
