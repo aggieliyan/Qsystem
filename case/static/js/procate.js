@@ -55,7 +55,7 @@
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
         }
         else{
-            document.test.submit();
+            document.test1.submit();
         } 
       }
     
