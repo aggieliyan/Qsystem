@@ -99,6 +99,8 @@ jQuery.fn.checkTree = function(settings) {
 		
 		// Send a change event to our parent checkbox:
 		$this.parents("ul:first").siblings(":checkbox:first").change();
+		// When third_level changed, send a change event to its grandpa; Fixed by YanLi.
+		$this.parents("ul:first").parents("ul:first").siblings(":checkbox:first").change();
 		
 		// Handle callbacks
 		if (settings.onCheck && $this.hasClass('checked')) {

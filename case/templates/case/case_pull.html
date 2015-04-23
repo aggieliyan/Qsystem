@@ -27,18 +27,17 @@
     			</div>
     			<div class="import_right">
     				<div class="search_bar">
-    					<form id="combobox-container" class="combobox-container">
+    					<div id="combobox-container" class="combobox-container">
 							<div class="cc-box">
-							<select class="cc-textbox" type="text" name="inputbox" value="" style="width: 180px; cursor: pointer;" readonly="readonly">
-								<option>请选择模块</option>
-								<option>机构后台</option>
-								<option>机构前台</option>
-							</select>
-							
+								<select class="cc-textbox" name="m_id" type="text" name="inputbox" value="" style="width: 170px; cursor: pointer;" readonly="readonly">
+									<option value="">请选择模块</option>
+									<option value="">嘿，先勾左边分类！</option>
+								</select>							
 							</div>
-							<input id="search_text" type="text" autocomplete="off" placeholder="请输入要搜索的用例">
-    						<button id="search_button" class="btn btn-success">搜索</button>
-						</form>    					
+							<input style="display:none" id="cate_ids" name="cate_ids"/>
+							<input id="search_text" name="key" type="text" autocomplete="off" placeholder="请输入要搜索的用例">
+    						<button id="search_button" class="btn btn-success" onclick="search_case()">搜索</button>
+						</div>    					
     				</div>
     				<div class="cases_list">
     					<h3>
@@ -54,7 +53,7 @@
 								  </li>
 								  <li class="gotopage">
 								  	<span>第&nbsp<input id="pagenum"/>&nbsp页，共&nbsp<span id="totalpage"></span>&nbsp页</span>
-								  	<a id="go">Go!</a>
+								  	<a id="go" value="/case/getcases/?page=">Go!</a>
 								  </li>
 								  <li class="next">
 								    <a href="javascript:void(0)">下一页 &rarr;</a>
@@ -71,13 +70,14 @@
     		<button class="btn btn-success">引入</button>
     	</div>
     </div>
+    <!--
     <div class="cc-itemListContainer" style="background-color: #dff0d8 ;opacity: 0.95; display: none; top: 93px; left: 237px; width: 163px; height: 87px; position: absolute; border-width: medium 1px 1px; border-style: none solid solid; border-color: -moz-use-text-color rgb(221, 221, 221) rgb(221, 221, 221); -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; z-index: 10011;">
 		<ul class="cc-itemList">
 			<li class="cc-item" title="全部">全部</li>
 			<li class="cc-item" title="默认类目">默认类目</li>
 			<li class="cc-item selectedItem" title="网站机制问题">网站机制问题</li>
 		</ul>
-	</div>
+	</div>-->
 	</body>
 
 </html>

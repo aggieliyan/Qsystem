@@ -2,7 +2,7 @@
 
 from django.shortcuts import render_to_response, \
 RequestContext, HttpResponseRedirect, HttpResponse
-from models import category, testcase   
+from models import category, testcase, casemodule   
 from case.forms import add_procateForm, edit_procateForm, del_procateForm
 import datetime
 import json
@@ -41,7 +41,7 @@ def product_category(request):
     
     if fircount > 0:
         for procate_first in procate_firsts:
-            first_level[procate_first.id] = procate_first.name
+            first_level[procate_first.id] = [procate_first.name]
             procate_seconds = category.objects.filter(parent_id = procate_first.id, isactived = '1')
             if procate_seconds.count() > 0:
                 first_secounts[procate_first.id] = 1
@@ -59,7 +59,15 @@ def product_category(request):
                             third_level[procate_third.id] = [procate_second.id, procate_third.name]
     if '/getprocate' in request.path:
         res = {'1': first_level, '2': second_level, '3': third_level}
+        for num, level in res.items():
+            for cate in level:
+                level[cate].append({})
+                T = testcase.objects.filter(category_id=cate)
+                module_ids = T.values('module_id').distinct()
+                for item in module_ids:
+                    level[cate][-1][item['module_id']] = casemodule.objects.get(id=item['module_id']).m_name
         print res
+        
         return HttpResponse(json.dumps(res))
     return render_to_response("case/product_category.html",RequestContext(request, \
     {'procate_firsts':procate_firsts, 'second_ids':sorted(second_ids.items()), \
