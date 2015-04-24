@@ -797,9 +797,4 @@ $(document).ready(function(){
         }      
     });
 
-//动态添加用例执行人
-// $(".executor").click(function(){
-//     pid = $()
-// });
-
 });
