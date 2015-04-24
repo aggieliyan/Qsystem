@@ -1,63 +1,4 @@
-$(document).ready(function(){
-/*    var swidth = $(window).width();
-    console.log(swidth);
-    console.log("width:"+swidth+"px;");
-    $(".fixbar").attr("style", "width:"+swidth+"px;");*/
-
-    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
-                          "<td class=\"editable nodrag\"></td>"+
-                          "<td class=\"editable nodrag\"></td>"+
-                        "<td class=\"editable nodrag\"></td>"+
-                          "<td class=\"level nodrag\">2</td>"+
-                          "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
-                        "<td class=\"editable nodrag\">-</td>"+
-                          "<td></td>"+
-                          "<td></td>"+
-                          "<td class=\"editable nodrag\">-</td>"+
-                          "<td class=\"nodrag\">"+
-                              "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
-                              "<a class=\"icon-download-alt\" title=\"引入用例\"></a> "+
-                              "<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
-                              "<a class=\"icon-trash\"></a>"+
-                          "</td>"+            
-                    "</tr>";
-
-    var modulehtml = "<tr class=\"cmodule\">"+
-                "<td colspan=\"11\">"+
-                    "<div>"+
-                        "<table >"+
-                            "<tbody>"+
-                                "<tr class=\"success\">"+
-                                    "<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
-                                    "<td colspan=\"9\" class=\"editable\"></td>"+
-                                    "<td >"+
-                                          "<a class=\"icon-plus-sign\" title=\"添加模块\"></a> "+
-                                          "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
-                                          "<a class=\"icon-trash\"></a> "+
-                                    "</td>"+
-                                "</tr>"+
-                                casehtml +
-                            "</tbody>"+
-                        "</table>"+
-                    "</div>"+
-                "</td>"+
-            "</tr>"
-
-    var resulthtml = "<select class=\"cresult\">"+
-                        "<option>-</option>"+
-                        "<option>Pass</option>"+
-                        "<option>Fail</option>"+
-                        "<option>Block</option>"+
-                    "</select>"
-
-    var levelhtml = "<select class=\"lselect\">"+
-                        "<option>1</option>"+
-                        "<option>2</option>"+
-                        "<option>3</option>"+
-                    "</select>"
-
-
-    function insert_update_rank(celement, cnum){
+function insert_update_rank(celement, cnum){
         var cnum = arguments[1] ? arguments[1] : 1;//设置cnum参数默认值为1，代表当次新插入的个数
         var pelement = celement.prev();
         var rankdic = {}
@@ -71,9 +12,9 @@ $(document).ready(function(){
 
         }
         //批量插入多个用例后，该第一个插入用例后面的新用例rank值也要更新
-        var tempele;
+        var tempele = celement;
         for(var i=1;i<cnum;i++){
-            tempele = celement.next();
+        	tempele = tempele.next(); 
             newrank = newrank + 1;
             tempele.attr("rank", newrank);
         }
@@ -116,11 +57,68 @@ $(document).ready(function(){
                 alert("sorry,排序更新失败~");
             }
         }); 
-
-
-
     }
 
+$(document).ready(function(){
+/*    var swidth = $(window).width();
+    console.log(swidth);
+    console.log("width:"+swidth+"px;");
+    $(".fixbar").attr("style", "width:"+swidth+"px;");*/
+
+    var casehtml = "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
+                          "<td class=\"editable nodrag\"></td>"+
+                          "<td class=\"editable nodrag\"></td>"+
+                        "<td class=\"editable nodrag\"></td>"+
+                          "<td class=\"level nodrag\">2</td>"+
+                          "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
+                        "<td class=\"editable nodrag\">-</td>"+
+                          "<td></td>"+
+                          "<td></td>"+
+                          "<td class=\"editable nodrag\">-</td>"+
+                          "<td class=\"nodrag\">"+
+                              "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
+                              "<a class=\"icon-download-alt\" title=\"引入用例\" href=\"#casePullModal\" data-toggle=\"modal\" id=\"pullbutton\" onclick=\"pullPop(this)\"></a> "+
+                              "<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
+                              "<a class=\"icon-trash\"></a>"+
+                          "</td>"+            
+                    "</tr>";
+
+    var modulehtml = "<tr class=\"cmodule\">"+
+                "<td colspan=\"11\">"+
+                    "<div>"+
+                        "<table >"+
+                            "<tbody>"+
+                                "<tr class=\"success\">"+
+                                    "<td colspan=\"1\"><input class=\"modulecheck\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
+                                    "<td colspan=\"9\" class=\"editable\"></td>"+
+                                    "<td >"+
+                                          "<a class=\"icon-plus-sign\" title=\"添加模块\"></a> "+
+                                          "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
+                                          "<a class=\"icon-trash\"></a> "+
+                                    "</td>"+
+                                "</tr>"+
+                                casehtml +
+                            "</tbody>"+
+                        "</table>"+
+                    "</div>"+
+                "</td>"+
+            "</tr>"
+
+    var resulthtml = "<select class=\"cresult\">"+
+                        "<option>-</option>"+
+                        "<option>Pass</option>"+
+                        "<option>Fail</option>"+
+                        "<option>Block</option>"+
+                    "</select>"
+
+    var levelhtml = "<select class=\"lselect\">"+
+                        "<option>1</option>"+
+                        "<option>2</option>"+
+                        "<option>3</option>"+
+                    "</select>"
+
+
+    
     function delete_update_rank(celement){
         var nextele = celement.next();
         var classname = celement.attr("class");
