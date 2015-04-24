@@ -3,7 +3,7 @@ from case import cases_views, login_views, category_views, casepull_views
 from project import views
 
 urlpatterns = patterns('',
-	url(r'^login/', views.login, {"url":"../caselist"},name='login'),
+	url(r'^login/', views.login, {"url":"../procate"},name='login'),
 	url(r'^logout/', login_views.logout),
 	url(r'^caselist/(\d+)/$', cases_views.case_list, name='caselist'),
 	url(r'^caselist/$', cases_views.allcaselist, name='allcaselist'),
