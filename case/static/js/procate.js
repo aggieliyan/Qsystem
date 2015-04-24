@@ -141,7 +141,7 @@
 	 $(".on_myproject").each(function(){
 		 val = $(this).text();
 		 if(val.length > 30){
-			 newval = val.substring(0,30)+"...";
+			 newval = val.substring(0,20)+"...";
 			 $(this).text(newval);
 		 }	 
      }); 

@@ -187,10 +187,10 @@ myinput {
 	color:red;
 }
 
-.gray{
-	color:#555;
-}
-
 .on_myproject{
 	color:#005fc8;
+}
+
+.span12{
+	height:50px;
 }

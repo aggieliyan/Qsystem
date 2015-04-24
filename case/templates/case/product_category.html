@@ -7,7 +7,7 @@
 {% block content %}
 <div class="row-fluid">
 
-    <div class="span12" >
+    <div class="span12" style="">
   	    <div class='nowpro'>
   	        <span>您正在进行中的项目：
   	        {% if my_onprojects %}
@@ -48,9 +48,9 @@
                 <a class='procate-a4' onclick='add_procate({{procate_first.id}},1)'>添加子模块</a>
                 <a class='procate-a5' onclick='del_procate({{procate_first.id}})'>删除</a>
                 {% else %}
-                <a class='procate-a3 gray' title='没权限'>编辑</a>
-                <a class='procate-a4 gray' title='没权限'>添加子模块</a>
-                <a class='procate-a5 gray' title='没权限'>删除</a>     
+                <a class='procate-a3' title='没权限' style='color:#555;'>编辑</a>
+                <a class='procate-a4' title='没权限' style='color:#555;'>添加子模块</a>
+                <a class='procate-a5' title='没权限' style='color:#555;'>删除</a>     
                 {% endif %}     
            </div>
             
@@ -74,9 +74,9 @@
                       <a class='procate-a4' onclick='add_procate({{secid}},2)'>添加子模块</a>
                       <a class='procate-a5' onclick='del_procate({{secid}})'>删除</a>
                       {% else %}
-                      <a class='procate-a3 gray' title='没权限'>编辑</a>
-                      <a class='procate-a4 gray' title='没权限'>添加子模块</a>
-                      <a class='procate-a5 gray' title='没权限'>删除</a>  
+                      <a class='procate-a3' title='没权限' style='color:#555;'>编辑</a>
+                      <a class='procate-a4' title='没权限' style='color:#555;'>添加子模块</a>
+                      <a class='procate-a5' title='没权限' style='color:#555;'>删除</a>  
                       {% endif %}
                      {% endif %}
                    {% endfor %}   
@@ -94,9 +94,9 @@
                                    <a class='procate-a4' onclick='add_procate({{thirid}},3)'>添加子模块</a>
                                    <a class='procate-a5' onclick='del_procate({{thirid}})'>删除</a>
                                    {% else %}
-                                   <a class='procate-a3 gray' title='没权限'>编辑</a>
-                                   <a class='procate-a4 gray' title='没权限'>添加子模块</a>
-                                   <a class='procate-a5 gray' title='没权限'>删除</a>  
+                                   <a class='procate-a3' title='没权限' style='color:#555;'>编辑</a>
+                                   <a class='procate-a4' title='没权限' style='color:#555;'>添加子模块</a>
+                                   <a class='procate-a5' title='没权限' style='color:#555;'>删除</a>  
                                    {% endif %}  
                                   {% endif %}
                                 {% endfor %} 
