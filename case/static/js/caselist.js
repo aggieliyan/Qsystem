@@ -693,7 +693,7 @@ $(document).ready(function(){
   //备注弹框信息显示
     $(".icon-eye-open").click(function(){
         $('#myModal').modal('show');
-        cpid = $(this).parent().children().eq(4).val();
+        cpid = $(this).next().val();
         console.log(cpid);
         var url = "/case/execlog/" + cpid;
         $.get(url, function(data, status){

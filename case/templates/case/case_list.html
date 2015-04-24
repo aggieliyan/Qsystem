@@ -213,6 +213,9 @@
 						      			<a class="icon-eye-open" title="查看结果"></a>
 						      			<a class="icon-trash"></a>
                         <input  value="{{c.id}}" class="checkresult" type="hidden">
+                        {% else %}
+                        <a class="icon-eye-open" style="margin-left:10px;" title="查看结果"></a>
+                        <input  value="{{c.id}}" class="checkresult" type="hidden">
                         {% endif %}
 						      		</td>
                       
