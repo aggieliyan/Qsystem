@@ -30,6 +30,8 @@
     
     //一级产品模块弹窗
     function add_firprocate(){
+	       $('#project_id').val("");
+	       $('#procate_title').val("");
         $('#myModal').modal('show');
     }
 
@@ -92,15 +94,13 @@
 		  alert('三级产品模板不能添加子模块！');
 		  return
 	   }
-	   else if(level==1 || level==2){
+	   else{
 	       $('#procate_id').val(id);
 	       $('#procate_level').val(level);
+	       $('#project_id').val("");
+	       $('#procate_title').val("");
 		   $('#myModal').modal('show'); 
-	   }
-	   else{
-		   $('#myModal').modal('show');    
-	   }
-  
+	   } 
    }
    
   //编辑产品模块
@@ -137,7 +137,6 @@
      })      
  }
    
-   
  $(document).ready(function(){
 	 $(".on_myproject").each(function(){
 		 val = $(this).text();
@@ -148,3 +147,6 @@
      }); 
 });
    
+ 
+ 
+ 
