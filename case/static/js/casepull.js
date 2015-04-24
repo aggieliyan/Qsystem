@@ -63,7 +63,6 @@ function search_case(){
 }
 function pullPop(obj) {
 	$('#cases').val($(obj).parent().parent().attr("value")); //存在哪里引入用例的位置
-	$('#nextcase').val($(obj).parent().parent().next().attr("value")); //存引入用例后面用例的位置,用来改变rank
 	var url = "/case/getcases/?page=1/";
 	ajaxClick(url);
 	/* 取共几页 */
@@ -130,7 +129,6 @@ $(document).ready(function(){
 	  });	
 	$('#import_c').click(function(){
 		precase_id = $('#cases').val();
-		nextcase_id = $('#nextcase').val();
 		$('#cases').val("");
 		var a = $("#import_list_wrapper tr td label input");
 		for(var i=0;i<a.length;i++){
@@ -138,7 +136,7 @@ $(document).ready(function(){
 				$('#cases').val($('#cases').val()+','+a.eq(i).val());
 			}
 	    }		
-		var casehtml="";		
+		var casehtml = "";		
 		url = "/case/pull/?cases="+$('#cases').val();
 		$.post(url, function(data, status){
 			data = eval ("(" + data + ")");
