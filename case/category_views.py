@@ -75,7 +75,6 @@ def product_category(request):
                 module_ids = T.values('module_id').distinct()
                 for item in module_ids:
                     level[cate][-1][item['module_id']] = casemodule.objects.get(id=item['module_id']).m_name        
-        print res
         return HttpResponse(json.dumps(res))
 
     return render_to_response("case/product_category.html",RequestContext(request, \

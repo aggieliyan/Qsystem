@@ -7,7 +7,15 @@ from django.http import HttpResponse
 from django.db.models import Q
 
 def case_pull(request):
-    return render_to_response("case/case_pull.html")
+    case_ids = request.GET.get('cases')
+    case_ids = case_ids.split(',')
+    case_infos = []
+    for i in case_ids:
+        if i:
+            a = models.testcase.objects.get(id=i)
+            case_infos.append([a.precondition, a.action, a.output])
+    
+    return HttpResponse(json.dumps(case_infos))
  
 def getcases(request): 
     #如果选择了模块，则不用管分类，直接筛模块即可，没有模块再筛末级分类
