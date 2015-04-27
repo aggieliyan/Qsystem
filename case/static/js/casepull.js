@@ -133,33 +133,35 @@ $(document).ready(function(){
 			if(a.eq(i).attr("checked")=="checked"){
 				$('#cases').val($('#cases').val()+','+a.eq(i).val());
 			}
-	    }		
-		var casehtml = "";		
-		url = "/case/pull/?cases="+$('#cases').val();
-		$.post(url, function(data, status){
-			data = eval ("(" + data + ")");
-			for(var i in data){
-				casehtml += "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
-		        "<td class=\"editable nodrag\">"+data[i][0]+"</td>"+
-		        "<td class=\"editable nodrag\">"+data[i][1]+"</td>"+
-		      "<td class=\"editable nodrag\">"+data[i][2]+"</td>"+
-		        "<td class=\"level nodrag\">2</td>"+
-		        "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
-		      "<td class=\"editable nodrag\"></td>"+
-		        "<td></td>"+
-		        "<td></td>"+
-		        "<td class=\"editable nodrag\"></td>"+
-		        "<td class=\"nodrag\">"+
-		            "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
-		            "<a class=\"icon-download-alt\" title=\"引入用例\" href=\"#casePullModal\" data-toggle=\"modal\" id=\"pullbutton\" onclick=\"pullPop(this)\"></a> "+
-		            "<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
-		            "<a class=\"icon-trash\"></a>"+
-		        "</td>"+            
-		  "</tr>";
-			}
-			$('.mtr[value='+precase_id+']').after(casehtml);
-			insert_update_rank($('.mtr[value='+precase_id+']').next(),data.length);
-		});
+	    }	
+		if ($('#cases').val()!=""){
+			var casehtml = "";		
+			url = "/case/pull/?cases="+$('#cases').val();
+			$.post(url, function(data, status){
+				data = eval ("(" + data + ")");
+				for(var i in data){
+					casehtml += "<tr class=\"mtr\" value=\"\"><td><input class=\"casecheck nodrag\" type=\"checkbox\" checked='checked' name=\"checklist\"></td>"+
+			        "<td class=\"editable nodrag\">"+data[i][0]+"</td>"+
+			        "<td class=\"editable nodrag\">"+data[i][1]+"</td>"+
+			      "<td class=\"editable nodrag\">"+data[i][2]+"</td>"+
+			        "<td class=\"level nodrag\">2</td>"+
+			        "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
+			      "<td class=\"editable nodrag\"></td>"+
+			        "<td></td>"+
+			        "<td></td>"+
+			        "<td class=\"editable nodrag\"></td>"+
+			        "<td class=\"nodrag\">"+
+			            "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
+			            "<a class=\"icon-download-alt\" title=\"引入用例\" href=\"#casePullModal\" data-toggle=\"modal\" id=\"pullbutton\" onclick=\"pullPop(this)\"></a> "+
+			            "<a class=\"icon-eye-open\" title=\"查看结果\"></a> "+
+			            "<a class=\"icon-trash\"></a>"+
+			        "</td>"+            
+			  "</tr>";
+				}
+				$('.mtr[value='+precase_id+']').after(casehtml);
+				insert_update_rank($('.mtr[value='+precase_id+']').next(),data.length);
+			});
+		}
 		$("#casePullModal").modal('hide');
 	});
 });
