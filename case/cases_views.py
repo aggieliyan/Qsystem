@@ -139,6 +139,8 @@ def case_list(request,pid):
 		newresult.append(p)
 	for m in testmodule:
 		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
+	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
+	# print case
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "executorlist":executorlist})

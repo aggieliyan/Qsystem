@@ -504,18 +504,19 @@ $(document).ready(function(){
                 $(".cate1").attr("value",category1.children().eq(preoption.length).val());
             };
         }else{
-            if(n==0&c1){
+            if(n==0 && c1 ){
                 if((areaJson[preoption.length-1].slist).length != 0){
                     category2.show();
                     category_select_2();
-                    // console.log("mmm");
+                    // console.log("eee");
                     $(".cate1").attr("value",category1.children().eq(preoption.length).val());
                 }else{
+                    // console.log("else");
                     category2.hide();
                     category3.hide();
                 }
             }else{
-                // console.log("else");
+                // console.log("else22");
                 category2.hide();
                 category3.hide();
             }           
@@ -606,7 +607,7 @@ $(document).ready(function(){
 
 
     $('.selectList select').live('click',function(){
-        if ($(this).val() !== '全部' & $(this).val() !== '请选择'){
+        if ($(this).val() !== '全部' && $(this).val() !== '请选择'){
             $(".cate").attr("value",$(this).val());
             $(".next").attr("action","/case/caselist/" + $(this).val() + "/");
         }else{ 
@@ -693,7 +694,6 @@ $(document).ready(function(){
     $(".icon-eye-open").click(function(){
         $('#myModal').modal('show');
         cpid = $(this).next().val();
-        console.log(cpid);
         var url = "/case/execlog/" + cpid;
         $.get(url, function(data, status){
             var datalist = eval ("(" + data + ")");
