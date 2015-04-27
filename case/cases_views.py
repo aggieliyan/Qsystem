@@ -450,7 +450,7 @@ def savecase(request):
 		import sys 
 		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
 		dict['message']=False
-		print e 
+		print e
 	finally:
 		cjson=json.dumps(dict) 
 	return HttpResponse(cjson)
