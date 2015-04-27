@@ -40,10 +40,11 @@
         var title = document.test.procate_title.value.replace(/(^\s*)|(\s*$)/g,"");
         var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,""); 
         //先判断填写项是否符合规格
-        if(proid <= 0 || proid!=parseInt(proid) || !title || title.length>30 || proid.length>10){
+        if((proid.length!=0 && (proid <= 0 || proid!=parseInt(proid) || proid.length>10)) || !title || title.length>30){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
-        }   
-        else{
+        }else if(proid.length == 0){
+        	document.test.submit();
+        }else{
             //再判断项目编号之前是否填写过
             url = "/case/has_proid";
             para = {"proid":proid};
@@ -67,10 +68,11 @@
         var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");
         var procate_id = document.test1.procate_id1.value;
         //先判断填写项是否符合规格
-        if(proid <= 0 || proid!=parseInt(proid) || !title || title.length>30 || proid.length>10){
+        if((proid.length!=0 && (proid <= 0 || proid!=parseInt(proid) || proid.length>10)) || !title || title.length>30){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
-        }   
-        else{
+        }else if(proid.length == 0){
+        	document.test1.submit();
+        }else{
             //再判断项目编号之前是否填写过
             url = "/case/has_proid";
             para = {"proid":proid};
