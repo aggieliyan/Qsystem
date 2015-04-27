@@ -8,7 +8,6 @@ function ajaxClick(url){
 		for(var key in json['actionlist']){			
 			$('#import_list').append('<tr><td class="text-left first-cell"><label class="import-list-item clearfix"><input onclick="change(this)" type="checkbox" value="'+key+'" style="margin-right:10px;"><p>'+json['actionlist'][key]+'</p></label></td></tr>');
 		}
-			
 		if (json['prelink']){
 			$('.previous').removeClass('disabled');
 			$('.previous a').attr("onclick", "ajaxClick('"+json['prelink']+"')");
@@ -20,7 +19,8 @@ function ajaxClick(url){
 			$('.next a').attr("onclick", "ajaxClick('"+json['nextlink']+"')");
 		} else{
 			$('.next').addClass('disabled');
-		}	
+		}
+		$('#totalpage').text(json['totalpage']);
 		if (json['golink']){
 			$('#go').attr("value", json['golink']);
 		}
@@ -65,11 +65,6 @@ function pullPop(obj) {
 	$('#cases').val($(obj).parent().parent().attr("value")); //存在哪里引入用例的位置
 	var url = "/case/getcases/?page=1/";
 	ajaxClick(url);
-	/* 取共几页 */
-	$.get("/case/totalpage/", function(data,status){
-		var json = eval ("(" + data + ")");
-		$('#totalpage').text(json['totalpage']);
-	});	
 	/* 画左边的类目树 */
 	$.get("/case/getprocate/", function(data, status){
 		var json = eval ("(" + data + ")");

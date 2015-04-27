@@ -42,9 +42,9 @@ def getcases(request):
 
     """分页"""
     paginator = Paginator(caselist, 25)
-    if '/totalpage' in request.path:
-        res = {'totalpage': paginator.num_pages}
-        return HttpResponse(json.dumps(res))
+#    if '/totalpage' in request.path:
+#        res = {paginator.num_pages}
+#        return HttpResponse(json.dumps(res))
    
     pagenum = request.GET.get('page')
     try:
@@ -80,6 +80,6 @@ def getcases(request):
         if caseobj.has_next():
             nextlink = "/case/getcases/?page=" + str(caseobj.next_page_number())
         go_link = ""
-
-    res = {'actionlist': actionlist, 'prelink': previouslink, 'nextlink': nextlink, 'golink': go_link}
+    print paginator.num_pages
+    res = {'actionlist': actionlist, 'prelink': previouslink, 'nextlink': nextlink, 'golink': go_link, 'totalpage': paginator.num_pages}
     return HttpResponse(json.dumps(res))
