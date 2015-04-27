@@ -824,7 +824,6 @@ $(document).ready(function(){
                 $(".savebtn").removeAttr("disabled");
             }
         }
-        }
     });
 
 });
