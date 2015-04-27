@@ -10,8 +10,25 @@ function insert_update_rank(celement, cnum){
             catid = curpath.replace(/[^0-9]/ig,"");
             if(catid == ""){
                 alert("非末级产品类目下不能对模块进行排序！");
+                location.reload();
                 return;
             }else{
+                var url = "/case/haschildren/"
+                var para = {"pid":catid,}
+                $.get(url, para, function(data){
+                    var rs = eval('('+data+')');
+                    if(rs.success){
+                        if(rs.haschildren){
+                            alert("非末级产品类目下不能对模块进行排序！");
+                            location.reload();
+                            return;
+                        }
+                    }else{
+                        alert("判断失败");
+            }
+
+                });
+
 
             }
 

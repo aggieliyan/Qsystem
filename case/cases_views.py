@@ -27,6 +27,23 @@ def is_tester(uid):
 	else:
 		return True
 
+def has_children(request):
+	resp = {}
+	pid = request.GET['pid']
+	child = category.objects.filter(parent_id = int(pid))
+	try:
+		if len(child):	
+			resp["haschildren"] = True
+		else:
+			resp["haschildren"] = False
+		resp["success"] = True
+
+	except Exception, e:
+		resp["success"] = False
+		print e
+	finally:
+		resp = json.dumps(resp)
+		return HttpResponse(resp)
 
 def case_list(request,pid):
 	#没登陆的提示去登录
