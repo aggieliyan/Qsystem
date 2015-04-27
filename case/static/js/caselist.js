@@ -789,6 +789,8 @@ $(document).ready(function(){
                 output = tdata.eq(3).text();
                 mname = $.trim(cm.find(".success").children().eq(1).text());
                 if(!input || !output || !mname ){
+                    node.css("background-color","#ffecec");
+                    $(".savebtn").removeAttr("disabled");
                     alert("用例必填项没有填写，请填写后再保存！");
                     flag = false;
                     return false;
@@ -814,6 +816,8 @@ $(document).ready(function(){
                         casejson[j] = datadic;
                        dic[tmodule] = casejson;
                     }else{
+                        node.css("background-color","#ffecec");
+                        $(".savebtn").removeAttr("disabled");
                         alert("模块名称没有填写，请填写后再保存！");
                         flag = false;
                         return false;
