@@ -147,10 +147,10 @@ $(document).ready(function(){
 		      "<td class=\"editable nodrag\">"+data[i][2]+"</td>"+
 		        "<td class=\"level nodrag\">2</td>"+
 		        "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
-		      "<td class=\"editable nodrag\">-</td>"+
+		      "<td class=\"editable nodrag\"></td>"+
 		        "<td></td>"+
 		        "<td></td>"+
-		        "<td class=\"editable nodrag\">-</td>"+
+		        "<td class=\"editable nodrag\"></td>"+
 		        "<td class=\"nodrag\">"+
 		            "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
 		            "<a class=\"icon-download-alt\" title=\"引入用例\" href=\"#casePullModal\" data-toggle=\"modal\" id=\"pullbutton\" onclick=\"pullPop(this)\"></a> "+
