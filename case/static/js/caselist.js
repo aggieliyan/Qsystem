@@ -3,6 +3,20 @@ function insert_update_rank(celement, cnum){
         var pelement = celement.prev();
         var rankdic = {}
         var newrank = 1
+        var classname = celement.attr("class")
+
+        if(classname == "cmodule"){//模块的情况下，要判断在不在末级类目下，如果不在末级类目模块是不能排序的
+            curpath = window.location.pathname;
+            catid = curpath = replace(/[^0-9]/ig,"");
+            if(catid == ""){
+                alert("非末级产品类目下不能对模块进行排序！");
+                return;
+            }else{
+
+            }
+
+        }
+
         if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
             celement.attr("rank", "1");
         }
@@ -27,8 +41,7 @@ function insert_update_rank(celement, cnum){
             celement.find("input").eq(0).attr("checked", "checked");
         } 
 
-        var classname = celement.attr("class")
-        var nx = celement.nextAll().filter("."+classname);
+                var nx = celement.nextAll().filter("."+classname);
         
         var mid = 0
         if(classname == "mtr"){
@@ -412,6 +425,11 @@ $(document).ready(function(){
                     var url = "/case/moduledel/"
                     var mid = currentm.attr("value");     
                     var para = {"mid": mid,};
+                    //如果是刚新建的没有mid就直接remove掉就行
+                    if(mid == undefined){
+                        currentm.remove();
+                        return;
+                    }
                     //更新rank值
                     delete_update_rank(currentm);
                     //克隆一份该模块下的用例
