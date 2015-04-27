@@ -343,9 +343,9 @@ def moduledel(request):
 	mid = request.POST['mid']
 	try:
 		delmodule = get_object_or_404(casemodule, pk=int(mid))
-		delmodule.isactived = 0
-		delmodule.save()
-		# delmodule.delete()
+		# delmodule.isactived = 0
+		# delmodule.save()
+		delmodule.delete()
 		resp["success"] = True
 	except Exception,e:
 		resp["success"] = False

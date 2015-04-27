@@ -16,7 +16,6 @@ function insert_update_rank(celement, cnum){
             }
 
         }
-        console.log("module!!!!!!!!1");
 
         if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
             celement.attr("rank", "1");
