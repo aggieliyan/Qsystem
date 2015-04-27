@@ -49,6 +49,7 @@ function menu_val(){
 /* 搜索用例 */
 function search_case(){
 	var a = $('.tree ul li ul li input');
+	$('#cate_ids').val("");
     for(var i=0;i<a.length;i++){
     	if(a.eq(i).attr("checked")=="checked"){
     		if(i==0){
