@@ -469,7 +469,11 @@ $(document).ready(function(){
                 delids += ",";
 
             });
-            
+            if(delids == ""){
+                alert("请勾选用例再点批量删除");
+                return;
+            }
+            $(this).attr("disabled","true"); 
             url = "/case/deletecase/";
             para = {"did": delids,};
             $.post(url, para, function(data, status){
@@ -482,6 +486,7 @@ $(document).ready(function(){
                     alert("删除失败");
                 }
             });
+            $(this).removeAttr("disabled");
         }
 
     });
@@ -812,14 +817,14 @@ $(document).ready(function(){
                 }else{
                     alert("保存失败，请重新保存！");
                 }
-                $(".savebtn").attr("disabled",false);
+                $(".savebtn").removeAttr("disabled");
             });
-
             }else{
                 alert("请勾选需要保存的用例！");
-                $(".savebtn").attr("disabled",false);
+                $(".savebtn").removeAttr("disabled");
             }
-        }      
+        }
+        }
     });
 
 });

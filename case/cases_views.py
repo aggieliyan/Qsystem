@@ -12,7 +12,7 @@ from django.db.models import Q
 #判断是否是技术部分的测试或者开发
 def is_dev(uid):
 	depid = user.objects.get(id=int(uid)).department_id
-	if depid not in [1, 2, 4, 5, 12]:
+	if depid not in [1, 2, 4, 5, 13]:
 		return False
 	else:
 		return True
