@@ -168,7 +168,7 @@ def allcaselist(request):
 			cexec_status = search.cleaned_data['exec_status']
 			ckeyword = search.cleaned_data['keyword']
 			if not isNone(cauthor):
-				kwargs['author'] =  cauthor
+				kwargs['authorid'] =  cauthor
 			cmodule = testcase.objects.filter(**kwargs)
 			if not isNone(cpriority):
 				kwargs['priority'] = cpriority
