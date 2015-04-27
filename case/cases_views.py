@@ -441,6 +441,7 @@ def savecase(request):
 							updatecase = testcase.objects.filter(pk = caseid).update(precondition = cpre, \
 								action = cinput, output = couput, priority = cpriority)
 						else:
+							print request.session['realname']
 							newcase = testcase(category_id = pid, rank = crank, module_id = key, precondition = cpre, \
 								action = cinput, output = couput, priority = cpriority, author = request.session['realname'], \
 								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
@@ -450,7 +451,7 @@ def savecase(request):
 		import sys 
 		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
 		dict['message']=False
-		print e
+		print e,info
 	finally:
 		cjson=json.dumps(dict) 
 	return HttpResponse(cjson)
