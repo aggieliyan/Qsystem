@@ -469,6 +469,7 @@ $(document).ready(function(){
                 delids += ",";
 
             });
+            $(this).attr("disabled","true");
             
             url = "/case/deletecase/";
             para = {"did": delids,};
@@ -482,6 +483,7 @@ $(document).ready(function(){
                     alert("删除失败");
                 }
             });
+            $(this).removeAttr("disabled");
         }
 
     });
@@ -811,7 +813,7 @@ $(document).ready(function(){
                     alert("保存失败，请重新保存！");
                 }
             });
-        }      
+        }
     });
 
 });
