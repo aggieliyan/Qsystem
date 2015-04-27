@@ -38,11 +38,13 @@
     //添加验证输入框
     function chk(){
         var title = document.test.procate_title.value.replace(/(^\s*)|(\s*$)/g,"");
-        var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,""); 
+        var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,"");
+        alert(proid.length);
         //先判断填写项是否符合规格
         if((proid.length!=0 && (proid <= 0 || proid!=parseInt(proid) || proid.length>10)) || !title || title.length>30){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
+        	$("#project_id").val(proid);
         	document.test.submit();
         }else{
             //再判断项目编号之前是否填写过
@@ -71,6 +73,7 @@
         if((proid.length!=0 && (proid <= 0 || proid!=parseInt(proid) || proid.length>10)) || !title || title.length>30){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
+        	$("#project_id").val(proid);
         	document.test1.submit();
         }else{
             //再判断项目编号之前是否填写过
