@@ -7,7 +7,7 @@ function insert_update_rank(celement, cnum){
 
         if(classname == "cmodule"){//模块的情况下，要判断在不在末级类目下，如果不在末级类目模块是不能排序的
             curpath = window.location.pathname;
-            catid = curpath = replace(/[^0-9]/ig,"");
+            catid = curpath.replace(/[^0-9]/ig,"");
             if(catid == ""){
                 alert("非末级产品类目下不能对模块进行排序！");
                 return;
@@ -16,6 +16,7 @@ function insert_update_rank(celement, cnum){
             }
 
         }
+        console.log("module!!!!!!!!1");
 
         if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
             celement.attr("rank", "1");
