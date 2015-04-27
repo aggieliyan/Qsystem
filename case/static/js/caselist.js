@@ -469,8 +469,11 @@ $(document).ready(function(){
                 delids += ",";
 
             });
-            $(this).attr("disabled","true");
-            
+            if(delids == ""){
+                alert("请勾选用例再点批量删除");
+                return;
+            }
+            $(this).attr("disabled","true"); 
             url = "/case/deletecase/";
             para = {"did": delids,};
             $.post(url, para, function(data, status){
