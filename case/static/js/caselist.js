@@ -738,7 +738,7 @@ $(document).ready(function(){
             tdata = node.children();
             cm = $(this).parents(".cmodule")
             tmodule = cm.attr("value");
-            if (tmodule == ''){
+            if (tmodule == '' || tmodule == undefined){
                     tmodule = -1;
             }
             mchk[i] = tmodule;

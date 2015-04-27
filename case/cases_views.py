@@ -422,7 +422,7 @@ def savecase(request):
 		for data in dt:
 			for key,value in data.items():
 				for ddata in value:
-					if key == "-1":
+					if key == "-1" or key == 'undefined':
 						cm = casemodule(m_name = ddata['mname'],m_rank = ddata['mrank'], isactived = 1)
 						cm.save()
 						key = cm.id
