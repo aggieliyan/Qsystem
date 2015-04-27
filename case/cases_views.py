@@ -46,7 +46,7 @@ def case_list(request,pid):
 	case = {}
 	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = \
 	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
-	cmodule = testcase.objects.filter(isactived =1)
+	cmodule = testcase.objects.filter(isactived = 1)
 
 	if request.method == "POST":
 		search = searchForm(request.POST)
@@ -128,7 +128,7 @@ def case_list(request,pid):
 		subset = list(set(subset2).union(set(subset3)))		
 		subset.append(pid)
 		cmodule = testcase.objects.filter(category__in = subset)
-		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	executorlist = caseresult.values_list("executor",flat = True).distinct()
@@ -137,10 +137,12 @@ def case_list(request,pid):
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
+	# ccase = {}
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
+		case[m.id] = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		# case.append(ccase)
 	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
-	# print case
+	print case
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "executorlist":executorlist})
@@ -210,7 +212,7 @@ def allcaselist(request):
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id).order_by("rank")
+		case[m.id] = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "canope": False, "executorlist":executorlist})
