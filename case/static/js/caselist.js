@@ -71,10 +71,10 @@ $(document).ready(function(){
                         "<td class=\"editable nodrag\"></td>"+
                           "<td class=\"level nodrag\">2</td>"+
                           "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
-                        "<td class=\"editable nodrag\">-</td>"+
+                        "<td class=\"editable nodrag\"></td>"+
                           "<td></td>"+
                           "<td></td>"+
-                          "<td class=\"editable nodrag\">-</td>"+
+                          "<td class=\"editable nodrag\"></td>"+
                           "<td class=\"nodrag\">"+
                               "<a class=\"icon-plus\" title=\"添加用例\"></a> "+
                               "<a class=\"icon-download-alt\" title=\"引入用例\" href=\"#casePullModal\" data-toggle=\"modal\" id=\"pullbutton\" onclick=\"pullPop(this)\"></a> "+
@@ -312,13 +312,14 @@ $(document).ready(function(){
                 rsdrop.after("<span class=\""+result+"\">"+result+"</span>");//在后面生成结果
                 rsdrop.toggle();//隐藏下拉选择框               
 
-                //更新后端返回的执行时间和执行人
+                //更新后端返回的执行时间和执行人，备注
                 rsdrop.parent().next().next().text(rs.exedetail.exec_date);
                 rsdrop.parent().next().next().next().text(rs.exedetail.executor);
-/*                alert("执行成功！");*/
+                rsdrop.parent().next().next().next().next().html("");
 
-            }else{
-                alert("执行失败！请重试");
+            }else{     
+                rsdrop.toggle();//隐藏下拉选择框 
+                alert("执行失败！");
             }
         });
 
