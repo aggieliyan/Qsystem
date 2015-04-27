@@ -101,6 +101,7 @@ function pullPop(obj) {
 		/*执行checkTree显示为树状结构*/
 		$("ul.tree").checkTree({});
 		$("ul.tree .checkbox").attr("onclick", "menu_val()");
+		$('#import_c').removeAttr("disabled");
 	});		
 };
 $(document).ready(function(){		
@@ -124,6 +125,7 @@ $(document).ready(function(){
 	    }
 	  });	
 	$('#import_c').click(function(){
+		$('#import_c').attr("disabled", "disabled");
 		precase_id = $('#cases').val();
 		$('#cases').val("");
 		var a = $("#import_list_wrapper tr td label input");
