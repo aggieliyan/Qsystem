@@ -742,6 +742,7 @@ $(document).ready(function(){
 
    //保存用例
     $(".savebtn").click(function(){
+        $(".savebtn").attr("disabled","true");
         i = 1;
         j = 0; 
         var casejson = [];
@@ -803,14 +804,21 @@ $(document).ready(function(){
         if(flag == true){
             diclist = JSON.stringify(diclist);
             casedic = {"datas":diclist};
-            $.post("/case/savecase/",casedic,function(data){
+            if (diclist.length-4){
+                 $.post("/case/savecase/",casedic,function(data){
                 var resp = eval('('+data+')');
                 if(resp.message){
                     $("input[name=\"checklist\"]:checked").removeAttr("checked");
                 }else{
                     alert("保存失败，请重新保存！");
                 }
+                $(".savebtn").attr("disabled",false);
             });
+
+            }else{
+                alert("请勾选需要保存的用例！");
+                $(".savebtn").attr("disabled",false);
+            }
         }      
     });
 
