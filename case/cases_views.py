@@ -115,7 +115,8 @@ def case_list(request,pid):
 				if not isNone(cstart_date):
 					caseresult = caseresult.filter(exec_date__gte = cstart_date)
 				if not isNone(cend_date):
-					caseresult = caseresult.filter(exec_date__lte = cend_date)
+					tomorrow = cend_date + datetime.timedelta(days=1)
+					caseresult = caseresult.filter(exec_date__lte = tomorrow)
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate)
 	else:
@@ -215,7 +216,8 @@ def allcaselist(request):
 				if not isNone(cstart_date):
 					caseresult = caseresult.filter(exec_date__gte = cstart_date)
 				if not isNone(cend_date):
-					caseresult = caseresult.filter(exec_date__lte = cend_date)
+					tomorrow = cend_date + datetime.timedelta(days=1)
+					caseresult = caseresult.filter(exec_date__lte = tomorrow)
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate)
 	else:
