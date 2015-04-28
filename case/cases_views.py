@@ -146,6 +146,7 @@ def case_list(request,pid):
 		subset.append(pid)
 		cmodule = testcase.objects.filter(category__in = subset)
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
+		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	executorlist = caseresult.values_list("executor",flat = True).distinct()
@@ -220,6 +221,7 @@ def allcaselist(request):
 				cmodule = cmodule.filter(pk__in = cdate)
 	else:
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	executorlist = caseresult.values_list("executor",flat = True).distinct()
