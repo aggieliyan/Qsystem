@@ -37,6 +37,7 @@
     float: right;
     padding: 2px 11px;
     height:30px;
+    cursor:pointer;  
 }
 
 .show_procate{
@@ -116,18 +117,20 @@
 	float:right;
 	position:relative;
 	right:70px;
+    cursor:pointer;
 }
-
 .procate-a4{
 	float:right;
 	position:relative;
 	right:-45px;
+    cursor:pointer;
 }
 
 .procate-a5{
 	float:right;
 	position:relative;
 	right:-160px;
+    cursor:pointer;
 }
 
 .mybtn-success {
