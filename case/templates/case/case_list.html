@@ -152,7 +152,8 @@
         </thead>
         <tbody>
         {% if case %}
-        {% for key,dic in case.items %}
+        {% for item in case %}
+        {% for key,dic in item.items %}
         {% for i in testmodule %}
         {% if key == i.id %}
 	    	<tr class="cmodule" rank="{{i.m_rank}}" value="{{key}}">
@@ -228,6 +229,7 @@
 	    			</div>
 	    		</td>
 	    	</tr>
+        {% endfor %}
         {% endfor %}
         {% else %}
         <tr class="cmodule" rank="1" value="">

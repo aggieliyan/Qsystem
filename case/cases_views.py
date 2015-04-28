@@ -57,10 +57,9 @@ def case_list(request,pid):
 		child = category.objects.filter(parent_id = int(pid))
 		if len(child):
 			canope =  False
-
-
+	#列表页显示		
 	kwargs={}
-	case = {}
+	case = []
 	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = \
 	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
 
@@ -94,7 +93,7 @@ def case_list(request,pid):
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword
 			cmodule = testcase.objects.filter(**kwargs)
-			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")
 			allmodule = testmodule
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			if not isNone(ctestmodule):
@@ -155,12 +154,11 @@ def case_list(request,pid):
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
-	# ccase = {}
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
-		# case.append(ccase)
+		ccase={}
+		ccase[m.id] = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		case.append(ccase)
 	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
-	print case
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "executorlist":executorlist})
@@ -172,7 +170,7 @@ def allcaselist(request):
 		return HttpResponseRedirect("/case/login")
 
 	kwargs={}
-	case = {}
+	case = []
 	ctestmodule = cpriority = cauthor = cexecutor = cstart_date = cend_date = \
 	cexec_status = ckeyword =  cstatue = cmold = ''
 	cmodule = testcase.objects.all()
@@ -196,7 +194,7 @@ def allcaselist(request):
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword
 			cmodule = cmodule.filter(**kwargs)
-			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")
 			allmodule = testmodule
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			if not isNone(ctestmodule):
@@ -221,7 +219,7 @@ def allcaselist(request):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate)
 	else:
-		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
 		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
 	listid = caseresult.values_list("testcase", flat=True).distinct()
@@ -232,7 +230,9 @@ def allcaselist(request):
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
 	for m in testmodule:
-		case[m.id] = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		ccase = {}
+		ccase[m.id] = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		case.append(ccase)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "canope": False, "executorlist":executorlist})
