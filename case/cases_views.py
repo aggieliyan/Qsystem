@@ -64,6 +64,7 @@ def case_list(request,pid):
 	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
 
 	if request.method == "POST":
+		canope =  False
 		search = searchForm(request.POST)
 		if search.is_valid():
 			cate1 = search.cleaned_data['cate1']
