@@ -55,7 +55,7 @@ function search_case(){
     		$('#cate_ids').val($('#cate_ids').val()+","+a.eq(i).attr("id"));
     		}
       };
-    url = "/case/getcases/?page=1&mid="+$('.cc-textbox').val()+"&cids="+$('#cate_ids').val()+"&skey="+$('#search_text').val();
+    url = "/case/getcases/?page=1&mid="+$('.cc-textbox').val()+"&cids="+$('#cate_ids').val()+"&skey="+$.trim($('#search_text').val());
     ajaxClick(url);
 };
 function pullPop(obj) {
