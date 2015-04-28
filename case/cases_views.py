@@ -89,12 +89,11 @@ def case_list(request,pid):
 				kwargs['category__in'] = subset				
 			if not isNone(cauthor):
 				kwargs['authorid'] = cauthor
-			cmodule = testcase.objects.filter(**kwargs)
 			if not isNone(cpriority):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword
-			cmodule = cmodule.filter(**kwargs)
+			cmodule = testcase.objects.filter(**kwargs)
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
 			allmodule = testmodule
 			caseresult = result.objects.filter(testcase__in = cmodule)
@@ -175,6 +174,7 @@ def allcaselist(request):
 	case = {}
 	ctestmodule = cpriority = cauthor = cexecutor = cstart_date = cend_date = \
 	cexec_status = ckeyword =  cstatue = cmold = ''
+	cmodule = testcase.objects.all()
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -190,7 +190,6 @@ def allcaselist(request):
 			ckeyword = search.cleaned_data['keyword']
 			if not isNone(cauthor):
 				kwargs['authorid'] =  cauthor
-			cmodule = testcase.objects.filter(**kwargs)
 			if not isNone(cpriority):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):

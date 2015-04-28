@@ -25,13 +25,9 @@ function insert_update_rank(celement, cnum){
                         }
                     }else{
                         alert("判断失败");
-            }
-
+                    }
                 });
-
-
             }
-
         }
 
         if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
@@ -816,7 +812,7 @@ $(document).ready(function(){
                         casejson[j] = datadic;
                        dic[tmodule] = casejson;
                     }else{
-                        node.css("background-color","#ffecec");
+                        node.css('border', "3px solid #339966");
                         $(".savebtn").removeAttr("disabled");
                         alert("模块名称没有填写，请填写后再保存！");
                         flag = false;
