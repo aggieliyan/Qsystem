@@ -24,17 +24,19 @@ def getcases(request):
     skey = request.GET.get('skey')
     if mid:
         caselist = models.testcase.objects.filter(module_id=mid)
-    elif cids:         
-        cids = cids.split(',')
+    elif cids:        
+        cid = cids.split(',')
+        print cid
         text = ''
         k = 0
-        for i in cids:
-            if k==0:
-                text += 'Q(category_id=' + i + ')'
-                k = 1
-            else:
-                text += '| Q(category_id=' + i + ')'            
-        caselist = models.testcase.objects.filter(eval(text))           
+        for i in cid:
+            if i!= '':                                
+                if k==0:
+                    text += 'Q(category_id=' + i + ')'
+                    k = 1
+                else:
+                    text += '| Q(category_id=' + i + ')'          
+        caselist = models.testcase.objects.filter(eval(text))          
     else:
         caselist = models.testcase.objects.all().order_by("-id")
     if skey:
@@ -70,8 +72,10 @@ def getcases(request):
             previouslink = "/case/getcases/?page=" + str(caseobj.previous_page_number()) \
                 +"&mid="+mid+"&cids="+cids+"&skey="+skey
         if caseobj.has_next():
+            print 1
             nextlink = "/case/getcases/?page=" + str(caseobj.next_page_number()) \
-                + "&mid=" + mid + "&cids=" + cids + "&skey=" + skey
+            + "&mid=" + mid + "&cids=" + cids + "&skey=" + skey
+            print 2
         go_link = "/case/getcases/?mid=" + mid + "&cids=" + cids + "&skey=" + skey \
             + "&page="
     else:        

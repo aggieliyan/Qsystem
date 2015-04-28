@@ -52,16 +52,12 @@ function search_case(){
 	$('#cate_ids').val("");
     for(var i=0;i<a.length;i++){
     	if(a.eq(i).attr("checked")=="checked"){
-    		if(i==0){
-    			$('#cate_ids').val(a.eq(i).attr("id"));
-    		}else{
-    			$('#cate_ids').val($('#cate_ids').val()+","+a.eq(i).attr("id"));
+    		$('#cate_ids').val($('#cate_ids').val()+","+a.eq(i).attr("id"));
     		}
-    	};
-      }
+      };
     url = "/case/getcases/?page=1&mid="+$('.cc-textbox').val()+"&cids="+$('#cate_ids').val()+"&skey="+$('#search_text').val();
     ajaxClick(url);
-}
+};
 function pullPop(obj) {
 	$('#cases').val($(obj).parent().parent().attr("value")); //存在哪里引入用例的位置
 	var url = "/case/getcases/?page=1/";
