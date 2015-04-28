@@ -64,7 +64,6 @@ def case_list(request,pid):
 	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
 
 	if request.method == "POST":
-		canope =  False
 		search = searchForm(request.POST)
 		if search.is_valid():
 			cate1 = search.cleaned_data['cate1']
@@ -84,7 +83,10 @@ def case_list(request,pid):
 			subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
 			subset3 = list(category.objects.filter(parent_id__in = subset2))
 			subset = list(set(subset2).union(set(subset3)))
-			subset.append(pid)			
+			subset.append(pid)
+			if ctestmodule or cpriority or cauthor or cexecutor or cstart_date or cend_date or \
+			cexec_status or ckeyword or cstatue:
+			    canope =  False
 			if not isNone(pid):
 				kwargs['category__in'] = subset				
 			if not isNone(cauthor):
