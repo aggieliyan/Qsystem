@@ -43,7 +43,7 @@
               <select class="" name="testmodule">
                 <option selected="selected" value="{{ctestmodule}}">{{ctestmodule}}</option>
                 <option value=""></option>
-                {% for m in testmodule %}
+                {% for m in allmodule %}
                 <option value="{{m.m_name}}">{{m.m_name}}</option>
                 {% endfor %}
               </select>
