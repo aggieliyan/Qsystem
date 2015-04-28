@@ -70,6 +70,12 @@
 	width:50px;
 }
 
+.fixhead{
+	position: fixed;
+	top: 35px;
+	z-index: 4;
+}
+
 .must{
 	color:red;
 }

@@ -30,6 +30,7 @@ function insert_update_rank(celement, cnum){
             }
         }
 
+        //如果插入的第一个元素前面没元素，则rank是1，否则是前面那个元素的rank值+1
         if(pelement.length == 0 || pelement.attr("class") !== celement.attr("class")){
             celement.attr("rank", "1");
         }
@@ -39,26 +40,26 @@ function insert_update_rank(celement, cnum){
 
         }
         //批量插入多个用例后，该第一个插入用例后面的新用例rank值也要更新
-        var tempele = celement;
+        var tempele = celement; 
         for(var i=1;i<cnum;i++){
         	tempele = tempele.next(); 
             newrank = newrank + 1;
             tempele.attr("rank", newrank);
+
+
         }
 
         var cid = celement.attr("value");
         if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
             rankdic[cid] = newrank;
-        }
-        else{
+        }else{
             celement.find("input").eq(0).attr("checked", "checked");
-        } 
+        }
 
-                var nx = celement.nextAll().filter("."+classname);
-        
-        var mid = 0
+        var nx = tempele.nextAll().filter("."+classname);
+        var mid = 0;
         if(classname == "mtr"){
-            mid = -1
+            mid = -1;
         }
 
         nx.each(function(){
@@ -757,6 +758,12 @@ $(document).ready(function(){
             $(".boxtable").html(recordhtml);          
         });
     })
+
+/*    $(window).scroll(function (){//浏览器滚动条滚动时触发的事件
+
+
+
+    });*/
 
    //保存用例
     $(".savebtn").click(function(){
