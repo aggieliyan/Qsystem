@@ -214,10 +214,18 @@ $(document).ready(function(){
         }
     }
 
+    function scrollOffset(scroll_offset){
+        var x = document.body.clientHeight;
+        console.log("scroll_offset");
+        console.log(x);
+
+        $("body,html").animate({scrollTop: scroll_offset.top + x}, 500);
+      }
     // click create case
     $("#newcase").click(function(){
         $(".mtr").last().after(casehtml);
         insert_update_rank($(".mtr").last());
+        scrollOffset($("#newone").offset()); 
 
     });
 

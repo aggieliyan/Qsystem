@@ -133,7 +133,7 @@
   		<img src="/static/img/praise.png" style="margin-left:500px">
   	</div>  -->
 <div class="span12">
-  	<div id="tbop"><span id="cnum">共{{count}}条用例</span>{% if canope %} <buton id="newcase" class="btn btn-success">新建用例</button>{% endif %} </div>
+  	<div id="tbop"><span id="cnum">共{{count}}条用例</span>{% if canope %}<buton id="newcase" class="btn btn-success">新建用例</button>{% endif %} </div>
     <table id="caselist" class="table table-bordered">
     	<thead>
 	      	<tr>
@@ -254,6 +254,7 @@
           </td>
         </tr>
       {% endif %}
+      <input id="newone" type="hidden">
 
         </tbody>
     </table>

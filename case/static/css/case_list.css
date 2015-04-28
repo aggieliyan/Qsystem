@@ -10,6 +10,7 @@
 	width: 100%;
 	height: 35px;
 	margin-left: -24px;
+	padding: 5px;
 }
 
 #caselist{
@@ -81,6 +82,7 @@
 }
 #newcase {
 	float:right;
+	margin-right: 5px;
 }
 
 .mtr td:nth-child(1){
