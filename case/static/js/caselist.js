@@ -826,11 +826,13 @@ $(document).ready(function(){
         if(flag == true){
             diclist = JSON.stringify(diclist);
             casedic = {"datas":diclist};
+            node = $("input[name=\"checklist\"]:checked");
             if (diclist.length-4){
                  $.post("/case/savecase/",casedic,function(data){
                 var resp = eval('('+data+')');
-                if(resp.message){
-                    $("input[name=\"checklist\"]:checked").removeAttr("checked");
+                if(resp.message){                    
+                    node.removeAttr("checked");
+                    node.parent().parent().removeAttr("style");
                 }else{
                     alert("保存失败，请重新保存！");
                 }
