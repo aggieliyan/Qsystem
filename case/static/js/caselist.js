@@ -726,6 +726,10 @@ $(document).ready(function(){
         $(".executor option[value="+$(".cexecutor").val()+"]").attr("selected",true);
     };
 
+    //过滤搜索关键词的空格
+    $.trim($(".search-input").val());
+
+    //时间组件
      $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         autoclose: true,
