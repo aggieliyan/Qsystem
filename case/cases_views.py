@@ -332,12 +332,16 @@ def update_rank(request):
 		rank_dict = json.loads(request.POST['rankdict'])
 		module_id = request.POST['mid']
 
+		#对字典进行排序
+		# rank_list = sorted(rank_dict.items(), key=lambda d: d[1])
+
 		if int(module_id):#更新用例rank
 			for key in rank_dict.keys():
 				tc = testcase.objects.get(id=key)
-				tc.rank = rank_dict[key]
 				if int(module_id) != -1:
 					tc.module_id = module_id
+				tc.rank = rank_dict[key]
+
 				tc.save()
 		else:#更新模块rank
 			for key in rank_dict.keys():
