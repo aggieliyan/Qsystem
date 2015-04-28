@@ -66,7 +66,7 @@
     </div>
     <div class="span9" style="width:75%">     
        <div> 
-       <input id="project_id1" name="project_id1" style='width:100px;' type="text"></input> 
+       <input id="project_id1" name="project_id1" style='width:100px;' type="text" onMouseOut="check_projectid"></input> 
        </div>
      <div> 
 		<input id="procate_title1" name="procate_title1" style='width:380px;' type="text"></input>
@@ -108,7 +108,7 @@
       </div>
       <div class="modal-footer">
         <div align="center">
-          <button id='procate_btn_del' type="button" class="btn mybtn-success" onclick="submit()">确定</button>
+          <button id='procate_btn_del' type="button" class="btn mybtn-success" onclick="setup();submit()">确定</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         </div>
       </div>

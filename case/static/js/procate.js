@@ -57,12 +57,21 @@
                 	alert("项目编号已被模块名称为“"+getname+"”关联！");	
                 } 	
                 else{
+                	$("#procate_btn").attr("disabled","true");
                     document.test.submit();	
                 }
             });
         } 
       }
-   
+ 
+    function check_projectid(){
+//    	var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");
+//    	if(proid.length!=0 && (proid <= 0 || proid!=parseInt(proid)){
+//    		alert('编号为正整数且不超过10位数');
+//    	}
+//    	else
+    }
+    
     //编辑验证输入框
     function chk1(){
         var title = document.test1.procate_title1.value.replace(/(^\s*)|(\s*$)/g,"");
@@ -86,6 +95,7 @@
                 	alert("项目编号已被模块名称为“"+getname+"”关联！");	
                 } 	
                 else{
+                	$("#procate_btn1").attr("disabled","true");
                     document.test1.submit();	
                 }
             });
@@ -141,6 +151,10 @@
      })      
  }
    
+ function setup(){
+     $("#procate_btn_del").attr("disabled","true"); 
+ }
+ 
  $(document).ready(function(){
 	 $(".on_myproject").each(function(){
 		 val = $(this).text();
