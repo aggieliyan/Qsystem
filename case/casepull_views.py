@@ -83,7 +83,7 @@ def getcases(request):
             previouslink = "/case/getcases/?page=" + str(caseobj.previous_page_number())
         if caseobj.has_next():
             nextlink = "/case/getcases/?page=" + str(caseobj.next_page_number())
-        go_link = ""
+        go_link = "/case/getcases/?mid=&cids=&skey=&page="
     print paginator.num_pages
     res = {'actionlist': actionlist, 'prelink': previouslink, 'nextlink': nextlink, 'golink': go_link, 'totalpage': paginator.num_pages}
     return HttpResponse(json.dumps(res))
