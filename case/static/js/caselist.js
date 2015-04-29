@@ -224,8 +224,23 @@ $(document).ready(function(){
     // click create case
     $("#newcase").click(function(){
         $(".mtr").last().after(casehtml);
-        insert_update_rank($(".mtr").last());
-        scrollOffset($("#newone").offset()); 
+        var newlast = $(".mtr").last();
+        insert_update_rank(newlast);
+        newlast.attr("id", "newone");
+        scrollOffset($("#newone").offset());
+        newlast.removeAttr("id");
+    });
+
+
+    $("#newmodule").click(function(){
+        var cmodule = $(".cmodule").last()
+        cmodule.after(modulehtml);
+        var newlast = cmodule.next();
+        insert_update_rank(newlast.find(".mtr"))
+        insert_update_rank(newlast);
+        newlast.attr("id", "newone");
+        scrollOffset($("#newone").offset());
+        newlast.removeAttr("id");
 
     });
 
@@ -373,8 +388,12 @@ $(document).ready(function(){
     $(".icon-plus-sign").live('click', function(){
         var cmodule = $(this).parents(".cmodule");
         cmodule.after(modulehtml);
-        insert_update_rank(cmodule.next().find(".mtr"))
-        insert_update_rank(cmodule.next());
+        var newlast = cmodule.next();
+        insert_update_rank(newlast.find(".mtr"))
+        insert_update_rank(newlast);
+        newlast.attr("id", "newone");
+        scrollOffset($("#newone").offset());
+        newlast.removeAttr("id");
     });
 
     function checkall(master, slave){
