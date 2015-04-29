@@ -109,11 +109,14 @@ def case_list(request,pid):
 				if cmold == u"未执行":
 					cmodule = cmodule.filter(args2[int(cstatue)])
 				else:
-					if not cstart_date or not cend_date:
-						caseresult = caseresult.filter(args[int(cstatue)]).order_by("-exec_date")
+					if not cstart_date and not cend_date:
+						rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
+						rid = []
+						for r in rlist:
+							rid.append(r.id)
+						caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
 					else:
-						print u"没有时间的"
-						caseresult = caseresult.filter(args[int(cstatue)])
+						caseresult = caseresult.filter(args[int(cstatue)])						
 					cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
 			if not isNone(cexecutor):
 				caseresult = caseresult.filter(executor = cexecutor)
@@ -215,7 +218,14 @@ def allcaselist(request):
 				if cmold == u"未执行":
 					cmodule = cmodule.filter(args2[int(cstatue)])
 				else:
-					caseresult = caseresult.filter(args[int(cstatue)])
+					if not cstart_date and not cend_date:
+						rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
+						rid = []
+						for r in rlist:
+							rid.append(r.id)
+						caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
+					else:
+						caseresult = caseresult.filter(args[int(cstatue)])						
 					cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
 			if not isNone(cexecutor):
 				caseresult = caseresult.filter(executor = cexecutor)

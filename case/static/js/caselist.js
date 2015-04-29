@@ -23,7 +23,7 @@ function insert_update_rank(celement, cnum){
                             location.reload();
                             return;
                         }
-                    }else{
+                    }else{ 
                         alert("判断失败");
                     }
                 });
@@ -846,7 +846,7 @@ $(document).ready(function(){
                         casejson[j] = datadic;
                        dic[tmodule] = casejson;
                     }else{
-                        node.css('border', "3px solid #339966");
+                        node.css('border', "3px solid #f77");
                         $(".savebtn").removeAttr("disabled");
                         alert("模块名称没有填写，请填写后再保存！");
                         flag = false;
