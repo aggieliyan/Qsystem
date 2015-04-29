@@ -35,13 +35,34 @@
         $('#myModal').modal('show');
     }
 
+    function check_projectid(obj){
+    	var proid = obj.value.replace(/(^\s*)|(\s*$)/g,"");
+    	if(proid.length!=0 && (proid <= 0 || proid >999999999 || proid!=parseInt(proid))){
+    		alert('编号为正整数且不超过9位数');
+    		window.checkvar = 0;
+    	}
+    	else{
+    		window.checkvar = 1;
+    	}
+    }
+ 
+   function check_protitle(obj){
+	var title = obj.value.replace(/(^\s*)|(\s*$)/g,"");
+	if(!title || title.length>30){
+         alert('模块名称不能为空且不超过30个字符！');
+         window.checkvar = 0;
+     }
+	else{
+		window.checkvar = 1;
+	}
+   }
+   
     //添加验证输入框
     function chk(){
-        var title = document.test.procate_title.value.replace(/(^\s*)|(\s*$)/g,"");
         var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,"");
         //先判断填写项是否符合规格
-        if((proid.length!=0 && (proid <= 0 || proid!=parseInt(proid) || proid.length>10)) || !title || title.length>30){
-            alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
+        if(window.checkvar == 0){
+            alert('编号为正整数且不超过9位数；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
         	$("#project_id").val(proid);
         	document.test.submit();
@@ -63,22 +84,13 @@
             });
         } 
       }
- 
-    function check_projectid(){
-//    	var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");
-//    	if(proid.length!=0 && (proid <= 0 || proid!=parseInt(proid)){
-//    		alert('编号为正整数且不超过10位数');
-//    	}
-//    	else
-    }
-    
+
     //编辑验证输入框
     function chk1(){
-        var title = document.test1.procate_title1.value.replace(/(^\s*)|(\s*$)/g,"");
         var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");
         var procate_id = document.test1.procate_id1.value;
         //先判断填写项是否符合规格
-        if((proid.length!=0 && (proid <= 0 || proid!=parseInt(proid) || proid.length>10)) || !title || title.length>30){
+        if(window.checkvar == 0){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
         	$("#project_id").val(proid);
