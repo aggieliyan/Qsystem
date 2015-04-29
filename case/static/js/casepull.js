@@ -58,8 +58,13 @@ function search_case(){
     ajaxClick(url);
 };
 function pullPop(obj) {
+	$('.cc-textbox option').remove();
 	$('.cc-textbox').append('<option value="">请选择模块</option><option value="">嘿，先勾左边分类！</option>');
 	$('#search_text').val("");
+	$('#select_all_btn').remove();
+	$('.cases_list h3 span').before('<input id="select_all_btn" type="checkbox">');
+	$('#pagenum').val("");
+	
 	$('#cases').val($(obj).parent().parent().attr("value")); //存在哪里引入用例的位置
 	var url = "/case/getcases/?page=1/";
 	ajaxClick(url);
@@ -109,7 +114,7 @@ $(document).ready(function(){
 		ajaxClick(url);
 	});
 	/* 点全选 */
-	$("#select_all_btn").click(function(){
+	$("#select_all_btn").live("click", function(){
 		var a = $("#import_list_wrapper tr td label input");
 	    if($(this).attr("checked")=="checked"){ 
 	      for(var i=0;i<a.length;i++){
