@@ -1,7 +1,7 @@
 .nowpro{
     width:900px;
     height:55px;
-    padding-top:10px;
+    padding-top:15px;
     padding-bottom:5px; 
     float:left;	
 }
@@ -9,7 +9,7 @@
 .creatfirst{
     height:50px;
     line-height:25px; 
-    padding-top:10px;
+    padding-top:25px;
     padding-bottom:5px; 
     float:right;
 }
@@ -30,7 +30,7 @@
 	color:#005fc8;
 }
 
-.add-first-procate {
+.creatfirst .add-first-procate {
     background: none repeat scroll 0 0 #0063cc;
     border-radius: 5px;
     color: #fff;
@@ -38,6 +38,7 @@
     padding: 2px 11px;
     height:30px;
     cursor:pointer;  
+    text-decoration: none;
 }
 
 .show_procate{
@@ -195,5 +196,5 @@ myinput {
 }
 
 .span12{
-	height:52px;
+	height:70px;
 }
