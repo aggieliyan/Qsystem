@@ -26,7 +26,6 @@ def getcases(request):
         caselist = models.testcase.objects.filter(module_id=mid)
     elif cids:        
         cid = cids.split(',')
-        print cid
         text = ''
         k = 0
         for i in cid:
@@ -72,10 +71,8 @@ def getcases(request):
             previouslink = "/case/getcases/?page=" + str(caseobj.previous_page_number()) \
                 +"&mid="+mid+"&cids="+cids+"&skey="+skey
         if caseobj.has_next():
-            print 1
             nextlink = "/case/getcases/?page=" + str(caseobj.next_page_number()) \
             + "&mid=" + mid + "&cids=" + cids + "&skey=" + skey
-            print 2
         go_link = "/case/getcases/?mid=" + mid + "&cids=" + cids + "&skey=" + skey \
             + "&page="
     else:        
@@ -84,6 +81,6 @@ def getcases(request):
         if caseobj.has_next():
             nextlink = "/case/getcases/?page=" + str(caseobj.next_page_number())
         go_link = "/case/getcases/?mid=&cids=&skey=&page="
-    print paginator.num_pages
+    
     res = {'actionlist': actionlist, 'prelink': previouslink, 'nextlink': nextlink, 'golink': go_link, 'totalpage': paginator.num_pages}
     return HttpResponse(json.dumps(res))
