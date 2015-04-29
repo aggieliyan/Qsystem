@@ -725,14 +725,6 @@ $(document).ready(function(){
         $(".executor").removeAttr("selected");
         $(".executor option[value="+$(".cexecutor").val()+"]").attr("selected",true);
     };
-
-    //过滤搜索关键词的空格
-    $(".searchbtn").click(function(){
-        $.trim($(".search-input").val());
-
-    });    
-    console.log($(".search-input").val());
-
     //时间组件
      $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
