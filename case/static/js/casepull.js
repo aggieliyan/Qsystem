@@ -21,9 +21,8 @@ function ajaxClick(url){
 			$('.next').addClass('disabled');
 		}
 		$('#totalpage').text(json['totalpage']);
-		if (json['golink']){
-			$('#go').attr("value", json['golink']);
-		}
+		$('#go').attr("value", json['golink']);
+		
 	});			
 };
 /* 点击选择用例 */
@@ -59,6 +58,8 @@ function search_case(){
     ajaxClick(url);
 };
 function pullPop(obj) {
+	$('.cc-textbox').append('<option value="">请选择模块</option><option value="">嘿，先勾左边分类！</option>');
+	$('#search_text').val("");
 	$('#cases').val($(obj).parent().parent().attr("value")); //存在哪里引入用例的位置
 	var url = "/case/getcases/?page=1/";
 	ajaxClick(url);
