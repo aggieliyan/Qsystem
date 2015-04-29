@@ -80,6 +80,12 @@
 .must{
 	color:red;
 }
+
+#newmodule{
+	float:right;
+	margin-right: 5px;
+}
+
 #newcase {
 	float:right;
 	margin-right: 5px;
