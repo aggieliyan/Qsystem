@@ -22,11 +22,12 @@ function ajaxClick(url){
 		}
 		$('#totalpage').text(json['totalpage']);
 		$('#go').attr("value", json['golink']);
-		
+		$('#select_all_btn').removeAttr("checked");
 	});			
 };
 /* 点击选择用例 */
 function change(obj){
+	$('#select_all_btn').removeAttr("checked");
 	if ($(obj).attr("checked")=="checked"){
 		$(obj).attr("checked", "checked");
 	}else{
@@ -62,8 +63,7 @@ function pullPop(obj) {
 	$('.cc-textbox option').remove();
 	$('.cc-textbox').append('<option value="">请选择模块</option><option value="">嘿，先勾左边分类！</option>');
 	$('#search_text').val("");
-	$('#select_all_btn').remove();
-	$('#pop_info_name').before('<input id="select_all_btn" type="checkbox">');
+	$('#select_all_btn').removeAttr("checked");
 	$('#pagenum').val("");
 	
 	$('#cases').val($(obj).parent().parent().attr("value")); //存在哪里引入用例的位置
@@ -115,7 +115,7 @@ $(document).ready(function(){
 		ajaxClick(url);
 	});
 	/* 点全选 */
-	$("#select_all_btn").live("click", function(){
+	$("#select_all_btn").click(function(){
 		var a = $("#import_list_wrapper tr td label input");
 	    if($(this).attr("checked")=="checked"){ 
 	      for(var i=0;i<a.length;i++){
