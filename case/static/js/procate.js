@@ -38,7 +38,6 @@
     function check_projectid(obj){
     	var proid = obj.value.replace(/(^\s*)|(\s*$)/g,"");
     	if(proid.length!=0 && (proid <= 0 || proid >999999999 || proid!=parseInt(proid))){
-    		alert('编号为正整数且不超过9位数');
     		window.checkvar = 0;
     	}
     	else{
@@ -49,7 +48,6 @@
    function check_protitle(obj){
 	var title = obj.value.replace(/(^\s*)|(\s*$)/g,"");
 	if(!title || title.length>30){
-         alert('模块名称不能为空且不超过30个字符！');
          window.checkvar = 0;
      }
 	else{
