@@ -58,11 +58,12 @@ function search_case(){
     ajaxClick(url);
 };
 function pullPop(obj) {
+	/* 清除上一次弹框的操作痕迹 */
 	$('.cc-textbox option').remove();
 	$('.cc-textbox').append('<option value="">请选择模块</option><option value="">嘿，先勾左边分类！</option>');
 	$('#search_text').val("");
 	$('#select_all_btn').remove();
-	$('.cases_list h3 span').before('<input id="select_all_btn" type="checkbox">');
+	$('#pop_info_name').before('<input id="select_all_btn" type="checkbox">');
 	$('#pagenum').val("");
 	
 	$('#cases').val($(obj).parent().parent().attr("value")); //存在哪里引入用例的位置
