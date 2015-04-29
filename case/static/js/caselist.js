@@ -288,7 +288,7 @@ $(document).ready(function(){
                     if(rs.success){
                         //alert("ok");
                     }else{
-                        alert("所填内容更新失败");
+                        alert(rs.message);
                     }
                 }); 
 
@@ -369,7 +369,7 @@ $(document).ready(function(){
 
             }else{     
                 rsdrop.toggle();//隐藏下拉选择框 
-                alert("执行失败！");
+                alert(rs.message);
             }
         });
 

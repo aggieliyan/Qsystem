@@ -20,8 +20,6 @@ def is_dev(uid):
 #判断是否是测试部门的
 def is_tester(uid):
 	depid = user.objects.get(id=int(uid)).department_id
-	print "depid------"
-	print depid
 	if depid != 1:
 		return False
 	else:
@@ -311,7 +309,7 @@ def execute_case(request):
 	#判断下权限
 	if not is_dev(request.session['id']):
 		resp["success"] = False
-		resp["message"] = "no permit"
+		resp["message"] = "您没有权限执行用例！"
 		resp = json.dumps(resp)
 		return HttpResponse(resp)
 
@@ -436,13 +434,19 @@ def update_case_related(request):
 	tname = request.POST['tname']
 	tcnt = request.POST['tcnt']
 	cid = request.POST['tid']
-		
+	
 	try:
 		trs = result.objects.filter(testcase_id=cid).order_by("-id")[0]
 		if trs:
 			if tname == "wi":
+				if len(tcnt) > 8:
+					resp['success'] = False
+					resp['message'] = "BUG字数不能超过8位"
 				trs.wi = tcnt
 			else:
+				if len(tcnt) > 100:
+					resp['success'] = False
+					resp['message'] = "备注字数不能超过100位"
 				trs.r_remark = tcnt
 
 			trs.save()
