@@ -1,7 +1,7 @@
 .nowpro{
     width:900px;
     height:55px;
-    padding-top:15px;
+    padding-top:20px;
     padding-bottom:5px; 
     float:left;	
 }
@@ -49,15 +49,16 @@
 .procate-one{
 	float:right;
 	width:100%;
-	height:30px;
+	height:32px;
 	background-color:#f6f6f6;
     margin:2px 0;
+    border-radius: 5px;
 }
 
 .procate-second{
 	float:right;
 	width:98%;
-	height:30px;
+	height:32px;
 	background-color:#f6f6f6;
     margin:2px 0;
 }
@@ -69,7 +70,7 @@
 .procate-third{
 	float:right;
 	width:96%;
-	height:30px;
+	height:32px;
 	background-color:#f6f6f6;
     margin:2px 0;
     display:none;
@@ -196,5 +197,5 @@ myinput {
 }
 
 .span12{
-	height:70px;
+	height:75px;
 }
