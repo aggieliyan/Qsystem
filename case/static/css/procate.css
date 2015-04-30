@@ -61,6 +61,7 @@
 	height:32px;
 	background-color:#f6f6f6;
     margin:2px 0;
+    border-radius: 5px;
 }
 
 .contain-third{
@@ -74,6 +75,7 @@
 	background-color:#f6f6f6;
     margin:2px 0;
     display:none;
+    border-radius: 5px;
 }
 
 .procate-a1_minus{
