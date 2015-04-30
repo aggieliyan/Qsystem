@@ -1,7 +1,7 @@
 .nowpro{
     width:900px;
     height:55px;
-    padding-top:35px;
+    padding-top:30px;
     padding-bottom:5px; 
     float:left;	
 }
@@ -115,6 +115,7 @@
 	float:right;
 	position:relative;
 	right:170px;
+    padding-top:3px;
 }
 
 .procate-a3{
@@ -122,12 +123,14 @@
 	position:relative;
 	right:70px;
     cursor:pointer;
+    padding-top:3px;
 }
 .procate-a4{
 	float:right;
 	position:relative;
 	right:-45px;
     cursor:pointer;
+    padding-top:3px;
 }
 
 .procate-a5{
@@ -135,6 +138,7 @@
 	position:relative;
 	right:-160px;
     cursor:pointer;
+    padding-top:3px;
 }
 
 .mybtn-success {

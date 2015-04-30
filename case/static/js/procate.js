@@ -168,7 +168,7 @@
  $(document).ready(function(){
 	 $(".on_myproject").each(function(){
 		 val = $(this).text();
-		 if(val.length > 30){
+		 if(val.length > 20){
 			 newval = val.substring(0,20)+"...";
 			 $(this).text(newval);
 		 }	 
