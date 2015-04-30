@@ -1,7 +1,7 @@
 .nowpro{
     width:900px;
     height:55px;
-    padding-top:20px;
+    padding-top:35px;
     padding-bottom:5px; 
     float:left;	
 }
@@ -35,8 +35,8 @@
     border-radius: 5px;
     color: #fff;
     float: right;
-    padding: 2px 11px;
-    height:30px;
+    padding: 7px 9px;
+    height:25px;
     cursor:pointer;  
     text-decoration: none;
 }
