@@ -1,5 +1,6 @@
 # coding=utf-8
 from django import forms
+from models import Upload
 
 class searchForm(forms.Form):
 	cate1 = forms.CharField(required=False)
@@ -30,3 +31,13 @@ class edit_procateForm(forms.Form):
 	
 class del_procateForm(forms.Form):
 	procate_id_del = forms.IntegerField(required=False)	
+
+class UploadForm(forms.Form):
+	title = forms.CharField(max_length=50)
+	upfile = forms.FileField()
+
+	# def handle_uploaded_file(f):
+	# 	destination = open('some/file/name.txt', 'wb+')
+	# 	for chunk in f.chunks():
+	# 		destination.write(chunk)
+	# 	destination.close()

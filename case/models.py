@@ -44,3 +44,7 @@ class result(models.Model):
 	r_remark = models.CharField(u'备注', blank=True, null=True, max_length=100)
 	rounds = models.IntegerField(u'当前轮数', blank=True, null=True, max_length=2)
 	isactived = models.IntegerField(max_length=1)
+
+class Upload(models.Model):
+	title = models.CharField(max_length=50)
+	upfile = models.FileField(upload_to = './upload/')

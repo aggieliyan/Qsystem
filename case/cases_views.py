@@ -1,10 +1,10 @@
 # coding=utf-8
 import datetime
-import json, re
+import json, re, xlrd, os, sys
 from django.shortcuts import render_to_response, redirect, RequestContext, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from models import testcase, casemodule, category, result
-from forms import searchForm
+from models import testcase, casemodule, category, result, Upload
+from forms import searchForm, UploadForm
 from project.models import user, department
 from project.views import isNone
 from django.db.models import Q
@@ -505,3 +505,82 @@ def savecase(request):
 	finally:
 		cjson=json.dumps(dict) 
 	return HttpResponse(cjson)
+
+def upload_file(request):
+	resp = {}
+	url = request.META['HTTP_REFERER']
+	print url
+	print request.method
+	try:	
+		if request.method == 'POST':
+			form = UploadForm(request.POST, request.FILES)
+			if form.is_valid():
+				#获取表单信息
+				title = form.cleaned_data['title']
+				ff = form.cleaned_data['upfile']			
+				print "tt=",title
+				print "ff=",ff
+				#写入数据库
+				uf = Upload(title = title, upfile = ff) 
+				uf.save()
+				filepath = uf.upfile
+				path3 = str(filepath).replace('/','\\')
+				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
+				excel_table_byindex(request,file= uipath, pid = 3)
+				resp['message'] = True
+				# return HttpResponse('upload ok!')
+		else:
+		    form = UploadForm()
+	except Exception,e:
+		resp['message'] = False
+		print e
+	return HttpResponseRedirect(url)
+
+def excel_table_byindex(request, file= '',pid = ''):
+	resp = {}
+	try:
+		data = xlrd.open_workbook(file)
+		table = data.sheets()[0]
+		nrows = table.nrows #行数
+		ncols = table.ncols #列数
+		print "ncols=",ncols
+		print 'nrows=',nrows
+		colnames =  table.row_values(4) #某一行数据
+		key = 0
+		crank = 1 
+		for rownum in range(0,nrows):			
+			# print "---------------"
+			# print rownum
+			row = table.row_values(rownum)
+			if row:
+				# print row
+				cpre = row[0]
+				# print cpre
+				cinput = row[1]
+				coutput = row[2]
+				cpriority = row[3]
+				if not cinput and not coutput:
+					num = len(casemodule.objects.all())
+					# print "num = ",num
+					cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
+					cm.save()
+					key = cm.id
+					crank = 1
+					# print key
+				else:
+					if key == 0 :
+						key = '';
+					# print key
+					newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
+								action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
+								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
+					newcase.save()
+					crank = crank+1;
+			# print "ok-------------------------------------"
+		resp['message'] = True
+	except Exception,e:
+		print str(e)
+		print "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
+		resp['message'] = False
+	# resp = json.dumps(resp)
+	# return HttpResponse(resp)

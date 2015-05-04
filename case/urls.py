@@ -27,4 +27,5 @@ urlpatterns = patterns('',
 	url(r'^deletecase/', cases_views.delete_case),
 	url(r'^updateresult/', cases_views.update_case_related),
 	url(r'^haschildren/', cases_views.has_children),
+	url(r'^upload/', cases_views.upload_file),
 )

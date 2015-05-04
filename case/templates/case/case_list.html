@@ -125,6 +125,7 @@
             <li>
               <input type="text" class="input-medium search-input" value="{{ckeyword}}" name="keyword" placeholder="请输入搜索关键字">
               <button type="submit" class="btn btn-success searchbtn">搜索</button>
+              <button type="button" class="btn btn-success fileload">导入用例</button>
             </li>
           </ul>
         </form>
@@ -270,6 +271,7 @@
 
  {% include "case/exec_log.html" %}
  {% include "case/case_pull.html" %}
+ {% include "case/upload.html" %}
 
 {% endblock %}
 {% block js %}
