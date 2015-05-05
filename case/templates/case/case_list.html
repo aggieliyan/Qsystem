@@ -125,7 +125,6 @@
             <li>
               <input type="text" class="input-medium search-input" value="{{ckeyword}}" name="keyword" placeholder="请输入搜索关键字">
               <button type="submit" class="btn btn-success searchbtn">搜索</button>
-              <button type="button" class="btn btn-success fileload">导入用例</button>
             </li>
           </ul>
         </form>
@@ -135,7 +134,7 @@
   		<img src="/static/img/praise.png" style="margin-left:500px">
   	</div>  -->
 <div class="span12">
-  	<div id="tbop"><span id="cnum">共{{count}}条用例</span>{% if canope %}<button id="newmodule" class="btn btn-primary">新建模块</button><buton id="newcase" class="btn btn-success">新建用例</button>{% endif %} </div>
+  	<div id="tbop"><span id="cnum">共{{count}}条用例</span>{% if canope %}<button id="newmodule" class="btn btn-primary">新建模块</button><button class="btn btn-success" id="newcase">新建用例</button><button class="btn btn-warning fileload" id="up">导入用例</button>{% endif %} </div>
     <table id="caselist" class="table table-bordered">
     	<thead>
 	      	<tr>

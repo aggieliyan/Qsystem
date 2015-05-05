@@ -90,6 +90,10 @@
 	float:right;
 	margin-right: 5px;
 }
+#up {
+	float:right;
+	margin-right: 5px;
+}
 
 .mtr td:nth-child(1){
 	width:50px;

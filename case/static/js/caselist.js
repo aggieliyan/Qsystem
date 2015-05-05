@@ -882,26 +882,23 @@ $(document).ready(function(){
 //upload
     $(".fileload").click(function(){
         $('#upload').modal('show');
-        
-
     });
-    $('.fileupload').click(function(){
+
+    var form = $('.fload')
+    $('.fileupload').click(function(){        
+        form.submit();
+        $(".fileupload").attr("disabled","true");
+        reminder_html = "<p style = 'color:red;'>正在上传，请耐心等待~~</p>"
+        $('.reminder').html(reminder_html);
+        // $(".fileupload").attr("disabled","true");
         // url = "/case/upload/";
-        //     $.post(url,function(data){
-        //         reminder_html = "<p style = 'color:red;'>正在上传，请耐心等待~~</p>";
-        //         $('.reminder').html(reminder_html);
-        //         var resp = eval('('+data+')');
-        //         if(resp.message){                    
-        //             alert("ok");
-        //         }else{
-        //             alert("上传失败，请重新上传！");
-        //         }
-        //         }); 
-            document.fileload.submit();
-            $(".fileupload").attr("disabled","true");
-            reminder_html = "<p style = 'color:red;'>正在上传，请耐心等待~~</p>"
-            $('.reminder').html(reminder_html);
-            // alert("ok");
-            return true;
-        });        
+        // $.post(url,form.serialize(),function(data){
+        //     var result = eval('('+data+')');
+        //     if(result.message){
+        //         alert("ok");
+        //     }else{
+        //         alert("上传失败，请重新上传！");
+        //     }
+        // });   
+    });
 });

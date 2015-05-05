@@ -33,8 +33,8 @@ class del_procateForm(forms.Form):
 	procate_id_del = forms.IntegerField(required=False)	
 
 class UploadForm(forms.Form):
-	title = forms.CharField(max_length=50)
 	upfile = forms.FileField()
+	uptime = forms.DateField(required=False)
 
 	# def handle_uploaded_file(f):
 	# 	destination = open('some/file/name.txt', 'wb+')

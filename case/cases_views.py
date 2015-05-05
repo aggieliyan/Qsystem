@@ -516,16 +516,15 @@ def upload_file(request):
 			form = UploadForm(request.POST, request.FILES)
 			if form.is_valid():
 				#获取表单信息
-				title = form.cleaned_data['title']
-				ff = form.cleaned_data['upfile']			
-				print "tt=",title
-				print "ff=",ff
+				xlsfile = form.cleaned_data['upfile']
+				filename = xlsfile.name
+				print "xlsfile=",xlsfile
 				#写入数据库
-				uf = Upload(title = title, upfile = ff) 
+				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
 				filepath = uf.upfile
-				path3 = str(filepath).replace('/','\\')
 				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
+				# path=os.path.join(settings.MEDIA_ROOT,'upload')
 				excel_table_byindex(request,file= uipath, pid = 3)
 				resp['message'] = True
 				# return HttpResponse('upload ok!')
@@ -533,54 +532,51 @@ def upload_file(request):
 		    form = UploadForm()
 	except Exception,e:
 		resp['message'] = False
-		print e
+		print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
 	return HttpResponseRedirect(url)
+	# resp = json.dumps(resp)
+	# return HttpResponse(resp)
 
 def excel_table_byindex(request, file= '',pid = ''):
-	resp = {}
-	try:
-		data = xlrd.open_workbook(file)
-		table = data.sheets()[0]
-		nrows = table.nrows #行数
-		ncols = table.ncols #列数
-		print "ncols=",ncols
-		print 'nrows=',nrows
-		colnames =  table.row_values(4) #某一行数据
-		key = 0
-		crank = 1 
-		for rownum in range(0,nrows):			
-			# print "---------------"
-			# print rownum
-			row = table.row_values(rownum)
-			if row:
-				# print row
-				cpre = row[0]
-				# print cpre
-				cinput = row[1]
-				coutput = row[2]
-				cpriority = row[3]
-				if not cinput and not coutput:
-					num = len(casemodule.objects.all())
-					# print "num = ",num
-					cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
-					cm.save()
-					key = cm.id
-					crank = 1
-					# print key
-				else:
-					if key == 0 :
-						key = '';
-					# print key
+	data = xlrd.open_workbook(file)
+	table = data.sheets()[0]
+	nrows = table.nrows #行数
+	ncols = table.ncols #列数
+	# print "ncols=",ncols
+	# print 'nrows=',nrows
+	colnames =  table.row_values(4) #某一行数据
+	key = 0
+	crank = 1 
+	for rownum in range(0,nrows):			
+		# print "---------------"
+		# print rownum
+		row = table.row_values(rownum)
+		# print "---------------"
+		# print row
+		# print len(row)
+		if row:
+			# print row
+			cpre = row[0]
+			# print cpre
+			cinput = row[1]
+			coutput = row[2]
+			cpriority = row[3]
+			if cpre and  not cinput and not coutput:
+				num = len(casemodule.objects.all())
+				# print "num = ",num
+				cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
+				cm.save()
+				key = cm.id
+				crank = 1
+				# print key
+			else:
+				if key == 0 :
+					key = '';
+				# print key
+				if cinput and coutput:					
 					newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
 								action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
 								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
 					newcase.save()
 					crank = crank+1;
-			# print "ok-------------------------------------"
-		resp['message'] = True
-	except Exception,e:
-		print str(e)
-		print "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-		resp['message'] = False
-	# resp = json.dumps(resp)
-	# return HttpResponse(resp)
+		# print "ok-------------------------------------"
