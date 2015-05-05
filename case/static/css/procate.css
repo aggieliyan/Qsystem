@@ -200,6 +200,12 @@ myinput {
 
 .on_myproject{
 	color:#005fc8;
+	display: inline-block;
+    max-width: 16em;
+    vertical-align: bottom;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .span12{

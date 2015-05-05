@@ -165,15 +165,15 @@
      $("#procate_btn_del").attr("disabled","true"); 
  }
  
- $(document).ready(function(){
-	 $(".on_myproject").each(function(){
-		 val = $(this).text();
-		 if(val.length > 20){
-			 newval = val.substring(0,20)+"...";
-			 $(this).text(newval);
-		 }	 
-     }); 
-});
+//  $(document).ready(function(){
+// 	 $(".on_myproject").each(function(){
+// 		 val = $(this).text();
+// 		 if(val.length > 20){
+// 			 newval = val.substring(0,20)+"...";
+// 			 $(this).text(newval);
+// 		 }	 
+//      }); 
+// });
    
  
  
