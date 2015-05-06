@@ -148,13 +148,16 @@ def case_list(request,pid):
 				cate3 = clist[-3]
 		except Exception,e:
 			pass
-		subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
-		subset3 = list(category.objects.filter(parent_id__in = subset2))
-		subset = list(set(subset2).union(set(subset3)))
 		#通过链接访问项目时，没有响应项目时，返回全部列表页
-		if not subset:
-			return HttpResponseRedirect('/case/caselist')		
-		subset.append(pid)		
+		ppid = len(category.objects.filter(pk = pid))
+		print ppid
+		if ppid == 0:
+			return HttpResponseRedirect('/case/caselist')
+		else:			
+			subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
+			subset3 = list(category.objects.filter(parent_id__in = subset2))
+			subset = list(set(subset2).union(set(subset3)))		
+			subset.append(pid)				
 		cmodule = testcase.objects.filter(category__in = subset)
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
 		allmodule = testmodule
