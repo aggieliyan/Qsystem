@@ -27,7 +27,7 @@ class testcase(models.Model):
 	precondition = models.CharField(u'前置条件', max_length=100, blank=True, null=True)
 	action = models.CharField(u'输入/动作', max_length=100)
 	output = models.CharField(u'期望输出', max_length=100)
-	priority = models.IntegerField(u'优先级', max_length=1, default=2)
+	priority = models.IntegerField(u'优先级', max_length=1)
 	author = models.CharField(u'本条用例作者', max_length=50)
 	authorid = models.IntegerField(u'作者id', blank=False, null=False)
 	createdate = models.DateTimeField(u'创建时间', blank=True, null=True)
