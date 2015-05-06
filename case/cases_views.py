@@ -546,36 +546,27 @@ def excel_table_byindex(request, file= '',pid = ''):
 	# print 'nrows=',nrows
 	key = 0
 	crank = 1 
-	for rownum in range(0,nrows):			
-		# print "---------------"
-		# print rownum
+	for rownum in range(0,nrows):
 		row = table.row_values(rownum)
-		# print "---------------"
-		# print row
-		# print len(row)
 		if row:
-			# print row
 			cpre = row[0]
-			# print cpre
 			cinput = row[1]
 			coutput = row[2]
 			cpriority = row[3]
+			if  not cpriority:
+				cpriority = 2
 			if cpre and  not cinput and not coutput:
 				num = len(casemodule.objects.all())
-				# print "num = ",num
 				cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
 				cm.save()
 				key = cm.id
 				crank = 1
-				# print key
 			else:
 				if key == 0 :
 					key = '';
-				# print key
 				if cinput and coutput:					
 					newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
 								action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
 								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
 					newcase.save()
 					crank = crank+1;
-		# print "ok-------------------------------------"
