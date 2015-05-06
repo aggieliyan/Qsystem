@@ -509,8 +509,8 @@ def savecase(request):
 def upload_file(request):
 	resp = {}
 	url = request.META['HTTP_REFERER']
-	print url
-	print request.method
+	p = re.compile(r'\d+')
+	pid = (p.findall(url))[-1]
 	try:	
 		if request.method == 'POST':
 			form = UploadForm(request.POST, request.FILES)
@@ -525,7 +525,7 @@ def upload_file(request):
 				filepath = uf.upfile
 				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
 				# path=os.path.join(settings.MEDIA_ROOT,'upload')
-				excel_table_byindex(request,file= uipath, pid = 3)
+				excel_table_byindex(request,file= uipath, pid = pid)
 				resp['message'] = True
 				# return HttpResponse('upload ok!')
 		else:
@@ -544,7 +544,6 @@ def excel_table_byindex(request, file= '',pid = ''):
 	ncols = table.ncols #列数
 	# print "ncols=",ncols
 	# print 'nrows=',nrows
-	colnames =  table.row_values(4) #某一行数据
 	key = 0
 	crank = 1 
 	for rownum in range(0,nrows):			

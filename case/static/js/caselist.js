@@ -888,7 +888,7 @@ $(document).ready(function(){
     $('.fileupload').click(function(){        
         form.submit();
         $(".fileupload").attr("disabled","true");
-        reminder_html = "<p style = 'color:red;'>正在上传，请耐心等待~~</p>"
+        reminder_html = "<p style = 'color:red;'>正在上传，请耐心等待~~</p>";
         $('.reminder').html(reminder_html);
         // $(".fileupload").attr("disabled","true");
         // url = "/case/upload/";
