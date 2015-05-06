@@ -89,9 +89,10 @@
     //编辑验证输入框
     function chk1(){
         var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");
+        var procate_title = document.test1.procate_title1.value.replace(/(^\s*)|(\s*$)/g,"");
         var procate_id = document.test1.procate_id1.value;
         //先判断填写项是否符合规格
-        if(window.checkvar == 0 || !window.checkvar1){
+        if(window.checkvar == 0 || window.checkvar1 == 0){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
         	$("#project_id").val(proid);
