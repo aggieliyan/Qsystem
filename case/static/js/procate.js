@@ -37,21 +37,24 @@
 
     function check_projectid(obj){
     	var proid = obj.value.replace(/(^\s*)|(\s*$)/g,"");
-    	if(proid.length!=0 && (proid <= 0 || proid >999999999 || proid!=parseInt(proid))){
-    		window.checkvar = 0;
-    	}
-    	else{
+    	if(proid.length == 0){
     		window.checkvar = 1;
+    	}
+        else if(proid > 0 && proid < 999999999 && proid==parseInt(proid)){
+            window.checkvar = 1;
+        }
+    	else{
+    		window.checkvar = 0;
     	}
     }
  
    function check_protitle(obj){
 	var title = obj.value.replace(/(^\s*)|(\s*$)/g,"");
 	if(!title || title.length>30){
-         window.checkvar = 0;
+         window.checkvar1 = 0;
      }
 	else{
-		window.checkvar = 1;
+		window.checkvar1 = 1;
 	}
    }
    
@@ -59,7 +62,7 @@
     function chk(){
         var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,"");
         //先判断填写项是否符合规格
-        if(window.checkvar == 0){
+        if(window.checkvar == 0 || window.checkvar1 == 0 || !window.checkvar1){
             alert('编号为正整数且不超过9位数；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
         	$("#project_id").val(proid);
@@ -88,7 +91,7 @@
         var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");
         var procate_id = document.test1.procate_id1.value;
         //先判断填写项是否符合规格
-        if(window.checkvar == 0){
+        if(window.checkvar == 0 || !window.checkvar1){
             alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
         	$("#project_id").val(proid);
