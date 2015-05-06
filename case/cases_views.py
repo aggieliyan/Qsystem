@@ -364,7 +364,7 @@ def update_rank(request):
 		else:#更新模块rank
 			for key in rank_dict.keys():
 				md = casemodule.objects.get(id=key)
-				md.rank = rank_dict[key]
+				md.m_rank = rank_dict[key]
 				md.save()
 			
 		resp["success"] = True
