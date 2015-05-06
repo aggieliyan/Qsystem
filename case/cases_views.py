@@ -546,7 +546,7 @@ def excel_table_byindex(request, file= '',pid = ''):
 	# print 'nrows=',nrows
 	key = 0
 	crank = 1 
-	for rownum in range(0,nrows):
+	for rownum in range(8,nrows):
 		row = table.row_values(rownum)
 		if row:
 			cpre = row[0]
