@@ -49,6 +49,11 @@
 	width: 96px;
 }
 
+#caselist .icon-chevron-up, #caselist .icon-chevron-down{
+	margin-right: 5px;
+    float: right;
+}
+
 #caselist .edittx{
 	width:95%;
 	margin-left:-6px;

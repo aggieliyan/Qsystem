@@ -396,6 +396,22 @@ $(document).ready(function(){
         newlast.removeAttr("id");
     });
 
+    $(".icon-chevron-up").live('click', function(){
+        var cdrop = $(this);
+        cdrop.removeClass("icon-chevron-up");
+        cdrop.addClass("icon-chevron-down");
+        cdrop.parent().parent().nextAll().toggle();
+
+
+    });
+
+    $(".icon-chevron-down").live('click', function(){
+        var cdrop = $(this);
+        cdrop.removeClass("icon-chevron-down");
+        cdrop.addClass("icon-chevron-up");
+        cdrop.parent().parent().nextAll().toggle();
+    });
+
     function checkall(master, slave){
         if(master.attr("checked")=="checked"){ 
             slave.each(function(){
