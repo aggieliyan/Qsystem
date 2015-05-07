@@ -888,6 +888,7 @@ $(document).ready(function(){
                 if(resp.message){                    
                     node.removeAttr("checked");
                     node.parent().parent().removeAttr("style");
+                    location.reload();
                 }else{
                     alert("保存失败，请重新保存！");
                 }
