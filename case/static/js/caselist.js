@@ -818,7 +818,9 @@ $(document).ready(function(){
         var diclist = [dic];
         var mmid = [];
         var mchk = [-2];
+        var mrank = [0];
         var flag = true;
+        var m = 0
         var node = $("input[name=\"checklist\"]:checked");
         var nlen = node.length;
         $(node).each(function(){             
@@ -826,9 +828,12 @@ $(document).ready(function(){
             tdata = node.children();
             cm = $(this).parents(".cmodule")
             tmodule = cm.attr("value");
-            if (tmodule == '' || tmodule == undefined){
-                    tmodule = -1;
+            tmrank = cm.attr("rank");
+            mrank[i] = tmrank;
+            if (mrank[i-1] != tmrank){
+                m--;
             }
+            tmodule = m;
             mchk[i] = tmodule;
             if(node.attr("class") == "mtr"){//判断是用例还是模块
                 input = tdata.eq(2).text();
@@ -851,9 +856,9 @@ $(document).ready(function(){
                         casejson[j] = datadic;
                     }
                 }
-            }else{//勾选的模块下没有勾选用例时，保存模块
+            }else{//保存模块
                 mtrnode = (node.parent(".cmodule").find(".mtr").find("input[name=\"checklist\"]:checked"));
-                if (mtrnode.length == 0){
+                 if (mtrnode.length == 0){
                     cmname = $.trim(cm.find(".success").children().eq(1).text());
                     if(cmname){
                         datadic = {"mname":cmname,"mrank":cm.attr("rank"),"id":-3};
