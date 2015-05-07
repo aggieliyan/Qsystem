@@ -246,7 +246,7 @@ $(document).ready(function(){
 
     });
 
-    $(".editable").live('dblclick', function(){
+    $(".editable").live('click', function(){
         var tdnode = $(this);
         var tdTest = tdnode.text();
         //before属性用来存点击时文本域的值
