@@ -2,12 +2,15 @@
 import datetime
 import json, re, xlrd, os, sys
 from django.shortcuts import render_to_response, redirect, RequestContext, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from models import testcase, casemodule, category, result, Upload
 from forms import searchForm, UploadForm
 from project.models import user, department
 from project.views import isNone
 from django.db.models import Q
+from Qsystem import settings
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 #判断是否是技术部分的测试或者开发
 def is_dev(uid):
@@ -530,6 +533,7 @@ def upload_file(request):
 				uf.save()
 				filepath = uf.upfile
 				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
+				print uipath
 				# path=os.path.join(settings.MEDIA_ROOT,'upload')
 				excel_table_byindex(request,file= uipath, pid = pid)
 				resp['message'] = True
@@ -576,3 +580,23 @@ def excel_table_byindex(request, file= '',pid = ''):
 								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
 					newcase.save()
 					crank = crank+1;
+
+from django.http import StreamingHttpResponse
+from django.core.servers.basehttp import FileWrapper 
+def savestream(self):  
+    import CompoundDoc  
+    doc = CompoundDoc.XlsDoc()  
+    return doc.savestream(self.get_biff_data())
+
+def download(request):
+	filename = 'aa.xlsx'
+	# path = sys.path[0]
+	# print path
+	# f = open(filename)
+	# data = f.read()
+	# print data
+	# f.close()
+	response = HttpResponse(data,'application/vnd.ms-excel')
+	response['Content-Length'] = os.path.getsize(filename) 
+	response['Content-Disposition'] = 'attachment; filename= aa.txt'  
+	return response
