@@ -837,8 +837,6 @@ $(document).ready(function(){
                 input = tdata.eq(2).text();
                 output = tdata.eq(3).text();
                 mname = $.trim(cm.find(".success").children().eq(1).text());
-                console.log(input.length);
-                console.log(output.length);
                 if(input.length > 100 || output.length > 100 ){
                     node.css("background-color","#ffecec");
                     $(".savebtn").removeAttr("disabled");
