@@ -831,10 +831,12 @@ $(document).ready(function(){
                 input = tdata.eq(2).text();
                 output = tdata.eq(3).text();
                 mname = $.trim(cm.find(".success").children().eq(1).text());
-                if(!input || !output || !mname ){
+                console.log(input.length);
+                console.log(output.length);
+                if(input.length > 100 || output.length > 100 ){
                     node.css("background-color","#ffecec");
                     $(".savebtn").removeAttr("disabled");
-                    alert("用例必填项没有填写，请填写后再保存！");
+                    alert("用例输入、期望输出为必填项，长度不能大于100个字符！");
                     flag = false;
                     return false;
                 }else{
@@ -852,7 +854,7 @@ $(document).ready(function(){
                 mtrnode = (node.parent(".cmodule").find(".mtr").find("input[name=\"checklist\"]:checked"));
                  if (mtrnode.length == 0){
                     cmname = $.trim(cm.find(".success").children().eq(1).text());
-                    if(cmname){
+                    if(cmname.length <= 30){
                         datadic = {"mname":cmname,"mrank":cm.attr("rank"),"id":-3};
                         j=0;
                         casejson = []; 
@@ -861,7 +863,7 @@ $(document).ready(function(){
                     }else{
                         node.css('border', "3px solid #f77");
                         $(".savebtn").removeAttr("disabled");
-                        alert("模块名称没有填写，请填写后再保存！");
+                        alert("模块名称为必填项，长度不能大于30个字符！");
                         flag = false;
                         return false;
                     }                                       
