@@ -569,10 +569,6 @@ $(document).ready(function(){
         });
         category1.html(temp_html); 
         var n = category1.get(0).selectedIndex;
-        // console.log("n");
-        // console.log(n);
-        // console.log("c1");
-        // console.log(c1);
         if(c1){
             $(".category_select_1 option[value="+c1+"]").attr("selected","true")
             var preoption = $(".category_select_1 option[value="+c1+"]").prevAll("option")
@@ -581,7 +577,6 @@ $(document).ready(function(){
             if((areaJson[n-1].slist).length != 0){
                 category2.show();
                 category_select_2();
-                // console.log("mmm");
                 if (!c1){
                     $(".cate").attr("value",'aa');
                 }
@@ -592,15 +587,12 @@ $(document).ready(function(){
                 if((areaJson[preoption.length-1].slist).length != 0){
                     category2.show();
                     category_select_2();
-                    // console.log("eee");
                     $(".cate1").attr("value",category1.children().eq(preoption.length).val());
                 }else{
-                    // console.log("else");
                     category2.hide();
                     category3.hide();
                 }
             }else{
-                // console.log("else22");
                 category2.hide();
                 category3.hide();
             }           
@@ -611,12 +603,7 @@ $(document).ready(function(){
         var c2=$(".cate2").val();
         temp_html="<option>"+'请选择'+"</option>"; 
         var n = category1.get(0).selectedIndex;
-        // console.log("n");
-        // console.log(n);
-        // console.log("c2");
-        // console.log(c2);
         if(n==0){
-            // console.log("ddd");
             category2.css("display","none");
             category3.css("display","none");
         }else{
@@ -629,7 +616,6 @@ $(document).ready(function(){
                 });
                 category2.html(temp_html);
                 if(c2){
-                    // console.log("aaa");
                     $(".category_select_2 option[value="+c2+"]").attr("selected","true")
                 }
                 category_select_3();
@@ -834,10 +820,12 @@ $(document).ready(function(){
             tmodule = cm.attr("value");
             tmrank = cm.attr("rank");
             mrank[i] = tmrank;
-            if (mrank[i-1] != tmrank){
+            if (tmodule == '' || tmodule == undefined){
+                if (mrank[i-1] != tmrank){
                 m--;
             }
-            tmodule = m;
+            tmodule = m; 
+            }
             mchk[i] = tmodule;
             if(node.attr("class") == "mtr"){//判断是用例还是模块
                 input = tdata.eq(2).text();
