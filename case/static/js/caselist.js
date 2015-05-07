@@ -86,6 +86,76 @@ function insert_update_rank(celement, cnum){
         }); 
     }
 
+function delete_update_rank(celement){
+    var nextele = celement.next();
+    var classname = celement.attr("class");
+    if(nextele.length !== 0 || classname == "cmodule"){    
+    //删除用例/模块后他们后面的用例/模块rank值先不变了 反正相对位置没有变 要不然批量删除的时候好麻烦        
+/*            console.log(classname);
+        var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
+        var rankdic = {}
+        var mid = 0
+        if(classname == "mtr"){
+            mid = -1
+        }
+        nx.each(function(){//rank值依次减1
+            var newrank = parseInt($(this).attr("rank"))-1;
+            var cid = $(this).attr("value");//取该模块/用例的id
+            $(this).attr("rank", newrank);
+            if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                rankdic[cid] = newrank;
+            }
+            else{
+                $(this).find("input").eq(0).attr("checked", "checked");
+            }
+        });
+        rankdic = JSON.stringify(rankdic);
+        url = "/case/updaterank/";
+        para = {"mid":mid, "rankdict":rankdic};
+        $.post(url, para, function(data){
+            alert("ok");
+        }); */
+
+        //如果删掉的是模块，模块下用例的rank值要变化
+        //删掉模块后，用例是直接接到上一个模块下，
+        //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
+        if(classname == "cmodule"){
+            var ccase = celement.find(".mtr");//该模块下所有用例
+            var cnum = celement.prev().find(".mtr").last().attr("rank");
+            mid = celement.prev().attr("value");
+            var i = 1;
+
+            rankdic = {}
+
+            ccase.each(function(){
+                var newrank = parseInt(cnum)+i;
+                i = i+1;
+                var cid = $(this).attr("value");
+                $(this).attr("rank", newrank);
+                if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                    rankdic[cid] = newrank;
+                }
+                else{
+                    $(this).find("input").eq(0).attr("checked", "checked");
+                }
+            });
+            rankdic = JSON.stringify(rankdic);
+            url = "/case/updaterank/";
+            para = {"mid":mid, "rankdict":rankdic};
+            
+            $.post(url, para, function(data){
+                var rs = eval('('+data+')');
+                if(rs.success){
+                    //alert("排序更新成功!");
+                }else{
+                    alert("sorry,排序更新失败~");
+                }
+            });
+                 
+        }
+
+    }
+}
 $(document).ready(function(){
 /*    var swidth = $(window).width();
     console.log(swidth);
@@ -145,74 +215,6 @@ $(document).ready(function(){
                     "</select>"
 
 
-    
-    function delete_update_rank(celement){
-        var nextele = celement.next();
-        var classname = celement.attr("class");
-        if(nextele.length !== 0 || classname == "cmodule"){    
-        //删除用例/模块后他们后面的用例/模块rank值先不变了 反正相对位置没有变 要不然批量删除的时候好麻烦        
-/*            console.log(classname);
-            var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
-            var rankdic = {}
-            var mid = 0
-            if(classname == "mtr"){
-                mid = -1
-            }
-            nx.each(function(){//rank值依次减1
-                var newrank = parseInt($(this).attr("rank"))-1;
-                var cid = $(this).attr("value");//取该模块/用例的id
-                $(this).attr("rank", newrank);
-                if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
-                    rankdic[cid] = newrank;
-                }
-                else{
-                    $(this).find("input").eq(0).attr("checked", "checked");
-                }
-            });
-            rankdic = JSON.stringify(rankdic);
-            url = "/case/updaterank/";
-            para = {"mid":mid, "rankdict":rankdic};
-            $.post(url, para, function(data){
-                alert("ok");
-            }); */
-
-            //如果删掉的是模块，模块下用例的rank值要变化
-            //删掉模块后，用例是直接接到上一个模块下，
-            //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
-            if(classname == "cmodule"){
-                var ccase = celement.find(".mtr");//该模块下所有用例
-                var cnum = celement.prev().find(".mtr").last().attr("rank");
-                mid = celement.prev().attr("value");
-                var i = 1;
-
-                rankdic = {}
-
-                ccase.each(function(){
-                    var newrank = parseInt(cnum)+i;
-                    i = i+1;
-                    var cid = $(this).attr("value");
-                    $(this).attr("rank", newrank);
-                    if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
-                        rankdic[cid] = newrank;
-                    }
-                    else{
-                        $(this).find("input").eq(0).attr("checked", "checked");
-                    }
-                });
-                rankdic = JSON.stringify(rankdic);
-                url = "/case/updaterank/";
-                para = {"mid":mid, "rankdict":rankdic};
-                $.post(url, para, function(data){
-                    var rs = eval('('+data+')');
-                    if(rs.success){
-                        //alert("排序更新成功!");
-                    }else{
-                        alert("sorry,排序更新失败~");
-                    }
-                });        
-            }      
-        }
-    }
 
     function scrollOffset(scroll_offset){
         var x = document.body.clientHeight;
@@ -487,10 +489,13 @@ $(document).ready(function(){
                         currentm.remove();
                         return;
                     }
+
                     //更新rank值
                     delete_update_rank(currentm);
+                    
                     //克隆一份该模块下的用例
                     var snode = node.siblings().clone(true);
+
                     $.post(url, para, function(data, status){
                         var rs = eval('('+data+')');
 
@@ -502,8 +507,7 @@ $(document).ready(function(){
                             alert("删除失败");
                         }
                     });
-
-
+                    
 
                 }else{
                     alert("抱歉~第一个模块不能删除。");
