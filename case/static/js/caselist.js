@@ -224,9 +224,15 @@ $(document).ready(function(){
         $("body,html").animate({scrollTop: scroll_offset.top + x}, 500);
       }
     // click create case
-    $("#newcase").click(function(){
-        $(".mtr").last().after(casehtml);
+    $("#newcase").click(function(){      
         var newlast = $(".mtr").last();
+        if(newlast.length == 0){
+            newlast = $(".success").last();
+            newlast.after(casehtml);      
+        }else{
+            newlast.after(casehtml);
+        }
+        newlast = $(".mtr").last()
         insert_update_rank(newlast);
         newlast.attr("id", "newone");
         scrollOffset($("#newone").offset());
@@ -361,7 +367,7 @@ $(document).ready(function(){
         $.post(url, para, function(data){
             var rs = eval('('+data+')');
             if(rs.success){
-                rsdrop.after("<span class=\""+result+"\">"+result+"</span>");//在后面生成结果
+                rsdrop.after("<span class=\""+result+"\">&nbsp;"+result+"</span>");//在后面生成结果
                 rsdrop.toggle();//隐藏下拉选择框               
 
                 //更新后端返回的执行时间和执行人，备注
