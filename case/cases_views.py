@@ -94,13 +94,13 @@ def case_list(request,pid):
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
 			cmodule = testcase.objects.filter(**kwargs)
-			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")
-			allmodule = testmodule
+			mcase = testcase.objects.filter(category__in = subset)
+			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")			
 			caseresult = result.objects.filter(testcase__in = cmodule)
-			allexecutor = caseresult.values_list("executor",flat = True).distinct()
+			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
-
 			args = [Q(result = cmold) , ~Q(result = cmold)] 
 			args2 = [~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct()),Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())]
 			if not isNone(cmold) and not isNone(cstatue):
@@ -150,7 +150,6 @@ def case_list(request,pid):
 			pass
 		#通过链接访问项目时，没有响应项目时，返回全部列表页
 		ppid = len(category.objects.filter(pk = pid))
-		print ppid
 		if ppid == 0:
 			return HttpResponseRedirect('/case/caselist')
 		else:			
@@ -212,10 +211,11 @@ def allcaselist(request):
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
 			cmodule = cmodule.filter(**kwargs)
+			mcase = testcase.objects.filter(category__in = subset)
+			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")
-			allmodule = testmodule
 			caseresult = result.objects.filter(testcase__in = cmodule)
-			allexecutor = caseresult.values_list("executor",flat = True).distinct()
+			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
 			args = [Q(result = cmold) , ~Q(result = cmold)] 
