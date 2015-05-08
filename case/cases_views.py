@@ -191,7 +191,8 @@ def allcaselist(request):
 	case = []
 	ctestmodule = cpriority = cauthor = cexecutor = cstart_date = cend_date = \
 	cexec_status = ckeyword =  cstatue = cmold = ''
-	cmodule = testcase.objects.all(isactived = 1)
+	cmodule = testcase.objects.all()
+	mcase = cmodule
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -212,7 +213,6 @@ def allcaselist(request):
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
 			cmodule = cmodule.filter(**kwargs)
-			mcase = testcase.objects.filter(category__in = subset)
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")
 			caseresult = result.objects.filter(testcase__in = cmodule)
