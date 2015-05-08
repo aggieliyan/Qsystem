@@ -40,8 +40,10 @@
               <lable style="float:right">所属模块：</lable>
             </li>
             <li>
-              <select class="" name="testmodule">
+              <select class="" name="testmodule" selected="selected">
+                {% if ctestmodule %}
                 <option selected="selected" value="{{ctestmodule}}">{{ctestmodule}}</option>
+                {% endif %}
                 <option value=""></option>
                 {% for m in allmodule %}
                 <option value="{{m.m_name}}">{{m.m_name}}</option>
@@ -51,7 +53,9 @@
             <li class="filter"><lable>优先级：</lable></li>
             <li>
               <select class="" name="priority">
+                {% if cpriority %}
                 <option select="selected" value="{{cpriority}}">{{cpriority}}</option>
+                {% endif %}
                 <option></option>
                 <option value="1">1</option>
                 <option value="2">2</option>
