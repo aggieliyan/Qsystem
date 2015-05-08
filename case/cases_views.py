@@ -101,6 +101,7 @@ def case_list(request,pid):
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
+				cmodule = cmodule.filter(module_id__in = testmodule, isactived = 1)
 			args = [Q(result = cmold) , ~Q(result = cmold)] 
 			args2 = [~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct()),Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())]
 			if not isNone(cmold) and not isNone(cstatue):
@@ -190,7 +191,7 @@ def allcaselist(request):
 	case = []
 	ctestmodule = cpriority = cauthor = cexecutor = cstart_date = cend_date = \
 	cexec_status = ckeyword =  cstatue = cmold = ''
-	cmodule = testcase.objects.all()
+	cmodule = testcase.objects.all(isactived = 1)
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -218,6 +219,7 @@ def allcaselist(request):
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
+				cmodule = cmodule.filter(module_id__in = testmodule, isactived = 1)
 			args = [Q(result = cmold) , ~Q(result = cmold)] 
 			args2 = [~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct()),Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())]
 			if not isNone(cmold) and not isNone(cstatue):
@@ -247,7 +249,7 @@ def allcaselist(request):
 	else:
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
 		allmodule = testmodule
-		caseresult = result.objects.filter(testcase__in = cmodule)
+		caseresult = result.objects.filter(testcase__in = cmodule,isactived = 1)
 		allexecutor = caseresult.values_list("executor",flat = True).distinct()
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	count =len(cmodule)
