@@ -841,8 +841,8 @@ $(document).ready(function(){
             }
             mchk[i] = tmodule;
             if(node.attr("class") == "mtr"){//判断是用例还是模块
-                input = tdata.eq(2).text();
-                output = tdata.eq(3).text();
+                input = $.trim(tdata.eq(2).text());
+                output = $.trim(tdata.eq(3).text());
                 mname = $.trim(cm.find(".success").children().eq(1).text());
                 if(input.length > 100 || output.length > 100 || !input || !output){
                     node.css("background-color","#ffecec");
