@@ -265,11 +265,13 @@ $(document).ready(function(){
 
         }
         else{
-            tdnode.empty();
-            var tx = $("<textarea class='edittx'></textarea>");
-            tx.attr("value", tdTest);
-            tdnode.append(tx);
-            tx.focus();
+            if(tdnode.find(".edittx").length == 0){
+                tdnode.empty();
+                var tx = $("<textarea class='edittx'></textarea>");
+                tx.attr("value", tdTest);
+                tdnode.append(tx);
+                tx.focus();
+            }
         }
    
     });
@@ -526,7 +528,6 @@ $(document).ready(function(){
                     
                 }
             }
-
 
             return true;
         }else{
