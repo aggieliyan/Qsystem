@@ -482,7 +482,7 @@ $(document).ready(function(){
 
             }else{//删除模块
               
-                //找到该模块的前一个模块下的 
+                //找到该模块的前一个模块下的
                 var currentm = node.parents(".cmodule")
                 var prevmodule = currentm.prev().find('tbody');
 
@@ -515,8 +515,15 @@ $(document).ready(function(){
                     });
                     
 
-                }else{
-                    alert("抱歉~第一个模块不能删除。");
+                }else{//模块是第一个的情况下
+                    var nexrmodule = currentm.next();
+                    var chcase = currentm.find(".mtr");
+                    if(nexrmodule.length && chcase.length == 0){//如果后面有模块，而且该模块下没有用例则可删
+                        currentm.remove();
+                    }else{
+                        alert("抱歉~不能删除");
+                    }
+                    
                 }
             }
 
