@@ -166,7 +166,7 @@ $(document).ready(function(){
                           "<td class=\"editable nodrag\"></td>"+
                           "<td class=\"editable nodrag\"></td>"+
                         "<td class=\"editable nodrag\"></td>"+
-                          "<td class=\"level nodrag\">2</td>"+
+                          "<td class=\"nodrag\"><span class=\"level\">2</span></td>"+
                           "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
                         "<td class=\"editable nodrag\"></td>"+
                           "<td></td>"+
@@ -311,10 +311,9 @@ $(document).ready(function(){
 
 
     //双击选择级别
-    $(".level").live('dblclick', function(){
-        console.log("yeeeee");
-        var tdnode = $(this);
-        var tdTest = tdnode.text();
+    $(".level").live('click', function(){
+        var tdnode = $(this).parent();
+        var tdTest = $(this).text();
         tdnode.empty();
         var tx = $(levelhtml);
         tx.attr("value", tdTest);
@@ -328,7 +327,7 @@ $(document).ready(function(){
         var tp = tx.parent();
         tx.remove();
         tp.attr("value", etext);
-        tp.html(etext);
+        tp.html("<span class='level'>"+etext+"</span>");
         tp.siblings().eq(0).find("input").attr("checked", "checked");    
     })
 
