@@ -2,7 +2,7 @@
 {% block title %}case系统{% endblock %}
 {% block head %}
 <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-<link href="/static/css/case_list.css" rel="stylesheet" media="screen">
+<link href="/static/css/case_list.css?v=001" rel="stylesheet" media="screen">
 <link href="/static/css/case_box.css" rel="stylesheet" media="screen">
 <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="/static/css/checktree.css" rel="stylesheet" media="screen">
@@ -170,6 +170,7 @@
 						      			<a class="icon-plus-sign" title="添加模块"></a>
 						      		  <a class="icon-plus" title="添加用例"></a>
 						      		  <a class="icon-trash"></a>
+                        <a class="icon-chevron-up"></a>
                       {% endif %}
 						    		</td>
                     
@@ -186,7 +187,7 @@
                       {% if result %}
 						      		{% for r in result %}
 						      		{% if c.id == r.testcase_id %}
-						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">{{r.result}}</span></td>
+						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">&nbsp;{{r.result}}</span></td>
 						    		  <td class="editable nodrag save" name="wi">{{r.wi|default_if_none:""}}</td>
 						      		<td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
 						      		<td>{{r.executor}}</td>
@@ -277,7 +278,7 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150425"></script>
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150501"></script>
     <script type="text/javascript" src="/static/js/checktree.js?v=20150424"></script>
     <script type="text/javascript" src="/static/js/casepull.js?v=20150424"></script>
 

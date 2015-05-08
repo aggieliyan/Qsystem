@@ -174,7 +174,9 @@ def case_list(request,pid):
 		newresult.append(p)
 	for m in testmodule:
 		ccase={}
-		ccase[m.id] = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		if len(mcaselist) != 0:
+			ccase[m.id] = mcaselist
 		case.append(ccase)
     #字典进行排序，暂不使用
 	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
@@ -258,7 +260,9 @@ def allcaselist(request):
 		newresult.append(p)
 	for m in testmodule:
 		ccase = {}
-		ccase[m.id] = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		if len(mcaselist) != 0:
+			ccase[m.id] = mcaselist
 		case.append(ccase)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
@@ -396,9 +400,9 @@ def moduledel(request):
 	mid = request.POST['mid']
 	try:
 		delmodule = get_object_or_404(casemodule, pk=int(mid))
-		# delmodule.isactived = 0
-		# delmodule.save()
-		delmodule.delete()
+		delmodule.isactived = 0
+		delmodule.save()
+		# delmodule.delete()
 		resp["success"] = True
 	except Exception,e:
 		resp["success"] = False
@@ -483,7 +487,7 @@ def savecase(request):
 		for data in dt:
 			for key,value in data.items():
 				for ddata in value:
-					if key == "-1" or key == 'undefined':
+					if int(key) < 0 or key == 'undefined':
 						cm = casemodule(m_name = ddata['mname'],m_rank = ddata['mrank'], isactived = 1)
 						cm.save()
 						key = cm.id

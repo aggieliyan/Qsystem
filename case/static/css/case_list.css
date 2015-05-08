@@ -49,6 +49,11 @@
 	width: 96px;
 }
 
+#caselist .icon-chevron-up, #caselist .icon-chevron-down{
+	margin-right: 5px;
+    float: right;
+}
+
 #caselist .edittx{
 	width:95%;
 	margin-left:-6px;
@@ -64,7 +69,7 @@
 }
 
 #caselist .cresult{
-	width:70px;
+	width:54px;
 }
 
 #caselist .lselect{
@@ -107,7 +112,7 @@
 }
 
 .mtr td:nth-child(6){
-	width:55px;
+	width:56px;
 }
 .mtr td:nth-child(5){
 	width:40px;

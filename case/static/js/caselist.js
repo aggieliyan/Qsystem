@@ -86,6 +86,76 @@ function insert_update_rank(celement, cnum){
         }); 
     }
 
+function delete_update_rank(celement){
+    var nextele = celement.next();
+    var classname = celement.attr("class");
+    if(nextele.length !== 0 || classname == "cmodule"){    
+    //删除用例/模块后他们后面的用例/模块rank值先不变了 反正相对位置没有变 要不然批量删除的时候好麻烦        
+/*            console.log(classname);
+        var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
+        var rankdic = {}
+        var mid = 0
+        if(classname == "mtr"){
+            mid = -1
+        }
+        nx.each(function(){//rank值依次减1
+            var newrank = parseInt($(this).attr("rank"))-1;
+            var cid = $(this).attr("value");//取该模块/用例的id
+            $(this).attr("rank", newrank);
+            if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                rankdic[cid] = newrank;
+            }
+            else{
+                $(this).find("input").eq(0).attr("checked", "checked");
+            }
+        });
+        rankdic = JSON.stringify(rankdic);
+        url = "/case/updaterank/";
+        para = {"mid":mid, "rankdict":rankdic};
+        $.post(url, para, function(data){
+            alert("ok");
+        }); */
+
+        //如果删掉的是模块，模块下用例的rank值要变化
+        //删掉模块后，用例是直接接到上一个模块下，
+        //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
+        if(classname == "cmodule"){
+            var ccase = celement.find(".mtr");//该模块下所有用例
+            var cnum = celement.prev().find(".mtr").last().attr("rank");
+            mid = celement.prev().attr("value");
+            var i = 1;
+
+            rankdic = {}
+
+            ccase.each(function(){
+                var newrank = parseInt(cnum)+i;
+                i = i+1;
+                var cid = $(this).attr("value");
+                $(this).attr("rank", newrank);
+                if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
+                    rankdic[cid] = newrank;
+                }
+                else{
+                    $(this).find("input").eq(0).attr("checked", "checked");
+                }
+            });
+            rankdic = JSON.stringify(rankdic);
+            url = "/case/updaterank/";
+            para = {"mid":mid, "rankdict":rankdic};
+            
+            $.post(url, para, function(data){
+                var rs = eval('('+data+')');
+                if(rs.success){
+                    //alert("排序更新成功!");
+                }else{
+                    alert("sorry,排序更新失败~");
+                }
+            });
+                 
+        }
+
+    }
+}
 $(document).ready(function(){
 /*    var swidth = $(window).width();
     console.log(swidth);
@@ -145,74 +215,6 @@ $(document).ready(function(){
                     "</select>"
 
 
-    
-    function delete_update_rank(celement){
-        var nextele = celement.next();
-        var classname = celement.attr("class");
-        if(nextele.length !== 0 || classname == "cmodule"){    
-        //删除用例/模块后他们后面的用例/模块rank值先不变了 反正相对位置没有变 要不然批量删除的时候好麻烦        
-/*            console.log(classname);
-            var nx = celement.nextAll().filter("."+classname);//该被删除模块/用例后面的模块/用例
-            var rankdic = {}
-            var mid = 0
-            if(classname == "mtr"){
-                mid = -1
-            }
-            nx.each(function(){//rank值依次减1
-                var newrank = parseInt($(this).attr("rank"))-1;
-                var cid = $(this).attr("value");//取该模块/用例的id
-                $(this).attr("rank", newrank);
-                if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
-                    rankdic[cid] = newrank;
-                }
-                else{
-                    $(this).find("input").eq(0).attr("checked", "checked");
-                }
-            });
-            rankdic = JSON.stringify(rankdic);
-            url = "/case/updaterank/";
-            para = {"mid":mid, "rankdict":rankdic};
-            $.post(url, para, function(data){
-                alert("ok");
-            }); */
-
-            //如果删掉的是模块，模块下用例的rank值要变化
-            //删掉模块后，用例是直接接到上一个模块下，
-            //所以模块的rank值从该被删掉模块的上一个模块的最后一个用例rank值开始递增
-            if(classname == "cmodule"){
-                var ccase = celement.find(".mtr");//该模块下所有用例
-                var cnum = celement.prev().find(".mtr").last().attr("rank");
-                mid = celement.prev().attr("value");
-                var i = 1;
-
-                rankdic = {}
-
-                ccase.each(function(){
-                    var newrank = parseInt(cnum)+i;
-                    i = i+1;
-                    var cid = $(this).attr("value");
-                    $(this).attr("rank", newrank);
-                    if(cid){//有用例id的拼json准备存到数据库，没有id的勾上复选框等着保存
-                        rankdic[cid] = newrank;
-                    }
-                    else{
-                        $(this).find("input").eq(0).attr("checked", "checked");
-                    }
-                });
-                rankdic = JSON.stringify(rankdic);
-                url = "/case/updaterank/";
-                para = {"mid":mid, "rankdict":rankdic};
-                $.post(url, para, function(data){
-                    var rs = eval('('+data+')');
-                    if(rs.success){
-                        //alert("排序更新成功!");
-                    }else{
-                        alert("sorry,排序更新失败~");
-                    }
-                });        
-            }      
-        }
-    }
 
     function scrollOffset(scroll_offset){
         var x = document.body.clientHeight;
@@ -222,9 +224,15 @@ $(document).ready(function(){
         $("body,html").animate({scrollTop: scroll_offset.top + x}, 500);
       }
     // click create case
-    $("#newcase").click(function(){
-        $(".mtr").last().after(casehtml);
+    $("#newcase").click(function(){      
         var newlast = $(".mtr").last();
+        if(newlast.length == 0){
+            newlast = $(".success").last();
+            newlast.after(casehtml);      
+        }else{
+            newlast.after(casehtml);
+        }
+        newlast = $(".mtr").last()
         insert_update_rank(newlast);
         newlast.attr("id", "newone");
         scrollOffset($("#newone").offset());
@@ -244,7 +252,7 @@ $(document).ready(function(){
 
     });
 
-    $(".editable").live('dblclick', function(){
+    $(".editable").live('click', function(){
         var tdnode = $(this);
         var tdTest = tdnode.text();
         //before属性用来存点击时文本域的值
@@ -257,11 +265,13 @@ $(document).ready(function(){
 
         }
         else{
-            tdnode.empty();
-            var tx = $("<textarea class='edittx'></textarea>");
-            tx.attr("value", tdTest);
-            tdnode.append(tx);
-            tx.focus();
+            if(tdnode.find(".edittx").length == 0){
+                tdnode.empty();
+                var tx = $("<textarea class='edittx'></textarea>");
+                tx.attr("value", tdTest);
+                tdnode.append(tx);
+                tx.focus();
+            }
         }
    
     });
@@ -359,7 +369,7 @@ $(document).ready(function(){
         $.post(url, para, function(data){
             var rs = eval('('+data+')');
             if(rs.success){
-                rsdrop.after("<span class=\""+result+"\">"+result+"</span>");//在后面生成结果
+                rsdrop.after("<span class=\""+result+"\">&nbsp;"+result+"</span>");//在后面生成结果
                 rsdrop.toggle();//隐藏下拉选择框               
 
                 //更新后端返回的执行时间和执行人，备注
@@ -394,6 +404,22 @@ $(document).ready(function(){
         newlast.attr("id", "newone");
         scrollOffset($("#newone").offset());
         newlast.removeAttr("id");
+    });
+
+    $(".icon-chevron-up").live('click', function(){
+        var cdrop = $(this);
+        cdrop.removeClass("icon-chevron-up");
+        cdrop.addClass("icon-chevron-down");
+        cdrop.parent().parent().nextAll().toggle();
+
+
+    });
+
+    $(".icon-chevron-down").live('click', function(){
+        var cdrop = $(this);
+        cdrop.removeClass("icon-chevron-down");
+        cdrop.addClass("icon-chevron-up");
+        cdrop.parent().parent().nextAll().toggle();
     });
 
     function checkall(master, slave){
@@ -458,7 +484,7 @@ $(document).ready(function(){
 
             }else{//删除模块
               
-                //找到该模块的前一个模块下的 
+                //找到该模块的前一个模块下的
                 var currentm = node.parents(".cmodule")
                 var prevmodule = currentm.prev().find('tbody');
 
@@ -471,10 +497,13 @@ $(document).ready(function(){
                         currentm.remove();
                         return;
                     }
+
                     //更新rank值
                     delete_update_rank(currentm);
+                    
                     //克隆一份该模块下的用例
                     var snode = node.siblings().clone(true);
+
                     $.post(url, para, function(data, status){
                         var rs = eval('('+data+')');
 
@@ -486,14 +515,19 @@ $(document).ready(function(){
                             alert("删除失败");
                         }
                     });
+                    
 
-
-
-                }else{
-                    alert("抱歉~第一个模块不能删除。");
+                }else{//模块是第一个的情况下
+                    var nexrmodule = currentm.next();
+                    var chcase = currentm.find(".mtr");
+                    if(nexrmodule.length && chcase.length == 0){//如果后面有模块，而且该模块下没有用例则可删
+                        currentm.remove();
+                    }else{
+                        alert("抱歉~不能删除");
+                    }
+                    
                 }
             }
-
 
             return true;
         }else{
@@ -549,10 +583,6 @@ $(document).ready(function(){
         });
         category1.html(temp_html); 
         var n = category1.get(0).selectedIndex;
-        // console.log("n");
-        // console.log(n);
-        // console.log("c1");
-        // console.log(c1);
         if(c1){
             $(".category_select_1 option[value="+c1+"]").attr("selected","true")
             var preoption = $(".category_select_1 option[value="+c1+"]").prevAll("option")
@@ -561,7 +591,6 @@ $(document).ready(function(){
             if((areaJson[n-1].slist).length != 0){
                 category2.show();
                 category_select_2();
-                // console.log("mmm");
                 if (!c1){
                     $(".cate").attr("value",'aa');
                 }
@@ -572,15 +601,12 @@ $(document).ready(function(){
                 if((areaJson[preoption.length-1].slist).length != 0){
                     category2.show();
                     category_select_2();
-                    // console.log("eee");
                     $(".cate1").attr("value",category1.children().eq(preoption.length).val());
                 }else{
-                    // console.log("else");
                     category2.hide();
                     category3.hide();
                 }
             }else{
-                // console.log("else22");
                 category2.hide();
                 category3.hide();
             }           
@@ -591,12 +617,7 @@ $(document).ready(function(){
         var c2=$(".cate2").val();
         temp_html="<option>"+'请选择'+"</option>"; 
         var n = category1.get(0).selectedIndex;
-        // console.log("n");
-        // console.log(n);
-        // console.log("c2");
-        // console.log(c2);
         if(n==0){
-            // console.log("ddd");
             category2.css("display","none");
             category3.css("display","none");
         }else{
@@ -609,7 +630,6 @@ $(document).ready(function(){
                 });
                 category2.html(temp_html);
                 if(c2){
-                    // console.log("aaa");
                     $(".category_select_2 option[value="+c2+"]").attr("selected","true")
                 }
                 category_select_3();
@@ -802,7 +822,9 @@ $(document).ready(function(){
         var diclist = [dic];
         var mmid = [];
         var mchk = [-2];
+        var mrank = [0];
         var flag = true;
+        var m = 0
         var node = $("input[name=\"checklist\"]:checked");
         var nlen = node.length;
         $(node).each(function(){             
@@ -810,18 +832,23 @@ $(document).ready(function(){
             tdata = node.children();
             cm = $(this).parents(".cmodule")
             tmodule = cm.attr("value");
+            tmrank = cm.attr("rank");
+            mrank[i] = tmrank;
             if (tmodule == '' || tmodule == undefined){
-                    tmodule = -1;
+                if (mrank[i-1] != tmrank){
+                m--;
+            }
+            tmodule = m; 
             }
             mchk[i] = tmodule;
             if(node.attr("class") == "mtr"){//判断是用例还是模块
                 input = tdata.eq(2).text();
                 output = tdata.eq(3).text();
                 mname = $.trim(cm.find(".success").children().eq(1).text());
-                if(!input || !output || !mname ){
+                if(input.length > 100 || output.length > 100 || !input || !output){
                     node.css("background-color","#ffecec");
                     $(".savebtn").removeAttr("disabled");
-                    alert("用例必填项没有填写，请填写后再保存！");
+                    alert("用例输入、期望输出为必填项，长度不能大于100个字符！");
                     flag = false;
                     return false;
                 }else{
@@ -835,11 +862,11 @@ $(document).ready(function(){
                         casejson[j] = datadic;
                     }
                 }
-            }else{//勾选的模块下没有勾选用例时，保存模块
+            }else{//保存模块
                 mtrnode = (node.parent(".cmodule").find(".mtr").find("input[name=\"checklist\"]:checked"));
-                if (mtrnode.length == 0){
+                 if (mtrnode.length == 0){
                     cmname = $.trim(cm.find(".success").children().eq(1).text());
-                    if(cmname){
+                    if(cmname.length>0 && cmname.length <= 30){
                         datadic = {"mname":cmname,"mrank":cm.attr("rank"),"id":-3};
                         j=0;
                         casejson = []; 
@@ -848,7 +875,7 @@ $(document).ready(function(){
                     }else{
                         node.css('border', "3px solid #f77");
                         $(".savebtn").removeAttr("disabled");
-                        alert("模块名称没有填写，请填写后再保存！");
+                        alert("模块名称为必填项，长度不能大于30个字符！");
                         flag = false;
                         return false;
                     }                                       
@@ -867,6 +894,7 @@ $(document).ready(function(){
                 if(resp.message){                    
                     node.removeAttr("checked");
                     node.parent().parent().removeAttr("style");
+                    location.reload();
                 }else{
                     alert("保存失败，请重新保存！");
                 }
