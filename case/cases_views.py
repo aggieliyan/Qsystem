@@ -583,8 +583,6 @@ def excel_table_byindex(request, file= '',pid = ''):
 		if row:
 			cpre = row[0]
 			cinput = row[1]
-			print cinput
-			print unicode(cinput)
 			coutput = row[2]
 			cpriority = row[3]
 			if  not cpriority:
