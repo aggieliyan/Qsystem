@@ -98,28 +98,40 @@ def case_list(request,pid):
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")			
 			caseresult = result.objects.filter(testcase__in = cmodule)
+			rresult = caseresult
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
 				cmodule = cmodule.filter(module_id__in = testmodule, isactived = 1)
+			#等于 、不等于某个状态
 			args = [Q(result = cmold) , ~Q(result = cmold)] 
+			#不等于(未执行)、等于 1 /0
 			args2 = [~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct()),Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())]
 			if not isNone(cmold) and not isNone(cstatue):
 				if cmold == u"未执行":
 					cmodule = cmodule.filter(args2[int(cstatue)])
 				else:
-					if not cstart_date and not cend_date:
-						rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
-						rid = []
-						for r in rlist:
-							rid.append(r.id)
-						caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
+					# 1 表示不等于状态
+					if cstatue =="1":
+						#取出当前项目下的test id,cm2表示符合当前状态的用例，然后去差集
+						cm1 = cmodule.values_list("pk",flat=True)	
+						cm2 = rresult.filter(result = cmold).values_list("testcase_id",flat=True).distinct()
+						idd = set(cm1)^(set(cm2))		
+						cmodule = cmodule.filter(pk__in = idd , isactived = 1)
 					else:
-						caseresult = caseresult.filter(args[int(cstatue)])						
-					cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+						if not cstart_date and not cend_date:
+							#根据testcase_id进行分组查询，取最新执行状态
+							rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
+							rid = []
+							for r in rlist:
+								rid.append(r.id)
+							caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
+						else:
+							caseresult = caseresult.filter(args[int(cstatue)])
+						cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct() , isactived = 1)
 			if not isNone(cexecutor):
 				caseresult = caseresult.filter(executor = cexecutor)
-				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct() , isactived =1)
 			if not isNone(cstart_date) or not isNone(cend_date):
 				if not isNone(cstart_date):
 					caseresult = caseresult.filter(exec_date__gte = cstart_date)
@@ -127,7 +139,7 @@ def case_list(request,pid):
 					tomorrow = cend_date + datetime.timedelta(days=1)
 					caseresult = caseresult.filter(exec_date__lte = tomorrow)
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
-				cmodule = cmodule.filter(pk__in = cdate)
+				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
 		try:
 			clist = []
@@ -191,7 +203,7 @@ def allcaselist(request):
 	case = []
 	ctestmodule = cpriority = cauthor = cexecutor = cstart_date = cend_date = \
 	cexec_status = ckeyword =  cstatue = cmold = ''
-	cmodule = testcase.objects.all()
+	cmodule = testcase.objects.filter(isactived = 1)
 	mcase = cmodule
 	if request.method == "POST":
 		search = searchForm(request.POST)
@@ -234,7 +246,14 @@ def allcaselist(request):
 						caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
 					else:
 						caseresult = caseresult.filter(args[int(cstatue)])						
-					cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
+					if cstatue =="1":
+						cm1 = cmodule.filter(~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())).values_list("pk",flat=True)
+						print cm1		
+						cm2 = caseresult.values_list("testcase", flat=True).distinct()
+						idd = set(cm1).union(set(cm2))			
+						cmodule = cmodule.filter(pk__in = idd,isactived = 1)
+					else:
+						cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct(),isactived =1)
 			if not isNone(cexecutor):
 				caseresult = caseresult.filter(executor = cexecutor)
 				cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct())
@@ -245,7 +264,7 @@ def allcaselist(request):
 					tomorrow = cend_date + datetime.timedelta(days=1)
 					caseresult = caseresult.filter(exec_date__lte = tomorrow)
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
-				cmodule = cmodule.filter(pk__in = cdate)
+				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
 		allmodule = testmodule
