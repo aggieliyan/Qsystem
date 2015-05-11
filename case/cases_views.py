@@ -111,23 +111,22 @@ def case_list(request,pid):
 				if cmold == u"未执行":
 					cmodule = cmodule.filter(args2[int(cstatue)])
 				else:
-					# 1 表示不等于状态
-					if cstatue =="1":
-						#取出当前项目下的test id,cm2表示符合当前状态的用例，然后去差集
-						cm1 = cmodule.values_list("pk",flat=True)	
-						cm2 = rresult.filter(result = cmold).values_list("testcase_id",flat=True).distinct()
-						idd = set(cm1)^(set(cm2))		
-						cmodule = cmodule.filter(pk__in = idd , isactived = 1)
-					else:
-						if not cstart_date and not cend_date:
-							#根据testcase_id进行分组查询，取最新执行状态
-							rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
-							rid = []
-							for r in rlist:
-								rid.append(r.id)
-							caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
+					if not cstart_date and not cend_date or cstatue =="1":
+						#根据testcase_id进行分组查询，取最新执行状态
+						rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
+						rid = []
+						for r in rlist:
+							rid.append(r.id)						
+						if cstatue == "1":
+							cm1 = cmodule.values_list("pk",flat=True)	
+							cm2 = rresult.filter(result = cmold,pk__in = rid).values_list("testcase_id",flat=True).distinct()
+							idd = set(cm1)^(set(cm2))
+							cmodule = cmodule.filter(pk__in = idd , isactived = 1)
 						else:
-							caseresult = caseresult.filter(args[int(cstatue)])
+							caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
+							cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct(),isactived =1)
+					else:
+						caseresult = caseresult.filter(args[int(cstatue)])
 						cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct() , isactived = 1)
 			if not isNone(cexecutor):
 				caseresult = caseresult.filter(executor = cexecutor)
@@ -239,23 +238,22 @@ def allcaselist(request):
 				if cmold == u"未执行":
 					cmodule = cmodule.filter(args2[int(cstatue)])
 				else:
-					# 1 表示不等于状态
-					if cstatue =="1":
-						#取出当前项目下的test id,cm2表示符合当前状态的用例，然后去差集
-						cm1 = cmodule.values_list("pk",flat=True)	
-						cm2 = rresult.filter(result = cmold).values_list("testcase_id",flat=True).distinct()
-						idd = set(cm1)^(set(cm2))		
-						cmodule = cmodule.filter(pk__in = idd , isactived = 1)
-					else:
-						if not cstart_date and not cend_date:
-							#根据testcase_id进行分组查询，取最新执行状态
-							rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
-							rid = []
-							for r in rlist:
-								rid.append(r.id)
-							caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
+					if not cstart_date and not cend_date or cstatue =="1":
+						#根据testcase_id进行分组查询，取最新执行状态
+						rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
+						rid = []
+						for r in rlist:
+							rid.append(r.id)						
+						if cstatue == "1":
+							cm1 = cmodule.values_list("pk",flat=True)	
+							cm2 = rresult.filter(result = cmold,pk__in = rid).values_list("testcase_id",flat=True).distinct()
+							idd = set(cm1)^(set(cm2))
+							cmodule = cmodule.filter(pk__in = idd , isactived = 1)
 						else:
-							caseresult = caseresult.filter(args[int(cstatue)])
+							caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
+							cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct(),isactived =1)
+					else:
+						caseresult = caseresult.filter(args[int(cstatue)])
 						cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct(),isactived =1)
 			if not isNone(cexecutor):
 				caseresult = caseresult.filter(executor = cexecutor)
@@ -585,6 +583,8 @@ def excel_table_byindex(request, file= '',pid = ''):
 		if row:
 			cpre = row[0]
 			cinput = row[1]
+			print cinput
+			print unicode(cinput)
 			coutput = row[2]
 			cpriority = row[3]
 			if  not cpriority:
