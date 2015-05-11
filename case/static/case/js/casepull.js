@@ -11,14 +11,16 @@ function ajaxClick(url){
 		if (json['prelink']){
 			$('.previous').removeClass('disabled');
 			$('.previous a').attr("onclick", "ajaxClick('"+json['prelink']+"')");
-		} else{
+		} else{			
 			$('.previous').addClass('disabled');
+			$('.previous a').removeAttr("onclick");
 		}
 		if (json['nextlink']){
 			$('.next').removeClass('disabled');
 			$('.next a').attr("onclick", "ajaxClick('"+json['nextlink']+"')");
-		} else{
+		} else{			
 			$('.next').addClass('disabled');
+			$('.next a').removeAttr("onclick");			
 		}
 		$('#totalpage').text(json['totalpage']);
 		$('#go').attr("value", json['golink']);

@@ -21,10 +21,11 @@ def getcases(request):
     #如果选择了模块，则不用管分类，直接筛模块即可，没有模块再筛末级分类
     mid = request.GET.get('mid')
     cids = request.GET.get('cids')
-    skey = request.GET.get('skey')
+    skey = request.GET.get('skey')     #如果这三个为空，则给它们赋以空字符，方便后面返回链接时字符串的联结
     if mid:
         caselist = models.testcase.objects.filter(module_id=mid)
-    elif cids:        
+    elif cids:
+        mid = ''        
         cid = cids.split(',')
         text = ''
         k = 0
@@ -37,9 +38,13 @@ def getcases(request):
                     text += '| Q(category_id=' + i + ')'          
         caselist = models.testcase.objects.filter(eval(text))          
     else:
+        mid = ''
+        cids = ''
         caselist = models.testcase.objects.all().order_by("-id")
     if skey:
         caselist = caselist.filter(action__contains=skey) 
+    else:
+        skey = ''
     caselist = caselist.filter(isactived=1)
 
     """分页"""
@@ -64,21 +69,14 @@ def getcases(request):
     
     previouslink = False
     nextlink = False
-    if mid or cids or skey:
-        if caseobj.has_previous():
-            previouslink = "/case/getcases/?page=" + str(caseobj.previous_page_number()) \
+    if caseobj.has_previous():
+        previouslink = "/case/getcases/?page=" + str(caseobj.previous_page_number()) \
                 +"&mid="+mid+"&cids="+cids+"&skey="+skey
-        if caseobj.has_next():
-            nextlink = "/case/getcases/?page=" + str(caseobj.next_page_number()) \
+    if caseobj.has_next():
+        nextlink = "/case/getcases/?page=" + str(caseobj.next_page_number()) \
             + "&mid=" + mid + "&cids=" + cids + "&skey=" + skey
-        go_link = "/case/getcases/?mid=" + mid + "&cids=" + cids + "&skey=" + skey \
+    go_link = "/case/getcases/?mid=" + mid + "&cids=" + cids + "&skey=" + skey \
             + "&page="
-    else:        
-        if caseobj.has_previous():
-            previouslink = "/case/getcases/?page=" + str(caseobj.previous_page_number())
-        if caseobj.has_next():
-            nextlink = "/case/getcases/?page=" + str(caseobj.next_page_number())
-        go_link = "/case/getcases/?mid=&cids=&skey=&page="
     
     res = {'actionlist': actionlist, 'prelink': previouslink, 'nextlink': nextlink, 'golink': go_link, 'totalpage': paginator.num_pages}
     return HttpResponse(json.dumps(res))
