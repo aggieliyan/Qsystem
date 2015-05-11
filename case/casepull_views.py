@@ -40,12 +40,10 @@ def getcases(request):
         caselist = models.testcase.objects.all().order_by("-id")
     if skey:
         caselist = caselist.filter(action__contains=skey) 
+    caselist = caselist.filter(isactived=1)
 
     """分页"""
     paginator = Paginator(caselist, 25)
-#    if '/totalpage' in request.path:
-#        res = {paginator.num_pages}
-#        return HttpResponse(json.dumps(res))
    
     pagenum = request.GET.get('page')
     try:

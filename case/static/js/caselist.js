@@ -166,7 +166,7 @@ $(document).ready(function(){
                           "<td class=\"editable nodrag\"></td>"+
                           "<td class=\"editable nodrag\"></td>"+
                         "<td class=\"editable nodrag\"></td>"+
-                          "<td class=\"level nodrag\">2</td>"+
+                          "<td class=\"nodrag\"><span class=\"level\">2</span></td>"+
                           "<td class=\"nodrag\"><a class=\"icon-play-circle\"></a></td>"+
                         "<td class=\"editable nodrag\"></td>"+
                           "<td></td>"+
@@ -311,10 +311,9 @@ $(document).ready(function(){
 
 
     //双击选择级别
-    $(".level").live('dblclick', function(){
-        console.log("yeeeee");
-        var tdnode = $(this);
-        var tdTest = tdnode.text();
+    $(".level").live('click', function(){
+        var tdnode = $(this).parent();
+        var tdTest = $(this).text();
         tdnode.empty();
         var tx = $(levelhtml);
         tx.attr("value", tdTest);
@@ -328,7 +327,7 @@ $(document).ready(function(){
         var tp = tx.parent();
         tx.remove();
         tp.attr("value", etext);
-        tp.html(etext);
+        tp.html("<span class='level'>"+etext+"</span>");
         tp.siblings().eq(0).find("input").attr("checked", "checked");    
     })
 
@@ -842,9 +841,16 @@ $(document).ready(function(){
             }
             mchk[i] = tmodule;
             if(node.attr("class") == "mtr"){//判断是用例还是模块
-                input = tdata.eq(2).text();
-                output = tdata.eq(3).text();
+                input = $.trim(tdata.eq(2).text());
+                output = $.trim(tdata.eq(3).text());
                 mname = $.trim(cm.find(".success").children().eq(1).text());
+                if(mname.length<=0 || mname.length> 30){
+                    cm.find(".success").css('border', "3px solid #f77");
+                    $(".savebtn").removeAttr("disabled");
+                    alert("模块名称为必填项，长度不能大于30个字符！");
+                    flag = false;
+                    return false;
+                }
                 if(input.length > 100 || output.length > 100 || !input || !output){
                     node.css("background-color","#ffecec");
                     $(".savebtn").removeAttr("disabled");

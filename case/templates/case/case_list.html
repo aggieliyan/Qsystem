@@ -20,7 +20,7 @@
       {% endif %} 
   		    <ul class="selectList">
             <li class="item-title">
-              <lable style="float:right">产品模块：</lable>
+              <lable style="float:right">产品类目：</lable>
             </li>
             <li>
               <input  value="{{categoryid}}" type="hidden" class="cate" name="categoryid">
@@ -40,8 +40,10 @@
               <lable style="float:right">所属模块：</lable>
             </li>
             <li>
-              <select class="" name="testmodule">
+              <select class="" name="testmodule" selected="selected">
+                {% if ctestmodule %}
                 <option selected="selected" value="{{ctestmodule}}">{{ctestmodule}}</option>
+                {% endif %}
                 <option value=""></option>
                 {% for m in allmodule %}
                 <option value="{{m.m_name}}">{{m.m_name}}</option>
@@ -51,7 +53,9 @@
             <li class="filter"><lable>优先级：</lable></li>
             <li>
               <select class="" name="priority">
+                {% if cpriority %}
                 <option select="selected" value="{{cpriority}}">{{cpriority}}</option>
+                {% endif %}
                 <option></option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -183,7 +187,7 @@
 						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
 						      		<td class="editable nodrag">{{c.action}}</td>
 						    		<td class="editable nodrag">{{c.output}}</td>
-						      		<td class="level nodrag">{{c.priority}}</td>
+						      		<td class="nodrag"><span class="level">{{c.priority}}</span></td>
                       {% if result %}
 						      		{% for r in result %}
 						      		{% if c.id == r.testcase_id %}
@@ -278,7 +282,7 @@
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/caselist.js?v=20150501"></script>
+    <script type='text/javascript' src="/static/js/caselist.js?v=20150502"></script>
     <script type="text/javascript" src="/static/js/checktree.js?v=20150424"></script>
     <script type="text/javascript" src="/static/js/casepull.js?v=20150424"></script>
 
