@@ -226,6 +226,7 @@ STATIC_URL = '/static/'
 if socket.gethostname() == 'liyan-PC':
     STATICFILES_DIRS = (
         'Qsystem/common/static/',
+        'Qsystem/project/static/'
         )
 else:
     STATICFILES_DIRS = (
