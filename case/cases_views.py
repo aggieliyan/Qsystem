@@ -81,6 +81,7 @@ def case_list(request,pid):
 			cend_date = search.cleaned_data['end_date']
 			cexec_status = search.cleaned_data['exec_status']
 			ckeyword = search.cleaned_data['keyword']
+			print ckeyword
 			subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
 			subset3 = list(category.objects.filter(parent_id__in = subset2))
 			subset = list(set(subset2).union(set(subset3)))
@@ -96,10 +97,12 @@ def case_list(request,pid):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
-			cmodule = cmodule.filter(**kwargs)
+				cmodule = cmodule.filter(action__contains = ckeyword.strip())
+			# cmodule = cmodule.filter(**kwargs)
+			print cmodule
 			mcase = testcase.objects.filter(category__in = subset)
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
-			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")			
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))			
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			rresult = caseresult
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
@@ -173,7 +176,7 @@ def case_list(request,pid):
 			subset = list(set(subset2).union(set(subset3)))		
 			subset.append(pid)				
 		cmodule = cmodule.filter(category__in = subset)
-		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
+		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
 		allexecutor = caseresult.values_list("executor",flat = True).distinct()
@@ -183,13 +186,15 @@ def case_list(request,pid):
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
+	if not ckeyword:
+		testmodule = testmodule.order_by("m_rank")
 	for m in testmodule:
 		ccase={}
 		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
 		if len(mcaselist) != 0:
 			ccase[m.id] = mcaselist
-			case.append(ccase)
-    #字典进行排序，暂不使用
+			case.append(ccase)		
+	#字典进行排序，暂不使用
 	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
@@ -614,15 +619,30 @@ def savestream(self):
     doc = CompoundDoc.XlsDoc()  
     return doc.savestream(self.get_biff_data())
 
+# def download(request):
+	# filename = 'aa.xlsx'
+	# # path = sys.path[0]
+	# # print path
+	# # f = open(filename)
+	# # data = f.read()
+	# # print data
+	# # f.close()
+	# response = HttpResponse(data,'application/vnd.ms-excel')
+	# response['Content-Length'] = os.path.getsize(filename) 
+	# response['Content-Disposition'] = 'attachment; filename= aa.txt'  
+	# return response
 def download(request):
-	filename = 'aa.xlsx'
-	# path = sys.path[0]
-	# print path
-	# f = open(filename)
-	# data = f.read()
-	# print data
-	# f.close()
-	response = HttpResponse(data,'application/vnd.ms-excel')
-	response['Content-Length'] = os.path.getsize(filename) 
-	response['Content-Disposition'] = 'attachment; filename= aa.txt'  
+    # do something...
+	the_file_name = "upload\\aa.xlsx"
+	response = StreamingHttpResponse(file_iterator(the_file_name))
+	response['Content-Type'] = 'application/vnd.ms-excel'
+	response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name)
 	return response
+def file_iterator(file_name, chunk_size=512):
+	with open(file_name) as f:
+		while True:
+			c = f.read(chunk_size)
+			if c:
+				yield c
+			else:
+				break
