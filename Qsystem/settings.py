@@ -161,7 +161,15 @@ if socket.gethostname() == 'test':
                 'PASSWORD':'as-qa',
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                         
-                },      
+                }, 
+        'csystem': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': 'csystem',
+                'USER':'root',
+                'PASSWORD':'mysqlpwd1',
+                'HOST':'localhost',
+                'PORT':'3306',   
+                    },     
             }            
                                   
                                      
