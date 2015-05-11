@@ -163,7 +163,7 @@ if socket.gethostname() == 'test':
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                         
                 },  #统计客户端登录的库
-        'csystem': {
+        'case': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'csystem',
                 'USER':'root',
