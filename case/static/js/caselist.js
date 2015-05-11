@@ -844,6 +844,15 @@ $(document).ready(function(){
                 input = $.trim(tdata.eq(2).text());
                 output = $.trim(tdata.eq(3).text());
                 mname = $.trim(cm.find(".success").children().eq(1).text());
+                console.log(mname.length);
+                if(mname.length<=0 || mname.length> 30){
+                    console.log("asdf");
+                    cm.find(".success").css('border', "3px solid #f77");
+                    $(".savebtn").removeAttr("disabled");
+                    alert("模块名称为必填项，长度不能大于30个字符！");
+                    flag = false;
+                    return false;
+                }
                 if(input.length > 100 || output.length > 100 || !input || !output){
                     node.css("background-color","#ffecec");
                     $(".savebtn").removeAttr("disabled");
