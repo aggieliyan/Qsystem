@@ -51,6 +51,7 @@ import socket
 if socket.gethostname() == 'test':
     DEBUG = TEMPLATE_DEBUG = False
     ALLOWED_HOSTS = ['*']
+    STATIC_ROOT = '/Django/Qsystem/allstatic'
     INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
