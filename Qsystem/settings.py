@@ -226,11 +226,11 @@ STATIC_URL = '/static/'
 if socket.gethostname() == 'liyan-PC':
     STATICFILES_DIRS = (
         'Qsystem/common/static/',
-        'Qsystem/project/static/'
         )
 else:
     STATICFILES_DIRS = (
         'common/static/',
+        'project/static',
         )
 TEMPLATE_LOADERS = (
    'django.template.loaders.app_directories.Loader',
