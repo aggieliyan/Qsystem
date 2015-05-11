@@ -228,13 +228,7 @@ $(document).ready(function(){
         var newlast = $(".mtr").last();
         if(newlast.length == 0){
             newlast = $(".success").last();
-            if(newlast.length == 0){
-                alert("请先添加模块");
-
-            }else{
-                newlast.after(casehtml);  
-            }
-                
+            newlast.after(casehtml);      
         }else{
             newlast.after(casehtml);
         }
@@ -248,14 +242,8 @@ $(document).ready(function(){
 
     $("#newmodule").click(function(){
         var cmodule = $(".cmodule").last()
-        if(cmodule.length == 0){
-            $("#caselist tbody").append(modulehtml);
-            cmodule = $(".cmodule").last();
-        }else{
-            cmodule.after(modulehtml);
-        }
-        
-        var newlast = $(".cmodule").last()
+        cmodule.after(modulehtml);
+        var newlast = cmodule.next();
         insert_update_rank(newlast.find(".mtr"))
         insert_update_rank(newlast);
         newlast.attr("id", "newone");
