@@ -23,7 +23,7 @@ class dbrouter(object):
 
     def allow_syncdb(self, db, model):
         "Make sure the case app only appears on the 'case' db"
-        if db == 'case':
+        if db == 'csystem':
             return model._meta.app_label == 'case'
         elif model._meta.app_label == 'case':
             return False
