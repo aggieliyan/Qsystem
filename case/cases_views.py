@@ -60,7 +60,7 @@ def case_list(request,pid):
 	case = []
 	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = \
 	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
-
+	cmodule = testcase.objects.filter(isactived = 1)
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -93,7 +93,7 @@ def case_list(request,pid):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
-			cmodule = testcase.objects.filter(**kwargs)
+			cmodule = cmodule.filter(**kwargs)
 			mcase = testcase.objects.filter(category__in = subset)
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")			
@@ -169,7 +169,7 @@ def case_list(request,pid):
 			subset3 = list(category.objects.filter(parent_id__in = subset2))
 			subset = list(set(subset2).union(set(subset3)))		
 			subset.append(pid)				
-		cmodule = testcase.objects.filter(category__in = subset)
+		cmodule = cmodule.filter(category__in = subset)
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
 		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
