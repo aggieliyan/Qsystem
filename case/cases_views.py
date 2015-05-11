@@ -228,6 +228,7 @@ def allcaselist(request):
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")
 			caseresult = result.objects.filter(testcase__in = cmodule)
+			rresult = caseresult
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
@@ -238,21 +239,23 @@ def allcaselist(request):
 				if cmold == u"未执行":
 					cmodule = cmodule.filter(args2[int(cstatue)])
 				else:
-					if not cstart_date and not cend_date:
-						rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
-						rid = []
-						for r in rlist:
-							rid.append(r.id)
-						caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
-					else:
-						caseresult = caseresult.filter(args[int(cstatue)])						
+					# 1 表示不等于状态
 					if cstatue =="1":
-						cm1 = cmodule.filter(~Q(pk__in = caseresult.values_list("testcase", flat=True).distinct())).values_list("pk",flat=True)
-						print cm1		
-						cm2 = caseresult.values_list("testcase", flat=True).distinct()
-						idd = set(cm1).union(set(cm2))			
-						cmodule = cmodule.filter(pk__in = idd,isactived = 1)
+						#取出当前项目下的test id,cm2表示符合当前状态的用例，然后去差集
+						cm1 = cmodule.values_list("pk",flat=True)	
+						cm2 = rresult.filter(result = cmold).values_list("testcase_id",flat=True).distinct()
+						idd = set(cm1)^(set(cm2))		
+						cmodule = cmodule.filter(pk__in = idd , isactived = 1)
 					else:
+						if not cstart_date and not cend_date:
+							#根据testcase_id进行分组查询，取最新执行状态
+							rlist = result.objects.raw('SELECT * FROM (SELECT * FROM case_result ORDER BY exec_date DESC) case_result GROUP BY testcase_id')
+							rid = []
+							for r in rlist:
+								rid.append(r.id)
+							caseresult = caseresult.filter(args[int(cstatue)], Q(pk__in = rid))
+						else:
+							caseresult = caseresult.filter(args[int(cstatue)])
 						cmodule = cmodule.filter(pk__in = caseresult.values_list("testcase", flat=True).distinct(),isactived =1)
 			if not isNone(cexecutor):
 				caseresult = caseresult.filter(executor = cexecutor)
