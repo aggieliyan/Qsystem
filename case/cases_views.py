@@ -97,8 +97,7 @@ def case_list(request,pid):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
-				cmodule = cmodule.filter(action__contains = ckeyword.strip())
-			# cmodule = cmodule.filter(**kwargs)
+			cmodule = cmodule.filter(**kwargs)
 			print cmodule
 			mcase = testcase.objects.filter(category__in = subset)
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
@@ -188,6 +187,8 @@ def case_list(request,pid):
 		newresult.append(p)
 	if not ckeyword:
 		testmodule = testmodule.order_by("m_rank")
+	else:
+		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
 		ccase={}
 		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
