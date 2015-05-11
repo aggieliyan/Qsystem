@@ -147,14 +147,14 @@ if socket.gethostname() == 'test':
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                      
                  }, #教务培训系统
-#        'ablesky_industrytrain': {  
-#                'ENGINE': 'django.db.backends.mysql',
-#                'NAME': 'ablesky_industrytrain',
-#                'USER':'qa',
-#                'PASSWORD':'as-qa',
-#                'HOST':'192.168.204.218',
-#                'PORT':'3306',  
-#                },  #行业培训
+        'ablesky_industrytrain': {  
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': 'ablesky_industrytrain',
+                'USER':'qa',
+                'PASSWORD':'as-qa',
+                'HOST':'103.17.42.149',
+                'PORT':'3306',  
+                },  #行业培训
         'ablesky_log': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ablesky_log',
