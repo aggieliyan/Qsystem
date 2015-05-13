@@ -599,7 +599,7 @@ def excel_table_byindex(request, file= '',pid = ''):
 			cinput = row[1]
 			coutput = row[2]
 			cpriority = row[3]
-			if  cpriority not in [1,2,3]:
+			if  not cpriority:
 				cpriority = 2
 			if cpre and  not cinput and not coutput:
 				num = len(casemodule.objects.all())
