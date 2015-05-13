@@ -563,7 +563,7 @@ def upload_file(request):
 				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
 				filepath = uf.upfile
-				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
+				uipath = unicode(str(filepath), "utf8")
 				# path=os.path.join(settings.MEDIA_ROOT,'upload')
 				excel_table_byindex(request,file= uipath, pid = pid)
 				resp['message'] = True
