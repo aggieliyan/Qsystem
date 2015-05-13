@@ -280,10 +280,41 @@
 {% endblock %}
 {% block js %}
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
+    <script type='text/javascript' src="/static/jquery/jquery.uploadify.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
     <script type='text/javascript' src="/static/js/caselist.js?v=20150502"></script>
     <script type="text/javascript" src="/static/js/checktree.js?v=20150424"></script>
     <script type="text/javascript" src="/static/js/casepull.js?v=20150424"></script>
+    <script type="text/javascript">  
+$(document).ready(function() {  
+  $('#file_upload').uploadify({
+    'uploader'  : '/static/jquery/uploadify.swf',//根据文件存放地址改变
+    'script'    : '/case/upload_script/',
+    'cancelImg' : '/static/img/uploadify-cancel.png',//根据文件存放地址改变
+    'folder'    : '/upload/',  
+    'auto'      : false,//  
+    'multi': true,//设置可以上传多个文件  
+    'queueSizeLimit':20,//设置可以同时20个文件
+    'buttonText':'上传',  
+    'removeCompleted':false,//  
+    'sizeLimit':10240000,//设置上传文件大小单位kb  
+    'fileExt':'*.xlsx',//设置上传文件类型为常用图片格式  
+    'fileDesc':'Image Files',                  
+    'onInit': function () {},  
+    'onError' : function (event,ID,fileObj,errorObj) {  
+            $('#id_span_msg').html("上传失败，错误码:"+errorObj.type+" "+errorObj.info);  
+        },  
+    'onSelect': function (e, queueId, fileObj) {  
+        $('#id_span_msg').html("");  
+    },  
+    'onAllComplete': function (event, data) {  
+        if(data.filesUploaded>=1){  
+          $('#id_span_msg').html("上传成功！");  
+        }                      
+    }                  
+  });  
+});  
+</script>
 
 {% endblock %}
