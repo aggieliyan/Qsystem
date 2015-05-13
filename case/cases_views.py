@@ -541,7 +541,8 @@ def savecase(request):
 	except Exception,e: 
 		import sys 
 		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-		dict['message']=False
+		dict['success']=False
+		dict['message']=info
 		print e,info
 	finally:
 		cjson=json.dumps(dict) 
@@ -559,7 +560,6 @@ def upload_file(request):
 				#获取表单信息
 				xlsfile = form.cleaned_data['upfile']
 				filename = xlsfile.name
-				print "xlsfile=",xlsfile
 				#写入数据库
 				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
@@ -568,16 +568,18 @@ def upload_file(request):
 				# path=os.path.join(settings.MEDIA_ROOT,'upload')
 				uipath = os.path.join(settings.MEDIA_ROOT,uipath)
 				excel_table_byindex(request,file= uipath, pid = pid)
-				resp['message'] = True
+				resp['success'] = True
 				# return HttpResponse('upload ok!')
 		else:
 		    form = UploadForm()
 	except Exception,e:
-		resp['message'] = False
-		print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-	return HttpResponseRedirect(url)
-	# resp = json.dumps(resp)
-	# return HttpResponse(resp)
+		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
+		resp['success'] = False
+		resp['message'] = info
+		# print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
+	# return HttpResponseRedirect(url)
+	resp = json.dumps(resp)
+	return HttpResponse(resp)
 
 def excel_table_byindex(request, file= '',pid = ''):
 	data = xlrd.open_workbook(file)
