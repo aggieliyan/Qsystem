@@ -96,7 +96,7 @@ def case_list(request,pid):
 			cmodule = cmodule.filter(**kwargs)
 			mcase = testcase.objects.filter(category__in = subset)
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
-			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")			
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))		
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			rresult = caseresult
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
@@ -170,7 +170,7 @@ def case_list(request,pid):
 			subset = list(set(subset2).union(set(subset3)))		
 			subset.append(pid)				
 		cmodule = cmodule.filter(category__in = subset)
-		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
+		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
 		allexecutor = caseresult.values_list("executor",flat = True).distinct()
@@ -180,6 +180,10 @@ def case_list(request,pid):
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
+	if not ckeyword:
+		testmodule = testmodule.order_by("m_rank")
+	else:
+		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
 		ccase={}
 		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
@@ -225,7 +229,7 @@ def allcaselist(request):
 				kwargs['action__contains'] = ckeyword.strip()
 			cmodule = cmodule.filter(**kwargs)
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
-			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True)).order_by("m_rank")
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			rresult = caseresult
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
@@ -267,7 +271,7 @@ def allcaselist(request):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
-		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True)).order_by("m_rank")
+		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule,isactived = 1)
 		allexecutor = caseresult.values_list("executor",flat = True).distinct()
@@ -277,6 +281,10 @@ def allcaselist(request):
 	for c in listid:
 		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
 		newresult.append(p)
+	if not ckeyword:
+		testmodule = testmodule.order_by("m_rank")
+	else:
+		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
 		ccase = {}
 		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
