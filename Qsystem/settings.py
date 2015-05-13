@@ -214,7 +214,7 @@ else:
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 # MEDIA_ROOT=os.path.join(BASE_DIR,'case/media/').replace('\\','/')
-# MEDIA_ROOT=os.path.join(BASE_DIR,'case/media/')
+MEDIA_ROOT=os.path.join(BASE_DIR,'case/')
 MEDIA_URL='case/media/' 
 
 LANGUAGE_CODE = 'en-us'

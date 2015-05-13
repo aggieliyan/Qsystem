@@ -8,6 +8,7 @@ from forms import searchForm, UploadForm
 from project.models import user, department
 from project.views import isNone
 from django.db.models import Q
+from Qsystem import settings
 
 #判断是否是技术部分的测试或者开发
 def is_dev(uid):
@@ -565,6 +566,7 @@ def upload_file(request):
 				filepath = uf.upfile
 				uipath = unicode(str(filepath), "utf8")
 				# path=os.path.join(settings.MEDIA_ROOT,'upload')
+				uipath = os.path.join(settings.MEDIA_ROOT,uipath)
 				excel_table_byindex(request,file= uipath, pid = pid)
 				resp['message'] = True
 				# return HttpResponse('upload ok!')
