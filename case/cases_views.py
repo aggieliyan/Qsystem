@@ -96,7 +96,7 @@ def case_list(request,pid):
 			cmodule = cmodule.filter(**kwargs)
 			mcase = testcase.objects.filter(category__in = subset)
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
-			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))			
+			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))		
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			rresult = caseresult
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()

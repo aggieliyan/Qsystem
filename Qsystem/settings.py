@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 Django settings for Qsystem project.
 
@@ -49,9 +50,9 @@ SECRET_KEY = '3oc$^^dt!@ir9)-l27(c3qk10w1=knk$1o7z(w48j30!d)(m0('
 import socket
 
 if socket.gethostname() == 'test':
-    DEBUG = TEMPLATE_DEBUG = False
+    DEBUG = TEMPLATE_DEBUG = True
     ALLOWED_HOSTS = ['*']
-    STATIC_ROOT = '/Django/Qsystem/Qsystem/common/static'
+    STATIC_ROOT = '/Django/Qsystem/allstatic'
     INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -129,7 +130,7 @@ if socket.gethostname() == 'test':
                 'PASSWORD':'as-qa',
                 'HOST':'192.168.3.91',
                 'PORT':'3306',
-             },
+             }, #网站
         'ablesky_examsystem': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ablesky_examsystem',
@@ -137,7 +138,7 @@ if socket.gethostname() == 'test':
                 'PASSWORD':'as-qa',
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                      
-                 },    
+                 }, #考试系统
         'eduadministration': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'eduadministration',
@@ -145,15 +146,15 @@ if socket.gethostname() == 'test':
                 'PASSWORD':'as-qa',
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                      
-                 },  
+                 }, #教务培训系统
         'ablesky_industrytrain': {  
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ablesky_industrytrain',
                 'USER':'qa',
                 'PASSWORD':'as-qa',
-                'HOST':'192.168.204.218',
+                'HOST':'103.17.42.149',
                 'PORT':'3306',  
-                },    
+                },  #行业培训
         'ablesky_log': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ablesky_log',
@@ -161,7 +162,15 @@ if socket.gethostname() == 'test':
                 'PASSWORD':'as-qa',
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                         
-                },      
+                },  #统计客户端登录的库
+        'case': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': 'csystem',
+                'USER':'root',
+                'PASSWORD':'mysqlpwd1',
+                'HOST':'localhost',
+                'PORT':'3306',   
+                    },     
             }            
                                   
                                      
