@@ -206,7 +206,7 @@ else:
 
 # MEDIA_ROOT=os.path.join(BASE_DIR,'case/media/').replace('\\','/')
 # MEDIA_ROOT=os.path.join(BASE_DIR,'case/media/')
-MEDIA_URL='case/media/' 
+MEDIA_URL='/case/' 
 
 LANGUAGE_CODE = 'en-us'
 

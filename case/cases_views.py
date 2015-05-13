@@ -555,29 +555,30 @@ def upload_file(request):
 	try:	
 		if request.method == 'POST':
 			form = UploadForm(request.POST, request.FILES)
-			if form.is_valid():
+			# if form.is_valid():
 				#获取表单信息
-				xlsfile = form.cleaned_data['upfile']
-				filename = xlsfile.name
-				print "xlsfile=",xlsfile
-				#写入数据库
-				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
-				uf.save()
-				filepath = uf.upfile
-				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
-				print uipath
-				# path=os.path.join(settings.MEDIA_ROOT,'upload')
-				excel_table_byindex(request,file= uipath, pid = pid)
-				resp['message'] = True
-				# return HttpResponse('upload ok!')
+			xlsfile = request.POST()
+			# xlsfile = form.cleaned_data['upfile']
+			filename = xlsfile.name
+			print "xlsfile=",xlsfile
+			#写入数据库
+			uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
+			uf.save()
+			filepath = uf.upfile
+			uipath = unicode(str(filepath).replace('/','\\') , "utf8")
+			print uipath
+			# path=os.path.join(settings.MEDIA_ROOT,'upload')
+			excel_table_byindex(request,file= uipath, pid = pid)
+			resp['message'] = True
+			# return HttpResponse('upload ok!')
 		else:
 		    form = UploadForm()
 	except Exception,e:
 		resp['message'] = False
 		print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-	return HttpResponseRedirect(url)
-	# resp = json.dumps(resp)
-	# return HttpResponse(resp)
+	# return HttpResponseRedirect(url)
+	resp = json.dumps(resp)
+	return HttpResponse(resp)
 
 def excel_table_byindex(request, file= '',pid = ''):
 	data = xlrd.open_workbook(file)
