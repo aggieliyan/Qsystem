@@ -555,22 +555,21 @@ def upload_file(request):
 	try:	
 		if request.method == 'POST':
 			form = UploadForm(request.POST, request.FILES)
-			# if form.is_valid():
+			if form.is_valid():
 				#获取表单信息
-			xlsfile = request.POST()
-			# xlsfile = form.cleaned_data['upfile']
-			filename = xlsfile.name
-			print "xlsfile=",xlsfile
-			#写入数据库
-			uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
-			uf.save()
-			filepath = uf.upfile
-			uipath = unicode(str(filepath).replace('/','\\') , "utf8")
-			print uipath
-			# path=os.path.join(settings.MEDIA_ROOT,'upload')
-			excel_table_byindex(request,file= uipath, pid = pid)
-			resp['message'] = True
-			# return HttpResponse('upload ok!')
+				xlsfile = form.cleaned_data['upfile']
+				filename = xlsfile.name
+				print "xlsfile=",xlsfile
+				#写入数据库
+				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
+				uf.save()
+				filepath = uf.upfile
+				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
+				print uipath
+				# path=os.path.join(settings.MEDIA_ROOT,'upload')
+				excel_table_byindex(request,file= uipath, pid = pid)
+				resp['message'] = True
+				# return HttpResponse('upload ok!')
 		else:
 		    form = UploadForm()
 	except Exception,e:
@@ -648,3 +647,4 @@ def file_iterator(file_name, chunk_size=512):
 				yield c
 			else:
 				break
+
