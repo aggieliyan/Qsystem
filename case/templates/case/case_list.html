@@ -161,79 +161,98 @@
         {% for key,dic in item.items %}
         {% for i in testmodule %}
         {% if key == i.id %}
-	    	<tr class="cmodule" rank="{{i.m_rank}}" value="{{key}}">
-	    		<td colspan="11">
-	    			<div>
-	    				<table >
-	    					<tbody>                  
-	    						<tr class="success">
-						    		<td colspan="1" ><input class="modulecheck" type="checkbox" name="checklist"></td>
-						    		<td colspan="9" class="editable">{{i.m_name}}</td>
-						    		<td >
-                      {% if canope %}
-						      			<a class="icon-plus-sign" title="添加模块"></a>
-						      		  <a class="icon-plus" title="添加用例"></a>
-						      		  <a class="icon-trash"></a>
-                        <a class="icon-chevron-up"></a>
-                      {% endif %}
-						    		</td>
-                    
-	    						</tr>
-                  {% endif %}
-                  {% endfor %}
-	    						{% for c in dic %}
-	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
-						    		<td><input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.id}}</td>
-						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
-						      		<td class="editable nodrag">{{c.action}}</td>
-						    		<td class="editable nodrag">{{c.output}}</td>
-						      		<td class="nodrag"><span class="level">{{c.priority}}</span></td>
-                      {% if result %}
-						      		{% for r in result %}
-						      		{% if c.id == r.testcase_id %}
-						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">&nbsp;{{r.result}}</span></td>
-						    		  <td class="editable nodrag save" name="wi">{{r.wi|default_if_none:""}}</td>
-						      		<td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
-						      		<td>{{r.executor}}</td>
-						      		<td class="editable nodrag save" name="remark">{{r.r_remark|default_if_none:""}}</td>
-						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
-						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
-						    		  <td class="editable nodrag save" name="wi"></td>
-						      		<td></td>
-						      		<td></td>
-						      		<td class="editable nodrag save" name="remark"></td>
-
-						      		{% endif %}
-						      		{% endfor %}
-                      {% else %}
-                      <td class="nodrag"><a class="icon-play-circle"></a><span></span></td>
-                      <td class="editable nodrag"></td>
-                      <td></td>
-                      <td></td>
-                      <td class="editable nodrag"></td>
-                      {% endif %}
-                      
-						      		<td class="nodrag">
+          {% if canope %}
+	    	  <tr class="cmodule" rank="{{i.m_rank}}" value="{{key}}">
+          {% else %}
+          <tr class="cmodule nodrag" rank="{{i.m_rank}}" value="{{key}}">
+          {% endif %}
+  	    		<td colspan="11">
+  	    			<div>
+  	    				<table >
+  	    					<tbody>                  
+  	    						<tr class="success">
+  						    		<td colspan="1" ><input class="modulecheck" type="checkbox" name="checklist"></td>
+  						    		<td colspan="9" class="editable">{{i.m_name}}</td>
+  						    		<td >
                         {% if canope %}
-						      			<a class="icon-plus" title="添加用例"></a>
-						      			<a class="icon-download-alt" title="引入用例" href="#casePullModal" data-toggle="modal" id="pullbutton" onclick="pullPop(this)"></a>
-						      			<a class="icon-eye-open" title="查看结果"></a>
-                        <input  value="{{c.id}}" class="checkresult" type="hidden">
-						      			<a class="icon-trash"></a>                        
-                        {% else %}
-                        <a class="icon-eye-open" style="margin-left:10px;" title="查看结果"></a>
-                        <input  value="{{c.id}}" class="checkresult" type="hidden">
+  						      			<a class="icon-plus-sign" title="添加模块"></a>
+  						      		  <a class="icon-plus" title="添加用例"></a>
+  						      		  <a class="icon-trash"></a>
+                          <a class="icon-chevron-up"></a>
                         {% endif %}
-						      		</td>
+  						    		</td>
                       
+  	    						</tr>
+                    {% endif %}
+                    {% endfor %}
+  	    						{% for c in dic %}
+  	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
+                      {% if canope%}
+  						    		  <td>
+                      {% else %}
+                        <td class="nodrag">
+                      {% endif %}<input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.id}}
+                        </td>
+  						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
+  						      		<td class="editable nodrag">{{c.action}}</td>
+  						    		<td class="editable nodrag">{{c.output}}</td>
+  						      		<td class="nodrag"><span class="level">{{c.priority}}</span></td>
+                        {% if result %}
+  						      		{% for r in result %}
+  						      		{% if c.id == r.testcase_id %}
+  						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">&nbsp;{{r.result}}</span></td>
+  						    		  <td class="editable nodrag save" name="wi">{{r.wi|default_if_none:""}}</td>
+                          {% if canope%}
+  						      		  <td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
+  						      		  <td>{{r.executor}}</td>
+                          {% else %}
+                          <td class="nodrag">{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
+                          <td class="nodrag">{{r.executor}}</td>                       
+                          {% endif %}
+  						      		<td class="editable nodrag save" name="remark">{{r.r_remark|default_if_none:""}}</td>
+  						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
+  						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
+  						    		  <td class="editable nodrag save" name="wi"></td>
+                          {% if canope%}
+                          <td></td>
+                          <td></td>
+                          {% else %}
+                          <td class="nodrag"></td>
+                          <td class="nodrag"></td>                       
+                          {% endif %}
+  						      		<td class="editable nodrag save" name="remark"></td>
 
-	    						</tr>
-	    						{% endfor %}						
+  						      		{% endif %}
+  						      		{% endfor %}
+                        {% else %}
+                        <td class="nodrag"><a class="icon-play-circle"></a><span></span></td>
+                        <td class="editable nodrag"></td>
+                        <td></td>
+                        <td></td>
+                        <td class="editable nodrag"></td>
+                        {% endif %}
+                        
+  						      		<td class="nodrag">
+                          {% if canope %}
+  						      			<a class="icon-plus" title="添加用例"></a>
+  						      			<a class="icon-download-alt" title="引入用例" href="#casePullModal" data-toggle="modal" id="pullbutton" onclick="pullPop(this)"></a>
+  						      			<a class="icon-eye-open" title="查看结果"></a>
+                          <input  value="{{c.id}}" class="checkresult" type="hidden">
+  						      			<a class="icon-trash"></a>                        
+                          {% else %}
+                          <a class="icon-eye-open" style="margin-left:10px;" title="查看结果"></a>
+                          <input  value="{{c.id}}" class="checkresult" type="hidden">
+                          {% endif %}
+  						      		</td>
+                        
 
-	    					</tbody>
-	    				</table>
-	    			</div>
-	    		</td>
+  	    						</tr>
+  	    						{% endfor %}						
+
+  	    					</tbody>
+  	    				</table>
+  	    			</div>
+  	    		</td>
 	    	</tr>
         {% endfor %}
         {% endfor %}
