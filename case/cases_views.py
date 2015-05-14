@@ -381,7 +381,7 @@ def update_rank(request):
 	#判断下权限
 	if not is_tester(request.session['id']):
 		resp["success"] = False
-		resp["message"] = "no permit"
+		resp["message"] = "对不起，您没有排序的权限~"
 		resp = json.dumps(resp)
 		return HttpResponse(resp)
 	try:
@@ -408,8 +408,7 @@ def update_rank(request):
 		resp["success"] = True
 	except Exception,e:
 		resp["success"] = False
-		print e
-		# resp["message"] = e
+		resp["message"] = e
 	finally:
 		resp = json.dumps(resp)
 		# print "resp==",resp
@@ -444,7 +443,7 @@ def delete_case(request):
 	#判断下权限
 	if not is_tester(request.session['id']):
 		resp["success"] = False
-		resp["message"] = "no permit"
+		resp["message"] = "对不起,您没有权限删除用例"
 		resp = json.dumps(resp)
 		return HttpResponse(resp)
 
@@ -460,6 +459,7 @@ def delete_case(request):
 		resp["success"] = True
 	except Exception, e:
 		resp["success"] = False
+		resp["message"] = e
 	finally:
 		resp = json.dumps(resp)
 		return HttpResponse(resp)

@@ -81,7 +81,7 @@ function insert_update_rank(celement, cnum){
             if(rs.success){
                 //alert("排序更新成功!");
             }else{
-                alert("sorry,排序更新失败~");
+                alert(rs.message);
             }
         }); 
     }
@@ -148,7 +148,7 @@ function delete_update_rank(celement){
                 if(rs.success){
                     //alert("排序更新成功!");
                 }else{
-                    alert("sorry,排序更新失败~");
+                    alert(rs.message);
                 }
             });
                  
@@ -337,20 +337,9 @@ $(document).ready(function(){
         var caseid = exeico.parents(".mtr").attr("value");
         
         if(caseid !== ""){//有用例id的才可以执行
-            exeico.next().next().remove();
-            var sel = exeico.next();//执行图标后面的元素可能是下拉框，也可能是上回的执行结果,或者什么也没有
-            if(sel.length == 0){//什么也没有的情况下，就生成一个下拉框供用户选择执行结果，并把执行图标隐藏
-                exeico.after(resulthtml);
-                exeico.toggle();       
-            }else{
-                if(sel.attr("class") == "cresult"){//如果后面是下拉框，则把下拉框显示出来
-                    sel.toggle();             
-                }else{//如果后面是执行结果，则生成下拉框，并把执行结果删掉
-                    exeico.after(resulthtml);
-                    sel.remove();//上一轮的结果删掉
-                }
-                exeico.toggle();//隐藏执行图标
-            }
+            exeico.next().remove();
+            exeico.after(resulthtml);
+            exeico.toggle();
             
         }
 
@@ -359,28 +348,38 @@ $(document).ready(function(){
     //选择执行结果
     $(".cresult").live('change', function(){
         var rsdrop = $(this);
+        var thiscell = rsdrop.parent();
+        var exeico = $(this).prev();
         var result = rsdrop.val();
+        if(result == "-"){
+            return;
+        }
         var caseid = rsdrop.parents(".mtr").attr("value");
-        $(this).prev().toggle();//把前面的执行图标显示出来
+        exeico.toggle();//把前面的执行图标显示出来        
         //将结果存入数据库
         url = "/case/executecase/";
         para = {"caseid":caseid, "cresult":result};
         $.post(url, para, function(data){
             var rs = eval('('+data+')');
             if(rs.success){
-                rsdrop.after("<span class=\""+result+"\">&nbsp;"+result+"</span>");//在后面生成结果
-                rsdrop.toggle();//隐藏下拉选择框               
+                rsdrop.before("<span class=\""+result+"\">&nbsp;"+result+"</span>");//在前面生成结果
+/*                rsdrop.toggle();//隐藏下拉选择框*/
+                rsdrop.remove(); 
+                           
 
                 //更新后端返回的执行时间和执行人，备注
-                rsdrop.parent().next().next().text(rs.exedetail.exec_date);
-                rsdrop.parent().next().next().next().text(rs.exedetail.executor);
-                rsdrop.parent().next().next().next().next().html("");
+                thiscell.next().next().text(rs.exedetail.exec_date);
+                thiscell.next().next().next().text(rs.exedetail.executor);
+                thiscell.next().next().next().next().html("");
+                
 
             }else{     
-                rsdrop.toggle();//隐藏下拉选择框 
+/*                rsdrop.toggle();//隐藏下拉选择框 */
+                rsdrop.remove();
                 alert(rs.message);
             }
         });
+
 
     });
 
@@ -451,6 +450,7 @@ $(document).ready(function(){
     //模块拖拽
     $("#caselist tbody").dragsort({
         dragSelector:".cmodule",
+        dragSelectorExclude:".nodrag",
         dragEnd:drag_update_rank,
     });
     //用例拖拽
