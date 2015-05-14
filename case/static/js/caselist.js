@@ -202,7 +202,6 @@ $(document).ready(function(){
             "</tr>"
 
     var resulthtml = "<select class=\"cresult\">"+
-                        "<option>-</option>"+
                         "<option>Pass</option>"+
                         "<option>Fail</option>"+
                         "<option>Block</option>"+
