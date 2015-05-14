@@ -81,7 +81,7 @@ function insert_update_rank(celement, cnum){
             if(rs.success){
                 //alert("排序更新成功!");
             }else{
-                alert("sorry,排序更新失败~");
+                alert(rs.message);
             }
         }); 
     }
@@ -148,7 +148,7 @@ function delete_update_rank(celement){
                 if(rs.success){
                     //alert("排序更新成功!");
                 }else{
-                    alert("sorry,排序更新失败~");
+                    alert(rs.message);
                 }
             });
                  
