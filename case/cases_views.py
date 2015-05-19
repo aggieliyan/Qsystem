@@ -552,40 +552,49 @@ def upload_file(request):
 	url = request.META['HTTP_REFERER']
 	p = re.compile(r'\d+')
 	pid = (p.findall(url))[-1]
+	print "-------------------------"
 	try:	
 		if request.method == 'POST':
 			form = UploadForm(request.POST, request.FILES)
+			print form
 			if form.is_valid():
+				print "-------------------------"
 				#获取表单信息
-				xlsfile = form.cleaned_data['upfile']
+				xlsfile = form.cleaned_data['Filedata']
 				filename = xlsfile.name
 				print "xlsfile=",xlsfile
 				#写入数据库
-				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
+				uf = Upload( Filedata = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
-				filepath = uf.upfile
+				filepath = uf.Filedata
 				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
 				print uipath
 				# path=os.path.join(settings.MEDIA_ROOT,'upload')
-				excel_table_byindex(request,file= uipath, pid = pid)
-				resp['message'] = True
+				cell = excel_table_byindex(request,file= uipath, pid = pid)
+				if len(cell) == 0:
+					resp['success'] = True
+				else:
+					resp['success'] = False
+					resp['message'] = "%s","行数导入失败" % cell
 				# return HttpResponse('upload ok!')
 		else:
 		    form = UploadForm()
 	except Exception,e:
-		resp['message'] = False
+		resp['success'] = False
+		resp['message'] = "%s" % (sys.exc_info()[1])
 		print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
 	# return HttpResponseRedirect(url)
 	resp = json.dumps(resp)
 	return HttpResponse(resp)
 
 def excel_table_byindex(request, file= '',pid = ''):
+	cell = []
 	data = xlrd.open_workbook(file)
 	table = data.sheets()[0]
 	nrows = table.nrows #行数
 	ncols = table.ncols #列数
-	# print "ncols=",ncols
-	# print 'nrows=',nrows
+	print "ncols=",ncols
+	print 'nrows=',nrows
 	key = 0
 	crank = 1 
 	for rownum in range(8,nrows):
@@ -595,23 +604,29 @@ def excel_table_byindex(request, file= '',pid = ''):
 			cinput = row[1]
 			coutput = row[2]
 			cpriority = row[3]
-			if  not cpriority:
+			if  cpriority not in [1,2,3]:
 				cpriority = 2
-			if cpre and  not cinput and not coutput:
-				num = len(casemodule.objects.all())
-				cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
-				cm.save()
-				key = cm.id
-				crank = 1
-			else:
-				if key == 0 :
-					key = '';
-				if cinput and coutput:					
-					newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
-								action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
-								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
-					newcase.save()
-					crank = crank+1;
+			try:				
+				if cpre and  not cinput and not coutput:
+					num = len(casemodule.objects.all())
+					cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
+					cm.save()
+					key = cm.id
+					crank = 1
+				else:
+					if key == 0 :
+						key = '';
+					if cinput and coutput:					
+						newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
+									action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
+									authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
+						newcase.save()
+						crank = crank+1;
+			except Exception,e:
+				cell.append(rownum)
+				pass
+	print cell
+	return cell
 
 from django.http import StreamingHttpResponse
 from django.core.servers.basehttp import FileWrapper 
@@ -632,19 +647,52 @@ def savestream(self):
 	# response['Content-Length'] = os.path.getsize(filename) 
 	# response['Content-Disposition'] = 'attachment; filename= aa.txt'  
 	# return response
-def download(request):
-    # do something...
-	the_file_name = "upload\\aa.xlsx"
-	response = StreamingHttpResponse(file_iterator(the_file_name))
-	response['Content-Type'] = 'application/vnd.ms-excel'
-	response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name)
-	return response
-def file_iterator(file_name, chunk_size=512):
-	with open(file_name) as f:
-		while True:
-			c = f.read(chunk_size)
-			if c:
-				yield c
-			else:
-				break
+# def download(request):
+#     # do something...
+# 	the_file_name = "upload\\aa.xlsx"
+# 	response = StreamingHttpResponse(file_iterator(the_file_name))
+# 	response['Content-Type'] = 'application/vnd.ms-excel'
+# 	response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name)
+# 	return response
+# def file_iterator(file_name, chunk_size=512):
+# 	with open(file_name) as f:
+# 		while True:
+# 			c = f.read(chunk_size)
+# 			if c:
+# 				yield c
+# 			else:
+# 				break
+def upload(file = ''):  
+    '''''图片上传函数'''  
+    if file:              
+        path=os.path.join(settings.MEDIA_ROOT,'upload/case')  
+        file_name=str(uuid.uuid1())+".jpg"        
+        path_file=os.path.join(path,file_name)  
+        parser = ImageFile.Parser()    
+        for chunk in file.chunks():    
+            parser.feed(chunk)    
+        img = parser.close()  
+        try:  
+            if img.mode != "RGB":  
+                img = img.convert("RGB")  
+            img.save(path_file, 'jpeg',quality=100)  
+        except:  
+            return False  
+        return True  
+    return False 
 
+# @csrf_exempt  
+def uploadify_script(request):
+	print "upload------------------------"
+	response=HttpResponse()  
+	response['Content-Type']="text/javascript"  
+	ret="0"          
+	filename = request.FILES("Filedata",None)
+	print filename     
+	if filename:              
+	    if upload(filename):  
+	        ret="1"  
+	    ret="2"  
+	response.write(ret)
+	print response  
+	return response
