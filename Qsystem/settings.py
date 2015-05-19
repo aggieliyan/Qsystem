@@ -202,7 +202,7 @@ else:
                  },
         'case': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'csystem',
+            'NAME': 'case',
             'USER':'root',
             'PASSWORD':'mysqlpwd1',
             'HOST':'localhost',
