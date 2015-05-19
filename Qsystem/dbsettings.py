@@ -25,7 +25,7 @@ class dbrouter(object):
         "Make sure the case app only appears on the 'case' db"
         if model._meta.app_label in ['south']:
             return True
-        if db == 'csystem':
+        if db == 'case':
             return model._meta.app_label == 'case'
         elif model._meta.app_label == 'case':
             return False

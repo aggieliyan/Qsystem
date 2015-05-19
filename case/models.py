@@ -46,5 +46,5 @@ class result(models.Model):
 	isactived = models.IntegerField(max_length=1)
 
 class Upload(models.Model):
-	upfile = models.FileField(upload_to = 'upload/')
+	Filedata = models.FileField(upload_to = 'upload/')
 	uptime = models.DateField(u'上传时间', blank=True, null=True)

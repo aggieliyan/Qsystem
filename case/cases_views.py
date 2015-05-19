@@ -558,12 +558,12 @@ def upload_file(request):
 			form = UploadForm(request.POST, request.FILES)
 			if form.is_valid():
 				#获取表单信息
-				xlsfile = form.cleaned_data['upfile']
+				xlsfile = form.cleaned_data['Filedata']
 				filename = xlsfile.name
 				#写入数据库
-				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
+				uf = Upload( Filedata = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
-				filepath = uf.upfile
+				filepath = uf.Filedata
 				uipath = unicode(str(filepath), "utf8")
 				uipath = os.path.join(settings.MEDIA_ROOT,uipath)
 				excel_table_byindex(request,file= uipath, pid = pid)
@@ -571,7 +571,7 @@ def upload_file(request):
 		else:
 		    form = UploadForm()
 	except Exception,e:
-		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
+		info = "%s" % (sys.exc_info()[1])
 		resp['success'] = False
 		resp['message'] = info
 		# print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
