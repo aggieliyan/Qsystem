@@ -918,21 +918,45 @@ $(document).ready(function(){
         $('#upload').modal('show');
     });
 
-    var form = $('.fload')
-    $('.fileupload').click(function(){        
-        form.submit();
-        $(".fileupload").attr("disabled","true");
-        reminder_html = "<p style = 'color:red;'>正在上传，请耐心等待~~</p>";
+    $('#file_upload').uploadify({ 
+   'swf'  : '/static/jquery/uploadify.swf',
+    'uploader'  : '/case/upload/',  
+    // 'script'    : '/case/upload/',  
+    'cancelImg' : '/static/img/uploadify-cancel.png',  
+    'auto'      : true ,// 
+    'dataType' :'json', 
+    'multi': true,//设置可以上传多个文件  
+    'queueSizeLimit':20,//设置可以同时20个文件  
+    'removeCompleted':false,//  
+    'sizeLimit':10240000,//设置上传文件大小单位kb  
+    'fileTypeExts':'*.xlsx;*.xls;',//设置上传文件类型为excel 
+    'fileTypeDesc':'Excel File', 
+    // 'buttonText': '选择文件'                 
+    'onInit': function () {},
+    'onUploadSuccess' : function(file,data,response) {
+      console.log("上传成功了吗");
+      console.log(file.name);
+      var result = eval('('+data+')'); 
+      console.log(result);      
+      if(result.success){
+        reminder_html = "<p style = 'color:red;'>上传成功！</p>";
         $('.reminder').html(reminder_html);
-        // $(".fileupload").attr("disabled","true");
-        // url = "/case/upload/";
-        // $.post(url,form.serialize(),function(data){
-        //     var result = eval('('+data+')');
-        //     if(result.message){
-        //         alert("ok");
-        //     }else{
-        //         alert("上传失败，请重新上传！");
-        //     }
-        // });   
+      }else{
+        reminder_html = "<p style = 'color:red;'>"+result.message+"</p>";
+        $('.reminder').html(reminder_html);
+      }
+    },
+    'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+      console.log("上传失败");
+      reminder_html = "<p style = 'color:red;'>"+ file.name + ' 上传失败: ' + errorString+"</p>";
+      $('.reminder').html(reminder_html);
+    },  
+    'onSelect' : function(file) {
+      alert('The file ' + file.name + ' was added to the queue.');
+    } ,             
+  });
+
+    $('.fileupload').click(function(){        
+        location.reload();
     });
 });

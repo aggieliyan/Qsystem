@@ -583,7 +583,7 @@ def excel_table_byindex(request, file= '',pid = ''):
 	data = xlrd.open_workbook(file)
 	table = data.sheets()
 	key = 0
-	crank = 1 
+	crank = 1
 	for ctable in table:
 		nrows = ctable.nrows #行数
 		ncols = ctable.ncols #列数		

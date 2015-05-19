@@ -7,18 +7,23 @@
         <h4 class="modal-title" id="myModalLabel">导入用例</h4>
       </div>
       <div class="modal-body">
-	      <div class="container-fluid">
-          <div class="row-fluid">
-            <form class='fload' name='fileload' method="post" enctype="multipart/form-data" accept-charset="utf-8" action="/case/upload/">
-              <input type='file' name='upfile'>
-            </form>
+        <div class="container-fluid">
+          <div class="row-fluid">            
+            <div class="demo-box">  
+              <input id="file_upload" type="file" name="upfile">  
+              <div id="file_uploadQueue" class="uploadifyQueue"></div>  
+              <!-- <p><a href="javascript:$('#file_upload').uploadify('upload')">上传图片</a>  
+              <a href="javascript:$('#file_upload').uploadify('cancel')">取消上传</a>  
+              </p>  --> 
+              <!-- <p><span id="id_span_msg"></span></p> -->  
+            </div>  
             <div class='reminder'>
-            </div>	  
-	        </div>       
+            </div>    
+          </div>       
         </div>
       </div>
     </div>
-	</div>
+  </div>
   <div class="modal-footer">
     <div align="center">
       <button type="button" class="btn btn-success fileupload" data-dismiss="modal">确定</button>
