@@ -16,7 +16,7 @@ class category(models.Model):
 	isactived = models.IntegerField(max_length=1)
     
 class casemodule(models.Model):
-	m_name = models.CharField(u'test模块名称', max_length=30)
+	m_name = models.CharField(u'test模块名称', max_length=100)
 	m_rank = models.IntegerField(u'编号', max_length=5)
 	isactived = models.IntegerField(max_length=1)
 

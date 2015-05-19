@@ -844,14 +844,14 @@ $(document).ready(function(){
                 input = $.trim(tdata.eq(2).text());
                 output = $.trim(tdata.eq(3).text());
                 mname = $.trim(cm.find(".success").children().eq(1).text());
-                if(mname.length<=0 || mname.length> 30){
+                if(mname.length<=0 || mname.length> 100){
                     cm.find(".success").css('border', "3px solid #f77");
                     $(".savebtn").removeAttr("disabled");
                     alert("模块名称为必填项，长度不能大于30个字符！");
                     flag = false;
                     return false;
                 }
-                if(input.length > 100 || output.length > 100 || !input || !output){
+                if(input.length > 300 || output.length > 300 || !input || !output){
                     node.css("background-color","#ffecec");
                     $(".savebtn").removeAttr("disabled");
                     alert("用例输入、期望输出为必填项，长度不能大于100个字符！");
@@ -872,7 +872,7 @@ $(document).ready(function(){
                 mtrnode = (node.parent(".cmodule").find(".mtr").find("input[name=\"checklist\"]:checked"));
                  if (mtrnode.length == 0){
                     cmname = $.trim(cm.find(".success").children().eq(1).text());
-                    if(cmname.length>0 && cmname.length <= 30){
+                    if(cmname.length>0 && cmname.length <= 100){
                         datadic = {"mname":cmname,"mrank":cm.attr("rank"),"id":-3};
                         j=0;
                         casejson = []; 
