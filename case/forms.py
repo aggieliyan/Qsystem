@@ -33,7 +33,7 @@ class del_procateForm(forms.Form):
 	procate_id_del = forms.IntegerField(required=False)	
 
 class UploadForm(forms.Form):
-	Filedata = forms.FileField()
+	upfile = forms.FileField()
 	uptime = forms.DateField(required=False)
 
 	# def handle_uploaded_file(f):

@@ -560,29 +560,29 @@ def upload_file(request):
 			if form.is_valid():
 				print "-------------------------"
 				#获取表单信息
-				xlsfile = form.cleaned_data['Filedata']
+				xlsfile = form.cleaned_data['upfile']
 				filename = xlsfile.name
 				print "xlsfile=",xlsfile
 				#写入数据库
-				uf = Upload( Filedata = xlsfile, uptime = datetime.datetime.now()) 
+				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
-				filepath = uf.Filedata
+				filepath = uf.upfile
 				uipath = unicode(str(filepath).replace('/','\\') , "utf8")
 				print uipath
 				# path=os.path.join(settings.MEDIA_ROOT,'upload')
 				cell = excel_table_byindex(request,file= uipath, pid = pid)
+				print cell
 				if len(cell) == 0:
 					resp['success'] = True
 				else:
 					resp['success'] = False
-					resp['message'] = "%s","行数导入失败" % cell
+					resp['message'] = cell,"行导入失败,请检查相应内容"
 				# return HttpResponse('upload ok!')
 		else:
 		    form = UploadForm()
 	except Exception,e:
 		resp['success'] = False
 		resp['message'] = "%s" % (sys.exc_info()[1])
-		print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
 	# return HttpResponseRedirect(url)
 	resp = json.dumps(resp)
 	return HttpResponse(resp)
@@ -597,6 +597,7 @@ def excel_table_byindex(request, file= '',pid = ''):
 	print 'nrows=',nrows
 	key = 0
 	crank = 1 
+	snum = 0
 	for rownum in range(8,nrows):
 		row = table.row_values(rownum)
 		if row:
@@ -621,78 +622,11 @@ def excel_table_byindex(request, file= '',pid = ''):
 									action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
 									authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
 						newcase.save()
+						snum = snum +1;
 						crank = crank+1;
 			except Exception,e:
 				cell.append(rownum)
 				pass
-	print cell
 	return cell
 
-from django.http import StreamingHttpResponse
-from django.core.servers.basehttp import FileWrapper 
-def savestream(self):  
-    import CompoundDoc  
-    doc = CompoundDoc.XlsDoc()  
-    return doc.savestream(self.get_biff_data())
 
-# def download(request):
-	# filename = 'aa.xlsx'
-	# # path = sys.path[0]
-	# # print path
-	# # f = open(filename)
-	# # data = f.read()
-	# # print data
-	# # f.close()
-	# response = HttpResponse(data,'application/vnd.ms-excel')
-	# response['Content-Length'] = os.path.getsize(filename) 
-	# response['Content-Disposition'] = 'attachment; filename= aa.txt'  
-	# return response
-# def download(request):
-#     # do something...
-# 	the_file_name = "upload\\aa.xlsx"
-# 	response = StreamingHttpResponse(file_iterator(the_file_name))
-# 	response['Content-Type'] = 'application/vnd.ms-excel'
-# 	response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name)
-# 	return response
-# def file_iterator(file_name, chunk_size=512):
-# 	with open(file_name) as f:
-# 		while True:
-# 			c = f.read(chunk_size)
-# 			if c:
-# 				yield c
-# 			else:
-# 				break
-def upload(file = ''):  
-    '''''图片上传函数'''  
-    if file:              
-        path=os.path.join(settings.MEDIA_ROOT,'upload/case')  
-        file_name=str(uuid.uuid1())+".jpg"        
-        path_file=os.path.join(path,file_name)  
-        parser = ImageFile.Parser()    
-        for chunk in file.chunks():    
-            parser.feed(chunk)    
-        img = parser.close()  
-        try:  
-            if img.mode != "RGB":  
-                img = img.convert("RGB")  
-            img.save(path_file, 'jpeg',quality=100)  
-        except:  
-            return False  
-        return True  
-    return False 
-
-# @csrf_exempt  
-def uploadify_script(request):
-	print "upload------------------------"
-	response=HttpResponse()  
-	response['Content-Type']="text/javascript"  
-	ret="0"          
-	filename = request.FILES("Filedata",None)
-	print filename     
-	if filename:              
-	    if upload(filename):  
-	        ret="1"  
-	    ret="2"  
-	response.write(ret)
-	print response  
-	return response
