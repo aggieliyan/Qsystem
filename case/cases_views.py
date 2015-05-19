@@ -541,7 +541,8 @@ def savecase(request):
 	except Exception,e: 
 		import sys 
 		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-		dict['message']=False
+		dict['success']=False
+		dict['message']=info
 		print e,info
 	finally:
 		cjson=json.dumps(dict) 
@@ -559,56 +560,54 @@ def upload_file(request):
 				#获取表单信息
 				xlsfile = form.cleaned_data['upfile']
 				filename = xlsfile.name
-				print "xlsfile=",xlsfile
 				#写入数据库
 				uf = Upload( upfile = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
 				filepath = uf.upfile
 				uipath = unicode(str(filepath), "utf8")
-				# path=os.path.join(settings.MEDIA_ROOT,'upload')
 				uipath = os.path.join(settings.MEDIA_ROOT,uipath)
 				excel_table_byindex(request,file= uipath, pid = pid)
-				resp['message'] = True
-				# return HttpResponse('upload ok!')
+				resp['success'] = True
 		else:
 		    form = UploadForm()
 	except Exception,e:
-		resp['message'] = False
-		print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-	return HttpResponseRedirect(url)
-	# resp = json.dumps(resp)
-	# return HttpResponse(resp)
+		info = "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
+		resp['success'] = False
+		resp['message'] = info
+		# print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
+	# return HttpResponseRedirect(url)
+	resp = json.dumps(resp)
+	return HttpResponse(resp)
 
 def excel_table_byindex(request, file= '',pid = ''):
 	data = xlrd.open_workbook(file)
-	table = data.sheets()[0]
-	nrows = table.nrows #行数
-	ncols = table.ncols #列数
-	# print "ncols=",ncols
-	# print 'nrows=',nrows
+	table = data.sheets()
 	key = 0
 	crank = 1 
-	for rownum in range(8,nrows):
-		row = table.row_values(rownum)
-		if row:
-			cpre = row[0]
-			cinput = row[1]
-			coutput = row[2]
-			cpriority = row[3]
-			if  not cpriority:
-				cpriority = 2
-			if cpre and  not cinput and not coutput:
-				num = len(casemodule.objects.all())
-				cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
-				cm.save()
-				key = cm.id
-				crank = 1
-			else:
-				if key == 0 :
-					key = '';
-				if cinput and coutput:					
-					newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
-								action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
-								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
-					newcase.save()
-					crank = crank+1;
+	for ctable in table:
+		nrows = ctable.nrows #行数
+		ncols = ctable.ncols #列数		
+		for rownum in range(8,nrows):
+			row = ctable.row_values(rownum)
+			if row:
+				cpre = row[0]
+				cinput = row[1]
+				coutput = row[2]
+				cpriority = row[3]
+				if  cpriority not in [1,2,3]:
+					cpriority = 2
+				if cpre and  not cinput and not coutput:
+					num = len(casemodule.objects.all())
+					cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
+					cm.save()
+					key = cm.id
+					crank = 1
+				else:
+					if key == 0 :
+						key = '';
+					if cinput and coutput:					
+						newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
+									action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
+									authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
+						newcase.save()
+						crank = crank+1;
