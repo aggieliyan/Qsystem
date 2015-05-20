@@ -934,6 +934,10 @@ $(document).ready(function(){
         // 'buttonText': '选择文件'                 
         // 'onInit': function () {},
         //返回一个错误，选择文件的时候触发
+        'onUploadStart' : function(file) {
+            reminder_html = "<p style = 'color:red;'>正在上传请耐心等待,不要关闭弹框~~</p>";
+            $('.reminder').html(reminder_html);
+        },
         'onSelectError': function (file, errorCode, errorMsg) {
             switch (errorCode) {
                 case -100:
