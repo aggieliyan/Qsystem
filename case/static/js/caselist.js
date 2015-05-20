@@ -917,43 +917,60 @@ $(document).ready(function(){
     $(".fileload").click(function(){
         $('#upload').modal('show');
     });
-
-    $('#file_upload').uploadify({ 
-   'swf'  : '/static/jquery/uploadify.swf',
-    'uploader'  : '/case/upload/',  
-    // 'script'    : '/case/upload/',  
-    'cancelImg' : '/static/img/uploadify-cancel.png',  
-    'auto'      : true ,// 
-    'dataType' :'json', 
-    'multi': true,//设置可以上传多个文件  
-    'queueSizeLimit':20,//设置可以同时20个文件  
-    'removeCompleted':false,//  
-    'sizeLimit':10240000,//设置上传文件大小单位kb  
-    'fileTypeExts':'*.xlsx;*.xls;',//设置上传文件类型为excel 
-    'fileTypeDesc':'Excel File', 
-    // 'buttonText': '选择文件'                 
-    'onInit': function () {},
-    'onUploadSuccess' : function(file,data,response) {
-      console.log("上传成功了吗");
-      console.log(file.name);
-      var result = eval('('+data+')'); 
-      console.log(result);      
-      if(result.success){
-        reminder_html = "<p style = 'color:red;'>上传成功！</p>";
-        $('.reminder').html(reminder_html);
-      }else{
-        reminder_html = "<p style = 'color:red;'>"+result.message+"</p>";
-        $('.reminder').html(reminder_html);
-      }
-    },
-    'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-      console.log("上传失败");
-      reminder_html = "<p style = 'color:red;'>"+ file.name + ' 上传失败: ' + errorString+"</p>";
-      $('.reminder').html(reminder_html);
-    },  
-    'onSelect' : function(file) {
-      alert('The file ' + file.name + ' was added to the queue.');
-    } ,             
+//异步上传文件，使用uploadify插件，使用方法参见官方文档
+    $('#file_upload').uploadify({
+        'debug': false,
+        'swf'  : '/static/jquery/uploadify.swf',
+        'uploader'  : '/case/upload/',  
+        // 'script'    : '/case/upload/',  
+        'cancelImg' : '/static/img/uploadify-cancel.png',  
+        'auto'      : true , 
+        'multi': false,//设置可以上传多个文件  
+        // 'queueSizeLimit':20,//设置可以同时20个文件  
+        'removeCompleted':false,//  
+        // 'sizeLimit':10240000,//设置上传文件大小单位kb  
+        'fileTypeExts':'*.xlsx;*.xls;',//设置上传文件类型为excel 
+        'fileTypeDesc':'Excel File', 
+        // 'buttonText': '选择文件'                 
+        // 'onInit': function () {},
+        //返回一个错误，选择文件的时候触发
+        'onSelectError': function (file, errorCode, errorMsg) {
+            switch (errorCode) {
+                case -100:
+                    alert("上传的文件数量已经超出系统限制的" + $('#file_upload').uploadify('settings', 'queueSizeLimit') + "个文件！");
+                    break;
+                case -110:
+                    alert("文件 [" + file.name + "] 大小超出系统限制的" + $('#file_upload').uploadify('settings', 'fileSizeLimit') + "大小！");
+                    break;
+                case -120:
+                    alert("文件 [" + file.name + "] 大小异常！");
+                    break;
+                case -130:
+                    reminder_html = "<p style = 'color:red;'>"+file.name + "  类型不正确,必须为xlsx、xls格式文件</p>";
+                    $('.reminder').html(reminder_html);
+                    break;
+            }
+        },
+        'onUploadSuccess' : function(file,data,response) {
+            var result = eval('('+data+')');      
+            if(result.success){
+                reminder_html = "<p style = 'color:red;'>成功上传!</p>";
+                $('.reminder').html(reminder_html);
+            }else{
+                reminder_html = "<p style = 'color:red;'>"+result.message+"</p>";
+                $('.reminder').html(reminder_html);
+            }
+        },
+        'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+          console.log("上传失败");
+          reminder_html = "<p style = 'color:red;'>"+ file.name + ' 上传失败: ' + errorString+","+errorCode+"</p>";
+          $('.reminder').html(reminder_html);
+        },  
+        //检测FLASH失败调用
+        'onFallback': function () {
+            reminder_html = "<p style = 'color:red;'>您未安装FLASH控件,请安装FLASH控件后再试</p>";
+            $('.reminder').html(reminder_html);
+        },             
   });
 
     $('.fileupload').click(function(){        

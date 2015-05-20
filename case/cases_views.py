@@ -575,7 +575,10 @@ def upload_file(request):
 		resp['success'] = False
 		resp['message'] = info
 		# print e, "%s || %s" % (sys.exc_info()[0], sys.exc_info()[1])
-	# return HttpResponseRedirect(url)
+	# finally:
+	# 	# resp['snum'] = count[0]
+	# 	# resp['fnum'] = count[1]
+	# 	print resp
 	resp = json.dumps(resp)
 	return HttpResponse(resp)
 
@@ -584,30 +587,38 @@ def excel_table_byindex(request, file= '',pid = ''):
 	table = data.sheets()
 	key = 0
 	crank = 1
+	snum = allnum = 0
+	count = []		
 	for ctable in table:
 		nrows = ctable.nrows #行数
-		ncols = ctable.ncols #列数		
-		for rownum in range(8,nrows):
-			row = ctable.row_values(rownum)
-			if row:
-				cpre = row[0]
-				cinput = row[1]
-				coutput = row[2]
-				cpriority = row[3]
-				if  cpriority not in [1,2,3]:
-					cpriority = 2
-				if cpre and  not cinput and not coutput:
-					num = len(casemodule.objects.all())
-					cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
-					cm.save()
-					key = cm.id
-					crank = 1
-				else:
-					if key == 0 :
-						key = '';
-					if cinput and coutput:					
-						newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
-									action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
-									authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
-						newcase.save()
-						crank = crank+1;
+		ncols = ctable.ncols #列数
+		if nrows >= 7 and ctable.cell(7,0).value == u'结构|用户角色':
+			for rownum in range(8,nrows):
+				row = ctable.row_values(rownum) 
+				if row:
+					cpre = row[0]
+					cinput = row[1]
+					coutput = row[2]
+					cpriority = row[3]
+					if  cpriority not in [1,2,3]:
+						cpriority = 2
+					if cpre and  not cinput and not coutput:
+						num = len(casemodule.objects.all())
+						cm = casemodule(m_name = cpre, m_rank = num, isactived = 1)
+						cm.save()
+						key = cm.id
+						crank = 1
+					else:
+						allnum = allnum + 1
+						if key == 0 :
+							key = '';
+						if cinput and coutput:					
+							newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
+										action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
+										authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
+							newcase.save()
+							snum = snum + 1;
+							crank = crank+1;
+	count.append(snum)
+	count.append(allnum-snum)
+	# return count
