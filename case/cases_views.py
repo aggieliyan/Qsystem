@@ -393,20 +393,26 @@ def update_rank(request):
 
 		if int(module_id):#更新用例rank
 			for key in rank_dict.keys():
-				tc = testcase.objects.get(id=key)
+				# tc = testcase.objects.get(id=key)
+				# if int(module_id) != -1:
+				# 	tc.module_id = module_id
+				# tc.rank = rank_dict[key]
+				# tc.save()
 				if int(module_id) != -1:
-					tc.module_id = module_id
-				tc.rank = rank_dict[key]
+					testcase.objects.filter(id=key).update(module_id=module_id, rank=rank_dict[key])
+				else:
+					testcase.objects.filter(id=key).update(rank=rank_dict[key])
 
-				tc.save()
+				
 		else:#更新模块rank
 			for key in rank_dict.keys():
-				md = casemodule.objects.get(id=key)
-				md.m_rank = rank_dict[key]
-				md.save()
+				# md = casemodule.objects.get(id=key)
+				# md.m_rank = rank_dict[key]
+				# md.save()
+				casemodule.objects.filter(id=key).update(m_rank=rank_dict[key])
 			
 		resp["success"] = True
-	except Exception,e:
+	except Exception, e:
 		resp["success"] = False
 		resp["message"] = e
 	finally:
