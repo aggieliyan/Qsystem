@@ -392,6 +392,8 @@ def update_rank(request):
 		# rank_list = sorted(rank_dict.items(), key=lambda d: d[1])
 
 		if int(module_id):#更新用例rank
+			if int(module_id) != -1:
+				m = casemodule.objects.get(id=module_id)
 			for key in rank_dict.keys():
 				# tc = testcase.objects.get(id=key)
 				# if int(module_id) != -1:
@@ -399,7 +401,7 @@ def update_rank(request):
 				# tc.rank = rank_dict[key]
 				# tc.save()
 				if int(module_id) != -1:
-					testcase.objects.filter(id=key).update(module_id=module_id, rank=rank_dict[key])
+					testcase.objects.filter(id=key).update(module=m, rank=rank_dict[key])
 				else:
 					testcase.objects.filter(id=key).update(rank=rank_dict[key])
 
@@ -432,9 +434,10 @@ def moduledel(request):
 
 	mid = request.POST['mid']
 	try:
-		delmodule = get_object_or_404(casemodule, pk=int(mid))
-		delmodule.isactived = 0
-		delmodule.save()
+		# delmodule = get_object_or_404(casemodule, pk=int(mid))
+		# delmodule.isactived = 0
+		# delmodule.save()
+		casemodule.objects.filter(id=int(mid)).update(isactived=0)
 		# delmodule.delete()
 		resp["success"] = True
 	except Exception,e:
