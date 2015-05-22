@@ -208,7 +208,6 @@ def allcaselist(request):
 	ctestmodule = cpriority = cauthor = cexecutor = cstart_date = cend_date = \
 	cexec_status = ckeyword =  cstatue = cmold = ''
 	cmodule = testcase.objects.filter(isactived = 1)
-	mcase = cmodule
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -229,11 +228,11 @@ def allcaselist(request):
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
 			cmodule = cmodule.filter(**kwargs)
-			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
-			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))
+			testmodule = casemodule.objects.filter(isactived = 1)
+			allmodule = testmodule
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			rresult = caseresult
-			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
+			allexecutor = result.objects.all().values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
 				cmodule = cmodule.filter(module_id__in = testmodule, isactived = 1)
@@ -272,9 +271,9 @@ def allcaselist(request):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
-		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
+		testmodule = casemodule.objects.filter(isactived = 1)
 		allmodule = testmodule
-		caseresult = result.objects.filter(testcase__in = cmodule,isactived = 1)
+		caseresult = result.objects.filter(isactived = 1)
 		allexecutor = caseresult.values_list("executor",flat = True).distinct()
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	count =len(cmodule)
@@ -288,7 +287,7 @@ def allcaselist(request):
 		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
 		ccase = {}
-		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		mcaselist = cmodule.filter(module = m.id).order_by("rank")
 		if len(mcaselist) != 0:
 			ccase[m.id] = mcaselist
 			case.append(ccase)
@@ -335,7 +334,7 @@ def exec_log(request,pid):
 	loglist = result.objects.filter(testcase_id = int(pid))
 	execrecord = list(loglist.values_list("result", flat = True))
 	clist["Pass"] = execrecord.count("Pass")
-	record.append(clist);
+	record.append(clist); 
 	for item in loglist:
 		recorddic = {}
 		recorddic["date"] = (item.exec_date).strftime("%Y-%m-%d %H:%M:%S")

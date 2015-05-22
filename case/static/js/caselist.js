@@ -931,7 +931,8 @@ $(document).ready(function(){
         // 'sizeLimit':10240000,//设置上传文件大小单位kb  
         'fileTypeExts':'*.xlsx;*.xls;',//设置上传文件类型为excel 
         'fileTypeDesc':'Excel File', 
-        // 'buttonText': '选择文件'                 
+        'buttonText': '选择文件' , 
+        // 'buttonClass' :'btn btn-mini',        
         // 'onInit': function () {},
         //返回一个错误，选择文件的时候触发
         'onUploadStart' : function(file) {
