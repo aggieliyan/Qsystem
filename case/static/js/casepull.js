@@ -1,5 +1,6 @@
 /* 为了点击类目将模块信息传给右边下拉菜单，使用全局变量 */
 var m_menu = new Array();
+var position;
 /* 用例列表内容和翻页链接*/
 function ajaxClick(url){
 	$.get(url, function(data, status){
@@ -68,7 +69,9 @@ function pullPop(obj) {
 	$('#select_all_btn').removeAttr("checked");
 	$('#pagenum').val("");
 	
-	$('#cases').val($(obj).parent().parent().attr("value")); //存在哪里引入用例的位置
+	//存在哪里引入用例的位置
+	position = $(obj).parent().parent();
+	
 	var url = "/case/getcases/?page=1/";
 	ajaxClick(url);
 	/* 画左边的类目树 */
@@ -131,7 +134,6 @@ $(document).ready(function(){
 	  });	
 	$('#import_c').click(function(){
 		$('#import_c').attr("disabled", "disabled");
-		precase_id = $('#cases').val();
 		$('#cases').val("");
 		var a = $("#import_list_wrapper tr td label input");
 		for(var i=0;i<a.length;i++){
@@ -162,9 +164,9 @@ $(document).ready(function(){
 			            "<a class=\"icon-trash\"></a>"+
 			        "</td>"+            
 			  "</tr>";
-				}
-				$('.mtr[value='+precase_id+']').after(casehtml);
-				insert_update_rank($('.mtr[value='+precase_id+']').next(),data.length);
+				}				
+	        	position.after(casehtml);
+	        	insert_update_rank(position.next(),data.length);
 			});
 		}
 		$("#casePullModal").modal('hide');
