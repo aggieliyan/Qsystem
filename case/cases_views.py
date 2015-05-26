@@ -607,10 +607,10 @@ def excel_table_byindex(request, file= '',pid = ''):
 			for rownum in range(8,nrows):
 				row = ctable.row_values(rownum) 
 				if row:
-					cpre = row[0]
-					cinput = row[1]
-					coutput = row[2]
-					cpriority = row[3]
+					cpre = row[0].strip()
+					cinput = row[1].strip()
+					coutput = row[2].strip()
+					cpriority = row[3].strip()
 					if  cpriority not in [1,2,3]:
 						cpriority = 2
 					if cpre and  not cinput and not coutput:
