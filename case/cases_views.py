@@ -207,7 +207,6 @@ def allcaselist(request):
 	case = []
 	ctestmodule = cpriority = cauthor = cexecutor = cstart_date = cend_date = \
 	cexec_status = ckeyword =  cstatue = cmold = ''
-	cmodule = testcase.objects.filter(isactived = 1)
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -271,9 +270,10 @@ def allcaselist(request):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
-		testmodule = casemodule.objects.filter(isactived = 1)
-		allmodule = testmodule
-		caseresult = result.objects.filter(isactived = 1)
+		cmodule = testcase.objects.filter(isactived = 1)[:2000]
+		allmodule = casemodule.objects.filter(isactived = 1)
+		testmodule = allmodule.filter(pk__in = set(cmodule.values_list("module", flat = True)))		
+		caseresult = result.objects.filter(testcase__in = list(cmodule), isactived = 1)
 		allexecutor = caseresult.values_list("executor",flat = True).distinct()
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	count =len(cmodule)
@@ -287,7 +287,7 @@ def allcaselist(request):
 		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
 		ccase = {}
-		mcaselist = cmodule.filter(module = m.id).order_by("rank")
+		mcaselist = testcase.objects.filter(module = m.id,isactived = 1).order_by("rank")
 		if len(mcaselist) != 0:
 			ccase[m.id] = mcaselist
 			case.append(ccase)
