@@ -245,9 +245,7 @@
                           <input  value="{{c.id}}" class="checkresult" type="hidden">
                           {% endif %}
   						      		</td>
-                        
-
-  	    						</tr>
+                      </tr>
   	    						{% endfor %}						
 
   	    					</tbody>
@@ -284,6 +282,12 @@
 
         </tbody>
     </table>
+    {% if notice %}
+    <div style = "position:absolute;">
+      <p style = 'color:red;'>{{notice}}</p>
+    </div>
+    {% endif %}
+
     {% if canope %}
     <div class="fixbar">
       <button class="btn btn-warning" id="delbtn">批量删除</button>

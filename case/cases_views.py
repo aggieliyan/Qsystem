@@ -206,7 +206,10 @@ def allcaselist(request):
 	kwargs={}
 	case = []
 	ctestmodule = cpriority = cauthor = cexecutor = cstart_date = cend_date = \
-	cexec_status = ckeyword =  cstatue = cmold = ''
+	cexec_status = ckeyword =  cstatue = cmold = notice = ''
+	testmodule = casemodule.objects.filter(isactived = 1)
+	allmodule = testmodule
+	allexecutor = result.objects.all().values_list("executor",flat = True).distinct()
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -226,12 +229,10 @@ def allcaselist(request):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
-			cmodule = cmodule.filter(**kwargs)
-			testmodule = casemodule.objects.filter(isactived = 1)
-			allmodule = testmodule
+			kwargs['isactived'] = 1
+			cmodule = testcase.objects.filter(**kwargs)			
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			rresult = caseresult
-			allexecutor = result.objects.all().values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
 				cmodule = cmodule.filter(module_id__in = testmodule, isactived = 1)
@@ -270,11 +271,11 @@ def allcaselist(request):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
-		cmodule = testcase.objects.filter(isactived = 1)[:2000]
-		allmodule = casemodule.objects.filter(isactived = 1)
-		testmodule = allmodule.filter(pk__in = set(cmodule.values_list("module", flat = True)))		
-		caseresult = result.objects.filter(testcase__in = list(cmodule), isactived = 1)
-		allexecutor = caseresult.values_list("executor",flat = True).distinct()
+		cmodule = testcase.objects.filter(isactived = 1).values_list("pk",flat=True)[:2000]
+		cmodule = testcase.objects.filter(pk__in = list(cmodule))
+		testmodule = testmodule.filter(pk__in = cmodule.values_list("module", flat = True))		
+		caseresult = result.objects.filter(testcase__in = cmodule, isactived = 1)
+		notice = u"全部用例下最多只显示2000条哈,请使用筛选项查看更多用例~~"
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	count =len(cmodule)
 	newresult = []
@@ -287,13 +288,13 @@ def allcaselist(request):
 		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
 		ccase = {}
-		mcaselist = testcase.objects.filter(module = m.id,isactived = 1).order_by("rank")
+		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
 		if len(mcaselist) != 0:
 			ccase[m.id] = mcaselist
 			case.append(ccase)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
-		                      "cend_date":cend_date, "canope": False, "allexecutor":allexecutor})
+		                      "cend_date":cend_date, "canope": False, "allexecutor":allexecutor, "notice":notice})
 
 
 def categorysearch(request):
