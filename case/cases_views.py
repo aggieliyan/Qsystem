@@ -50,18 +50,25 @@ def case_list(request,pid):
 		return HttpResponseRedirect("/case/login")
 	#权限判断
 	canope = True
+	child = category.objects.filter(parent_id = int(pid))
+	notice = ''
 	if not is_tester(request.session['id']):
 		canope =  False
 	else:
-		child = category.objects.filter(parent_id = int(pid))
 		if len(child):
 			canope =  False
+	if len(child) and request.method == "GET":
+		cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:20]
+		cmodule = testcase.objects.filter(pk__in = list(cmodule))
+		notice = u"类目包含子类目时，当前类目下最多只显示2000条哈,请使用筛选项查看更多用例~~"
+		print notice
+	else:
+		cmodule = testcase.objects.filter(isactived = 1)
 	#列表页显示		
 	kwargs={}
 	case = []
 	cate1 = cate2 = cate3 = categoryid = ctestmodule = 	cpriority = cauthor = \
-	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold = ''
-	cmodule = testcase.objects.filter(isactived = 1)
+	cexecutor = cstart_date = cend_date = cexec_status = ckeyword =  cstatue = cmold =  ''
 	if request.method == "POST":
 		search = searchForm(request.POST)
 		if search.is_valid():
@@ -195,7 +202,7 @@ def case_list(request,pid):
 	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
-		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "allexecutor":allexecutor})
+		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "allexecutor":allexecutor, "notice":notice})
 
 def allcaselist(request):
 
