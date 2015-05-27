@@ -60,7 +60,7 @@ def case_list(request,pid):
 	if len(child) and request.method == "GET":
 		cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:20]
 		cmodule = testcase.objects.filter(pk__in = list(cmodule))
-		notice = u"类目包含子类目时，当前类目下最多只显示2000条哈,请使用筛选项查看更多用例~~"
+		notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"
 	else:
 		cmodule = testcase.objects.filter(isactived = 1)
 	#列表页显示		
