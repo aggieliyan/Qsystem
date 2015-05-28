@@ -57,12 +57,6 @@ def case_list(request,pid):
 	else:
 		if len(child):
 			canope =  False
-	if len(child) and request.method == "GET":
-		cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:20]
-		cmodule = testcase.objects.filter(pk__in = list(cmodule))
-		notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"
-	else:
-		cmodule = testcase.objects.filter(isactived = 1)
 	#列表页显示		
 	kwargs={}
 	case = []
@@ -92,6 +86,14 @@ def case_list(request,pid):
 			if ctestmodule or cpriority or cauthor or cexecutor or cstart_date or cend_date or \
 			cexec_status or ckeyword or cstatue:
 			    canope =  False
+			    cmodule = testcase.objects.filter(isactived = 1)
+			else:
+				if len(child):
+					cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:2000]
+					cmodule = testcase.objects.filter(pk__in = list(cmodule))
+					notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"
+				else:
+					cmodule = testcase.objects.filter(isactived = 1)
 			if not isNone(pid):
 				kwargs['category__in'] = subset				
 			if not isNone(cauthor):
@@ -175,7 +177,13 @@ def case_list(request,pid):
 			subset2 = list(category.objects.filter(parent_id = pid).values_list("id",flat=True))
 			subset3 = list(category.objects.filter(parent_id__in = subset2))
 			subset = list(set(subset2).union(set(subset3)))		
-			subset.append(pid)				
+			subset.append(pid)
+		if len(child):
+			cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:2000]
+			cmodule = testcase.objects.filter(pk__in = list(cmodule))
+			notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"
+		else:
+			cmodule = testcase.objects.filter(isactived = 1)				
 		cmodule = cmodule.filter(category__in = subset)
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		allmodule = testmodule
@@ -229,14 +237,20 @@ def allcaselist(request):
 			cend_date = search.cleaned_data['end_date']
 			cexec_status = search.cleaned_data['exec_status']
 			ckeyword = search.cleaned_data['keyword']
+			if ctestmodule or cpriority or cauthor or cexecutor or cstart_date or cend_date or \
+			cexec_status or ckeyword or cstatue:
+			    cmodule = testcase.objects.filter(isactived = 1)
+			else:
+				cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:2000]
+				cmodule = testcase.objects.filter(pk__in = list(cmodule))
+				notice = u"全部用例下最多只显示2000条哈,请使用筛选项查看更多用例~~"
 			if not isNone(cauthor):
 				kwargs['authorid'] =  cauthor
 			if not isNone(cpriority):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
-			kwargs['isactived'] = 1
-			cmodule = testcase.objects.filter(**kwargs)			
+			cmodule = cmodule.filter(**kwargs)			
 			caseresult = result.objects.filter(testcase__in = cmodule)
 			rresult = caseresult
 			if not isNone(ctestmodule):
@@ -277,7 +291,7 @@ def allcaselist(request):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
-		cmodule = testcase.objects.filter(isactived = 1).values_list("pk",flat=True)[:2000]
+		cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk",flat=True)[:2000]
 		cmodule = testcase.objects.filter(pk__in = list(cmodule))
 		testmodule = testmodule.filter(pk__in = cmodule.values_list("module", flat = True))		
 		caseresult = result.objects.filter(testcase__in = cmodule, isactived = 1)
