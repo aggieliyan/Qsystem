@@ -83,19 +83,17 @@ def case_list(request,pid):
 			subset3 = list(category.objects.filter(parent_id__in = subset2))
 			subset = list(set(subset2).union(set(subset3)))
 			subset.append(pid)
+			cmodule = testcase.objects.filter(category__in = subset, isactived = 1)
 			if ctestmodule or cpriority or cauthor or cexecutor or cstart_date or cend_date or \
 			cexec_status or ckeyword or cstatue:
 			    canope =  False
-			    cmodule = testcase.objects.filter(isactived = 1)
 			else:
 				if len(child):
-					cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:2000]
+					cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:2000]
 					cmodule = testcase.objects.filter(pk__in = list(cmodule))
 					notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"
-				else:
-					cmodule = testcase.objects.filter(isactived = 1)
-			if not isNone(pid):
-				kwargs['category__in'] = subset				
+			# if not isNone(pid):
+			# 	kwargs['category__in'] = subset				
 			if not isNone(cauthor):
 				kwargs['authorid'] = cauthor
 			if not isNone(cpriority):
@@ -178,13 +176,11 @@ def case_list(request,pid):
 			subset3 = list(category.objects.filter(parent_id__in = subset2))
 			subset = list(set(subset2).union(set(subset3)))		
 			subset.append(pid)
+			cmodule = testcase.objects.filter(category__in = subset, isactived = 1)
 		if len(child):
-			cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:2000]
+			cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:2000]
 			cmodule = testcase.objects.filter(pk__in = list(cmodule))
-			notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"
-		else:
-			cmodule = testcase.objects.filter(isactived = 1)				
-		cmodule = cmodule.filter(category__in = subset)
+			notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"		
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
