@@ -627,7 +627,7 @@ def excel_table_byindex(request, file= '',pid = ''):
 					cpre = row[0].strip()
 					cinput = row[1].strip()
 					coutput = row[2].strip()
-					cpriority = row[3].strip()
+					cpriority = row[3]
 					if  cpriority not in [1,2,3]:
 						cpriority = 2
 					if cpre and  not cinput and not coutput:
