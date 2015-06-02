@@ -167,7 +167,7 @@ def case_list(request,pid):
 				cate3 = clist[-3]
 		except Exception,e:
 			pass
-		#通过链接访问项目时，没有响应项目时，返回全部列表页
+		#通过链接访问项目时，没有项目时，返回全部列表页
 		ppid = len(category.objects.filter(pk = pid))
 		if ppid == 0:
 			return HttpResponseRedirect('/case/caselist')
@@ -560,7 +560,6 @@ def savecase(request):
 							updatecase = testcase.objects.filter(pk = caseid).update(precondition = cpre, \
 								action = cinput, output = couput, priority = cpriority)
 						else:
-							print request.session['realname']
 							newcase = testcase(category_id = pid, rank = crank, module_id = key, precondition = cpre, \
 								action = cinput, output = couput, priority = cpriority, author = request.session['realname'], \
 								authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')

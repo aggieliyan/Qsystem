@@ -310,7 +310,7 @@ $(document).ready(function(){
     });
 
 
-    //双击选择级别
+    //单击选择级别
     $(".level").live('click', function(){
         var tdnode = $(this).parent();
         var tdTest = $(this).text();
@@ -590,9 +590,6 @@ $(document).ready(function(){
             if((areaJson[n-1].slist).length != 0){
                 category2.show();
                 category_select_2();
-                if (!c1){
-                    $(".cate").attr("value",'aa');
-                }
                 $(".cate1").attr("value",category1.children().eq(preoption.length).val());
             };
         }else{
@@ -847,7 +844,7 @@ $(document).ready(function(){
                 if(mname.length<=0 || mname.length> 100){
                     cm.find(".success").css('border', "3px solid #f77");
                     $(".savebtn").removeAttr("disabled");
-                    alert("模块名称为必填项，长度不能大于30个字符！");
+                    alert("模块名称为必填项，长度不能大于100个字符！");
                     flag = false;
                     return false;
                 }
@@ -967,7 +964,6 @@ $(document).ready(function(){
             }
         },
         'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-          console.log("上传失败");
           reminder_html = "<p style = 'color:red;'>"+ file.name + ' 上传失败: ' + errorString+","+errorCode+"</p>";
           $('.reminder').html(reminder_html);
         },  
