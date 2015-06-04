@@ -478,11 +478,6 @@ def delete_case(request):
 		deleteid.remove('')
 	
 	try:
-		# for did in deleteid:
-		# 	if len(did):
-				# delcase = get_object_or_404(testcase, pk=int(did))
-				# delcase.isactived = 0
-				# delcase.save()
 		testcase.objects.filter(id__in = deleteid).update(isactived=0)		
 		resp["success"] = True
 	except Exception, e:
