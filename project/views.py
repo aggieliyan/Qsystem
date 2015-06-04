@@ -852,8 +852,8 @@ def project_list(request):
                 u_name = u_name + ' ' + u.username.realname
         l.append(u_name)   
         if org.status_p !=u'暂停' and org.status_p != u'已上线' :
-            time = datetime.datetime.now()
-            nowtime=time.strftime("%Y-%m-%d ") 
+            curtime = datetime.datetime.now()
+            nowtime = curtime.strftime("%Y-%m-%d ") 
             expect_date = org.expect_launch_date
             if org.expect_launch_date and org.status_p != u'运营推广' and expect_date.strftime("%Y-%m-%d ") < nowtime:
                 stu_col = "style=background-color:#ff9933"
