@@ -9,6 +9,7 @@ from project.models import user, department
 from project.views import isNone
 from django.db.models import Q
 from Qsystem import settings
+import time
 
 #判断是否是技术部分的测试或者开发
 def is_dev(uid):
@@ -45,6 +46,7 @@ def has_children(request):
 		return HttpResponse(resp)
 
 def case_list(request,pid):
+	print 'start---', time.ctime()
 	#没登陆的提示去登录
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect("/case/login")
@@ -83,7 +85,10 @@ def case_list(request,pid):
 			subset3 = list(category.objects.filter(parent_id__in = subset2))
 			subset = list(set(subset2).union(set(subset3)))
 			subset.append(pid)
+			print 'get alltestcase---start', time.ctime()
 			cmodule = testcase.objects.filter(category__in = subset, isactived = 1)
+			print 'get alltestcase---end', time.ctime()
+			
 			if ctestmodule or cpriority or cauthor or cexecutor or cstart_date or cend_date or \
 			cexec_status or ckeyword or cstatue:
 			    canope =  False
@@ -149,20 +154,20 @@ def case_list(request,pid):
 	else:
 		try:
 			clist = []
-			first = get_object_or_404(category,pk = int(pid))
+			first = get_object_or_404(category, pk=int(pid))
 			clist.append(int(pid))
 			if first.parent_id != 0:
 				clist.append(first.parent_id)
-				second = get_object_or_404(category,pk = first.parent_id)
+				second = get_object_or_404(category, pk= first.parent_id)
 				if second.parent_id !=0:
 					clist.append(second.parent_id)
 			catelen = len(clist)
 			if catelen:
 				cate1 = clist[-1]
-				catelen = catelen-1;
+				catelen = catelen - 1;
 			if catelen:
 				cate2 = clist[-2]
-				catelen = catelen-1;
+				catelen = catelen - 1;
 			if catelen:
 				cate3 = clist[-3]
 		except Exception,e:
@@ -208,6 +213,7 @@ def case_list(request,pid):
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "allexecutor":allexecutor, "notice":notice})
 
 def allcaselist(request):
+	print 'start---', time.ctime()
 
 	#没登陆的提示去登录
 	if not request.user.is_authenticated():
@@ -235,19 +241,26 @@ def allcaselist(request):
 			ckeyword = search.cleaned_data['keyword']
 			if ctestmodule or cpriority or cauthor or cexecutor or cstart_date or cend_date or \
 			cexec_status or ckeyword or cstatue:
-			    cmodule = testcase.objects.filter(isactived = 1)
+				print 'get alltestcase---start1', time.ctime()
+				cmodule = testcase.objects.filter(isactived = 1)
+				print 'get alltestcase---end1', time.ctime()
 			else:
+				print 'get alltestcase---start2', time.ctime()
 				cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:2000]
 				cmodule = testcase.objects.filter(pk__in = list(cmodule))
 				notice = u"全部用例下最多只显示2000条哈,请使用筛选项查看更多用例~~"
+				print 'get alltestcase---end2', time.ctime()
 			if not isNone(cauthor):
 				kwargs['authorid'] =  cauthor
 			if not isNone(cpriority):
 				kwargs['priority'] = cpriority
 			if not isNone(ckeyword):
 				kwargs['action__contains'] = ckeyword.strip()
-			cmodule = cmodule.filter(**kwargs)			
+			print 'get filter---1', time.ctime()
+			cmodule = cmodule.filter(**kwargs)
+			print 'get filter---2', time.ctime()		
 			caseresult = result.objects.filter(testcase__in = cmodule)
+			print 'get filter---3', time.ctime()	
 			rresult = caseresult
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
@@ -308,6 +321,7 @@ def allcaselist(request):
 		if len(mcaselist) != 0:
 			ccase[m.id] = mcaselist
 			case.append(ccase)
+	print 'end-----', time.ctime()
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "canope": False, "allexecutor":allexecutor, "notice":notice})
