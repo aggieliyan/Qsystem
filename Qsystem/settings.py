@@ -104,7 +104,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.gzip.GZipMiddleware', 
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'case.statsmiddleware.StatsMiddleware'
+    # 'case.statsmiddleware.StatsMiddleware'
 
 )
 

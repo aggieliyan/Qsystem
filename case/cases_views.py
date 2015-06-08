@@ -94,9 +94,9 @@ def case_list(request,pid):
 			    canope =  False
 			else:
 				if len(child):
-					cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:2000]
+					cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:1000]
 					cmodule = testcase.objects.filter(pk__in = list(cmodule))
-					notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"
+					notice = u"类目包含子类目时，当前类目下最多只显示1000条哈，请使用筛选项查看更多用例~~"
 			# if not isNone(pid):
 			# 	kwargs['category__in'] = subset				
 			if not isNone(cauthor):
@@ -183,9 +183,9 @@ def case_list(request,pid):
 			subset.append(pid)
 			cmodule = testcase.objects.filter(category__in = subset, isactived = 1)
 		if len(child):
-			cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:2000]
+			cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:1000]
 			cmodule = testcase.objects.filter(pk__in = list(cmodule))
-			notice = u"类目包含子类目时，当前类目下最多只显示2000条哈，请使用筛选项查看更多用例~~"		
+			notice = u"类目包含子类目时，当前类目下最多只显示1000条哈，请使用筛选项查看更多用例~~"		
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
@@ -194,7 +194,7 @@ def case_list(request,pid):
 	count = len(cmodule)
 	newresult = []
 	for c in listid:
-		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
+		p = caseresult.filter(testcase=c).order_by("-exec_date")[0]
 		newresult.append(p)
 	if not ckeyword:
 		testmodule = testmodule.order_by("m_rank")
@@ -204,8 +204,13 @@ def case_list(request,pid):
 		ccase={}
 		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
 		if len(mcaselist) != 0:
-			ccase[m.id] = mcaselist
+			minfo = {}
+			minfo['module'] = m
+			minfo['mcase'] = mcaselist
+			print minfo
+			ccase[m.id] = minfo
 			case.append(ccase)
+
     #字典进行排序，暂不使用
 	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
@@ -246,9 +251,9 @@ def allcaselist(request):
 				print 'get alltestcase---end1', time.ctime()
 			else:
 				print 'get alltestcase---start2', time.ctime()
-				cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:2000]
+				cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:1000]
 				cmodule = testcase.objects.filter(pk__in = list(cmodule))
-				notice = u"全部用例下最多只显示2000条哈,请使用筛选项查看更多用例~~"
+				notice = u"全部用例下最多只显示1000条哈,请使用筛选项查看更多用例~~"
 				print 'get alltestcase---end2', time.ctime()
 			if not isNone(cauthor):
 				kwargs['authorid'] =  cauthor
@@ -300,11 +305,11 @@ def allcaselist(request):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
-		cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk",flat=True)[:2000]
+		cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk",flat=True)[:1000]
 		cmodule = testcase.objects.filter(pk__in = list(cmodule))
 		testmodule = testmodule.filter(pk__in = cmodule.values_list("module", flat = True))		
 		caseresult = result.objects.filter(testcase__in = cmodule, isactived = 1)
-		notice = u"全部用例下最多只显示2000条哈,请使用筛选项查看更多用例~~"
+		notice = u"全部用例下最多只显示1000条哈,请使用筛选项查看更多用例~~"
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	count =len(cmodule)
 	newresult = []
@@ -321,11 +326,17 @@ def allcaselist(request):
 		if len(mcaselist) != 0:
 			ccase[m.id] = mcaselist
 			case.append(ccase)
-	print 'end-----', time.ctime()
+
+	# 	if mcaselist[1:]:
+	# 		minfo = {}
+	# 		minfo['module'] = m
+	# 		minfo['mcase'] = mcaselist
+	# 		ccase[m.id] = minfo
+	# 		case.append(ccase)
+	# print 'end-----', time.ctime()
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "canope": False, "allexecutor":allexecutor, "notice":notice})
-
 
 def categorysearch(request):
 	clist = []

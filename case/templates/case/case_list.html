@@ -160,8 +160,8 @@
         {% if case %}
             {% for item in case %}
                 {% for key, dic in item.items %}
-                    {% for i in testmodule %}
-                        {% if key == i.id %}
+                 {% for i in testmodule %}
+                       {% if key == i.id %}
                             {% if canope %}
                   	    	  <tr class="cmodule" rank="{{i.m_rank}}" value="{{key}}">
                             {% else %}
@@ -183,9 +183,9 @@
                                         {% endif %}
                   						    		</td>  
                   	    						</tr>
-                        {% endif %}
-                    {% endfor %}
-          	        {% for c in dic %}
+                           {% endif %}
+                           {% endfor %} 
+          	                {% for c in dic %}
                   	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
                                       {% if canope%}
                   						    		  <td>
@@ -246,7 +246,6 @@
                   						      		</td>
                                       </tr>
           	    						{% endfor %}						
-
           	    					</tbody>
           	    				</table>
           	    			</div>
@@ -254,7 +253,7 @@
           	    	</tr>
               {% endfor %}
             {% endfor %}
-             {% else %}
+      {% else %}
                 <tr class="cmodule" rank="1" value="">
                   <td colspan="11">
                     <div>
