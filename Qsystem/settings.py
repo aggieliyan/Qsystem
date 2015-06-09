@@ -63,9 +63,9 @@ if socket.gethostname() == 'test':
     'project',
     'case',
     'south',
-    'django_crontab',
+    'django_crontab',  #定时统计任务
 
-#    'pipeline',
+    'pipeline',
 )
     
 else:
@@ -80,12 +80,35 @@ else:
     'django.contrib.staticfiles',
     'project',
     'case',
-    #'pipeline',
+    'pipeline',
     # 'django_crontab',
     # 'debug_toolbar',
 )
 
-#STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+PIPELINE_CSS = {
+    'colors': {
+        'source_filenames': (
+          'css/login.css',
+        ),
+        'output_filename': 'common/css/colors.css',
+        'PIPELINE_CSS_COMPRESSOR': {
+            '',
+        },
+    },
+}
+
+#PIPELINE_JS = {
+#    'stats': {
+#        'source_filenames': (
+#          'common/js/bootstrap.js',
+#        ),
+#        'output_filename': 'common/js/stats.js',
+#        'PIPELINE_JS_COMPRESSOR': {
+#            '',
+#        },
+#    }
+#}
 #STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.FileSystemFinder',
 #    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
