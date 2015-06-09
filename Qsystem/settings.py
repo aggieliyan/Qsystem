@@ -50,7 +50,7 @@ SECRET_KEY = '3oc$^^dt!@ir9)-l27(c3qk10w1=knk$1o7z(w48j30!d)(m0('
 import socket
 
 if socket.gethostname() == 'test':
-    DEBUG = TEMPLATE_DEBUG = True
+    DEBUG = TEMPLATE_DEBUG = False
     ALLOWED_HOSTS = ['*']
     STATIC_ROOT = '/Django/Qsystem/allstatic'
     INSTALLED_APPS = (
