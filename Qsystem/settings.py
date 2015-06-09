@@ -92,7 +92,9 @@ PIPELINE_CSS = {
           'css/login.css',
         ),
         'output_filename': 'css/colors.css',
-      
+        'PIPELINE_JS_COMPRESSOR': {
+                '/usr/bin/yuglify',
+                }
     }
 }
 
