@@ -91,7 +91,7 @@ PIPELINE_CSS = {
         'source_filenames': (
           'css/login.css',
         ),
-        'output_filename': 'css/colors.css',
+        'output_filename': '',
     }
 }
 
