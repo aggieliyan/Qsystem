@@ -86,13 +86,15 @@ else:
 )
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+PIPELINE_YUGLIFY_BINARY = '/usr/local/bin/yuglify'
+
 PIPELINE_CSS = {
     'colors': {
         'source_filenames': (
           'css/login.css',
         ),
         'output_filename': 'css/colors.css',
-        'PIPELINE_CSS_COMPRESSOR': None,
+        
     }
 }
 
