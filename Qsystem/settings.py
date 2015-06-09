@@ -89,13 +89,13 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS = {
     'colors': {
         'source_filenames': (
-          'css/login.css',
+          'css/login.css'
         ),
         'output_filename': 'common/css/colors.css',
         'PIPELINE_CSS_COMPRESSOR': {
-            ''
-        },
-    },
+            
+        }
+    }
 }
 
 #PIPELINE_JS = {
