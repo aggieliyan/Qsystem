@@ -93,7 +93,7 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'css/colors.css',
         'PIPELINE_JS_COMPRESSOR': {
-                '/usr/bin/yuglify',
+                '/usr/bin/yuglify'
                 }
     }
 }
