@@ -93,9 +93,9 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'css/colors.css',
         'PIPELINE_CSS_COMPRESSOR': {
-            ''
-        },
-    },
+            
+        }
+    }
 }
 
 #PIPELINE_JS = {
