@@ -93,7 +93,7 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'common/css/colors.css',
         'PIPELINE_CSS_COMPRESSOR': {
-            '',
+            ''
         },
     },
 }
