@@ -86,7 +86,7 @@ else:
 )
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-PIPELINE_YUGLIFY_BINARY = '/usr/local/bin/yuglify'
+PIPELINE_YUGLIFY_BINARY = '/usr/bin/yuglify'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
         
 PIPELINE_CSS = {
