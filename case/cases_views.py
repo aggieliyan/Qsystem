@@ -46,7 +46,6 @@ def has_children(request):
 		return HttpResponse(resp)
 
 def case_list(request,pid):
-	print 'start---', time.ctime()
 	#没登陆的提示去登录
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect("/case/login")
@@ -201,14 +200,10 @@ def case_list(request,pid):
 	else:
 		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
-		ccase={}
+		ccase = {}
 		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
 		if len(mcaselist) != 0:
-			minfo = {}
-			minfo['module'] = m
-			minfo['mcase'] = mcaselist
-			print minfo
-			ccase[m.id] = minfo
+			ccase[m.id] = mcaselist
 			case.append(ccase)
 
     #字典进行排序，暂不使用
@@ -218,8 +213,6 @@ def case_list(request,pid):
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "allexecutor":allexecutor, "notice":notice})
 
 def allcaselist(request):
-	print 'start---', time.ctime()
-
 	#没登陆的提示去登录
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect("/case/login")
@@ -326,14 +319,6 @@ def allcaselist(request):
 		if len(mcaselist) != 0:
 			ccase[m.id] = mcaselist
 			case.append(ccase)
-
-	# 	if mcaselist[1:]:
-	# 		minfo = {}
-	# 		minfo['module'] = m
-	# 		minfo['mcase'] = mcaselist
-	# 		ccase[m.id] = minfo
-	# 		case.append(ccase)
-	# print 'end-----', time.ctime()
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "canope": False, "allexecutor":allexecutor, "notice":notice})
