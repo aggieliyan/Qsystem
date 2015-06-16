@@ -65,7 +65,7 @@ if socket.gethostname() == 'test':
     'south',
     'django_crontab',  #定时统计任务
 
-    'pipeline',
+    'compressor',
 )
     
 else:
@@ -80,11 +80,12 @@ else:
     'django.contrib.staticfiles',
     'project',
     'case',
-    'pipeline',
+    'compressor',
     # 'django_crontab',
     # 'debug_toolbar',
 )
 
+COMPRESS_ENABLED = True
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_BINARY = '/usr/bin/yuglify'        
@@ -113,11 +114,12 @@ PIPELINE_CSS = {
 #        },
 #    }
 #}
-#STATICFILES_FINDERS = (
-#    'django.contrib.staticfiles.finders.FileSystemFinder',
-#    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'pipeline.finders.PipelineFinder',
-#)
+    'compressor.finders.CompressorFinder',
+)
 
 # Application definition
 
