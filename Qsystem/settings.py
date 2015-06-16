@@ -64,7 +64,6 @@ if socket.gethostname() == 'test':
     'case',
     'south',
     'django_crontab',  #定时统计任务
-
     'compressor',
 )
     
