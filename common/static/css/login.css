@@ -1,6 +1,6 @@
 ﻿.top
 	{
-	    background: url(../img/top.jpg) repeat-x;
+	    background: url(/static/img/top.jpg) repeat-x;
 	    width: 100%;
 	    height: 86px;
         margin: auto;
@@ -33,7 +33,7 @@
 	.backgroud
     {
         float: left;
-	    background: url(../img/backgroud.jpg) no-repeat;
+	    background: url(/static/img/backgroud.jpg) no-repeat;
 	    height: 100%;
 	    width: 100%;
     }
