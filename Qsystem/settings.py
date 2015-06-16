@@ -84,39 +84,13 @@ else:
     # 'debug_toolbar',
 )
 
-COMPRESS_ENABLED = True
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE_YUGLIFY_BINARY = '/usr/bin/yuglify'        
-PIPELINE_YUGLIFY_CSS_ARGUMENTS = ''
-#PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
-#PIPELINE_YUI_BINARY = '/usr/bin/yuicompressor'
 
-PIPELINE_CSS = {
-    'colors': {
-        'source_filenames': (
-          'css/login.css',
-        ),
-        'output_filename': 'css/color.css',
-        
-    }
-}
+COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSMinFilter']
 
-#PIPELINE_JS = {
-#    'stats': {
-#        'source_filenames': (
-#          'common/js/bootstrap.js',
-#        ),
-#        'output_filename': 'common/js/stats.js',
-#        'PIPELINE_JS_COMPRESSOR': {
-#            '',
-#        },
-#    }
-#}
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'pipeline.finders.PipelineFinder',
     'compressor.finders.CompressorFinder',
 )
 
