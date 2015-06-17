@@ -633,12 +633,9 @@
     {% include "selectperson.html" %}     
   {% endblock %}
   {% block js %}
-  {% load compress %}
-  {% compress js %}
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/newproject.min.js?v=20150210"></script>
-  {% endcompress %} 
+    <script type='text/javascript' src="/static/js/newproject.js"></script>
     <script type="text/javascript">   
     $(document).ready(function(){
       $(".icon-plus").live('click', function(){
