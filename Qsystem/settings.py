@@ -84,7 +84,7 @@ else:
     # 'debug_toolbar',
 )
 
-
+COMPRESS_ENABLED = True
 COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSMinFilter']
 COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.JSMinFilter']
 
