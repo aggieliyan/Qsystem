@@ -5,9 +5,16 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=f7f1c7" />
     <meta http-equiv="Content-Language" content="zh-cn" />
 	<link rel="icon" href="/static/img/favicon.ico"  type="image/x-icon">
-	<link href='/static/css/register.min.css?v=20150306' rel='stylesheet' media='screen'>
-    <script language="javascript" type="text/javascript" src="../static/js/register.min.js">
+    {% load compress %}
+    {% compress css %}
+	<link href='/static/css/register.css' rel='stylesheet' media='screen'>
+	{% endcompress %} 
+	
+    {% load compress %}
+    {% compress js %}
+    <script language="javascript" type="text/javascript" src="../static/js/register.js">
     </script>
+    {% endcompress %} 
 </head>
 <body style="margin:0px;">
 	<div class="backgroud">
