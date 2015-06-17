@@ -89,7 +89,7 @@
         line-height: 30px;
         }
       #customers th{
-        background-image: url(../img/list.png);
+        background-image: url("/static/img/list.png");
             height: 30px;
             text-align:center;
         }
