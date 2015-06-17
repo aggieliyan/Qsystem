@@ -6,10 +6,10 @@
     {% load compress %}
     {% compress css %}
     {% block head %}
-    {% endblock %}
-    <link rel="icon" href="/static/img/case/favicon.ico"  type="image/x-icon">
-    <link  href='/static/css/casebase.css?v=20150126' rel='stylesheet' media='screen'>
+    {% endblock %} 
+    <link  href='/static/css/casebase.css' rel='stylesheet' media='screen'>
     {% endcompress %}
+    <link rel="icon" href="/static/img/case/favicon.ico"  type="image/x-icon">
   </head>
   <body>
   	<div class="top">
@@ -38,7 +38,7 @@
     {% endblock %}
     {% compress js %}
     <script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="/static/js/casebase.js?v=20150401"></script>
+    <script type="text/javascript" src="/static/js/casebase.js"></script>
   {% block js %}
   {% endblock %}
   {% endcompress %}
