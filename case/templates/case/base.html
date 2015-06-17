@@ -2,10 +2,14 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}{% endblock %}</title> 
-    {% block head %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+    {% load compress %}
+    {% compress css %}
+    {% block head %}
+    {% endblock %}
     <link rel="icon" href="/static/img/case/favicon.ico"  type="image/x-icon">
-    <link  href='/static/css/casebase.css?v=20150126' rel='stylesheet' media='screen'> 
+    <link  href='/static/css/casebase.css?v=20150126' rel='stylesheet' media='screen'>
+    {% endcompress %}
   </head>
   <body>
   	<div class="top">
@@ -32,9 +36,11 @@
     <p class="basefooter">© 2014 Ablesky, Inc. 版权所有, 能力天空科技（北京）有限公司 </p>
     </div>
     {% endblock %}
+    {% compress js %}
     <script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="/static/js/casebase.js?v=20150401"></script>
   {% block js %}
   {% endblock %}
+  {% endcompress %}
 </body>
 </html>
