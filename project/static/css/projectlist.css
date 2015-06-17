@@ -95,7 +95,7 @@
            
         }
       #customers th{
-        background-image: url(../img/list.png);
+        background-image: url(/static/img/list.png);
             width: 30px;
             text-align:center;
         }
