@@ -1,0 +1,86 @@
+.top {
+	background:url(/static/img/top.jpg) repeat-x;
+	height:86px;
+	width:100%;
+	margin:auto
+}
+.top_logo {
+	margin-left:0;
+	height:86px;
+	width:320px;
+	padding-left:0
+}
+.top_logo a {
+	color:#fff;
+	font-weight:bold;
+	font-size:24px;
+	text-decoration:none
+}
+.top_logo li {
+	float:left;
+	margin-top:5px;
+	padding-right:31px;
+	line-height:85px
+}
+.logo {
+	background-image:url("/static/img/logo.png");
+	width:88px;
+	height:86px;
+	background-position:12px -10px
+}
+.backgroud {
+	background:url(/static/img/backgroud.jpg) no-repeat;
+	height:100%;
+	width:100%
+}
+.backgroud_white {
+	background-color:#fff;
+	height:400px;
+	width:700px;
+	margin-top:65px
+}
+.table {
+	height:34px;
+	width:264px;
+	font_size:5
+}
+#Text_nameid {
+	height:29px;
+	width:266px;
+	font-family:Verdana,Microsoft YaHei,宋体
+}
+#Text_name {
+	height:29px;
+	width:266px;
+	font-family:Verdana,Microsoft YaHei,宋体
+}
+#Text_password {
+	height:29px;
+	width:266px;
+	font-family:Verdana,Microsoft YaHei,宋体
+}
+#Text_confirmpassword {
+	height:29px;
+	width:266px;
+	font-family:Verdana,Microsoft YaHei,宋体
+}
+#Select_part {
+	width:266px;
+	height:32px;
+	font-family:Verdana,Microsoft YaHei,宋体
+}
+#Button_register {
+	border-style:none;
+	border-color:inherit;
+	border-width:0;
+	height:39px;
+	width:98px;
+	background-color:Green;
+	font-family:Verdana,Microsoft YaHei,宋体;
+	font-size:14px;
+	text-shadow:0 1px 1px #1f8ce3
+}
+function echo(stringA,stringB) {
+	var hello="你好";
+	alert("hello world")
+}
