@@ -39,10 +39,10 @@ ul.tree li .arrow {
 	background: transparent no-repeat 0 4px;
 }
 ul.tree li .collapsed {
-	background-image: url(../img/collapsed.gif);
+	background-image: url(/static/img/collapsed.gif);
 }
 ul.tree li .expanded {
-	background-image: url(../img/expanded.gif);
+	background-image: url(/static/img/expanded.gif);
 }
 
 ul.tree li .checkbox {
@@ -52,11 +52,11 @@ ul.tree li .checkbox {
 	margin: 0;
 	cursor: pointer;
 	float: left;
-	background: url(../img/check0.gif) no-repeat 0 0px;
+	background: url(/static/img/check0.gif) no-repeat 0 0px;
 }
 ul.tree li .checked {
-	background-image: url(../img/check2.gif);
+	background-image: url(/static/img/check2.gif);
 }
 ul.tree li .half_checked {
-	background-image: url(../img/check1.gif);
+	background-image: url(/static/img/check1.gif);
 }
