@@ -7,7 +7,7 @@ import models
 import datetime
 from django.http import HttpResponse
 
-def my_scheduled_job(request):
+def my_scheduled_job():
     chart_pro = models.project_statistics.objects.filter(is_graph=1)
     results = []
     for item in chart_pro:
