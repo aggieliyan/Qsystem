@@ -319,5 +319,7 @@ $(document).ready(function(){
         }
     });
 
-
+    $(".icon-plus").live('click', function(){
+        $(this).parent().parent().append("<span class=\"title sqlcss\"></span><span class=\"content\"><input id ='' class=\"sql\" type=\"text\"  maxlength=\"2100\" placeholder=\"请按格式输入'查询项名称：库名：查询语句',一个输入框只可写一句SQL语句\" > <input class=\"is-graph\" type=\"checkbox\" title=\"是否生成趋势图\" > <i class=\"icon-plus\" title=\"再添加一条SQL\" ></i> <i class=\"icon-remove\"></i></span>");
+    });
 });
