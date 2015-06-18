@@ -5,7 +5,7 @@ Created on 2015-2-3
 '''
 import models
 import datetime
-from django.http import HttpResponse
+#from django.http import HttpResponse
 
 def my_scheduled_job():
     chart_pro = models.project_statistics.objects.filter(is_graph=1)
@@ -26,4 +26,4 @@ def my_scheduled_job():
             ps.is_graph = 0
             ps.save()
     models.project_statistics_result.objects.bulk_create(results)
-    return HttpResponse("123")
+#    return HttpResponse("123")
