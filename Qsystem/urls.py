@@ -79,10 +79,10 @@ urlpatterns = patterns('',
     url(r'^sdetail/',project.views.statistics_detail),
     url(r'^statistics_operate', project.views.statistics_operate,name="addoperate'"),
     url(r'^statistics_operate', project.views.statistics_operate,name="\'addoperate\'"),
-    url(r'^sflip/(\d+)$', project.views.sdropdown),
+    url(r'^sflip/(\d+)/$', project.views.sdropdown),
     #statistics
     url(r'^slist/$', project.views.show_slist),
-    url(r'^getsdata/(\d+)$', project.views.sdata),
+    url(r'^getsdata/(\d+)/$', project.views.sdata),
     url(r'^case/', include('case.urls')),
 )
 

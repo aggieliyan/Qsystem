@@ -1,5 +1,5 @@
 function show_graph(pid,id){
-	var url = "/getsdata/" + pid;
+	var url = "/getsdata/" + pid + "/";
 	$.get(url, function(data, status){
 		var json = eval ("(" + data + ")");
 		var i = 0;

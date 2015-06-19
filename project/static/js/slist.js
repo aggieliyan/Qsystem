@@ -11,7 +11,7 @@ $(document).ready(function(){
 			var panel = traicon.parent().parent().next(".panel");
 			if(panel.length == 0){
 				traicon.parent().parent().after("<tr class='row panel'><td id='"+id+"'></td></tr>");
-			    var url = "/sflip/" + pid;
+			    var url = "/sflip/" + pid + "/";
 			    $.get(url, function(data, status){
 				    var datalist = eval ("(" + data + ")");
 				    var num = datalist.length;
