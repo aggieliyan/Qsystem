@@ -93,9 +93,9 @@ def case_list(request,pid):
 			    canope =  False
 			else:
 				if len(child):
-					cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:1000]
+					cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:200]
 					cmodule = testcase.objects.filter(pk__in = list(cmodule))
-					notice = u"类目包含子类目时，当前类目下最多只显示1000条哈，请使用筛选项查看更多用例~~"
+					notice = u"类目包含子类目时，当前类目下最多只显示200条哈，请使用筛选项查看更多用例~~"
 			# if not isNone(pid):
 			# 	kwargs['category__in'] = subset				
 			if not isNone(cauthor):
@@ -182,9 +182,9 @@ def case_list(request,pid):
 			subset.append(pid)
 			cmodule = testcase.objects.filter(category__in = subset, isactived = 1)
 		if len(child):
-			cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:1000]
+			cmodule = cmodule.order_by("-id").values_list("pk", flat = True)[:200]
 			cmodule = testcase.objects.filter(pk__in = list(cmodule))
-			notice = u"类目包含子类目时，当前类目下最多只显示1000条哈，请使用筛选项查看更多用例~~"		
+			notice = u"类目包含子类目时，当前类目下最多只显示200条哈，请使用筛选项查看更多用例~~"		
 		testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module", flat = True))
 		allmodule = testmodule
 		caseresult = result.objects.filter(testcase__in = cmodule)
@@ -244,9 +244,9 @@ def allcaselist(request):
 				print 'get alltestcase---end1', time.ctime()
 			else:
 				print 'get alltestcase---start2', time.ctime()
-				cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:1000]
+				cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk", flat = True)[:200]
 				cmodule = testcase.objects.filter(pk__in = list(cmodule))
-				notice = u"全部用例下最多只显示1000条哈,请使用筛选项查看更多用例~~"
+				notice = u"全部用例下最多只显示200条哈,请使用筛选项查看更多用例~~"
 				print 'get alltestcase---end2', time.ctime()
 			if not isNone(cauthor):
 				kwargs['authorid'] =  cauthor
@@ -298,11 +298,11 @@ def allcaselist(request):
 				cdate = set(cmodule.values_list("id",flat = True))&(set(caseresult.values_list("testcase", flat=True)))
 				cmodule = cmodule.filter(pk__in = cdate,isactived = 1)
 	else:
-		cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk",flat=True)[:1000]
+		cmodule = testcase.objects.filter(isactived = 1).order_by("-id").values_list("pk",flat=True)[:200]
 		cmodule = testcase.objects.filter(pk__in = list(cmodule))
 		testmodule = testmodule.filter(pk__in = cmodule.values_list("module", flat = True))		
 		caseresult = result.objects.filter(testcase__in = cmodule, isactived = 1)
-		notice = u"全部用例下最多只显示1000条哈,请使用筛选项查看更多用例~~"
+		notice = u"全部用例下最多只显示200条哈,请使用筛选项查看更多用例~~"
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	count =len(cmodule)
 	newresult = []
