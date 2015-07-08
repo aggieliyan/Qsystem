@@ -754,7 +754,7 @@ def project_list(request):
             createtag = 1
     #notice
     noticess = public_message.objects.filter(type_p='notice').order_by('-id')
-    count = len(noticess)
+    count = noticess.count()
     notices = noticess[:5]      
     ##
     projectlist = None
@@ -795,6 +795,7 @@ def project_list(request):
             projectlist = models.project.objects.filter().order_by("-status_p","-priority")
     else:
         projectlist = models.project.objects.all().order_by("-status_p","-priority")
+                                           
     if not isNone(project_id):
         project_id=project_id.strip()
         if(project_id.isdigit()):
