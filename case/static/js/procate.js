@@ -31,6 +31,7 @@
     //一级产品模块弹窗
     function add_firprocate(){
 	       $('#project_id').val("");
+	       $('#redmine_proid').val("");
 	       $('#procate_title').val("");
         $('#myModal').modal('show');
     }
@@ -58,12 +59,23 @@
 	}
    }
    
+   function check_redmine_proid(obj){
+		var redmine_proid = obj.value.replace(/(^\s*)|(\s*$)/g,"");
+		if(redmine_proid>30){
+	         window.checkvar2 = 0;
+	     }
+		else{
+			window.checkvar2 = 1;
+		}
+	   }
+	   
+   
     //添加验证输入框
     function chk(){
         var proid = document.test.project_id.value.replace(/(^\s*)|(\s*$)/g,"");
         //先判断填写项是否符合规格
-        if(window.checkvar == 0 || window.checkvar1 == 0 || !window.checkvar1){
-            alert('编号为正整数且不超过9位数；模块名称不能为空且不超过30个字符！');
+        if(window.checkvar == 0 || window.checkvar1 == 0 || !window.checkvar1 || window.checkvar2 == 0){
+            alert('编号为正整数且不超过9位数；redmine项目编号不能超过30个字符；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
         	$("#project_id").val(proid);
         	document.test.submit();
@@ -91,8 +103,8 @@
         var proid = document.test1.project_id1.value.replace(/(^\s*)|(\s*$)/g,"");
         var procate_id = document.test1.procate_id1.value;
         //先判断填写项是否符合规格
-        if(window.checkvar == 0 || window.checkvar1 == 0){
-            alert('编号为正整数且不超过10位数；模块名称不能为空且不超过30个字符！');
+        if(window.checkvar == 0 || window.checkvar1 == 0 || window.checkvar2 == 0){
+            alert('编号为正整数且不超过9位数；redmine项目编号不能超过30个字符；模块名称不能为空且不超过30个字符！');
         }else if(proid.length == 0){
         	$("#project_id").val(proid);
         	document.test1.submit();
@@ -125,6 +137,7 @@
 	       $('#procate_id').val(id);
 	       $('#procate_level').val(level);
 	       $('#project_id').val("");
+	       $('#redmine_proid').val("");
 	       $('#procate_title').val("");
 		   $('#myModal').modal('show'); 
 	   } 
@@ -138,6 +151,13 @@
 	       var proid = eval('('+data+')');
 	       $('#project_id1').val(proid);
 	     });
+	   url = "/case/get_redmine_proid"
+		   para = {"procate_id":id}
+		   $.get(url, para, function(data){
+		       var redmine_proid = eval('('+data+')');
+		       $('#redmine_proid1').val(redmine_proid);
+		     });
+	   
        $('#procate_id1').val(id);
 	   $('#procate_title1').val(name);
 	   $('#myModal1').modal('show');

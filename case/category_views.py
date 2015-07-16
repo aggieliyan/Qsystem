@@ -92,12 +92,13 @@ def add_procate(request, url):
             proid = form.cleaned_data['project_id']
             procate_level = form.cleaned_data['procate_level']
             procate_name = form.cleaned_data['procate_title']
+            redmine_id = form.cleaned_data['redmine_proid'] 
             if procate_id == None:
-                pro_cate = category(name = procate_name, parent_id = 0, project_id = proid, level = 1, \
-                           createdate = datetime.datetime.now(), isactived = 1)
+                pro_cate = category(name = procate_name, parent_id = 0, project_id = proid, redmine_proid = redmine_id,\
+                                    level = 1, createdate = datetime.datetime.now(), isactived = 1)
             else:
-                pro_cate = category(name = procate_name, parent_id = procate_id, project_id = proid,\
-                           level = procate_level + 1, \
+                pro_cate = category(name = procate_name, parent_id = procate_id, project_id = proid, \
+                                    redmine_proid = redmine_id, level = procate_level + 1, \
                            createdate = datetime.datetime.now(), isactived = 1)
             pro_cate.save()                  
     return HttpResponseRedirect(url)
@@ -108,10 +109,12 @@ def edit_procate(request, url):
         if form.is_valid():
             procate_id = form.cleaned_data['procate_id1']
             procate_name = form.cleaned_data['procate_title1']
-            proid1 = form.cleaned_data['project_id1'] 
+            proid1 = form.cleaned_data['project_id1']
+            redmine_id = form.cleaned_data['redmine_proid1']  
             pro_cate = category.objects.get(id = procate_id)
             pro_cate.name = procate_name
-            pro_cate.project_id = proid1              
+            pro_cate.project_id = proid1   
+            pro_cate.redmine_proid = redmine_id        
             pro_cate.save()                  
     return HttpResponseRedirect(url)
 
@@ -133,10 +136,18 @@ def delprocate_confirm(request):
 def get_proid(request): 
     procate_id = request.GET['procate_id']
     pro_cate = category.objects.get(id = procate_id)   
-    proid = pro_cate.project_id 
+    proid = pro_cate.project_id
     pro_id = json.dumps(proid)
     print pro_id
     return HttpResponse(pro_id)
+
+def get_redmine_proid(request): 
+    procate_id = request.GET['procate_id']
+    pro_cate = category.objects.get(id = procate_id)   
+    redmine_id = pro_cate.redmine_proid
+    redmine_proid = json.dumps(redmine_id)
+    print redmine_proid
+    return HttpResponse(redmine_proid)
       
 def del_procate(request, url):
     if request.method == 'POST':

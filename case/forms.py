@@ -22,11 +22,13 @@ class add_procateForm(forms.Form):
 	procate_id = forms.IntegerField(required=False)
 	project_id = forms.IntegerField(required=False)
 	procate_level = forms.IntegerField(required=False)
+	redmine_proid = forms.CharField(required=False)
 	procate_title = forms.CharField(required=True,error_messages={'required': u'产品模块名称不能为空'})
 	
 class edit_procateForm(forms.Form):
 	procate_id1 = forms.IntegerField(required=False)
 	procate_title1 = forms.CharField(required=True,error_messages={'required': u'产品模块名称不能为空'})
+	redmine_proid1 = forms.CharField(required=False)
 	project_id1 = forms.IntegerField(required=False)
 	
 class del_procateForm(forms.Form):
