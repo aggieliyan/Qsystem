@@ -49,3 +49,7 @@ class result(models.Model):
 class Upload(models.Model):
 	Filedata = models.FileField(upload_to = 'upload/')
 	uptime = models.DateField(u'上传时间', blank=True, null=True)
+
+class redmine_key(models.Model):
+    uid = models.IntegerField(u'用户ID', blank=False, null=False)
+    key = models.CharField(u'Redmine登录后的Key值', blank=False, max_length=70)

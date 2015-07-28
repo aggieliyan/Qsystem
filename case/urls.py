@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from case import cases_views, login_views, category_views, casepull_views
+from case import cases_views, login_views, category_views, casepull_views, redmineuse_views
 from project import views
 
 urlpatterns = patterns('',
@@ -34,4 +34,10 @@ urlpatterns = patterns('',
 	url(r'^updateresult/', cases_views.update_case_related),
 	url(r'^haschildren/', cases_views.has_children),
 	url(r'^upload/', cases_views.upload_file),
+	url(r'^filebug/', redmineuse_views.filebug),
+	url(r'^newbug/$', redmineuse_views.newbug),
+	url(r'^newbug/(\d+)/$', redmineuse_views.newbug),
+	url(r'^getstatus/([^/]+)/', redmineuse_views.updatewi),
+	url(r'^getwi/(\d+)/$', redmineuse_views.getwi),
+	url(r'^closewi/(\d+)/$', redmineuse_views.newbug),
 )

@@ -8,6 +8,7 @@
 <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="/static/css/checktree.css" rel="stylesheet" media="screen">
 <link href="/static/css/case_pull.css" rel="stylesheet" media="screen">
+<link href="/static/css/filebug.css" rel="stylesheet" media="screen">
 {% endblock %}
 {% block content %}
 
@@ -139,7 +140,7 @@
   		<img src="/static/img/praise.png" style="margin-left:500px">
   	</div>  -->
 <div class="span12">
-  	<div id="tbop"><span id="cnum">共{{count}}条用例</span>{% if canope %}<button id="newmodule" class="btn btn-primary">新建模块</button><button class="btn btn-success" id="newcase">新建用例</button><button class="btn btn-warning fileload" id="up">导入用例</button>{% endif %} </div>
+  	<div id="tbop"><span id="cnum">共{{count}}条用例</span>{% if canope %}<button id="newmodule" class="btn btn-primary">新建模块</button><button class="btn btn-success" id="newcase">新建用例</button><button class="btn btn-warning fileload" id="up">导入用例</button><button class="btn btn-info" id="refreshwi">刷新WI</button>{% endif %} </div>
     <table id="caselist" class="table table-bordered">
     	<thead>
 	      	<tr>
@@ -201,10 +202,14 @@
                   						      		{% for r in result %}
                   						      		{% if c.id == r.testcase_id %}
                   						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">&nbsp;{{r.result}}</span></td>
-                  						    		  <td class="editable nodrag save" name="wi">{{r.wi|default_if_none:""}}</td>
+                  						    		<td class="editable1 nodrag save wi" name="wi">
+                  						    			{% ifnotequal r.wi None %}
+                  						    			<a href=http://gj.ablesky.com/issues/{{r.wi}} id={{r.wi}} target="_blank">{{r.wi}}</a>
+                  						    			{% endifnotequal %}         
+                  						    		</td>
                                           {% if canope%}
-                  						      		  <td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
-                  						      		  <td>{{r.executor}}</td>
+                  						      		<td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
+                  						      		<td>{{r.executor}}</td>
                                           {% else %}
                                           <td class="nodrag">{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
                                           <td class="nodrag">{{r.executor}}</td>                       
@@ -296,7 +301,8 @@
  {% include "case/exec_log.html" %}
  {% include "case/case_pull.html" %}
  {% include "case/upload.html" %}
-
+ {% include "case/filebug.html" %}
+ 
 {% endblock %}
 {% block js %}
     <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
@@ -307,4 +313,6 @@
     <script type='text/javascript' src="/static/js/caselist.js"></script>
     <script type="text/javascript" src="/static/js/checktree.js"></script>
     <script type="text/javascript" src="/static/js/casepull.js"></script> 
+    <script type="text/javascript" src="/static/jquery/jquery.form.js"></script>
+    <script type="text/javascript" src="/static/js/filebug.js"></script>
 {% endblock %}

@@ -1,9 +1,9 @@
 function insert_update_rank(celement, cnum){
         var cnum = arguments[1] ? arguments[1] : 1;//设置cnum参数默认值为1，代表当次新插入的个数
         var pelement = celement.prev();
-        var rankdic = {}
-        var newrank = 1
-        var classname = celement.attr("class")
+        var rankdic = {};
+        var newrank = 1;
+        var classname = celement.attr("class");
 
         if(classname == "cmodule"){//模块的情况下，要判断在不在末级类目下，如果不在末级类目模块是不能排序的
             curpath = window.location.pathname;
@@ -13,8 +13,8 @@ function insert_update_rank(celement, cnum){
                 location.reload();
                 return;
             }else{
-                var url = "/case/haschildren/"
-                var para = {"pid":catid,}
+                var url = "/case/haschildren/";
+                var para = {"pid":catid,};
                 $.get(url, para, function(data){
                     var rs = eval('('+data+')');
                     if(rs.success){
@@ -125,7 +125,7 @@ function delete_update_rank(celement){
             mid = celement.prev().attr("value");
             var i = 1;
 
-            rankdic = {}
+            rankdic = {};
 
             ccase.each(function(){
                 var newrank = parseInt(cnum)+i;
@@ -199,20 +199,20 @@ $(document).ready(function(){
                         "</table>"+
                     "</div>"+
                 "</td>"+
-            "</tr>"
+            "</tr>";
 
     var resulthtml = "<select class=\"cresult\">"+
                         "<option>-</option>"+
                         "<option>Pass</option>"+
                         "<option>Fail</option>"+
                         "<option>Block</option>"+
-                    "</select>"
+                    "</select>";
 
     var levelhtml = "<select class=\"lselect\">"+
                         "<option>1</option>"+
                         "<option>2</option>"+
                         "<option>3</option>"+
-                    "</select>"
+                    "</select>";
 
 
 
@@ -232,7 +232,7 @@ $(document).ready(function(){
         }else{
             newlast.after(casehtml);
         }
-        newlast = $(".mtr").last()
+        newlast = $(".mtr").last();
         insert_update_rank(newlast);
         newlast.attr("id", "newone");
         scrollOffset($("#newone").offset());
@@ -241,17 +241,39 @@ $(document).ready(function(){
 
 
     $("#newmodule").click(function(){
-        var cmodule = $(".cmodule").last()
+        var cmodule = $(".cmodule").last();
         cmodule.after(modulehtml);
         var newlast = cmodule.next();
-        insert_update_rank(newlast.find(".mtr"))
+        insert_update_rank(newlast.find(".mtr"));
         insert_update_rank(newlast);
         newlast.attr("id", "newone");
         scrollOffset($("#newone").offset());
         newlast.removeAttr("id");
 
     });
+    $(".editable1").live('dblclick', function(){   //由于BUG为链接，所以把编辑改为双击
+        var tdnode = $(this);
+        var tdTest = tdnode.text().trim();
+        //before属性用来存点击时文本域的值
+        tdnode.attr("before", tdTest);
 
+        //如果还没有执行结果，那点BUG和备注没反应
+        var crs = tdnode.parent().children().eq(5).find("span");
+
+        if(tdnode.hasClass("save") && crs.length == 0 ){
+
+        }
+        else{
+            if(tdnode.find(".edittx").length == 0){
+                tdnode.empty();
+                var tx = $("<textarea class='edittx'></textarea>");
+                tx.attr("value", tdTest);
+                tdnode.append(tx);
+                tx.focus();
+            }
+        }
+   
+    });
     $(".editable").live('click', function(){
         var tdnode = $(this);
         var tdTest = tdnode.text();
@@ -278,21 +300,20 @@ $(document).ready(function(){
 
     $(".edittx").live('blur', function(){
         var tx = $(this);
-        var etext = tx.val();
+        var etext = tx.val().trim();
         var tp = tx.parent();
         tx.remove();
         tp.attr("value", etext);
         tp.html(etext);
         //文本框的值与原来的值不同时，勾上checkbox
-        if(tp.attr("before") !== etext){
-            
+        if(tp.attr("before") !== etext){            
             //如果是BUG和备注部分,而且用例是保存的用例则实时保存
             var tid = tp.parent().attr("value");
             var tname = tp.attr("name");
-            var crs = tp.parent().children().eq(5).find("span")//看有没有执行结果，有执行结果的才可以保存BUG和备注
+            var crs = tp.parent().children().eq(5).find("span");//看有没有执行结果，有执行结果的才可以保存BUG和备注
             if(tp.hasClass('save') && tid && crs.length){
-                var url = "/case/updateresult/"
-                var para = {"tname": tname, "tid":tid, "tcnt":etext}
+                var url = "/case/updateresult/";
+                var para = {"tname": tname, "tid":tid, "tcnt":etext};
                 $.post(url, para, function(data){
                     var rs = eval('('+data+')');
                     if(rs.success){
@@ -318,7 +339,7 @@ $(document).ready(function(){
         var tx = $(levelhtml);
         tx.attr("value", tdTest);
         tdnode.append(tx);
-    })
+    });
 
     //选择用例级别
     $(".lselect").live('change', function(){
@@ -329,7 +350,7 @@ $(document).ready(function(){
         tp.attr("value", etext);
         tp.html("<span class='level'>"+etext+"</span>");
         tp.siblings().eq(0).find("input").attr("checked", "checked");    
-    })
+    });
 
     //点击执行用例，主要是把下拉框显示出来供用户选择，图标和下拉框不能同时显示
     $(".icon-play-circle").live('click', function(){
@@ -351,6 +372,9 @@ $(document).ready(function(){
         var thiscell = rsdrop.parent();
         var exeico = $(this).prev();
         var result = rsdrop.val();
+        if($('#newmodule').attr('class')){ //如果是测试人员，就弹报bug的框。这里判断是否测试人员通过是否有新建模块的按钮进行判断，省得发请求。
+	        fileBug(thiscell);   //执行失败的时候弹出新建bug弹框,成功则关闭WI
+	    }
         if(result == "-"){
             return;
         }
@@ -397,7 +421,7 @@ $(document).ready(function(){
         var cmodule = $(this).parents(".cmodule");
         cmodule.after(modulehtml);
         var newlast = cmodule.next();
-        insert_update_rank(newlast.find(".mtr"))
+        insert_update_rank(newlast.find(".mtr"));
         insert_update_rank(newlast);
         newlast.attr("id", "newone");
         scrollOffset($("#newone").offset());
@@ -484,11 +508,11 @@ $(document).ready(function(){
             }else{//删除模块
               
                 //找到该模块的前一个模块下的
-                var currentm = node.parents(".cmodule")
+                var currentm = node.parents(".cmodule");
                 var prevmodule = currentm.prev().find('tbody');
 
                 if(prevmodule.length){
-                    var url = "/case/moduledel/"
+                    var url = "/case/moduledel/";
                     var mid = currentm.attr("value");     
                     var para = {"mid": mid,};
                     //如果是刚新建的没有mid就直接remove掉就行
@@ -583,8 +607,8 @@ $(document).ready(function(){
         category1.html(temp_html); 
         var n = category1.get(0).selectedIndex;
         if(c1){
-            $(".category_select_1 option[value="+c1+"]").attr("selected","true")
-            var preoption = $(".category_select_1 option[value="+c1+"]").prevAll("option")
+            $(".category_select_1 option[value="+c1+"]").attr("selected","true");
+            var preoption = $(".category_select_1 option[value="+c1+"]").prevAll("option");
         }       
         if(n != 0){
             if((areaJson[n-1].slist).length != 0){
@@ -626,7 +650,7 @@ $(document).ready(function(){
                 });
                 category2.html(temp_html);
                 if(c2){
-                    $(".category_select_2 option[value="+c2+"]").attr("selected","true")
+                    $(".category_select_2 option[value="+c2+"]").attr("selected","true");
                 }
                 category_select_3();
             };
@@ -698,17 +722,17 @@ $(document).ready(function(){
                 cate1val = $(".cate1").val();
                 cate2val = $(".cate2").val();
                 if (cateval == cate2val){
-                    $(".cate3").attr("value",'')
+                    $(".cate3").attr("value",'');
                 }
                 if (cateval == cate1val){
                     $(".cate2").attr("value",'');
-                    $(".cate3").attr("value",'')
+                    $(".cate3").attr("value",'');
                 }
             }else{
                 $(".next").attr("action","/case/caselist/");
                 $(".cate1").attr("value",'');
                 $(".cate2").attr("value",'');
-                $(".cate3").attr("value",'')
+                $(".cate3").attr("value",'');
             }            
         }
     });
@@ -785,7 +809,7 @@ $(document).ready(function(){
                      "<th width=\"30px\">执行人</th>"+
                      "<th width=\"15px\">结果</th>"+
                      "<th width=\"94px\">备注</th>"+
-                    "</tr></thead>"
+                    "</tr></thead>";
             /*recordhtml = ''*/
             for(var i=1;i<num;i++)
             {
@@ -796,11 +820,11 @@ $(document).ready(function(){
                      "<td>"+datalist[i].executor+"</td>"+
                      "<td>"+datalist[i].result+"</td>"+
                      "<td>"+(datalist[i].remark?datalist[i].remark:"")+"</td>"+
-                    "</tr>"
-            }  
+                    "</tr>";
+            }  ;
             $(".boxtable").html(recordhtml);          
         });
-    })
+    });
 
 /*    $(window).scroll(function (){//浏览器滚动条滚动时触发的事件
 
@@ -820,13 +844,13 @@ $(document).ready(function(){
         var mchk = [-2];
         var mrank = [0];
         var flag = true;
-        var m = 0
+        var m = 0;
         var node = $("input[name=\"checklist\"]:checked");
         var nlen = node.length;
         $(node).each(function(){             
             var node = $(this).parent().parent();
             tdata = node.children();
-            cm = $(this).parents(".cmodule")
+            cm = $(this).parents(".cmodule");
             tmodule = cm.attr("value");
             tmrank = cm.attr("rank");
             mrank[i] = tmrank;

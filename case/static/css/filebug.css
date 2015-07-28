@@ -1,0 +1,38 @@
+.modal {
+	height: 
+}
+#buginfo {
+	line-height: 45px;
+}
+#item {
+	float: right;
+}
+#buginfo select{
+	width: 200px;
+}
+#subject input{
+	height: 25px;
+	width: 600px;
+}
+#description textarea{
+	width: 600px;
+	height: 150px;
+}
+#path{
+	height: 25px;
+	width: 600px;
+}
+.must {
+	color: red;
+}
+.item_cont{
+	width: 750px;
+}
+#status {
+	margin-right: 100px;
+}
+#status .item_cont input{
+	margin-left: 15px;
+    margin-right: 5px;
+    margin-top: -2px;
+}

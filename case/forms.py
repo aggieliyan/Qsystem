@@ -38,8 +38,14 @@ class UploadForm(forms.Form):
 	Filedata = forms.FileField()
 	uptime = forms.DateField(required=False)
 
-	# def handle_uploaded_file(f):
-	# 	destination = open('some/file/name.txt', 'wb+')
-	# 	for chunk in f.chunks():
-	# 		destination.write(chunk)
-	# 	destination.close()
+class fileBugForm(forms.Form):
+	type = forms.IntegerField(required=True)
+	status = forms.IntegerField(required=True)
+	env = forms.CharField(required=True)
+	subject = forms.CharField(required=True,max_length=300)
+	description = forms.CharField(required=True,max_length=2000)
+	PRI = forms.IntegerField(required=True)
+	assign_to = forms.IntegerField(required=True)
+	attachment = forms.CharField(required=False)
+	
+	
