@@ -13,10 +13,15 @@ function fileBug(obj) {
 			$('#status input').eq(0).attr("checked","checked");
 			$('#environment select').val('');
 			$('#subject input').attr("value","");
-			$('#description textarea').attr("value","");
+			content = "\r编号：" + $(obj).parent().children().eq(0).text().trim() + "\r" + "前置条件：" + $(obj).parent().children().eq(1).text() + "\r" + "输入/动作："+ $(obj).parent().children().eq(2).text() + "\r" + "期望输出："+ $(obj).parent().children().eq(3).text() + "\r";
+			$('#description textarea').attr("value",content);
 			$('#priority select').val('2');
 			$('#assign_to select').val('');
+			$('#path').parent().children('div').remove();
 			$('#path').attr("value","");    //清除之前弹框填写的数据
+			$('#my-file').attr("value",""); 
+			$('#cid').attr("value",$('.category_select_3').val());
+			$('#create').removeAttr("disabled");			
 			$('#fileBugForm').attr("action", "/case/newbug/");
 			$('#fileBugModal').modal('show');
 			$(obj).next().attr("id", "bugId"); //做个标记，知道更新哪条用例的bug
@@ -31,21 +36,25 @@ function fileBug(obj) {
 				$('#description textarea').attr("value", issue['description']);
 				$('#priority select').val(issue['PRI']);
 				$('#assign_to select').val(issue['assign_to']);
-				// var path = '';
-				// for(var pa in issue['uploads']){
-				//	 path = path + "C:\\bugPic\\" + issue['uploads'][pa] + ";";
-				// } //不显示路径了，因为只能增不能减，显示会重复提交
-				//$('#path').attr("value",path);
+				var path = '';
+				for(var pa in issue['uploads']){
+					path = path + "C:\\bugPic\\" + issue['uploads'][pa] + ";";
+				 } //不显示路径了，因为只能增不能减，显示会重复提交
+				$('#path').parent().children('div').remove();
+				$('#path').attr("value","");
+				$('#path').before("<div>"+path+"</div>");
+				$('#my-file').attr("value",""); 
+				$('#cid').attr("value", issue['cid']);
+				$('#create').removeAttr("disabled");
 				$('#fileBugForm').attr("action", "/case/newbug/"+wid+"/");
 				$('#fileBugModal').modal('show');
 				$(obj).next().attr("id", "bugId");		
 			});
 		}
 	} else {
-		wid && $.post('/case/closewi/'+wid+'/', function(data, status){
-				
-			});
-		}	
+		$(obj).next().text('');
+		wid && $.post('/case/closewi/'+wid+'/');
+	}
 }
 function checkForm() {
 	var flag = true;
@@ -62,6 +71,7 @@ function checkForm() {
 			return false;
 		} else {
 			$('#fileBugForm').submit;
+			$('#create').attr('disabled',"true");
 		}
 	} else {
 		return false;
@@ -71,20 +81,24 @@ $('#fileBugModal').on('hidden', function(){ //为了保证标记的唯一性，�
 	$('#bugId').removeAttr("id");
 });
 $('#refreshwi').click(function(){
-	var buglist = '';
+	var buglist = {};
 	for(var i=0; i<$('.wi').length; i++){
-		if($('.wi a').eq(i).text()!=""){  
-			buglist = buglist + '_' + $('.wi a').eq(i).text();
+		if($('.wi a').eq(i).text()!=""){
+			tid = $('.wi a').eq(i).parent().parent().attr("value");
+			wid = $('.wi a').eq(i).text();
+			buglist[tid] = wid;
 		}
 	}
-	$.get('/case/getstatus/'+buglist+'/', function(data, status){
+	$.get('/case/getstatus/', buglist, function(data, status){
 		uplist = eval('('+data+')');
 		for (var wi in uplist){
 			if(uplist[wi]==3){    //不同状态在页面做不同提示
 				$('#'+wi).append('&nbsp<i class="icon-star" title="已解决"></i>');
 			}
 			else if(uplist[wi]==5){
-				$('#'+wi).remove();
+				$('#'+wi).parent().prev().children('span').text("pass");
+				$('#'+wi).parent().next().next().text("Redmine更新");
+				$('#'+wi).remove();				
 			}
 			else if(uplist[wi]=="err"){
 				$('#'+wi).append('&nbsp<i class="icon-exclamation-sign" title="WI填写有误，请检查！"></i>');

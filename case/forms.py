@@ -39,7 +39,7 @@ class UploadForm(forms.Form):
 	uptime = forms.DateField(required=False)
 
 class fileBugForm(forms.Form):
-	type = forms.IntegerField(required=True)
+	itype = forms.IntegerField(required=True)
 	status = forms.IntegerField(required=True)
 	env = forms.CharField(required=True)
 	subject = forms.CharField(required=True,max_length=300)
@@ -47,5 +47,4 @@ class fileBugForm(forms.Form):
 	PRI = forms.IntegerField(required=True)
 	assign_to = forms.IntegerField(required=True)
 	attachment = forms.CharField(required=False)
-	
-	
+	cid = forms.IntegerField(required=True)	

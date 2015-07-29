@@ -1,6 +1,6 @@
 # coding=utf-8
 from redmine import Redmine
-import json, time
+import json, time, datetime
 from case.forms import fileBugForm
 from django.http import HttpResponse
 import case.models
@@ -38,13 +38,14 @@ def newbug(request, wid=''):
                 if item:
                     filename = item.split("\\")[-1]
                     uploads.append({'path': item, 'filename': filename})
-
+            cid = fb.cleaned_data['cid']
+            ipid = cid if wid else case.models.category.objects.get(id=cid).redmine_proid      
             redmine = Redmine('http://192.168.3.221', key=rkey)
             if '/newbug/' in request.path:
                 issue = redmine.issue.get(wid) if wid else redmine.issue.new()
-                issue.project_id = 'vacation'
+                issue.project_id = ipid
                 issue.subject = fb.cleaned_data['subject']
-                issue.tracker_id = fb.cleaned_data['type']
+                issue.tracker_id = fb.cleaned_data['itype']
                 issue.description = description
                 issue.status_id = fb.cleaned_data['status']
                 issue.priority_id = fb.cleaned_data['PRI']
@@ -57,26 +58,26 @@ def newbug(request, wid=''):
             issue.status_id = 5            
             issue.save()                        
         return HttpResponse(issue.id)
-def updatewi(request, wids):
-    if request.method == 'GET':
-        if "wids":
-            updatewi = {}
-            redmine = Redmine('http://192.168.3.221', key=authKey)
-            wids = wids.split('_')
-            for wid in wids:
-                if wid:
-                    try:
-                        issue = redmine.issue.get(wid)
-                    except ResourceNotFoundError:
-                        updatewi[wid] = "err"
-                    else:
-                        if issue.status.id != 1:
-                            updatewi[wid] = issue.status.id
-#                        if issue.status.id == 5:
-#                            r = case.models.result.objects.filter(wi=wid).order_by("-id")[0]
-#                            r.wi = ''
-#                            r.save()
-        return HttpResponse(json.dumps(updatewi))
+def updatewi(request):
+    buglist = request.GET
+    updatewi = {}
+    redmine = Redmine('http://192.168.3.221', key=authKey)
+    results = []
+    for tid, wid in buglist.items():
+        try:
+            issue = redmine.issue.get(wid)
+        except ResourceNotFoundError:
+            updatewi[wid] = "err"
+        else:
+            if issue.status.id != 1:
+                updatewi[wid] = issue.status.id
+            if issue.status.id == 5:
+                results.append(case.models.result(testcase_id=tid, result='Pass', 
+                                                  exec_date=datetime.datetime.now(), 
+                                                  executor="Redmine更新", executorid="1", 
+                                                  isactived=1))
+    case.models.result.objects.bulk_create(results)
+    return HttpResponse(json.dumps(updatewi))
 def getwi(request, wid):
     redmine = Redmine('http://192.168.3.221', key=authKey)
     try:
@@ -87,10 +88,11 @@ def getwi(request, wid):
         attachments = []
         for item in issue.attachments:
             attachments.append(item.filename)
+        print list(issue.project)
         issueitem = {'id': issue.id, 'type': issue.tracker.id, 'status': issue.status.id, 
                      'subject': issue.subject, 'description': issue.description, 
                      'PRI': issue.priority.id, 'assign_to': issue.assigned_to.id, 
-                     'uploads': attachments}
+                     'uploads': attachments, 'cid': issue.project.id}
         return HttpResponse(json.dumps(issueitem))
 
         

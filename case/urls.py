@@ -37,7 +37,7 @@ urlpatterns = patterns('',
 	url(r'^filebug/', redmineuse_views.filebug),
 	url(r'^newbug/$', redmineuse_views.newbug),
 	url(r'^newbug/(\d+)/$', redmineuse_views.newbug),
-	url(r'^getstatus/([^/]+)/', redmineuse_views.updatewi),
+	url(r'^getstatus/', redmineuse_views.updatewi),
 	url(r'^getwi/(\d+)/$', redmineuse_views.getwi),
 	url(r'^closewi/(\d+)/$', redmineuse_views.newbug),
 )
