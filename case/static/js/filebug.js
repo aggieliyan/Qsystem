@@ -114,7 +114,12 @@ $(document).ready(function(){
 		};		
 	});
 	$('#fileBugForm').ajaxForm(function(data, status) {//提交完表单成功后做以下操作
+		$('#create').removeAttr("disabled");
 		var bug = eval("(" + data + ")");	
+		if(bug['failed']){ 
+			alert(bug['message']);
+			return false;
+		}
 		buglink = '<a href=http://gj.ablesky.com/issues/'+bug+' target="_blank">'+bug+'</a>';
 		$('#bugId a').remove();
 		$('#bugId').append(buglink);

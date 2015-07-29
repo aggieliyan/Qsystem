@@ -38,8 +38,13 @@ def newbug(request, wid=''):
                 if item:
                     filename = item.split("\\")[-1]
                     uploads.append({'path': item, 'filename': filename})
-            cid = fb.cleaned_data['cid']
-            ipid = cid if wid else case.models.category.objects.get(id=cid).redmine_proid      
+            cid = fb.cleaned_data['cid']                
+            ipid = cid if wid else case.models.category.objects.get(id=cid).redmine_proid 
+            if not ipid:
+                rs = {}
+                rs['failed'] = True
+                rs['message'] = "请先到产品管理页添加该项目所关联的Redmine项目id~~"
+                return HttpResponse(json.dumps(rs))     
             redmine = Redmine('http://192.168.3.221', key=rkey)
             if '/newbug/' in request.path:
                 issue = redmine.issue.get(wid) if wid else redmine.issue.new()
