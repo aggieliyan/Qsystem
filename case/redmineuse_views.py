@@ -24,13 +24,16 @@ def newbug(request, wid=''):
         try:
             rkey = case.models.redmine_key.objects.get(uid=uid).key
         except:
-            return HttpResponse("请联系李燕为您添加Redmine系统的Key值，才能正常开Bug~~")         
+            rs = {}
+            rs['failed'] = True
+            rs['message'] = "请联系李燕为您添加Redmine系统的Key值，才能正常开Bug~~"
+            return HttpResponse(json.dumps(rs))         
         fb = fileBugForm(request.POST)
         if fb.is_valid():
             env = fb.cleaned_data['env']
             description = fb.cleaned_data['description']
             today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-            description = '使用'+env+'环境'+today+'版本：\r'+description
+            description = u'使用'+env+u'环境'+today+u'版本：\r'+description
             path = fb.cleaned_data['attachment']
             path = path.split(';')
             uploads = []
@@ -59,7 +62,10 @@ def newbug(request, wid=''):
                 issue.save() 
         if '/closewi/' in request.path:
             redmine = Redmine('http://192.168.3.221', key=rkey)
-            issue = redmine.issue.get(wid)
+            try:
+                issue = redmine.issue.get(wid)
+            except ResourceNotFoundError:
+                return HttpResponse("can't find this wi, please close it by yourself~")    
             issue.status_id = 5            
             issue.save()                        
         return HttpResponse(issue.id)
