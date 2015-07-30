@@ -96,7 +96,8 @@ $('#refreshwi').click(function(){
 				$('#'+wi).append('&nbsp<i class="icon-star" title="已解决"></i>');
 			}
 			else if(uplist[wi]==5){
-				$('#'+wi).parent().prev().children('span').text("pass");
+				$('#'+wi).parent().prev().children('span').attr("class","Pass");
+				$('#'+wi).parent().prev().children('span').text(" Pass");
 				$('#'+wi).parent().next().next().text("Redmine更新");
 				$('#'+wi).remove();				
 			}
