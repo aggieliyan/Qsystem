@@ -93,17 +93,20 @@ $('#refreshwi').click(function(){
 		uplist = eval('('+data+')');
 		for (var wi in uplist){
 			if(uplist[wi]==3){    //不同状态在页面做不同提示
-				$('#'+wi).append('&nbsp<i class="icon-star" title="已解决"></i>');
+				$('.'+wi).append('&nbsp<i class="icon-star" title="已解决"></i>');
 			}
 			else if(uplist[wi]==5){
-				$('#'+wi).parent().prev().children('span').attr("class","Pass");
-				$('#'+wi).parent().prev().children('span').text(" Pass");
-				$('#'+wi).parent().next().next().text("Redmine更新");
-				$('#'+wi).parent().next().next().next().text("#"+wi);
-				$('#'+wi).remove();				
+				num = $('.'+wi).length;
+				for(var i=num-1; i>=0; i--){					
+					$('.'+wi).eq(i).parent().prev().children('span').attr("class","Pass");
+					$('.'+wi).eq(i).parent().prev().children('span').text(" Pass");
+					$('.'+wi).eq(i).parent().next().next().text("Redmine更新");
+					$('.'+wi).eq(i).parent().next().next().next().text("#"+wi);
+					$('.'+wi).eq(i).remove();						
+				}
 			}
 			else if(uplist[wi]=="err"){
-				$('#'+wi).append('&nbsp<i class="icon-exclamation-sign" title="WI填写有误，请检查！"></i>');
+				$('.'+wi).append('&nbsp<i class="icon-exclamation-sign" title="WI填写有误，请检查！"></i>');
 			};
 		};
 	});
@@ -126,7 +129,7 @@ $(document).ready(function(){
 		$('#bugId a').remove();
 		$('#bugId').append(buglink);
 		tid = $('#bugId').parent().attr("value");
-		$('#bugId a').attr("id",bug); 
+		$('#bugId a').attr("class",bug); 
 		var url = "/case/updateresult/";
         var para = {"tname":"wi", "tid":tid, "tcnt":bug};
         $.post(url, para, function(data){
