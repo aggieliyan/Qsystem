@@ -99,6 +99,7 @@ $('#refreshwi').click(function(){
 				$('#'+wi).parent().prev().children('span').attr("class","Pass");
 				$('#'+wi).parent().prev().children('span').text(" Pass");
 				$('#'+wi).parent().next().next().text("Redmine更新");
+				$('#'+wi).parent().next().next().next().text("#"+wi);
 				$('#'+wi).remove();				
 			}
 			else if(uplist[wi]=="err"){

@@ -63,7 +63,7 @@ def newbug(request, wid=''):
         if '/closewi/' in request.path:
             redmine = Redmine('http://192.168.3.221', key=rkey)
             try:
-                issue = redmine.issue.get(wid)
+                issue = redmine.issue.get(wid)                
             except ResourceNotFoundError:
                 return HttpResponse("can't find this wi, please close it by yourself~")    
             issue.status_id = 5            
@@ -86,7 +86,7 @@ def updatewi(request):
                 results.append(case.models.result(testcase_id=tid, result='Pass', 
                                                   exec_date=datetime.datetime.now(), 
                                                   executor="Redmine更新", executorid="1", 
-                                                  isactived=1))
+                                                  r_remark="#"+wid, isactived=1))
     case.models.result.objects.bulk_create(results)
     return HttpResponse(json.dumps(updatewi))
 def getwi(request, wid):
