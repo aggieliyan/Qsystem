@@ -38,7 +38,7 @@ p,a {
 }
 .logo{
 	float: left;
-	margin-left: 0px;
+	margin-left: -100px;
 	padding-right: 31px;
 	line-height: 85px;
 	background-image: url("/static/img/logo.png");
@@ -76,7 +76,7 @@ p,a {
 }
 .top_memu {
 	float: left;
-	margin-left: 180px;
+	margin-left: 220px;
 }
 .top_memu a {
 	float: left;
