@@ -24,33 +24,29 @@
     padding-right: 31px;
     line-height: 85px;
 }
-.logo{
+.logo {
     background-image: url("/static/img/logo.png");    
     width: 88px;
     height: 86px;
     background-position: 12px -10px;
 }
-	.backgroud
-    {
-        float: left;
-	    background: url(/static/img/backgroud.jpg) no-repeat;
-	    height: 100%;
-	    width: 100%;
+.backgroud  {
+    float: left;
+	background: url(/static/img/backgroud.jpg) no-repeat;
+	height: 100%;
+	width: 100%;
     }
-    .backgroud_white
-    {
-    	background-color: #FFFFFF;
-    	height: 350px; 
-    	width: 650px; 
-    	margin-top: 90px;
+.backgroud_white {
+    background-color: #FFFFFF;
+    height: 350px; 
+    width: 650px; 
+    margin-top: 90px;
     }
-	.table
-    {
-        height: 34px;
-        size:5;
+.table {
+    height: 34px;
+    size:5;
     }
-    .table-td
-    {
+.table-td    {
     width:240px;
     overflow:hidden;
     }
