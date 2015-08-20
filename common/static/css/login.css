@@ -5,14 +5,14 @@
 	    height: 86px;
         margin: auto;
 	}
-	.top_logo
+.top_logo
     {
         margin-left:0px;
 	    height: 86px;
 	    width: 320px;
         padding-left: 0px;
     }    
-    .top_logo a {
+.top_logo a {
     color: #fff;
     font-weight: bold;
     font-size: 24px;
