@@ -64,7 +64,7 @@ $(document).ready(function(){
     var ptotal = $.trim($(".basecolor").eq(i).children().eq(1).children().eq(2).text());
     ptotal = ptotal.replace(/\s+/g,'\t\t\r');
     $(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(1).attr("title",ptotal);
-    $(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(0).attr("title",project);
+    //$(".basecolor").eq(i).children().eq(table_list['项目名称']).children().eq(0).attr("title",project);
     $(".basecolor").eq(i).children().eq(table_list['项目成员']).attr("title",user_prolist);}
 });
 });
