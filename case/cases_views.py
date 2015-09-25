@@ -594,6 +594,7 @@ def upload_file(request):
 				#获取表单信息
 				xlsfile = form.cleaned_data['Filedata']
 				filename = xlsfile.name
+				print filename
 				#写入数据库
 				uf = Upload( Filedata = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
@@ -656,25 +657,3 @@ def excel_table_byindex(request, file= '',pid = ''):
 	count.append(snum)
 	count.append(allnum-snum)
 	# return count
-	
-from redmine import Redmine
-
-redmine = Redmine('http://192.168.3.221', key='c3dbd70f0c3fe1a7c90432fab56dd9d298e48c8d')
-#project = redmine.project.create(name='Vacation', identifier='vacation2', description='foo', homepage='http://foo.bar', is_public=True, parent_id=10, inherit_members=True, custom_fields=[{'id': 1, 'value': 'foo'}, {'id': 2, 'value': 'bar'}])
-#issue = redmine.issue.create(project_id='vacation', subject='Vacation', description='foo', tracker_id=3, status_id=1, priority_id=3, assigned_to_id=2215, watcher_user_ids=[3], start_date='2014-01-01', due_date='2014-02-01', estimated_hours=4, done_ratio=40, custom_fields=[{'id': 1, 'value': 'foo'}, {'id': 2, 'value': 'bar'}], uploads=[{'path': 'C:\\Users\\liyan\\Desktop\\2.jpg'}, {'path': 'C:\\Users\\liyan\\Desktop\\1.jpg'}])
-#print issue
-#issue = redmine.issue.get(11577)
-#memberships = redmine.project_membership.filter(project_id='vacation', include='users')
-#for item in memberships:
-#	print item.user_id
-users = redmine.user.filter(status=1)
-#for user in users:
-#	print ''
-##	username = redmine.user.get(user)
-##	print username
-##user = redmine.user.get(17)
-##print user
-#group1 = redmine.Group.get(41)
-##group2 = redmine.Group.get(67)
-#for user in group1.users:
-#	print user.id

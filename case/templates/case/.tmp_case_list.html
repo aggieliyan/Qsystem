@@ -1,0 +1,318 @@
+{% extends "case/base.html" %}
+{% block title %}case系统{% endblock %}
+{% block head %}
+<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<link href="/static/css/uploadify.css" rel="stylesheet" media="screen">
+<link href="/static/css/case_list.css" rel="stylesheet" media="screen">
+<link href="/static/css/case_box.css" rel="stylesheet" media="screen">
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/static/css/checktree.css" rel="stylesheet" media="screen">
+<link href="/static/css/case_pull.css" rel="stylesheet" media="screen">
+<link href="/static/css/filebug.css" rel="stylesheet" media="screen">
+{% endblock %}
+{% block content %}
+
+<div class="row-fluid">	
+  	<div class="span12" style="float:left; margin-top:10px;border:thin solid #ddd;" id="searchbar">
+      <div style="padding-top:10px;">
+      {% if categoryid %}
+        <form action="{% url 'caselist' categoryid %}" id="searchform" method="post" class="next">
+      {% else %}
+        <form action="" id="searchform" method="post" class="next">
+      {% endif %} 
+  		    <ul class="selectList">
+            <li class="item-title">
+              <lable style="float:right">产品类目：</lable>
+            </li>
+            <li>
+              <input  value="{{categoryid}}" type="hidden" class="cate" name="categoryid">
+              <input  value="{{cate1}}" type="hidden" class="cate1" name="cate1">
+              <input  value="{{cate2}}" type="hidden" class="cate2" name="cate2">
+              <input  value="{{cate3}}" type="hidden" class="cate3" name="cate3">
+              <select class="category_select_1">
+              </select>
+              <select class="category_select_2">
+              </select>
+              <select class="category_select_3">
+              </select>
+           </li> 
+          </ul>
+          <ul class="testmodule">
+            <li class="item-title">
+              <lable style="float:right">所属模块：</lable>
+            </li>
+            <li>
+              <select class="" name="testmodule" selected="selected">
+                {% if ctestmodule %}
+                <option selected="selected" value="{{ctestmodule}}">{{ctestmodule}}</option>
+                {% endif %}
+                <option value=""></option>
+                {% for m in allmodule %}
+                <option value="{{m.m_name}}">{{m.m_name}}</option>
+                {% endfor %}
+              </select>
+            </li>
+            <li class="filter"><lable>优先级：</lable></li>
+            <li>
+              <select class="" name="priority">
+                {% if cpriority %}
+                <option select="selected" value="{{cpriority}}">{{cpriority}}</option>
+                {% endif %}
+                <option></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </li>
+          </ul>
+          <ul class="priority">
+            <input  value="{{statue}}" type="hidden" class="hide-statue">
+            <input  value="{{mold}}" type="hidden" class="hide-mold">
+  			    <li class="item-title"><lable style="float:right">状态：</lable></li>
+            <li>
+              <select class="statue" name="status">
+                <option value=""> </option>
+                <option value="0">等于</option>
+                <option value="1">不等于</option>
+              </select>
+            </li>
+            <li class="filter mold" style="display:none;"><lable>+</lable></li>
+            <li>
+              <select class="mold" name="mold" style="display: none;">
+  			      	<option value="未执行">未执行</option>
+  			      	<option value="PASS">PASS</option>
+  				      <option value="FAIL">FAIL</option>
+                <option value="BLOCK">BLOCK</option>
+              </select>
+            <li>
+          </ul>     
+          <ul>
+            <li class="item-title"><lable style="float:right">作者：</lable></li>
+  		      <li>
+              <input value="{{cauthor}}" type="hidden" class="cauthor">
+  			      <select class="author" name="author">
+                <option value=""> </option>
+                <option value="2">范峤</option>
+  			      	<option value="3">李燕</option>
+  				      <option value="4">易璐璐</option>
+                <option value="5">国玉玲</option>
+                <option value="6">刘红蛟</option>
+                <option value="9">高岳</option>
+                <option value="10">杜永红</option>
+                <option value="14">李稳</option>                
+                <option value="37">胡图图</option>
+              </select>
+            </li>
+            <li class="filter"><lable>执行人：</lable></li> 		
+  		    	<li>
+              <input value="{{cexecutor}}" type="hidden" class="cexecutor">
+              <select class="executor" name="executor">
+                <option value=""> </option>
+                {% for exec in allexecutor %}
+                <option value="{{exec}}">{{exec}}</option>
+  				      {% endfor %}
+              </select>
+            </li>
+          </ul>
+          <ul>              
+            <li class="item-title"><lable style="float:right">执行时间：</lable></li>
+            <li>
+              <span class="input-append date form_datetime">
+                <input type="text" value="{{cstart_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF;width:110px;" 
+                          name="start_date" >
+                <span class="add-on"><i class="icon-calendar"></i></span>
+              </span>&nbsp;&nbsp;至&nbsp; 
+              <span class="input-append date form_datetime">
+                <input type="text" value="{{cend_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF;width:110px;" 
+                          name="end_date" placeholder="{{cend_date|date:"Y-m-d"|default:""}}">
+                <span class="add-on"><i class="icon-calendar"></i></span>
+              </span>
+            </li>
+            <li>
+              <input type="text" class="input-medium search-input" value="{{ckeyword}}" name="keyword" placeholder="请输入搜索关键字">
+              <button type="submit" class="btn btn-success searchbtn">搜索</button>
+            </li>
+          </ul>
+        </form>
+      </div>
+  	</div>
+  	<!-- <div  id="searchicon" style="margin-top:10px;">
+  		<img src="/static/img/praise.png" style="margin-left:500px">
+  	</div>  -->
+<div class="span12">
+  	<div id="tbop"><span id="cnum">共{{count}}条用例</span>{% if canope %}<button id="newmodule" class="btn btn-primary">新建模块</button><button class="btn btn-success" id="newcase">新建用例</button><button class="btn btn-warning fileload" id="up">导入用例</button><button class="btn btn-info" id="refreshwi">刷新WI</button>{% endif %} </div>
+    <table id="caselist" class="table table-bordered">
+    	<thead>
+	      	<tr>
+	    		<th style="width:60px;"><input id="caseall" type="checkbox">&nbsp;编号</th>
+	    		<th style="width:100px;">前置条件</th>
+	    		<th style="width:163px;"><span class="must">*</span>输入/动作</th>
+	    		<th style="width:163px;"><span class="must">*</span>期望输出</th>
+	    		<th style="width:30px;">级别</th>
+	    		<th style="width:50px;">结果</th>
+	    		<th style="width:55px;">WI</th>
+	    		<th style="width:75px;">执行日期</th>
+	    		<th style="width:44px;">执行人</th>
+	    		<th style="width:80px;">备注</th>
+	    		<th>操作</th>
+	    	</tr>
+        </thead>
+        <tbody>
+        {% if case %}
+            {% for item in case %}
+                {% for key, dic in item.items %}
+                 {% for i in testmodule %}
+                       {% if key == i.id %}
+                            {% if canope %}
+                  	    	  <tr class="cmodule" rank="{{i.m_rank}}" value="{{key}}">
+                            {% else %}
+                            <tr class="cmodule nodrag" rank="{{i.m_rank}}" value="{{key}}">
+                            {% endif %}
+                  	    		<td colspan="11">
+                  	    			<div>
+                  	    				<table >
+                  	    					<tbody>                  
+                  	    						<tr class="success">
+                  						    		<td colspan="1" ><input class="modulecheck" type="checkbox" name="checklist"></td>
+                  						    		<td colspan="9" class="editable">{{i.m_name}}</td>
+                  						    		<td >
+                                        {% if canope %}
+                  						      			<a class="icon-plus-sign" title="添加模块"></a>
+                  						      		  <a class="icon-plus" title="添加用例"></a>
+                  						      		  <a class="icon-trash"></a>
+                                          <a class="icon-chevron-up"></a>
+                                        {% endif %}
+                  						    		</td>  
+                  	    						</tr>
+                           {% endif %}
+                           {% endfor %} 
+          	                {% for c in dic %}
+                  	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
+                                      {% if canope%}
+                  						    		  <td>
+                                      {% else %}
+                                        <td class="nodrag">
+                                      {% endif %}<input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.id}}
+                                        </td>
+                  						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
+                  						      		<td class="editable nodrag">{{c.action}}</td>
+                  						    		<td class="editable nodrag">{{c.output}}</td>
+                  						      		<td class="nodrag"><span class="level">{{c.priority}}</span></td>
+                                        {% if result %}
+                  						      		{% for r in result %}
+                  						      		{% if c.id == r.testcase_id %}
+                  						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">&nbsp;{{r.result}}</span></td>
+                  						    		<td class="editable1 nodrag save wi" name="wi">
+                  						    			{% ifnotequal r.wi None %}
+                  						    			<a href=http://gj.ablesky.com/issues/{{r.wi}} class={{r.wi}} target="_blank">{{r.wi}}</a>
+                  						    			{% endifnotequal %}         
+                  						    		</td>
+                                          {% if canope%}
+                  						      		<td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
+                  						      		<td>{{r.executor}}</td>
+                                          {% else %}
+                                          <td class="nodrag">{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
+                                          <td class="nodrag">{{r.executor}}</td>                       
+                                          {% endif %}
+                  						      		<td class="editable nodrag save" name="remark">{{r.r_remark|default_if_none:""}}</td>
+                  						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
+                  						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
+                  						    		  <td class="editable nodrag save" name="wi"></td>
+                                          {% if canope%}
+                                          <td></td>
+                                          <td></td>
+                                          {% else %}
+                                          <td class="nodrag"></td>
+                                          <td class="nodrag"></td>                       
+                                          {% endif %}
+                  						      		<td class="editable nodrag save" name="remark"></td>
+
+                  						      		{% endif %}
+                  						      		{% endfor %}
+                                        {% else %}
+                                        <td class="nodrag"><a class="icon-play-circle"></a><span></span></td>
+                                        <td class="editable nodrag"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="editable nodrag"></td>
+                                        {% endif %}
+                                        
+                  						      		<td class="nodrag">
+                                          {% if canope %}
+                  						      			<a class="icon-plus" title="添加用例"></a>
+                  						      			<a class="icon-download-alt" title="引入用例" href="#casePullModal" data-toggle="modal" id="pullbutton" onclick="pullPop(this)"></a>
+                  						      			<a class="icon-eye-open" title="查看结果"></a>
+                                          <input  value="{{c.id}}" class="checkresult" type="hidden">
+                  						      			<a class="icon-trash"></a>                        
+                                          {% else %}
+                                          <a class="icon-eye-open" style="margin-left:10px;" title="查看结果"></a>
+                                          <input  value="{{c.id}}" class="checkresult" type="hidden">
+                                          {% endif %}
+                  						      		</td>
+                                      </tr>
+          	    						{% endfor %}						
+          	    					</tbody>
+          	    				</table>
+          	    			</div>
+          	    		</td>
+          	    	</tr>
+              {% endfor %}
+            {% endfor %}
+      {% else %}
+                <tr class="cmodule" rank="1" value="">
+                  <td colspan="11">
+                    <div>
+                      <table >
+                        <tbody>                  
+                          <tr class="success">
+                            <td colspan="1" ><input class="modulecheck" type="checkbox" name="checklist"></td>
+                            <td colspan="9" class="editable"></td>
+                          {% if canope %}
+                            <td >
+                                <a class="icon-plus-sign" title="添加模块"></a>
+                                  <a class="icon-plus" title="添加用例"></a>
+                                  <a class="icon-trash"></a>
+                            </td>
+                          {% endif %}
+                          </tr>
+                          </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+      {% endif %}
+      </tbody>
+    </table>
+    {% if notice %}
+    <div style = "position:absolute;">
+      <p style = 'color:red;'>{{notice}}</p>
+    </div>
+    {% endif %}
+
+    {% if canope %}
+    <div class="fixbar">
+      <button class="btn btn-warning" id="delbtn">批量删除</button>
+    	<button class="btn btn-success savebtn">保存</button>
+    </div>
+    {% endif %}
+  	</div>
+</div>
+
+ {% include "case/exec_log.html" %}
+ {% include "case/case_pull.html" %}
+ {% include "case/upload.html" %}
+ {% include "case/filebug.html" %}
+ 
+{% endblock %}
+{% block js %}
+    <script type='text/javascript' src="/static/jquery/jquery.dragsort-0.5.2.min.js"></script>
+    <script type='text/javascript' src="/static/jquery/swfobject.js"></script>
+    <script type='text/javascript' src="/static/jquery/jquery.uploadify.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
+    <script type='text/javascript' src="/static/js/caselist.js"></script>
+    <script type="text/javascript" src="/static/js/checktree.js"></script>
+    <script type="text/javascript" src="/static/js/casepull.js"></script> 
+    <script type="text/javascript" src="/static/jquery/jquery.form.js"></script>
+    <script type="text/javascript" src="/static/js/filebug.js"></script>
+{% endblock %}

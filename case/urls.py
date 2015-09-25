@@ -40,4 +40,6 @@ urlpatterns = patterns('',
 	url(r'^getstatus/', redmineuse_views.updatewi),
 	url(r'^getwi/(\d+)/$', redmineuse_views.getwi),
 	url(r'^closewi/(\d+)/$', redmineuse_views.newbug),
+	url(r'^upload_script/$',redmineuse_views.uploadify_script), 
+    url(r'^delete_uploadfile/$',redmineuse_views.profile_delte),
 )
