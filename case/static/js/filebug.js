@@ -17,6 +17,7 @@ function fileBug(obj) {
 			$('#description textarea').attr("value",content);
 			$('#priority select').val('2');
 			$('#assign_to select').val('');
+			$('#file_upload1').parent().children("p").remove();
 			$('#file_upload1-queue').children().remove();  //清除之前弹框填写的数据
 			$('#path').attr("value","");
 			$('#cid').attr("value",$('.category_select_3').val());
@@ -40,8 +41,8 @@ function fileBug(obj) {
 					path = path + issue['uploads'][pa] + ";&nbsp;&nbsp;&nbsp";
 				 } //不显示路径了，因为只能增不能减，显示会重复提交
 				$('#file_upload1-queue').children().remove();
-				$('#file_upload1').before("");
-				$('#file_upload1').before(path);
+				$('#file_upload1').parent().children("p").remove();
+				$('#file_upload1').before("<p>"+path+"</p>");
 				$('#path').attr("value","");
 				$('#my-file').attr("value",""); 
 				$('#cid').attr("value", issue['cid']);
