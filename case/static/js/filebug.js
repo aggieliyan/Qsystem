@@ -70,7 +70,7 @@ function checkForm() {
 			alert('主题不能超过140字，描述不能超过1000字！');
 			return false;
 		} else {
-			$('#fileBugForm').submit();
+			//$('#fileBugForm').submit;
 			$('#create').attr('disabled',"true");
 		}
 	} else {
