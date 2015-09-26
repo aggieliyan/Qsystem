@@ -593,6 +593,7 @@ def upload_file(request):
 				#获取表单信息
 				xlsfile = form.cleaned_data['Filedata']
 				filename = xlsfile.name
+				print filename
 				#写入数据库
 				uf = Upload(Filedata = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()

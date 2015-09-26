@@ -1,0 +1,93 @@
+  <!--Button to trigger modal 
+    <a href="#fileBugModal" role="button" class="btn" data-toggle="modal" id="fileBug">创建bug</a>
+    <input type="file" name="my-file" id="my-file" onchange="inputFileOnChange();" /> 
+　　<div id="info"></div> -->
+    <!-- Modal -->
+    <div id="fileBugModal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+    	<div class="modal-header">
+    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    		<h3 id="fileBugLabel">新建问题</h3>
+    	</div>
+    	<form id='fileBugForm' action="/case/newbug/" method="post">
+	    	<div class="modal-body">
+	    		<table id="buginfo">
+	    			<tr id='type'>
+	    				<td id='item'><span class="must">*&nbsp</span>跟踪：</td>
+	    				<td class='item_cont'>
+	    					<select name='itype'>
+	    						<option value='1'>错误</option>
+	    						<option value='2'>功能</option>
+	    						<option value='3'>支持</option>
+	    					</select>
+	    				</td>
+	    			</tr>
+	    			<tr id="status">
+	    				<td id='item'><span class="must">*&nbsp</span>状态：</td>
+	    				<td class='item_cont' name="status">
+							<input type="radio" value="1" name="status" checked="checked"/>新建
+							<input type="radio" value="4" name="status" />反馈
+						</td>
+					</tr>
+	    			<tr id='environment'>
+	    				<td id='item'><span class="must">*&nbsp</span>测试环境：</td>
+	    				<td class='item_cont'>
+	    					<select name='env'>
+	    						<option value='beta'>beta</option>
+	    						<option value='www'>www</option>
+	    						<option value='omega'>omega</option>
+	    						<option value='gamma'>gamma</option>
+	    						<option value='sigma'>sigma</option>
+	    					</select>
+	    				</td>
+	    			</tr>
+	    			<tr id='subject'>
+	    				<td id='item'><span class="must">*&nbsp</span>主题：</td>
+	    				<td class='item_cont'>
+	    					<input name='subject'>
+	    				</td>
+	    			</tr>
+	    			<tr id='description'>
+	    				<td id='item'><span class="must">*&nbsp</span>描述：</td>
+	    				<td class='item_cont'>
+	    				<textarea name='description'></textarea>
+	    				</td>
+	    			</tr>
+	    			<tr id='priority'>
+	    				<td id='item'><span class="must">*&nbsp</span>优先级：</td>
+	    				<td class='item_cont'>
+		    				<select name='PRI'>
+			    				<option value='1'>低</option>
+		    					<option value='2' selected="selected">普通</option>
+		    					<option value='3'>高</option>
+		    					<option value='4'>紧急</option>
+		    					<option value='5'>立刻</option>
+		    				</select>
+	    				</td>
+	    			</tr>
+	    			<tr id='assign_to'>
+	    				<td id='item'><span class="must">*&nbsp</span>指派给：</td>
+	    				<td class='item_cont'>
+	    					<select name='assign_to'>
+	    						<option></option>
+	    					</select>
+	    				</td>
+	    			</tr>
+	    			<tr id="attachment">
+	    				<td id='item'>附件：</td>
+	    				<td class='item_cont'>	
+							<input id="file_upload1" type="file" name="Filedata">  							 
+	    					<!-- <input name='attachment' id="path" placeholder="请将图片放在C:\bugPic内上传。" readonly>
+	    					<a onclick="$('#path').attr('value','')">删除</a>
+	    					<input type="file" name="my-file" id="my-file" onchange="inputFileOnChange();" />  -->
+	    				
+						</td>
+	    			</tr>
+	    		</table>
+	    	</div>
+	    	<div class="modal-footer">
+	    		<input style="display:none" id="cid" name="cid"/>
+	    		<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+	    		<button class="btn btn-success" id="create" onclick="return checkForm()">创建</button>
+	    	</div>
+	    </form>
+    </div>
