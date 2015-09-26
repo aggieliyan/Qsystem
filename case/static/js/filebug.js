@@ -1,6 +1,6 @@
 function inputFileOnChange() {   
-	if($('#my-file').val()){
-		$('#path').attr("value", $('#path').val() + "C:\\bugPic\\" + $('#my-file').val() + ";");
+	if($('#file_upload1').val()){
+		$('#path').attr("value", $('#path').val() + $('#file_upload1').val() + ";");
 	}
 }; 
 function fileBug(obj) {
@@ -17,9 +17,8 @@ function fileBug(obj) {
 			$('#description textarea').attr("value",content);
 			$('#priority select').val('2');
 			$('#assign_to select').val('');
-			$('#path').parent().children('div').remove();
-			$('#path').attr("value","");    //清除之前弹框填写的数据
-			$('#my-file').attr("value",""); 
+			$('#file_upload1-queue').children().remove();  //清除之前弹框填写的数据
+			$('#path').attr("value","");
 			$('#cid').attr("value",$('.category_select_3').val());
 			$('#create').removeAttr("disabled");			
 			$('#fileBugForm').attr("action", "/case/newbug/");
@@ -38,11 +37,12 @@ function fileBug(obj) {
 				$('#assign_to select').val(issue['assign_to']);
 				var path = '';
 				for(var pa in issue['uploads']){
-					path = path + "C:\\bugPic\\" + issue['uploads'][pa] + ";";
+					path = path + issue['uploads'][pa] + ";&nbsp;&nbsp;&nbsp";
 				 } //不显示路径了，因为只能增不能减，显示会重复提交
-				$('#path').parent().children('div').remove();
+				$('#file_upload1-queue').children().remove();
+				$('#file_upload1').before("");
+				$('#file_upload1').before(path);
 				$('#path').attr("value","");
-				$('#path').before("<div>"+path+"</div>");
 				$('#my-file').attr("value",""); 
 				$('#cid').attr("value", issue['cid']);
 				$('#create').removeAttr("disabled");
@@ -70,7 +70,7 @@ function checkForm() {
 			alert('主题不能超过140字，描述不能超过1000字！');
 			return false;
 		} else {
-			$('#fileBugForm').submit;
+			$('#fileBugForm').submit();
 			$('#create').attr('disabled',"true");
 		}
 	} else {
@@ -106,7 +106,7 @@ $('#refreshwi').click(function(){
 				}
 			}
 			else if(uplist[wi]=="err"){
-				$('.'+wi).append('&nbsp<i class="icon-exclamation-sign" title="WI填写有误，请检查！"></i>');
+				$('.'+wi).append('&nbsp<i class="icon-exclamation-sign" title="WI不存在，请检查！"></i>');
 			};
 		};
 	});
@@ -142,4 +142,15 @@ $(document).ready(function(){
         }); 
 		$('#fileBugModal').modal('hide'); 		
      });
+    $('#file_upload1').uploadify({		
+        'swf'  : '/static/jquery/uploadify.swf',
+        'uploader'  : '/case/upload_script/',  
+        'auto'      : true , 
+        'removeCompleted':false,  
+        'buttonText': '选择文件' , 
+		'onUploadSuccess': function(file, data, response){
+			var result = eval('(' + data + ')');
+			$("#path").attr("value", $("#path").val()+result['old_name']+":"+result['save_name']+",");
+		}
+  });
 });

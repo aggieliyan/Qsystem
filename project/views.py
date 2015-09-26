@@ -53,6 +53,7 @@ def register(request,uname=''):
                 uid = models.user.objects.filter(username=username)[0].id
                 request.session['username'] = username
                 request.session['realname'] = realname
+                print request.session['realname']
                 request.session['id'] = uid
     
                 #Django 认证系统的登录

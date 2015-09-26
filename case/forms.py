@@ -36,6 +36,7 @@ class del_procateForm(forms.Form):
 
 class UploadForm(forms.Form):
 	Filedata = forms.FileField()
+	#cate_id = forms.IntegerField(required=True)
 	uptime = forms.DateField(required=False)
 
 class fileBugForm(forms.Form):
