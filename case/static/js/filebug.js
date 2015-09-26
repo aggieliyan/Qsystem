@@ -70,7 +70,7 @@ function checkForm() {
 			alert('主题不能超过140字，描述不能超过1000字！');
 			return false;
 		} else {
-			$('#fileBugForm').submit;
+			$('#fileBugForm').submit();
 			$('#create').attr('disabled',"true");
 		}
 	} else {
@@ -106,7 +106,7 @@ $('#refreshwi').click(function(){
 				}
 			}
 			else if(uplist[wi]=="err"){
-				$('.'+wi).append('&nbsp<i class="icon-exclamation-sign" title="WI填写有误，请检查！"></i>');
+				$('.'+wi).append('&nbsp<i class="icon-exclamation-sign" title="WI不存在，请检查！"></i>');
 			};
 		};
 	});
