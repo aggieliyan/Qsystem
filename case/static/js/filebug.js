@@ -145,12 +145,8 @@ $(document).ready(function(){
         }); 
 		$('#fileBugModal').modal('hide'); 		
      });
-<<<<<<< HEAD
-    $('#file_upload1').uploadify({
-		'formData': {'request.session["realname"]':''},		
-=======
+
     $('#file_upload1').uploadify({		
->>>>>>> origin/master
         'swf'  : '/static/jquery/uploadify.swf',
         'uploader'  : '/case/upload_script/',  
         'auto'      : true , 
