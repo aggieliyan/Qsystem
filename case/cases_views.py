@@ -584,9 +584,8 @@ def savecase(request):
 
 def upload_file(request):
 	resp = {}
-	url = request.META['HTTP_REFERER']
-	p = re.compile(r'\d+')
-	pid = (p.findall(url))[-1]
+	url = str(request.get_full_path())	
+	pid = url.split("/")[-1]
 	try:	
 		if request.method == 'POST':
 			form = UploadForm(request.POST, request.FILES)
@@ -595,7 +594,7 @@ def upload_file(request):
 				xlsfile = form.cleaned_data['Filedata']
 				filename = xlsfile.name
 				#写入数据库
-				uf = Upload( Filedata = xlsfile, uptime = datetime.datetime.now()) 
+				uf = Upload(Filedata = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
 				filepath = uf.Filedata
 				uipath = unicode(str(filepath), "utf8")
@@ -603,7 +602,7 @@ def upload_file(request):
 				excel_table_byindex(request,file= uipath, pid = pid)
 				resp['success'] = True
 		else:
-		    form = UploadForm()
+			form = UploadForm()
 	except Exception,e:
 		info = "%s" % (sys.exc_info()[1])
 		resp['success'] = False
@@ -646,35 +645,13 @@ def excel_table_byindex(request, file= '',pid = ''):
 						allnum = allnum + 1
 						if key == 0 :
 							key = '';
-						if cinput and coutput:					
+						if cinput and coutput:				
 							newcase = testcase(category_id = int(pid), rank = crank, module_id = int(key), precondition = cpre, \
-										action = cinput, output = coutput, priority = cpriority, author = request.session['realname'], \
-										authorid = request.session['id'], createdate = datetime.datetime.now(), isactived = '1')
+										action = cinput, output = coutput, priority = cpriority, author = request.POST['realname'], \
+										authorid = request.POST['uid'], createdate = datetime.datetime.now(), isactived = '1')
 							newcase.save()
 							snum = snum + 1;
 							crank = crank+1;
 	count.append(snum)
 	count.append(allnum-snum)
 	# return count
-	
-from redmine import Redmine
-
-redmine = Redmine('http://192.168.3.221', key='c3dbd70f0c3fe1a7c90432fab56dd9d298e48c8d')
-#project = redmine.project.create(name='Vacation', identifier='vacation2', description='foo', homepage='http://foo.bar', is_public=True, parent_id=10, inherit_members=True, custom_fields=[{'id': 1, 'value': 'foo'}, {'id': 2, 'value': 'bar'}])
-#issue = redmine.issue.create(project_id='vacation', subject='Vacation', description='foo', tracker_id=3, status_id=1, priority_id=3, assigned_to_id=2215, watcher_user_ids=[3], start_date='2014-01-01', due_date='2014-02-01', estimated_hours=4, done_ratio=40, custom_fields=[{'id': 1, 'value': 'foo'}, {'id': 2, 'value': 'bar'}], uploads=[{'path': 'C:\\Users\\liyan\\Desktop\\2.jpg'}, {'path': 'C:\\Users\\liyan\\Desktop\\1.jpg'}])
-#print issue
-#issue = redmine.issue.get(11577)
-#memberships = redmine.project_membership.filter(project_id='vacation', include='users')
-#for item in memberships:
-#	print item.user_id
-users = redmine.user.filter(status=1)
-#for user in users:
-#	print ''
-##	username = redmine.user.get(user)
-##	print username
-##user = redmine.user.get(17)
-##print user
-#group1 = redmine.Group.get(41)
-##group2 = redmine.Group.get(67)
-#for user in group1.users:
-#	print user.id

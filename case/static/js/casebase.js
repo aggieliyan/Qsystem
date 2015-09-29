@@ -1,9 +1,11 @@
 ﻿$(document).ready(function(){
 	var url = "/user_info";
+
 	$.get(url, function(data){
 		var result = eval("\("+data+"\)");
 		var name = result.realname;		
 	    $(".top_bar a").eq(0).text(name);
+	    $(".top_bar a").eq(0).attr("id", result.uid);
 	    if(name == "GUEST"){
 	    	var bar = $(".top_bar a").eq(1)
 	    	bar.text("登录");

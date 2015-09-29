@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+{% if url == '../procate' %}
+<title >case系统</title>
+    <link rel="icon" href="/static/img/case/favicon.ico"  type="image/x-icon">
+{% else %}
+<title >Q系统</title>
+    <link rel="icon" href="/static/img/favicon.ico"  type="image/x-icon">
+{% endif %}
+    <!-- <LINK href="favicon.ico" type="image/x-icon" rel="shortcut icon"> -->      
+{% load compress %}
+{% compress css %}  
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet" >    
+    <link href='/static/css/login.css' rel='stylesheet' media='screen'>
+{% endcompress %}
+
+
+</head>
+<body style="margin:0px;">
+    <div class="backgroud">
+        <div align="center" class="top">
+            <div align="center">
+                <ul class="top_logo">
+                    <li class="logo" id="logo"></li>
+                    <li><a>项目管理系统</a></li>
+                </ul>
+            </div>
+        <form action="" method="post">
+            {% csrf_token %}
+	        <div class="backgroud_white" align="center" style="overflow:hidden">
+	            <table style="width:500px; height: 220px; margin-left: 60px; margin-top: 55px; cellspacing='1'; cellpadding='10'">
+                    <tr>
+                        <td class="table-td" style="font-family: Verdana,Microsoft YaHei ,宋体;">登录<span style="color: green; font-size:12px;"> (请使用W盘用户名密码登录)</span>
+                        </td>
+                        <td class="table-td">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-td">
+                            <label for="id_name" style="font-family: Verdana,Microsoft YaHei ,宋体;">请输入您的帐号:</label>
+                            {{ form.username }}
+                        </td>
+                        <td class="table-td" style="color: red;font-size: 14px;font-family: Verdana,Microsoft YaHei ,宋体;">
+                            {{ form.username.errors }}{{ error }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-td">
+                            <label for="id_password"  style="font-family: Verdana,Microsoft YaHei ,宋体;">请输入您的密码:</label>
+                            {{ form.password }}
+                        </td>
+                        <td class="table-td" style="color: red;font-size: 14px;font-family: Verdana,Microsoft YaHei ,宋体;">
+                            {{ form.password.errors }}
+                        </td>
+                       
+                    </tr>
+                    <tr>
+                        <td class="table-td" style="font-size: 14px;font-family: Verdana,Microsoft YaHei ,宋体;">
+                            {{ form.isautologin }}&nbsp;自动登录
+                        </td>
+                        <td class="table-td">
+                        </td>
+                      
+                    </tr>
+                    <tr>
+                        {% if url == '../procate' %}  
+                        <td class="table-td">
+                            <input id="Button_login" type="submit" value="登  录"
+                                style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/>&nbsp;&nbsp;
+                        </td>
+                        {% else %}
+                        <td class="table-td">
+                            <input id="Button_login" type="submit" value="登  录"
+                                style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/>&nbsp;&nbsp;
+                            <!--   <input id="Button_register" type="button" value="注  册" onclick="javascript: window.open('/register/')" 
+                                style="color: #FFFFFF; background-color: #5CB85C; font-weight:bolder; cursor:pointer;"/>-->
+                        </td>
+                        {% endif %}
+
+                        <td class="table-td">
+                        </td>
+                    </tr>
+                </table>
+	        </div><p style="font-size: 14px; margin-top: 150px;font-family: Verdana,Microsoft YaHei ,宋体;">© 2014 Ablesky, Inc. 版权所有, 能力天空科技（北京）有限公司 </p>
+        </form>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+

@@ -937,14 +937,18 @@ $(document).ready(function(){
 //upload
     $(".fileload").click(function(){
         $('#upload').modal('show');
-    });
-//异步上传文件，使用uploadify插件，使用方法参见官方文档
+		//upload用例到对应的项目下	
+	var num = window.location.href.split('/').length
+	var cate_id = window.location.href.split('/')[num-2]
+//异步上传文件，使用uploadify插件，使用方法参见官方文档	
     $('#file_upload').uploadify({
+		//这个标签的ID和text是个人的id和realname, 由于flash的bug, 在火狐下必须formData传给后端,后端无法从session中读取
+		formData: {'uid':$('.top_bar').children('li').eq(0).children().attr("id"),'realname':$('.top_bar').children('li').eq(0).children().text()},
         'debug': false,
         'swf'  : '/static/jquery/uploadify.swf',
-        'uploader'  : '/case/upload/',  
+        'uploader'  : '/case/upload/'+cate_id,  
         // 'script'    : '/case/upload/',  
-        'cancelImg' : '/static/img/uploadify-cancel.png',  
+        //'cancelImg' : '/static/img/uploadify-cancel.png',  
         'auto'      : true , 
         'multi': false,//设置可以上传多个文件  
         // 'queueSizeLimit':20,//设置可以同时20个文件  
@@ -1001,4 +1005,6 @@ $(document).ready(function(){
     $('.fileupload').click(function(){        
         location.reload();
     });
+    });
+
 });
