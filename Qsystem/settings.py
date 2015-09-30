@@ -98,6 +98,7 @@ STATICFILES_FINDERS = (
 
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
@@ -107,8 +108,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware', 
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
     # 'case.statsmiddleware.StatsMiddleware'
-    'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 
 )
