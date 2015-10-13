@@ -1,4 +1,4 @@
-# coding=utf-8
+﻿# coding=utf-8
 """
 Django settings for Qsystem project.
 
@@ -132,24 +132,24 @@ if socket.gethostname() == 'test':
         'ajaxableskydb': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ajaxableskydb',
-                'USER':'qa',
-                'PASSWORD':'as-qa',
+                'USER':'public',  #qa
+                'PASSWORD':'public',  #as-qa
                 'HOST':'192.168.3.91',
                 'PORT':'3306',
              }, #网站
         'ablesky_examsystem': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ablesky_examsystem',
-                'USER':'qa',
-                'PASSWORD':'as-qa',
+                'USER':'public',
+                'PASSWORD':'public',
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                      
                  }, #考试系统
         'eduadministration': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'eduadministration',
-                'USER':'qa',
-                'PASSWORD':'as-qa',
+                'USER':'public',
+                'PASSWORD':'public',
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                      
                  }, #教务培训系统
@@ -164,8 +164,8 @@ if socket.gethostname() == 'test':
         'ablesky_log': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ablesky_log',
-                'USER':'qa',
-                'PASSWORD':'as-qa',
+                'USER':'public',
+                'PASSWORD':'public',
                 'HOST':'192.168.3.90',
                 'PORT':'3306',                         
                 },  #统计客户端登录的库
