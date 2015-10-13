@@ -887,7 +887,7 @@ def project_list(request):
     # p1 = models.project_statistics.objects.distinct().values_list('project_id',flat=True)
     # pcount = list(set(p1).intersection(set(proid))) 
     testsql = []
-    m = 0
+    m = []
     for c in pcount: 
         sql = c.sql
         db = c.db
@@ -907,7 +907,7 @@ def project_list(request):
             c.save()
             cursor.close()
         except:
-            m = m + 1
+            m.append(sql+ '\r' )
             pass
         if c.project_id not in cpcount: #project_id 去重
             filter_project.append(pcount.filter(project_id=c.project_id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
