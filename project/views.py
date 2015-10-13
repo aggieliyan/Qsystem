@@ -886,8 +886,6 @@ def project_list(request):
     pcount = models.project_statistics.objects.filter(project_id__in = proid)
     # p1 = models.project_statistics.objects.distinct().values_list('project_id',flat=True)
     # pcount = list(set(p1).intersection(set(proid))) 
-    testsql = []
-    m = []
     for c in pcount: 
         sql = c.sql
         db = c.db
@@ -903,19 +901,14 @@ def project_list(request):
                         total_list = total_list + str(a[0]) + '\r'
                   
             c.total = total_list
-            testsql.append(c.total+ '\r')
             c.save()
             cursor.close()
         except Exception, e:
             print e
-            m.append(sql+ ':' + str(e) + ';' )
             pass
         if c.project_id not in cpcount: #project_id 去重
             filter_project.append(pcount.filter(project_id=c.project_id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
             cpcount.append(c.project_id)   
-    print datetime.datetime.now()
-    if 'testsql' in request.path:
-        return HttpResponse(m)
     return render_to_response('projectlist.html', RequestContext(request, {'projectobj':projectobj, \
             'rendering':rendering, 'pcount':pcount, 'fproject':filter_project,  'project_id':project_id, \
             'project_name':project_name, 'start_date_s':start_date_s, 'end_date_s':end_date_s, \
