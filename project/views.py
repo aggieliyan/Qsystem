@@ -906,8 +906,9 @@ def project_list(request):
             testsql.append(c.total+ '\r')
             c.save()
             cursor.close()
-        except:
-            m.append(sql+ '\r' )
+        except Exception, e:
+            print e
+            m.append(sql+ ':' + str(e) + ';' )
             pass
         if c.project_id not in cpcount: #project_id 去重
             filter_project.append(pcount.filter(project_id=c.project_id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
