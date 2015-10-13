@@ -84,6 +84,8 @@ urlpatterns = patterns('',
     url(r'^slist/$', project.views.show_slist),
     url(r'^getsdata/(\d+)/$', project.views.sdata),
     url(r'^case/', include('case.urls')),
+    
+    url(r'^testsql', project.views.project_list),
 )
 
 

@@ -98,6 +98,7 @@ STATICFILES_FINDERS = (
 
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
@@ -107,6 +108,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware', 
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
     # 'case.statsmiddleware.StatsMiddleware'
+    'django.middleware.cache.FetchFromCacheMiddleware',
 
 )
 
@@ -252,3 +254,17 @@ TEMPLATE_DIRS = ()
 CRONJOBS = [
         ('0 0 * * *', 'project.cron.my_scheduled_job')
     ]
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+CACHE_MIDDLEWARE_SECONDS = 1
