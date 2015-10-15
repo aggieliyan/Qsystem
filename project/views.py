@@ -11,7 +11,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User, Group
-from django.db import connections
 from django.db.models import Q
 import models
 from models import department, project, project_user, public_message, project_delay, project_user_message , project_operator_bussniess_message
@@ -22,6 +21,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, \
 MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm, addmoduleForm, sdetailForm
+from django.views.decorators.cache import cache_page
 
 def register(request,uname=''):
     if uname =='':      #若是直接Q系统注册为空,以ldap第一次登录则会传来用户名
@@ -887,25 +887,6 @@ def project_list(request):
     # p1 = models.project_statistics.objects.distinct().values_list('project_id',flat=True)
     # pcount = list(set(p1).intersection(set(proid))) 
     for c in pcount: 
-        sql = c.sql
-        db = c.db
-        try:
-            cursor = connections[db].cursor()
-            cursor.execute(sql)
-            total = cursor.fetchall()
-            total_list = ''       
-            for a in total:         #适合显示1列数据，若要多显示，则需要对a继续循环
-                    if len(total) == 1:         #此处if, else为了调整样式好看
-                        total_list = str(a[0])
-                    else:
-                        total_list = total_list + str(a[0]) + '\r'
-                  
-            c.total = total_list
-            c.save()
-            cursor.close()
-        except Exception, e:
-            print e
-            pass
         if c.project_id not in cpcount: #project_id 去重
             filter_project.append(pcount.filter(project_id=c.project_id).order_by("total")[0]) #每个项目只返回一组统计值最大的记录,方便页面显示
             cpcount.append(c.project_id)   
@@ -928,7 +909,7 @@ def praise(request ,pid):
 
 
     return HttpResponse(praisecount)
-    
+@cache_page(60 * 15)    
 def detail(request, pid='', nid=''):
     """
     pid是项目id
@@ -938,7 +919,6 @@ def detail(request, pid='', nid=''):
         request.session['id']
     except:
         return HttpResponseRedirect('/login')
-    
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))

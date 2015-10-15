@@ -6,8 +6,31 @@ Created on 2015-2-3
 import models
 import datetime
 #from django.http import HttpResponse
+from django.db import connections
 
 def my_scheduled_job():
+    allsql = models.project_statistics.objects.all()
+    for c in allsql: 
+        sql = c.sql
+        db = c.db
+        try:
+            cursor = connections[db].cursor()
+            cursor.execute(sql)
+            total = cursor.fetchall()
+            total_list = ''       
+            for a in total:         #for style, more lines need '\r'
+                    if len(total) == 1:         
+                        total_list = str(a[0])
+                    else:
+                        total_list = total_list + str(a[0]) + '\r'
+                  
+            c.total = total_list
+            c.save()
+            cursor.close()
+            
+        except Exception, e:
+            print e
+            pass
     chart_pro = models.project_statistics.objects.filter(is_graph=1)
     results = []
     for item in chart_pro:
