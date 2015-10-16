@@ -909,7 +909,7 @@ def praise(request ,pid):
 
 
     return HttpResponse(praisecount)
-@cache_page(60 * 15)    
+#@cache_page(60)    
 def detail(request, pid='', nid=''):
     """
     pid是项目id
