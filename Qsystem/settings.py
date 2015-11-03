@@ -98,7 +98,7 @@ STATICFILES_FINDERS = (
 
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
+#    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
@@ -108,7 +108,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware', 
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
     # 'case.statsmiddleware.StatsMiddleware'
-    'django.middleware.cache.FetchFromCacheMiddleware',
+#    'django.middleware.cache.FetchFromCacheMiddleware',
 
 )
 
@@ -268,4 +268,4 @@ CRONJOBS = [
 #SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 #SESSION_CACHE_ALIAS = "default"
 #CACHE_MIDDLEWARE_SECONDS = 100
-CACHE_BACKEND = 'db://q_cache_table'
+#CACHE_BACKEND = 'db://q_cache_table'
