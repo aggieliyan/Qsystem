@@ -22,7 +22,7 @@
       {% endif %} 
   		    <ul class="selectList">
             <li class="item-title">
-              <lable style="float:right">产品类目：</lable>
+              <label style="float:right">产品类目：</label>
             </li>
             <li>
               <input  value="{{categoryid}}" type="hidden" class="cate" name="categoryid">
@@ -39,7 +39,7 @@
           </ul>
           <ul class="testmodule">
             <li class="item-title">
-              <lable style="float:right">所属模块：</lable>
+              <label style="float:right">所属模块：</label>
             </li>
             <li>
               <select class="" name="testmodule" selected="selected">
@@ -52,7 +52,7 @@
                 {% endfor %}
               </select>
             </li>
-            <li class="filter"><lable>优先级：</lable></li>
+            <li class="filter"><label>优先级：</label></li>
             <li>
               <select class="" name="priority">
                 {% if cpriority %}
@@ -68,7 +68,7 @@
           <ul class="priority">
             <input  value="{{statue}}" type="hidden" class="hide-statue">
             <input  value="{{mold}}" type="hidden" class="hide-mold">
-  			    <li class="item-title"><lable style="float:right">状态：</lable></li>
+  			    <li class="item-title"><label style="float:right">状态：</label></li>
             <li>
               <select class="statue" name="status">
                 <option value=""> </option>
@@ -76,7 +76,7 @@
                 <option value="1">不等于</option>
               </select>
             </li>
-            <li class="filter mold" style="display:none;"><lable>+</lable></li>
+            <li class="filter mold" style="display:none;"><label>+</label></li>
             <li>
               <select class="mold" name="mold" style="display: none;">
   			      	<option value="未执行">未执行</option>
@@ -87,7 +87,7 @@
             <li>
           </ul>     
           <ul>
-            <li class="item-title"><lable style="float:right">作者：</lable></li>
+            <li class="item-title"><label style="float:right">作者：</label></li>
   		      <li>
               <input value="{{cauthor}}" type="hidden" class="cauthor">
   			      <select class="author" name="author">
@@ -103,7 +103,7 @@
                 <option value="37">胡图图</option>
               </select>
             </li>
-            <li class="filter"><lable>执行人：</lable></li> 		
+            <li class="filter"><label>执行人：</label></li> 		
   		    	<li>
               <input value="{{cexecutor}}" type="hidden" class="cexecutor">
               <select class="executor" name="executor">
@@ -115,7 +115,7 @@
             </li>
           </ul>
           <ul>              
-            <li class="item-title"><lable style="float:right">执行时间：</lable></li>
+            <li class="item-title"><label style="float:right">执行时间：</label></li>
             <li>
               <span class="input-append date form_datetime">
                 <input type="text" value="{{cstart_date|date:"Y-m-d"|default:""}}" readonly="" style="background-color: #FFFFFF;width:110px;" 
@@ -187,35 +187,34 @@
                            {% endif %}
                            {% endfor %} 
           	                {% for c in dic %}
-                  	    						<tr class="mtr" rank="{{c.rank}}" value="{{c.id}}">
+                  	    						<tr class="mtr" rank="{{c.0.rank}}" value="{{c.0.id}}">
                                       {% if canope%}
                   						    		  <td>
                                       {% else %}
                                         <td class="nodrag">
-                                      {% endif %}<input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.id}}
+                                      {% endif %}<input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.0.id}}
                                         </td>
-                  						      		<td class="editable nodrag">{{c.precondition|default_if_none:""}}</td>
-                  						      		<td class="editable nodrag">{{c.action}}</td>
-                  						    		<td class="editable nodrag">{{c.output}}</td>
-                  						      		<td class="nodrag"><span class="level">{{c.priority}}</span></td>
-                                        {% if result %}
-                  						      		{% for r in result %}
-                  						      		{% if c.id == r.testcase_id %}
-                  						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{r.result}}">&nbsp;{{r.result}}</span></td>
+                  						      		<td class="editable nodrag">{{c.0.precondition|default_if_none:""}}</td>
+                  						      		<td class="editable nodrag">{{c.0.action}}</td>
+                  						    		<td class="editable nodrag">{{c.0.output}}</td>
+                  						      		<td class="nodrag"><span class="level">{{c.0.priority}}</span></td>
+                                        {% if c.1 %}
+                  						      		
+                  						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{c.1.result}}">&nbsp;{{c.1.result}}</span></td>
                   						    		<td class="editable1 nodrag save wi" name="wi">
-                  						    			{% ifnotequal r.wi None %}
-                  						    			<a href=http://gj.ablesky.com/issues/{{r.wi}} class={{r.wi}} target="_blank">{{r.wi}}</a>
+                  						    			{% ifnotequal c.1.wi None %}
+                  						    			<a href=http://gj.ablesky.com/issues/{{c.1.wi}} class={{c.1.wi}} target="_blank">{{c.1.wi}}</a>
                   						    			{% endifnotequal %}         
                   						    		</td>
                                           {% if canope%}
-                  						      		<td>{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
-                  						      		<td>{{r.executor}}</td>
+                  						      		<td>{{c.1.exec_date|date:"Y/m/d H:i:s"}}</td>
+                  						      		<td>{{c.1.executor}}</td>
                                           {% else %}
-                                          <td class="nodrag">{{r.exec_date|date:"Y/m/d H:i:s"}}</td>
-                                          <td class="nodrag">{{r.executor}}</td>                       
+                                          <td class="nodrag">{{c.1.exec_date|date:"Y/m/d H:i:s"}}</td>
+                                          <td class="nodrag">{{c.1.executor}}</td>                       
                                           {% endif %}
-                  						      		<td class="editable nodrag save" name="remark">{{r.r_remark|default_if_none:""}}</td>
-                  						      		{% elif c.id  not in listid and forloop.counter == 1 %}	
+                  						      		<td class="editable nodrag save" name="remark">{{c.1.r_remark|default_if_none:""}}</td>
+                  						      		{% elif c.0.id  not in listid and forloop.counter == 1 %}	
                   						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
                   						    		  <td class="editable nodrag save" name="wi"></td>
                                           {% if canope%}
@@ -227,8 +226,7 @@
                                           {% endif %}
                   						      		<td class="editable nodrag save" name="remark"></td>
 
-                  						      		{% endif %}
-                  						      		{% endfor %}
+                  						      
                                         {% else %}
                                         <td class="nodrag"><a class="icon-play-circle"></a><span></span></td>
                                         <td class="editable nodrag"></td>
@@ -242,11 +240,11 @@
                   						      			<a class="icon-plus" title="添加用例"></a>
                   						      			<a class="icon-download-alt" title="引入用例" href="#casePullModal" data-toggle="modal" id="pullbutton" onclick="pullPop(this)"></a>
                   						      			<a class="icon-eye-open" title="查看结果"></a>
-                                          <input  value="{{c.id}}" class="checkresult" type="hidden">
+                                          <input  value="{{c.0.id}}" class="checkresult" type="hidden">
                   						      			<a class="icon-trash"></a>                        
                                           {% else %}
                                           <a class="icon-eye-open" style="margin-left:10px;" title="查看结果"></a>
-                                          <input  value="{{c.id}}" class="checkresult" type="hidden">
+                                          <input  value="{{c.0.id}}" class="checkresult" type="hidden">
                                           {% endif %}
                   						      		</td>
                                       </tr>

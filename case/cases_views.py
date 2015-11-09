@@ -3,7 +3,7 @@ import datetime
 import json, re, xlrd, os, sys
 from django.shortcuts import render_to_response, redirect, RequestContext, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from models import testcase, casemodule, category, result, Upload
+from models import testcase, casemodule, category, Upload, result
 from forms import searchForm, UploadForm
 from project.models import user, department
 from project.views import isNone
@@ -108,8 +108,7 @@ def case_list(request,pid):
 			mcase = testcase.objects.filter(category__in = subset)
 			allmodule = casemodule.objects.filter(pk__in = mcase.values_list("module",flat=True))
 			testmodule = casemodule.objects.filter(pk__in = cmodule.values_list("module",flat=True))		
-			caseresult = result.objects.filter(testcase__in = cmodule)
-			rresult = caseresult
+			rresult = caseresult = result.objects.filter(testcase__in = cmodule)
 			allexecutor = result.objects.filter(testcase__in = mcase).values_list("executor",flat = True).distinct()
 			if not isNone(ctestmodule):
 				testmodule = testmodule.filter(m_name = ctestmodule)
@@ -190,25 +189,35 @@ def case_list(request,pid):
 		caseresult = result.objects.filter(testcase__in = cmodule)
 		allexecutor = caseresult.values_list("executor",flat = True).distinct()
 	listid = caseresult.values_list("testcase", flat=True).distinct()
+#	print len(listid)
 	count = len(cmodule)
-	newresult = []
-	for c in listid:
-		p = caseresult.filter(testcase=c).order_by("-exec_date")[0]
-		newresult.append(p)
+#	newresult = []
+#	for c in listid:
+#		p = caseresult.filter(testcase=c).order_by("-exec_date")[0]
+#		newresult.append(p)
 	if not ckeyword:
 		testmodule = testmodule.order_by("m_rank")
 	else:
 		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
 		ccase = {}
-		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		ccase[m.id] = []
+		mcaselist = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
 		if len(mcaselist) != 0:
-			ccase[m.id] = mcaselist
+			for c in mcaselist:
+				try:
+					cresult = caseresult.filter(testcase_id = c.id).order_by("-exec_date")[0]
+				except:
+					cresult = ''
+				ccase[m.id].append([c, cresult])
 			case.append(ccase)
 
     #字典进行排序，暂不使用
 	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "count":count,"result":newresult, "listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
+	
+	print case
+
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "count":count,"listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "cate1":cate1, "cate2":cate2, "cate3":cate3, "canope":canope, "allexecutor":allexecutor, "notice":notice})
 
@@ -305,21 +314,27 @@ def allcaselist(request):
 		notice = u"全部用例下最多只显示200条哈,请使用筛选项查看更多用例~~"
 	listid = caseresult.values_list("testcase", flat=True).distinct()
 	count =len(cmodule)
-	newresult = []
-	for c in listid:
-		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
-		newresult.append(p)
+#	newresult = []
+#	for c in listid:
+#		p = caseresult.filter(testcase = c).order_by("-exec_date")[0]
+#		newresult.append(p)
 	if not ckeyword:
 		testmodule = testmodule.order_by("m_rank")
 	else:
 		testmodule = testmodule.order_by("-id")
 	for m in testmodule:
 		ccase = {}
-		mcaselist = cmodule.filter(module = m.id,isactived = 1).order_by("rank")
+		ccase[m.id] = []
+		mcaselist = cmodule.filter(module = m.id, isactived = 1).order_by("rank")
 		if len(mcaselist) != 0:
-			ccase[m.id] = mcaselist
+			for c in mcaselist:
+				try:
+					cresult = caseresult.filter(testcase_id = c.id).order_by("-exec_date")[0]
+				except:
+					cresult = ''
+				ccase[m.id].append([c, cresult])
 			case.append(ccase)
-	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "result":newresult, "listid":listid, "count":count, "cauthor":cauthor, 
+	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "listid":listid, "count":count, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
 		                      "cend_date":cend_date, "canope": False, "allexecutor":allexecutor, "notice":notice})
 

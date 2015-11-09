@@ -116,7 +116,7 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 					method          : 'post',             // The method to use when sending files to the server-side upload script
 					multi           : true,               // Allow multiple file selection in the browse dialog
 					formData        : {},                 // An object with additional data to send to the server-side upload script with every file upload
-					preventCaching  : true,               // Adds a random value to the Flash URL to prevent caching of it (conflicts with existing parameters)
+					preventCaching  : false,              // Adds a random value to the Flash URL to prevent caching of it (conflicts with existing parameters)
 					progressData    : 'percentage',       // ('percentage' or 'speed') Data to show in the queue item during a file upload
 					queueID         : false,              // The ID of the DOM object to use as a file queue (without the #)
 					queueSizeLimit  : 999,                // The maximum number of files that can be in the queue at one time

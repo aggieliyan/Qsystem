@@ -4,6 +4,12 @@ function inputFileOnChange() {
 	}
 }; 
 function fileBug(obj) {
+	$.get('/case/filebug/', function(data, status){
+		var json = eval("(" + data + ")");
+		for (var id in json){	
+			$("#assign_to select").append("<option value=" + id +">" + json[id] + "</option>");
+		};		
+	});
 	var result = $(obj).children().eq(1).val();
 	var wid = $(obj).next().children().text();
 	if(result!="Pass"){
@@ -57,6 +63,17 @@ function fileBug(obj) {
 		wid && $.post('/case/closewi/'+wid+'/');
 	}
 }
+$('#file_upload1').uploadify({		
+	'swf'  : '/static/jquery/uploadify.swf',
+    'uploader'  : '/case/upload_script/',  
+    'auto'      : true , 
+    'removeCompleted':false,  
+    'buttonText': '选择文件' , 
+	'onUploadSuccess': function(file, data, response){
+		var result = eval('(' + data + ')');
+		$("#path").attr("value", $("#path").val()+result['old_name']+":"+result['save_name']+",");
+		}
+});
 function checkForm() {
 	var flag = true;
 	$('.item_cont').children().each(function(){
@@ -83,6 +100,30 @@ function checkForm() {
 $('#fileBugModal').on('hidden', function(){ //为了保证标记的唯一性，所以要及时去掉无用的标记
 	$('#bugId').removeAttr("id");
 });
+$('#fileBugForm').ajaxForm(function(data, status) {//提交完表单成功后做以下操作
+		$('#create').removeAttr("disabled");
+		var bug = eval("(" + data + ")");	
+		if(bug['failed']){ 
+			alert(bug['message']);
+			return false;
+		}
+		buglink = '<a href=http://gj.ablesky.com/issues/'+bug+' target="_blank">'+bug+'</a>';
+		$('#bugId a').remove();
+		$('#bugId').append(buglink);
+		tid = $('#bugId').parent().attr("value");
+		$('#bugId a').attr("class",bug); 
+		var url = "/case/updateresult/";
+        var para = {"tname":"wi", "tid":tid, "tcnt":bug};
+        $.post(url, para, function(data){
+            var rs = eval('('+data+')');
+            if(rs.success){
+                //alert("ok");
+            }else{
+                alert(rs.message);
+            }
+        }); 
+		$('#fileBugModal').modal('hide'); 		
+     });
 $('#refreshwi').click(function(){
 	var buglist = {};
 	for(var i=0; i<$('.wi').length; i++){
@@ -113,48 +154,4 @@ $('#refreshwi').click(function(){
 			};
 		};
 	});
-});
-$(document).ready(function(){	
-	$.get('/case/filebug/', function(data, status){
-		var json = eval("(" + data + ")");
-		for (var id in json){	
-			$("#assign_to select").append("<option value=" + id +">" + json[id] + "</option>");
-		};		
-	});
-	$('#fileBugForm').ajaxForm(function(data, status) {//提交完表单成功后做以下操作
-		$('#create').removeAttr("disabled");
-		var bug = eval("(" + data + ")");	
-		if(bug['failed']){ 
-			alert(bug['message']);
-			return false;
-		}
-		buglink = '<a href=http://gj.ablesky.com/issues/'+bug+' target="_blank">'+bug+'</a>';
-		$('#bugId a').remove();
-		$('#bugId').append(buglink);
-		tid = $('#bugId').parent().attr("value");
-		$('#bugId a').attr("class",bug); 
-		var url = "/case/updateresult/";
-        var para = {"tname":"wi", "tid":tid, "tcnt":bug};
-        $.post(url, para, function(data){
-            var rs = eval('('+data+')');
-            if(rs.success){
-                //alert("ok");
-            }else{
-                alert(rs.message);
-            }
-        }); 
-		$('#fileBugModal').modal('hide'); 		
-     });
-
-    $('#file_upload1').uploadify({		
-        'swf'  : '/static/jquery/uploadify.swf',
-        'uploader'  : '/case/upload_script/',  
-        'auto'      : true , 
-        'removeCompleted':false,  
-        'buttonText': '选择文件' , 
-		'onUploadSuccess': function(file, data, response){
-			var result = eval('(' + data + ')');
-			$("#path").attr("value", $("#path").val()+result['old_name']+":"+result['save_name']+",");
-		}
-  });
-});
+});	
