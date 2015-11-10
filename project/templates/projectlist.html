@@ -169,7 +169,7 @@
                                     <td>
                                         <!--a href="{% url 'prodetail' p.id %}">{{ p.project }}</a-->
                                         <!--a href="javascript:update({{ p.id }})"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px"><span>{{ p.praise_p }}</span></a-->
-                                        <div class="pro-proname" title="{{p.project}}:&#10;产品：{{p.estimated_product_start_date|date:"Y-m-d"}}至{{p.estimated_product_end_date|date:"Y-m-d"}}&#10;开发：{{p.estimated_develop_start_date|date:"Y-m-d"}}至{{p.estimated_develop_start_date|date:"Y-m-d"}}&#10;测试：{{p.estimated_develop_start_date|date:"Y-m-d"}}至{{p.estimated_develop_start_date|date:"Y-m-d"}}">
+                                        <div class="pro-proname" title="{{p.project}}:&#10;产品：{{p.estimated_product_start_date|date:"Y-m-d"}}至{{p.estimated_product_end_date|date:"Y-m-d"}}&#10;开发：{{p.estimated_develop_start_date|date:"Y-m-d"}}至{{p.estimated_develop_end_date|date:"Y-m-d"}}&#10;测试：{{p.estimated_test_start_date|date:"Y-m-d"}}至{{p.estimated_test_end_date|date:"Y-m-d"}}">
                                             <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
                                         </div>
                                         <div style="width:54px;float:right">
