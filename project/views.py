@@ -102,7 +102,6 @@ def register(request,uname=''):
 
 def logout(request):
     try:
-
         response = HttpResponseRedirect("/login")
         response.delete_cookie("username")
         response.delete_cookie("password")
@@ -120,6 +119,8 @@ def no_login(request):
 def no_perm(request):
     return render_to_response("noperm.html")
 def login(request,url):
+    agent = request.META.get('HTTP_USER_AGENT','')
+    print agent
     template_var = {}
     template_var["url"] = url
     if "username" in request.COOKIES and "password" in request.COOKIES:
@@ -853,7 +854,7 @@ def project_list(request):
             if not match:
                 u_name = u_name + ' ' + u.username.realname
         l.append(u_name)   
-        if org.status_p !=u'暂停' and org.status_p != u'已上线' :
+        if org.status_p !=u'已暂停' and org.status_p != u'已上线' :
             curtime = datetime.datetime.now()
             nowtime = curtime.strftime("%Y-%m-%d ") 
             expect_date = org.expect_launch_date
@@ -1211,7 +1212,7 @@ def user_info(request):
             for p in project_user_list:
                 projectids.append(p.project.id) 
             projectlist = projectlist.filter(pk__in = projectids)       
-            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")
+            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'已暂停') | Q(status_p = u'运营推广')).order_by("-id")
             pro_num=res.count()
             result['pro_num'] = pro_num
    
@@ -1278,13 +1279,13 @@ def personal_homepage(request):
                 uname = uname + ' ' + u.username.realname
         relateduser[p.project.id] = uname
     projectlist = projectlist.filter(pk__in = projectids)
-    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
+    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'已暂停') | Q(status_p = u'运营推广')).order_by("-id")   
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'运营推广')).order_by("-id")
     #判断项目是否显示橙色和选中相应项目负责人
     rendering = {}
     for org in result:
         l = []
-        if org.status_p !=u'暂停' and org.status_p != u'已上线':
+        if org.status_p !=u'已暂停' and org.status_p != u'已上线':
             time = datetime.datetime.now()
             nowtime=time.strftime("%Y-%m-%d ") 
             if org.expect_launch_date:
@@ -1357,7 +1358,7 @@ def deleteproject(request,pid,url):
     return HttpResponseRedirect(url)
 def pauseproject(request, pid, url):
     pausepro = get_object_or_404(project, pk = int(pid))
-    pausepro.status_p ='暂停'
+    pausepro.status_p ='已暂停'
     pausepro.save()
     return HttpResponseRedirect(url)
 """
