@@ -17,7 +17,7 @@ function fileBug(obj) {
 			$('#fileBugLabel').text("新建问题");
 			$('#type select').val('');
 			$('#status input').eq(0).attr("checked","checked");
-			$('#environment select').val('');
+			//$('#environment select').val(''); //这个好处就是如果开omega,下次还是omega，省得总切换
 			$('#subject input').attr("value","");
 			content = "\r编号：" + $(obj).parent().children().eq(0).text().trim() + "\r" + "前置条件：" + $(obj).parent().children().eq(1).text() + "\r" + "输入/动作："+ $(obj).parent().children().eq(2).text() + "\r" + "期望输出："+ $(obj).parent().children().eq(3).text() + "\r";
 			$('#description textarea').attr("value",content);
@@ -37,7 +37,7 @@ function fileBug(obj) {
 				$('#fileBugLabel').text('#'+wid);
 				$('#type select').val(issue['type']);
 				issue['status']==4? $('#status input').eq(1).attr("checked","checked"):$('#status input').eq(0).attr("checked","checked");
-				$('#environment select').val('');
+				//$('#environment select').val('');
 				$('#subject input').attr("value",issue['subject']);
 				$('#description textarea').attr("value", issue['description']);
 				$('#priority select').val(issue['PRI']);

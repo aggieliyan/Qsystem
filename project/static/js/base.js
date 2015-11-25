@@ -1,5 +1,11 @@
 $(document).ready(function(){
-  var today = new Date();
+	var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox")>0?true:false; 
+	var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1 
+	if (!isFirefox && !isChrome) {
+		alert("Q同学，请将你的浏览器更换为Firefox或Chrome访问吧~坚持不换不在保修范围哦^_^")
+    } //判断是否Firefox或Chrome浏览器
+    	
+  	var today = new Date();
     var weekday=new Array(7)
     weekday[0]="Sat-Sun"
     weekday[1]="Mon"
