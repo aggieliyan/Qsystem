@@ -961,7 +961,7 @@ def detail(request, pid='', nid=''):
     # sql = ''
     # for p in pro_sql:
     #     sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 
-    if pro_sql=='':
+    if len(pro_sql)==0:
         sql_status = '未填写'
     else:
         sql_status = '已填写'
