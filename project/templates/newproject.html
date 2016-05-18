@@ -65,18 +65,45 @@
                 </div>
                 <textarea style="width:205px;height:80px;resize:none;" type="text" name="description" class="form-control inputfield" maxlength=500>{{res.pro.description}}</textarea>
               </div>
+			  {% if editdate %}
+			  <div>
+			  	<div class="title">
+					<label class="item-title">招募分数：</label>
+			  	</div>
+				<input type="text" name="p_plan_score" class="form-control inputfield" maxlength=100 value="{{res.ps.pps|default_if_none:''}}">
+              </div>
+			  <div style="height:100px;">
+                <div class="title">
+                  <label class="item-title">具体说明：</label>
+                </div>
+                <textarea style="width:205px;height:80px;resize:none;" type="text" name="plan_score_description" class="form-control inputfield" maxlength=500>{{res.ps.pps_dpt}}</textarea>
+              </div>
+			  <div>
+			  	<div class="title">
+					<label class="item-title">实际得分：</label>
+			  	</div>
+				<input type="text" name="p_actual_score" class="form-control inputfield" maxlength=100 value="{{res.ps.pas|default_if_none:''}}">
+              </div>
+			  <div style="height:100px;">
+                <div class="title">
+                  <label class="item-title">打分说明：</label>
+                </div>
+                <textarea style="width:205px;height:80px;resize:none;" type="text" name="actual_score_description" class="form-control inputfield" maxlength=500>{{res.ps.pas_dpt}}</textarea>
+              </div>
+			  {% endif %}
               <div >
                 <div class="title">
                 <label class="item-title"><span class="must">*</span>项目状态：</label>
                 </div>
                 <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
                   <option select = 'selected'>{{res.pro.status_p}}</option>
+				  <option>招募PM中..</option>
                   <option>需求讨论中</option>
                   <option>设计中</option>
                   <option>设计完成</option>
                   <option>开发中</option>
                   <option>测试中</option>
-                  <option>暂停</option>
+                  <option>已暂停</option>
                   <option>已上线</option>
                   <option>运营推广</option>
                 </select>
@@ -377,12 +404,13 @@
                 <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
                   <option select = 'selected'>{{res.pro.status_p}}</option>
                   {% if isope %}
+				  <option>招募PM中..</option>
                   <option>需求讨论中</option>
                   <option>设计中</option>
                   <option>设计完成</option>
                   <option>开发中</option>
                   <option>测试中</option>
-                  <option>暂停</option>
+                  <option>已暂停</option>
                   <option>已上线</option> 
                   <option>运营推广</option>
                   {% endif %}
@@ -635,7 +663,7 @@
   {% block js %}
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
-    <script type='text/javascript' src="/static/js/newproject.js"></script>
+	<script type='text/javascript' src="/static/js/newproject.js"></script>
     <script type="text/javascript">   
     $(document).ready(function(){
       
@@ -675,7 +703,9 @@
         var pro = $("[name='priority']").val();
         var leader = $("[name='leader']").val();
         var pname = $("[name='pname']").val();
-
+		if($("[name='status']").val()=="招募PM中.."){
+			leader = "3"
+		}		
         if(type_p == "" || pro == "" || leader== "" || pname == ""){
           $("#errofield").text("请检查必填项");
           return false;

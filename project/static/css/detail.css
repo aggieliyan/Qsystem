@@ -4,18 +4,38 @@
 	margin-right: auto;
 }
 body {
-	font-family: "Microsoft YaHei",arial,宋体;
+	font-family: "Microsoft YaHei",arial;
     padding: 0;
     font-size: 14px;
     margin-top: 0px;
 }
+.notice {
+	background-color: #ffd;
+    border: thin solid #f93;
+    margin: auto;
+    position: relative;
+	padding: 15px 20px 20px 0px;
+	width: 100%;	
+	height:auto;
+	overflow: auto;
+}
+
+.pps_left {
+	width: 50%;
+	float: left;	
+}
+
+.pas_right {
+	width: 50%;
+	float: right;	
+}
+
 table {
 	width: 100%;
 }
 tr {
 	height: 40px;
 }
-
 a {
 	text-decoration: none;
 	color: #09f;
@@ -51,7 +71,6 @@ a:hover {
 	list-style: none;
 	text-align: right;
 	color: #555;
-
 }
 .line-text {
 	width:36%;

@@ -5,7 +5,6 @@ function show_graph(pid,id){
 		var i = 0;
 		for (var key in json){
 			var lineChartData = {
-
 					labels : json[key].labels,
 					datasets : [
 						{

@@ -6,8 +6,10 @@ function ajaxClick(url){
 	$.get(url, function(data, status){
 		var json = eval ("(" + data + ")");
 		$('#import_list tr').remove();
-		for(var key in json['actionlist']){			
-			$('#import_list').append('<tr><td class="text-left first-cell"><label class="import-list-item clearfix"><input onclick="change(this)" type="checkbox" value="'+key+'" style="margin-right:10px;"><p>'+json['actionlist'][key]+'</p></label></td></tr>');
+		for(var c in json['actionlist']){	
+			for (var key in json['actionlist'][c]) {
+				$('#import_list').append('<tr><td class="text-left first-cell"><label class="import-list-item clearfix"><input onclick="change(this)" type="checkbox" value="' + key + '" style="margin-right:10px;"><p>' + json['actionlist'][c][key] + '</p></label></td></tr>');
+			}
 		}
 		if (json['prelink']){
 			$('.previous').removeClass('disabled');

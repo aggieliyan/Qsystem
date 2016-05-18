@@ -22,6 +22,7 @@ from django.utils.translation import ugettext_lazy as _
 from project.forms import UserForm, ProjectForm, changedesignForm, delayprojectForm, TestForm, Approveform, LoginForm, \
 MessageForm, NoticeForm, ProjectSearchForm ,ConmessageForm, feedbackForm, feedbackCommentForm, addmoduleForm, sdetailForm
 from django.views.decorators.cache import cache_page
+from django.db.models import Sum
 
 def register(request,uname=''):
     if uname =='':      #若是直接Q系统注册为空,以ldap第一次登录则会传来用户名
@@ -53,7 +54,6 @@ def register(request,uname=''):
                 uid = models.user.objects.filter(username=username)[0].id
                 request.session['username'] = username
                 request.session['realname'] = realname
-                print request.session['realname']
                 request.session['id'] = uid
     
                 #Django 认证系统的登录
@@ -102,7 +102,6 @@ def register(request,uname=''):
 
 def logout(request):
     try:
-
         response = HttpResponseRedirect("/login")
         response.delete_cookie("username")
         response.delete_cookie("password")
@@ -120,6 +119,8 @@ def no_login(request):
 def no_perm(request):
     return render_to_response("noperm.html")
 def login(request,url):
+    agent = request.META.get('HTTP_USER_AGENT','')
+    print agent
     template_var = {}
     template_var["url"] = url
     if "username" in request.COOKIES and "password" in request.COOKIES:
@@ -233,6 +234,12 @@ def new_project(request, pid='', nid=''):
             priority = form.cleaned_data['priority']
             pname = form.cleaned_data['pname']
             description = form.cleaned_data['description']
+            #新增以下四项支持项目打分
+            pplan_score = form.cleaned_data['p_plan_score']
+            print pplan_score, description
+            pps_dpt = form.cleaned_data['plan_score_description']
+            pactual_score = form.cleaned_data['p_actual_score']
+            pas_dpt = form.cleaned_data['actual_score_description']
             status = form.cleaned_data['status']
             leaderid = form.cleaned_data['leader']
             leader = models.user.objects.get(id=leaderid)
@@ -393,7 +400,13 @@ def new_project(request, pid='', nid=''):
                         project_statistics = models.project_statistics(
                                         project_id=pid, item=item, db=db, sql=sql, is_graph=isgraph, is_editable=1)
                     project_statistics.save()
-            
+            #存项目分数,如果已存过，则先删除旧的，再存新的，实现编辑功能，一条pid对应一条scroe记录
+            try:
+                models.pro_score.objects.filter(project_id=pid).delete()
+            finally:
+                pro_score = models.pro_score(project_id=pid, p_plan_score=pplan_score, p_plan_dpt=pps_dpt,
+                                             p_actual_score=pactual_score, p_actual_dpt=pas_dpt)
+                pro_score.save()
 
             #将各负责人加入到相应负责人权限组
             allmasters = [[leaderid, 4], [designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
@@ -853,7 +866,7 @@ def project_list(request):
             if not match:
                 u_name = u_name + ' ' + u.username.realname
         l.append(u_name)   
-        if org.status_p !=u'暂停' and org.status_p != u'已上线' :
+        if org.status_p !=u'已暂停' and org.status_p != u'已上线' :
             curtime = datetime.datetime.now()
             nowtime = curtime.strftime("%Y-%m-%d ") 
             expect_date = org.expect_launch_date
@@ -921,6 +934,7 @@ def detail(request, pid='', nid=''):
         return HttpResponseRedirect('/login')
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
+    print user.realname
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
     bms = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=3), Q(department_id=12) | Q(department_id=9) | Q(department_id=7)| Q(department_id=6))
     ops = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=4), Q(department_id=3) | Q(department_id=8) | Q(department_id=12)| Q(department_id=9) | Q(department_id=7) | Q(department_id=6))
@@ -960,7 +974,7 @@ def detail(request, pid='', nid=''):
     # sql = ''
     # for p in pro_sql:
     #     sql = sql + p.item + ':' + p.db + ':' + p.sql + ';' 
-    if pro_sql=='':
+    if len(pro_sql)==0:
         sql_status = '未填写'
     else:
         sql_status = '已填写'
@@ -1012,17 +1026,47 @@ def detail(request, pid='', nid=''):
         fc[item] = feedback_comment
     
 #    print sorted(fc.iteritems(), key=lambda d:d[0].id, reverse = True)  如果想按评论也倒序显示，可以使用这句先将字典变成列表
-         
+    
+    #取项目分数信息
+    ps_info = {'pps':'', 'pps_dpt':'', 'pas':'', 'pas_dpt':''}
+    try:
+        ps_obj = models.pro_score.objects.get(project_id=pid)
+        ps_info['pps'] = ps_obj.p_plan_score
+        ps_info['pps_dpt'] = ps_obj.p_plan_dpt
+        ps_info['pas'] = ps_obj.p_actual_score
+        ps_info['pas_dpt'] = ps_obj.p_actual_dpt
+    except:
+#        ps_info['pps'] = ps_info['pps_dpt'] = ps_info['pas'] = ps_info['pas_dpt'] = ''
+        pass
+    print ps_info     
     try:
         request.user 
         auth_id = [pro.leader_p_id, pro.designer_p_id, pro.tester_p_id, 
                    pro.business_man_id, pro.operator_p_id, pro.customer_service_id]            
         if(request.user.has_perm('auth.change_permission') or request.session['id'] in auth_id):
             editboolean = True
+        
     finally:
         if '/detail/' in request.path:
+            # 详情页项目经理可以看到已报名项目的人
+            # 如果不是项目经理就判断是否已报名
+            # signed_PM: 1 已报   0 未报
+            if pro.status_p == u"招募PM中..":
+                signed_info = signed_pro(pid, "PM", editboolean, current_uid)
+            elif pro.status_p == u"需求讨论中":
+                signed_info = signed_pro(pid, "PD", editboolean, current_uid)
+            elif pro.status_p == u"设计中":                
+                dev_info = signed_pro(pid, "dev", editboolean, current_uid)
+                test_info = signed_pro(pid, "test", editboolean, current_uid)
+                pd_info = signed_pro(pid, "PD", editboolean, current_uid)
+                signed_info = [dev_info, test_info, pd_info]
+                print signed_info
+            else:
+                signed_info = u"非报名状态"
+            print signed_info
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
-                   'sql': sql_status, 'confirmation': confirmation, 'curuid': current_uid, 'feedback': [len(pro_feedback), fc]}
+                   'sql': sql_status, 'confirmation': confirmation, 'curuid': current_uid, 
+                   'feedback': [len(pro_feedback), fc], 'signed_info': signed_info, 'ps': ps_info}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
 
@@ -1047,10 +1091,30 @@ def detail(request, pid='', nid=''):
 
                 if not request.user.has_perm('auth.change_permission'):
                     editdate = 0
-
-            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'request': edittag, 'editid':nid, 'sql': pro_sql}
+            print ps_info['pps']
+            print pro.description
+            res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 
+                   'request': edittag, 'editid':nid, 'sql': pro_sql, 'ps': ps_info}
+            # editdate用来判断是否PMO
             return render_to_response('newproject.html', {'res': res, 'editdate':editdate, 'isdevs':isdevs, 'isope':isope})
 
+def signed_pro(pid, type, editboolean, current_uid):
+    signed_infos = models.signup_project.objects.filter(project_id=pid, type=type)
+    signed_info = []
+    if editboolean:                
+        for info in signed_infos:
+            name = models.user.objects.get(id=info.user_id).realname
+            signed_info.append(name)
+    else:
+        for info in signed_infos:
+            signed_uid = models.user.objects.get(id=info.user_id).id
+            signed_info.append(signed_uid)
+        if current_uid in signed_info:
+            signed_info = 1
+        else:
+            signed_info = 0
+    return signed_info
+        
 def project_feedback(request):  #也可以写在detail里，这样更清晰
     try:
         request.session['id']
@@ -1211,7 +1275,7 @@ def user_info(request):
             for p in project_user_list:
                 projectids.append(p.project.id) 
             projectlist = projectlist.filter(pk__in = projectids)       
-            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")
+            res = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'已暂停') | Q(status_p = u'运营推广')).order_by("-id")
             pro_num=res.count()
             result['pro_num'] = pro_num
    
@@ -1278,13 +1342,13 @@ def personal_homepage(request):
                 uname = uname + ' ' + u.username.realname
         relateduser[p.project.id] = uname
     projectlist = projectlist.filter(pk__in = projectids)
-    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'暂停') | Q(status_p = u'运营推广')).order_by("-id")   
+    result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'已暂停') | Q(status_p = u'运营推广')).order_by("-id")   
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'运营推广')).order_by("-id")
     #判断项目是否显示橙色和选中相应项目负责人
     rendering = {}
     for org in result:
         l = []
-        if org.status_p !=u'暂停' and org.status_p != u'已上线':
+        if org.status_p !=u'已暂停' and org.status_p != u'已上线':
             time = datetime.datetime.now()
             nowtime=time.strftime("%Y-%m-%d ") 
             if org.expect_launch_date:
@@ -1357,7 +1421,7 @@ def deleteproject(request,pid,url):
     return HttpResponseRedirect(url)
 def pauseproject(request, pid, url):
     pausepro = get_object_or_404(project, pk = int(pid))
-    pausepro.status_p ='暂停'
+    pausepro.status_p ='已暂停'
     pausepro.save()
     return HttpResponseRedirect(url)
 """
@@ -1919,7 +1983,7 @@ def sdata(request, pid):
         labels = []
         total = []
         datas = models.project_statistics_result.objects.filter(sql_id=sid).order_by("date")
-        for i in range(0, len(datas)+1, 7):
+        for i in range(0, len(datas)+1, 30):
             try:
                 labels.append(str(datas[i].date))
                 total.append(datas[i].statistical_result)
@@ -1930,6 +1994,119 @@ def sdata(request, pid):
         sdata[sid] = {'labels': labels, 'total': total}
            
     return HttpResponse(json.dumps(sdata))
+
+def signup_project(request, type, uid, pid):
+    print datetime.datetime.now()
+    signup_info = models.signup_project(project_id=int(pid), user_id=int(uid), type=type, time=datetime.datetime.now(), isactived=1)
+    signup_info.save()
+    
+    return HttpResponse("success")
+
+def score(request, pid):
+    try:         #没登录的去登录页面
+        request.session['id']
+    except:
+        return HttpResponseRedirect('/login')
+    pro = models.project.objects.get(id=int(pid))
+    devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
+    p_role = []
+    dep_id = [[1,2], [3,0]]
+    for item_id in dep_id:
+        p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id[0], project_user__roles=item_id[1]))
+    try:
+        ispm_done = models.pro_score.objects.get(project_id=pid).pm_done
+    except:
+        ispm_done = 1  
+    scoreboolean = 0
+    if ((request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id) and ispm_done): #and比or优先
+                    scoreboolean = 1 #判断是否有打分权限,项目经理或PM并且尚未提交打分
+    related_user = {'dev': devs,
+              'pd': p_role[1],
+              'qa': p_role[0]}
+    user_info = {}
+    for section, users in related_user.items():
+        user_info[section] = []
+        for user in users:
+            try:
+                sobj = models.user_score.objects.get(user_id=user.id, project_id=pid)
+                user_info[section].append([user,sobj])
+            except:
+                user_info[section].append([user,''])
+     
+    result = {'pro': pro,
+              'dev': user_info['dev'],
+              'pd': user_info['pd'],
+              'qa': user_info['qa'],
+              'scorebool': scoreboolean,
+              'done_flag': ispm_done,
+              }
+    print result
+    return render_to_response('score.html',{'res': result})
+
+def scoreuser(request, pid, flag):
+    datas = json.loads(request.POST.get('datas',False))
+    uscores = []
+    for key,value in datas.items():
+        print key, value
+        try:
+            models.user_score.objects.filter(user_id=key, project_id=pid).delete()
+        finally:
+            if value[0]:#因为数据库中分数是int型，如果为空存储时会报错
+                uscores.append(models.user_score(user_id=key, project_id=pid, 
+                                             u_actual_score=value[0], 
+                                             u_actual_dpt=value[1], upd_time=datetime.datetime.now()))
+            else:
+                uscores.append(models.user_score(user_id=key, project_id=pid,                                              
+                                             u_actual_dpt=value[1], upd_time=datetime.datetime.now()))
+    print uscores
+    models.user_score.objects.bulk_create(uscores)
+
+    if(int(flag)==0):
+        try:
+            ps = models.pro_score.objects.get(project_id=pid)
+            ps.pm_done = 0
+            ps.save()
+        except:
+            return HttpResponse(json.dumps({0:"请先找架构组给项目评估分后才可以提交最终评分！"}))
+    return HttpResponse(json.dumps({1:"success"}))
+
+def myscore(request, userid=''):
+    try:         #没登录的去登录页面
+        uid = request.session['id']
+    except:
+        return HttpResponseRedirect('/login')
+    if userid:
+        uid = userid
+    sobj = models.user_score.objects.filter(user_id=uid)
+    uscore = {} #通过user_score表的外链就可以访问到对应的project对象
+    for obj in sobj:
+        try:
+            uscore[obj] = models.pro_score.objects.get(project_id=obj.project_id).pm_done
+        except:
+            uscore[obj] = 1
+    whose = models.user.objects.get(id=uid)
+    total_score = models.user_score.objects.filter(user_id=uid).aggregate(total=Sum('u_actual_score'))
+    result = {'uscore': uscore,
+              'owner': whose,
+              'total': total_score}    
+    return render_to_response('myscore.html',{'res': result})
+
+def scorelist(request):
+    try:         #没登录的去登录页面
+        uid = request.session['id']
+    except:
+        return HttpResponseRedirect('/login')  
+    slist = {}
+    users = models.user_score.objects.values('user').distinct()
+    for user in users:
+        uobj = models.user.objects.get(id=user['user'])
+        slist[uobj] = models.user_score.objects.filter(user_id=user['user']).aggregate(total=Sum('u_actual_score'))
+    slist = sorted(slist.iteritems(), key=lambda d:d[1], reverse = True)
+    print slist
+    for i in slist:
+        print i
+    result = {'slist': slist}
+    return render_to_response('scorelist.html',{'res':result})
 
 def initdata(request):
     #auth_group

@@ -88,6 +88,13 @@
     </div>
 </body>
 </html>
+<script>
+	var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox")>0?true:false; 
+	var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1 
+	if (!isFirefox && !isChrome) {
+		alert("Q同学，请将你的浏览器更换为Firefox或Chrome访问吧~坚持不换不在保修范围哦^_^")
+    } //判断是否Firefox或Chrome浏览器
+</script>
 
 
 

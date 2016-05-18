@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  var today = new Date();
+  	var today = new Date();
     var weekday=new Array(7)
     weekday[0]="Sat-Sun"
     weekday[1]="Mon"
@@ -38,11 +38,13 @@ $(document).ready(function(){
 (function(){
     //导航选中
     var url = location.pathname, navg = $('.top_memu li a');
-    if(url == '/personal_homepage/'||url=='/historymessage/'||url=='/delay/'){
+    if(url == '/personal_homepage/'||url=='/historymessage/'||url=='/delay/'||url=='/myscore/'){
         navg.eq(0).addClass('selected');
     }else if(!url.indexOf('/projectlist/')||!url.indexOf('/newproject/')||!url.indexOf('/detail/')||!url.indexOf('/editproject/')||!url.indexOf('/notice/')){
         navg.eq(1).addClass('selected');
     }else if(!url.indexOf('/sdetail/')||!url.indexOf('/slist/')){
         navg.eq(2).addClass('selected');
-    }
+    }else if(!url.indexOf('/scorelist/')||!url.indexOf('/viewscore/')){
+		navg.eq(3).addClass('selected');
+	}
 })()

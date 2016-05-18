@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
+    <link href='/static/css/myscore.css' rel='stylesheet' media='screen'>
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<META http-equiv="content-type" content="text/html; charset=utf-8">
+  {% endblock %}
+  {% block content %}
+  <div id="container" >
+  	<div id="head"></div>
+	<div id="bread">
+		<p><a href="/personal_homepage/">个人主页</a>&nbsp>>{{res.owner.realname}}的积分</p>
+	</div>
+	<table id="myscorelist">
+		<h3 style="width:100%; margin-top:20px; margin-bottom:-20px">
+			<span style="color:#555; font-size:15px">总分：</span>
+			<span style="color:#1e90ff; font-size:40px">{{res.total.total|default_if_none:'0'}}</span>
+		</h3>
+		<tr>
+			<th style="width:30%">项目名称</th>
+			<th style="width:7%">分数（分）</th>
+			<th style="width:50%">打分说明</th>
+			<th style="width:8%">评分时间</th>
+			<th style="width:5%">状态</th>
+		</tr>
+		{% for s in res.uscore %}
+			<tr>
+				<td><a href="/detail/{{s.project_id}}/" target="_blank">{{s.project.project}}</a></td>
+				<td>{{s.u_actual_score}}</td>
+				<td>{{s.u_actual_dpt}}</td>
+				<td>{{s.upd_time|date:"Y-m-d"}}</td>
+				{% if res.uscore.s %}
+				<td>未提交</td>
+				{% else %}
+				<td>已提交</td>
+				{% endif %}
+			</tr>
+		{% endfor %}
+	</table>
+  </div>
+  {% endblock %}

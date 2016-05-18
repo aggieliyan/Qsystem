@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
+    <link href='/static/css/myscore.css' rel='stylesheet' media='screen'>
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<META http-equiv="content-type" content="text/html; charset=utf-8">
+  {% endblock %}
+  {% block content %}
+  <div id="container">
+  	<h3 style="width:100%">Q&nbsp榜</h3>
+  	<a id="viewdpt" href="http://www.ablesky.com/org/post/detail_61179" target="_blank">查看打分说明>></a>
+  	<table id="scorelist">
+		<tr>
+			<th style="width:30%">排名</th>
+			<th style="width:30%">姓名</th>
+			<th style="width:30%">总分</th>			
+		</tr>
+		{% for item in res.slist %}
+			<tr>
+				<td>{{forloop.counter}}</td>
+				<td><a href="/viewscore/{{item.0.id}}/" target="_blank">{{item.0.realname}}</a></td>
+				<td>{{item.1.total}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+  </div>
+  {% endblock %}

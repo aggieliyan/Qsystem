@@ -71,7 +71,7 @@
                   <option value="设计完成">设计完成</option>
                   <option value="开发中">开发中</option>
                   <option value="测试中">测试中</option>
-                  <option value="暂停">暂停</option>
+                  <option value="已暂停">已暂停</option>
                   <option value="已上线">已上线</option>
                   <option value="运营推广">运营推广</option>
                 </select>
@@ -109,7 +109,7 @@
                         <span class="input-append date form_datetime">
                           <input class="start_date_s" size="16" type="text" value="{{start_date_s|date:"Y-m-d"|default:""}}" name="start_date_s" readonly="" style="background-color: #FFFFFF">
                           <span class="add-on"><i class="icon-calendar"></i></span>
-                        </span>至
+                        </span>&nbsp&nbsp至&nbsp
                         <span class="input-append date form_datetime">
                           <input class="end_date_s" size="16" type="text" value="{{end_date_s|date:"Y-m-d"|default:""}}" name="end_date_s" readonly="" style="background-color: #FFFFFF">
                           <span class="add-on"><i class="icon-calendar"></i></span>
@@ -169,7 +169,7 @@
                                     <td>
                                         <!--a href="{% url 'prodetail' p.id %}">{{ p.project }}</a-->
                                         <!--a href="javascript:update({{ p.id }})"><input id="praise-add" type="image" src="../static/img/praise.png" style="height: 16px;width: 16px; margin-bottom:5px"><span>{{ p.praise_p }}</span></a-->
-                                        <div class="pro-proname" title="{{p.project}}:&#10;产品：{{p.estimated_product_start_date|date:"Y-m-d"}}至{{p.estimated_product_end_date|date:"Y-m-d"}}&#10;开发：{{p.estimated_develop_start_date|date:"Y-m-d"}}至{{p.estimated_develop_start_date|date:"Y-m-d"}}&#10;测试：{{p.estimated_develop_start_date|date:"Y-m-d"}}至{{p.estimated_develop_start_date|date:"Y-m-d"}}">
+                                        <div class="pro-proname" title="{{p.project}}:&#10;产品：{{p.estimated_product_start_date|date:"Y-m-d"}}至{{p.estimated_product_end_date|date:"Y-m-d"}}&#10;开发：{{p.estimated_develop_start_date|date:"Y-m-d"}}至{{p.estimated_develop_end_date|date:"Y-m-d"}}&#10;测试：{{p.estimated_test_start_date|date:"Y-m-d"}}至{{p.estimated_test_end_date|date:"Y-m-d"}}">
                                             <a href="{% url 'prodetail' p.id %}"style="overflow:hidden;text-overflow: ellipsis">{{ p.project }}</a>
                                         </div>
                                         <div style="width:54px;float:right">
@@ -209,10 +209,10 @@
                                     <td>{{ p.status_p }}</td>
                                     <input name="datetime" value="{{p.expect_launch_date|date:"Y-m-d"}}" type="hidden">
                                     <td>
-                                        {% if p.status_p == "暂停" and deletetag == 1 %}
+                                        {% if p.status_p == "已暂停" and deletetag == 1 %}
                                                 <a class="icon-trash" href="{% url 'pproject_delete' p.id %}" title="删除" onclick="return confirm('你确认要删除吗?')"><span> </span></a>
                                         {% endif %}
-                                        {% if p.status_p == "运营推广" or p.status_p == "暂停"%}
+                                        {% if p.status_p == "运营推广" or p.status_p == "已暂停"%}
                                             {% if createtag == 1 %}
                                                 <a href="{% url 'similarpro' p.id  1 %}" class = 'pic copypro' title='发布相似'></a>
                                         {% else %}

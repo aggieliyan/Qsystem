@@ -23,6 +23,7 @@
 		<li><a href="/personal_homepage/">个人主页<i class="mesage_right" title="进行中的项目数">(0)</i></a></li>	
 		<li><a href="/projectlist/">项目管理</a></li>
     	<li><a href="/slist/">项目统计</a></li>
+		<li><a href="/scorelist/">排行榜</a></li>
 <!-- 		<li><a href="#" class="judge">资源管理</a></li> -->
 	 </ul>
 	 <div class="top_bar">
@@ -49,3 +50,10 @@
   {% endcompress %}
 </body>
 </html>
+<script>
+	var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox")>0?true:false; 
+	var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1 
+	if (!isFirefox && !isChrome) {
+		alert("Q同学，请将你的浏览器更换为Firefox或Chrome访问吧~坚持不换不在保修范围哦^_^")
+    } //判断是否Firefox或Chrome浏览器
+</script>

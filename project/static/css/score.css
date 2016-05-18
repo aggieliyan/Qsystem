@@ -1,0 +1,73 @@
+#container {
+	width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+}
+body {
+	font-family: "Microsoft YaHei",arial;
+    padding: 0;
+    font-size: 14px;
+    margin-top: 0px;
+}
+a {
+	text-decoration: none;
+	color: #09f;
+}
+a:hover {
+    color: #FF3300;
+} 
+#bread {
+	height: 36px;
+	width: 100%;
+	background-color: #339966;
+	margin-top: 15px;
+}
+#bread p {
+	padding: 16px;
+	line-height: 5px;
+}
+#bread a {
+	text-decoration: none;
+	color: white;
+}
+#bread a:hover {
+	color: #333333;
+}
+#pname div {
+    display: inline-block;
+    margin: 0 0 -5px 30px;
+    position: relative;
+}
+#s_sheet {
+	width: 100%;
+	line-height: 40px;
+}
+.line-name {
+	width: 14%;
+	list-style: none;
+	color: #555;
+	text-align:center;
+}
+.uscore td{
+	font-size: 16px;
+}
+.uname {
+	text-align: right;
+}
+.us {
+	width: 20%;
+	text-align: center;
+}
+.es {
+	width: 50px;
+	height: 30px;
+	text-align: center;
+}
+.esd {
+	width: 50%;
+	height: 60px;
+}
+.save-line {
+	text-align: center;
+	height: 150px;
+}

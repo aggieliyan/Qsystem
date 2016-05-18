@@ -76,7 +76,7 @@ p,a {
 }
 .top_memu {
 	float: left;
-	margin-left: 220px;
+	margin-left: 170px;
 }
 .top_memu a {
 	float: left;
@@ -144,7 +144,7 @@ p,a {
 }
 .top_bar {
 	float: right;
-	margin-right: -80px;
+	margin-right: -180px;
     margin-top: 34px;
 }
 .top_bar a {

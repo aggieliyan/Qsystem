@@ -141,3 +141,29 @@ class project_statistics_result(models.Model):
     date = models.DateField(u'统计日期')
     statistical_result = models.IntegerField(u'统计结果', max_length=10)
     isactived = models.BooleanField()
+#报名项目
+class signup_project(models.Model):
+    project = models.ForeignKey(project)
+    user = models.ForeignKey(user)
+    type = models.CharField(u'人员类型', max_length=20)
+    time = models.DateTimeField(u'申请时间')
+    isactived = models.BooleanField()
+    
+#项目打分
+class pro_score(models.Model):
+    project = models.ForeignKey(project)
+    p_plan_score = models.IntegerField(u'招募分数', max_length=10, null=True) 
+    p_plan_dpt = models.TextField(u'分数说明', max_length=2000, null=True)
+    p_actual_score = models.IntegerField(u'实际得分', max_length=10, null=True) 
+    p_actual_dpt = models.TextField(u'打分说明', max_length=2000, null=True)
+    pm_done = models.BooleanField(u'PM是否完成对成员的评分', default=1)
+    
+class user_score(models.Model):
+    user = models.ForeignKey(user)
+    project = models.ForeignKey(project)
+    u_plan_score = models.IntegerField(u'个人预计分数', max_length=10, null=True) 
+    u_plan_dpt = models.TextField(u'分数说明', max_length=2000, null=True)
+    u_actual_score = models.IntegerField(u'个人实际得分', max_length=10, null=True) 
+    u_actual_dpt = models.TextField(u'打分说明', max_length=2000, null=True)
+    upd_time = models.DateTimeField(u'更新时间')
+    

@@ -50,9 +50,13 @@ class LoginForm(forms.Form):
 class ProjectForm(forms.Form):
     priority = forms.IntegerField(required=True, error_messages={'required':u'优先级不能为空','invalid':u'优先级必须是正整数'})
     type_p = forms.CharField(required=True, error_messages={'required':u'项目类型不能为空'})
-    description = forms.CharField(required=False)
+#    description = forms.CharField(required=False)
     pname = forms.CharField(required=True, error_messages={'required':u'项目名称不能为空'})
     description = forms.CharField(required=False)
+    p_plan_score = forms.IntegerField(required=False)
+    plan_score_description = forms.CharField(required=False)
+    p_actual_score = forms.IntegerField(required=False)
+    actual_score_description = forms.CharField(required=False)
     status = forms.CharField(required=True, error_messages={'required':u'项目状态不能为空'})
     leader = forms.IntegerField(required=True, error_messages={'required':u'负责人不能为空'})
     designer = forms.IntegerField(required=False)
@@ -145,3 +149,8 @@ class addmoduleForm(forms.Form):
 class sdetailForm(forms.Form):
     module_p = forms.CharField(required=False) 
     kw = forms.CharField(required=False)
+
+#class handsupForm(forms.Form):
+#    pid = forms.IntegerField(required=True, error_messages={'required':u'请确定您是登录状态！'})
+#    mid = forms.IntegerField(required=True, error_messages={'required':u'请确定您是登录状态！'})
+#    

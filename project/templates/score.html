@@ -1,0 +1,109 @@
+ {% extends "base.html" %}
+  {% block title %}Q系统{% endblock %}
+  {% block head %}
+    <link href='/static/css/score.css' rel='stylesheet' media='screen'>
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<META http-equiv="content-type" content="text/html; charset=utf-8">
+  {% endblock %}
+  {% block content %}
+  <div id="container" >	
+	<div id="head"></div>
+	<div id="bread">
+		<p><a href="/projectlist">项目管理</a>&nbsp>>项目评分</p>
+	</div>
+	<div>
+		<div id="pname">
+			<div><h3>{{res.pro.project}}</h3></div>
+			<div>{% if res.scorebool %}
+					<a id="score" onclick="score()">打分</a>
+				 {% endif %}
+			</div>					
+		</div>
+		<table id="s_sheet">
+			<tr>
+				<td class="uname"></td>
+				<td class="us">分数（分）</td>
+				<td class="us-dpt">打分说明</td>
+			</tr>
+			<tr>
+				<td class="line-name">产品人员：</td>
+			</tr>	
+			{% for pd in res.pd %}				
+			<tr class="uscore">
+				<td class="uname" value="{{pd.0.id}}"><b>{{pd.0.realname}}</b></td> 
+				<td class="us"><span class="non-editable">{{pd.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{pd.1.u_actual_score|default_if_none:''}}"/></td>
+				<td class="us-dpt"><span class="non-editable">{{pd.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{pd.1.u_actual_dpt|safe}}"></textarea></td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td class="line-name">开发人员：</td>
+			</tr>	
+			{% for dev in res.dev %}				
+			<tr class="uscore">
+				<td class="uname" value="{{dev.0.id}}"><b>{{dev.0.realname}}</b></td> 
+				<td class="us"><span class="non-editable">{{dev.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{dev.1.u_actual_score|default_if_none:''}}"/></td>
+				<td class="us-dpt"><span class="non-editable">{{dev.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{dev.1.u_actual_dpt|safe}}"></textarea></td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td class="line-name">测试人员：</td>
+			</tr>	
+			{% for qa in res.qa %}				
+			<tr class="uscore">
+				<td class="uname" value="{{qa.0.id}}"><b>{{qa.0.realname}}</b></td> 
+				<td class="us"><span class="non-editable">{{qa.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{qa.1.u_actual_score|default_if_none:''}}"/></td>
+				<td class="us-dpt"><span class="non-editable">{{qa.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{qa.1.u_actual_dpt|safe}}"></textarea></td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td class="save-line non-editable">
+				{% if res.done_flag %}
+					<p style="font-size:18px; color:green">未提交</p>
+				{% else %}
+					<p style="font-size:18px; color:green">已提交</p>
+				{% endif %}
+				</td>
+				<td class="save-line editable" style="display:none">
+					<button class="btn btn-success" value="{{res.pro.id}}" onclick="save(this.value,1)">保存</button>
+				</td>
+				<td class="editable" style="display:none">
+					<button class="btn btn-primary" value="{{res.pro.id}}" onclick="save(this.value,0)">保存并提交</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+  </div>
+  {% endblock %}
+  {% block js %}
+  <script>
+  	function score(){
+		$(".editable").attr("style", "");
+		$(".non-editable").attr("style", "display: none");
+		$("#score").attr("style","display: none");
+	}
+	function save(pid, flag){
+		/* flag: 0  表示pm已提交评分，不可再次打分
+		 *       1  表示pm尚未提交，可以修改评分
+		 */
+		if(flag==0){
+			alert("提交后就不能再编辑分数了哟~");
+			};
+		uscore_dic={};
+		for(var i=0; i<$('.uscore').length; i++){
+			uscore_dic[$(".uscore")[i].children[0].getAttribute("value")]=[$(".uscore")[i].children[1].children[1].value, $(".uscore")[i].children[2].children[1].value]
+		}
+		uscore_dic=JSON.stringify(uscore_dic);
+		usdic = {"datas":uscore_dic};
+		$.post("/scoreuser/"+pid+"/"+flag+"/", usdic, function(data){
+			var data = eval ("(" + data + ")");
+			for(var key in data){
+				if(key==0){
+					alert(data[key]);
+				}
+			}
+			location.reload();
+		})
+		
+	}
+  </script>
+  {% endblock %}

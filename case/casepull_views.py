@@ -40,12 +40,12 @@ def getcases(request):
     else:
         mid = ''
         cids = ''
-        caselist = models.testcase.objects.all().order_by("-id")
+        caselist = models.testcase.objects.all()
     if skey:
         caselist = caselist.filter(action__contains=skey) 
     else:
         skey = ''
-    caselist = caselist.filter(isactived=1)
+    caselist = caselist.filter(isactived=1).order_by("rank")
 
     """分页"""
     paginator = Paginator(caselist, 25)
@@ -63,10 +63,11 @@ def getcases(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         caseobj = paginator.page(paginator.num_pages)
-    actionlist  = {}
+    actionlist  = []
     for case in caseobj:
-        actionlist[case.id] = case.action
-    
+        cases = {}
+        cases[case.id] = case.action
+        actionlist.append(cases)
     previouslink = False
     nextlink = False
     if caseobj.has_previous():

@@ -16,7 +16,7 @@ $(document).ready(function(){
 				    var datalist = eval ("(" + data + ")");
 				    var num = datalist.length;
 			     	for(var i=0;i<num;i++){
-				    	$("#"+id).append("<div><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='width:60%;'><canvas id='canvas"+id+datalist[i].sql+"' height='2' width='3'></canvas></div>");
+				    	$("#"+id).append("<div><p>"+datalist[i].item+":"+"</p><p>"+datalist[i].num+"</p></div><div style='width:90%;'><canvas id='canvas"+id+datalist[i].sql+"' height='5' width='8'></canvas></div>");
                         if(i<num-1){
 					        $("#"+id).append("<div><hr style=\"border:1px dotted #7B7B7B\" /></div>");
                        }
