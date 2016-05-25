@@ -23,13 +23,13 @@
 			<th style="width:8%">评分时间</th>
 			<th style="width:5%">状态</th>
 		</tr>
-		{% for s in res.uscore %}
+		{% for s,st in res.uscore.items %}
 			<tr>
 				<td><a href="/detail/{{s.project_id}}/" target="_blank">{{s.project.project}}</a></td>
 				<td>{{s.u_actual_score}}</td>
 				<td>{{s.u_actual_dpt}}</td>
 				<td>{{s.upd_time|date:"Y-m-d"}}</td>
-				{% if res.uscore.s %}
+				{% if st %}
 				<td>未提交</td>
 				{% else %}
 				<td>已提交</td>
