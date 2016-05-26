@@ -400,13 +400,15 @@ def new_project(request, pid='', nid=''):
                         project_statistics = models.project_statistics(
                                         project_id=pid, item=item, db=db, sql=sql, is_graph=isgraph, is_editable=1)
                     project_statistics.save()
-            #存项目分数,如果已存过，则先删除旧的，再存新的，实现编辑功能，一条pid对应一条scroe记录
-            try:
-                models.pro_score.objects.filter(project_id=pid).delete()
-            finally:
-                pro_score = models.pro_score(project_id=pid, p_plan_score=pplan_score, p_plan_dpt=pps_dpt,
-                                             p_actual_score=pactual_score, p_actual_dpt=pas_dpt)
-                pro_score.save()
+            #存项目分数,如果已存过，则先删除旧的，再存新的，实现编辑功能，一条pid对应一条scroe记录;
+            #要判断只有项目经理才可以存项目分数
+            if request.user.has_perm('project.add_project'):
+                try:
+                    models.pro_score.objects.filter(project_id=pid).delete()
+                finally:
+                    pro_score = models.pro_score(project_id=pid, p_plan_score=pplan_score, p_plan_dpt=pps_dpt,
+                                                 p_actual_score=pactual_score, p_actual_dpt=pas_dpt)
+                    pro_score.save()
 
             #将各负责人加入到相应负责人权限组
             allmasters = [[leaderid, 4], [designer, 5], [tester, 6], [business_man, 7], [operator_p, 8], [customer_service, 9]]
@@ -2084,6 +2086,7 @@ def myscore(request, userid=''):
             uscore[obj] = models.pro_score.objects.get(project_id=obj.project_id).pm_done
         except:
             uscore[obj] = 1
+    print uscore
     whose = models.user.objects.get(id=uid)
     total_score = models.user_score.objects.filter(user_id=uid).aggregate(total=Sum('u_actual_score'))
     result = {'uscore': uscore,
