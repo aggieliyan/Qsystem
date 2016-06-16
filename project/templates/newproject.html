@@ -97,7 +97,6 @@
                 </div>
                 <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
                   <option select = 'selected'>{{res.pro.status_p}}</option>
-				  <option>招募PM中..</option>
                   <option>需求讨论中</option>
                   <option>设计中</option>
                   <option>设计完成</option>
@@ -404,7 +403,6 @@
                 <select id="status" name = "status" class="inputfield" selected="{{res.pro.status_p}}">
                   <option select = 'selected'>{{res.pro.status_p}}</option>
                   {% if isope %}
-				  <option>招募PM中..</option>
                   <option>需求讨论中</option>
                   <option>设计中</option>
                   <option>设计完成</option>
@@ -703,9 +701,6 @@
         var pro = $("[name='priority']").val();
         var leader = $("[name='leader']").val();
         var pname = $("[name='pname']").val();
-		/*if($("[name='status']").val()=="招募PM中.."){
-			leader = "3"
-		}	*/	
         if(type_p == "" || pro == "" || leader== "" || pname == ""){
           $("#errofield").text("请检查必填项");
           return false;

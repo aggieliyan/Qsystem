@@ -72,22 +72,24 @@
 					</tr>
 					<tr>	
 						<td class="line-name">PM：</td>	
-						<!--1.判断是否招PM的状态中；2.是否有编辑权限，决定是否可以看到报名人员；3.判断登录人员是否已报名，决定报名按钮状态-->					
-						{% if res.pro.status_p == "招募PM中.." %} 
+						<!--1.判断是否招PM的状态中；2.是否有编辑权限，决定是否可以看到报名人员；3.判断登录人员是否已报名，决定报名按钮状态；4.所有人都能看到当前PM-->					
+						<td class="line-text">{{res.user.realname}}&nbsp&nbsp
+						{% if res.signed_info.pm_info.0 %} 
 							{% if res.editbool %}							
-								<td class="line-text" style="color: green">{% for name in res.signed_info %}
+								<span style="color: green">{% for name in res.signed_info.pm_info.1 %}
 	                       			{{name}} &nbsp;							
-	                       		{% endfor %}</td>	
+	                       		{% endfor %}</span>	
 							{% else %}
-								{% if res.signed_info  %}
-									<td class="line-text"><button id="iwant_PM" value="PM" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span></td>				
+								{% if res.signed_info.pm_info.1  %}
+									<button id="iwant_PM" value="PM" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;
+									<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span>			
 								{% else %}
-									<td class="line-text"><button id="iwant_PM" value="PM" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;<span id="PM_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span></td>
+									<button id="iwant_PM" value="PM" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;
+									<span id="PM_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span>
 								{% endif %}
-							{% endif %}
-						{% else %}
-						<td class="line-text"><b>{{res.user.realname}}</b></td>
+							{% endif %}                                          
 						{% endif %}
+						</td>
 					</tr>
 					<tr>
 						<td class="line-name">项目开始日期：</td>
@@ -164,89 +166,78 @@
 					<tr>
 						<td class="line-name2">产品人员：</td>
 						<!--1.判断是否需求讨论中的状态，此时要招产品人员（PD）；2.是否有编辑权限，决定是否可以看到报名人员；3.判断登录人员是否已报名，决定报名按钮状态-->					
-						{% if res.pro.status_p == "需求讨论中" %} 
-							{% if res.editbool %}							
-								<td class="line-text" style="color: green">{% for name in res.signed_info %}
-	                       			{{name}} &nbsp;							
-	                       		{% endfor %}</td>	
-							{% else %}
-								{% if res.signed_info  %}
-									<td class="line-text"><button id="iwant_PD" value="PD" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span></td>				
-								{% else %}
-									<td class="line-text"><button id="iwant_PD" value="PD" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;<span id="PM_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span></td>
-								{% endif %}
-							{% endif %}
-						{% else %}<!--1.判断是否设计中的状态，此时要招UI人员 2.管理员可以看到已选产品+报名UI，报名人员显示为绿色；3.其他人看到已选中的产品人员和报名按钮-->
-							<td class="line-text2">{% for item in res.reuser.pd %}
+						<td class="line-text2">{% for item in res.reuser.pd %}
 	                       			{% if item.id == res.pro.designer_p_id %}
 	                       				<b>{{item.realname}}</b>&nbsp;&nbsp;
 	                       			{% else %}
 	                       				{{item.realname}}&nbsp;&nbsp;
 	                       			{% endif %}
 	                       		{% endfor %}
-								{% if res.pro.status_p == "设计中" %}
-									{% if res.editbool %}							
-										<span style="color:green">{% for name in res.signed_info.2 %}
-			                       			{{name}} &nbsp;							
-			                       		{% endfor %}
-										</span>	
-									{% else %}
-										{% if res.signed_info.2  %}
-										<button id="iwant_PD" value="PD" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span>			
-										{% else %}
-										<button id="iwant_PD" value="PD" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;<span id="PM_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span>
-										{% endif %}
-									{% endif %}
+						{% if res.signed_info.pd_info.0%} 
+							{% if res.editbool %}							
+								<span style="color: green">{% for name in res.signed_info.pd_info.1 %}
+	                       			{{name}} &nbsp;							
+	                       		{% endfor %}</span>									
+							{% else %}
+								{% if res.pd_info.1  %}
+									<button id="iwant_PD" value="PD" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;
+									<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span></td>				
+								{% else %}
+									<button id="iwant_PD" value="PD" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;
+									<span id="PM_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span></td>
 								{% endif %}
-	                       	</td>
-						{% endif %}						
+							{% endif %}	                       	
+						{% endif %}	
+						</td>					
                     </tr>
 					<!--1.判断是否设计中的状态，此时要招募开发和测试人员；2.是否有编辑权限，决定是否可以看到报名人员；3.判断登录人员是否已报名，决定报名按钮状态-->					
 					<tr>
 						<td class="line-name2">开发人员：</td>
-						{% if res.pro.status_p == "设计中" %} 						
-							{% if res.editbool %}							
-								<td class="line-text" style="color: green">{% for name in res.signed_info.0%}
+						<td class="line-text2">{% for item in res.reuser.dev %}
+	                       					{{item.realname}}&nbsp;&nbsp;
+			                    		{% endfor %}
+						{% if res.signed_info.dev_info.0 %} 						
+							{% if res.editbool %}							 
+								<span style="color: green">{% for name in res.signed_info.dev_info.1 %}
 		                       		{{name}} &nbsp;							
-		                       	{% endfor %}</td>	
-							{% else %}
-								{% if res.signed_info.0  %}
-									<td class="line-text"><button id="iwant_dev" value="dev" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span></td>				
-								{% else %}
-									<td class="line-text"><button id="iwant_dev" value="dev" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;<span id="PM_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span></td>
+		                       	{% endfor %}</span>									
+							{% else %}							
+								{% if res.signed_info.dev_info.1  %}					
+									<button id="iwant_dev" value="dev" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;
+									<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span>												
+								{% else %}									
+									<button id="iwant_dev" value="dev" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;
+									<span id="dev_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span>									
 								{% endif %}
-							{% endif %}
-						{% else %}
-							<td class="line-text2">{% for item in res.reuser.dev %}
-	                       		{{item.realname}}&nbsp;&nbsp;
-			                    {% endfor %}
-			                </td>	
+							{% endif %}						
 						{% endif %}
-						</tr>					
+						</td>
+					</tr>					
 					<tr>
 						<td class="line-name2">测试人员：</td>
-						{% if res.pro.status_p == "设计中" %} 
-							{% if res.editbool %}							
-								<td class="line-text" style="color: green">{% for name in res.signed_info.1 %}
-		                       		{{name}} &nbsp;							
-		                       		{% endfor %}</td>	
-							{% else %}
-								{% if res.signed_info.1  %}
-									<td class="line-text"><button id="iwant_test" value="test" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span></td>				
-								{% else %}
-									<td class="line-text"><button id="iwant_test" value="test" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;<span id="PM_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span></td>
-								{% endif %}
-							{% endif %}
-						{% else %}
-							<td class="line-text2">{% for item in res.reuser.qa %}
+						<td class="line-text2">{% for item in res.reuser.qa %}
 								{% if item.id == res.pro.tester_p_id %}
 		                       		<b>{{item.realname}}</b>&nbsp;&nbsp;
 		                       	{% else %}
 		                       		{{item.realname}}&nbsp;&nbsp;
 		                       	{% endif %}
 		                       	{% endfor %}
-		                    </td>     
-						{% endif %}								                  	
+						{% if res.signed_info.test_info.0 %} 
+							{% if res.editbool %}							
+								<span style="color: green">{% for name in res.signed_info.test_info.1 %}
+		                       		{{name}} &nbsp;							
+		                       		{% endfor %}</span>	
+							{% else %}
+								{% if res.signed_info.test_info.1  %}
+									<button id="iwant_test" value="test" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;
+									<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span>			
+								{% else %}
+									<button id="iwant_test" value="test" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;
+									<span id="test_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span>
+								{% endif %}
+							{% endif %}
+						{% endif %}		
+						</td>						                  	
 					</tr>
 					<tr>
 						<td class="line-name">设计图：</td>
@@ -395,7 +386,7 @@
 				$("#iwant_"+type).val("已报名");
 				$("#iwant_"+type).text("已报名");
 				$("#iwant_"+type).attr("disabled","");
-				$("#PM_success").attr("style","font-size:14px; color: green; display:true;");
+				$("#"+type+"_success").attr("style","font-size:14px; color: green; display:true;");
 			})
 		}					
 	 </script>

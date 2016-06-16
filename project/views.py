@@ -936,7 +936,6 @@ def detail(request, pid='', nid=''):
         return HttpResponseRedirect('/login')
     pro = models.project.objects.get(id=int(pid))
     user = models.user.objects.get(id=pro.leader_p_id)
-    print user.realname
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
     bms = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=3), Q(department_id=12) | Q(department_id=9) | Q(department_id=7)| Q(department_id=6))
     ops = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=4), Q(department_id=3) | Q(department_id=8) | Q(department_id=12)| Q(department_id=9) | Q(department_id=7) | Q(department_id=6))
@@ -1053,25 +1052,26 @@ def detail(request, pid='', nid=''):
             # 详情页项目经理可以看到已报名项目的人
             # 如果不是项目经理就判断是否已报名
             # signed_PM: 1 已报   0 未报
-            if pro.status_p == u"招募PM中..":
-                signed_info = signed_pro(pid, "PM", editboolean, current_uid)
-            elif pro.status_p == u"需求讨论中":
-                signed_info = signed_pro(pid, "PD", editboolean, current_uid)
-            elif pro.status_p == u"设计中":                
-                dev_info = signed_pro(pid, "dev", editboolean, current_uid)
-                test_info = signed_pro(pid, "test", editboolean, current_uid)
-                pd_info = signed_pro(pid, "PD", editboolean, current_uid)
-                signed_info = [dev_info, test_info, pd_info]
-                print signed_info
-            else:
-                signed_info = u"非报名状态"
-            print signed_info
+            signed_info = {}            
+            for section,users in related_user.items():
+                for us in users:
+                    if us.realname==u"招募PM":
+                        pm_info = signed_pro(pid, "PM", editboolean, current_uid)
+                        signed_info['pm_info'] = [1, pm_info]
+                    if us.realname in [u"招募后端", u"招募前端", u"招募App", u"招募flash", u"招募C++"]:   
+                        dev_info = signed_pro(pid, "dev", editboolean, current_uid)
+                        signed_info['dev_info'] = [1, dev_info]
+                    if us.realname in [u"招募web测试", u"招募client测试"]:
+                        test_info = signed_pro(pid, "test", editboolean, current_uid)
+                        signed_info['test_info'] = [1, test_info]
+                    if us.realname in [u"招募产品", u"招募UI"]:
+                        pd_info = signed_pro(pid, "PD", editboolean, current_uid)
+                        signed_info['pd_info'] = [1, pd_info]            
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
                    'sql': sql_status, 'confirmation': confirmation, 'curuid': current_uid, 
                    'feedback': [len(pro_feedback), fc], 'signed_info': signed_info, 'ps': ps_info}
             return render_to_response('detail.html', {'res': res})
         elif '/editproject' in request.path:
-
             edittag = 1
             editdate = 1
             isdevs = 1
@@ -1115,6 +1115,7 @@ def signed_pro(pid, type, editboolean, current_uid):
             signed_info = 1
         else:
             signed_info = 0
+    print signed_info
     return signed_info
         
 def project_feedback(request):  #也可以写在detail里，这样更清晰
