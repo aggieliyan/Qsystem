@@ -32,7 +32,7 @@
 			<tr class="uscore">
 				<td class="uname" value="{{pd.0.id}}"><b>{{pd.0.realname}}</b></td> 
 				<td class="us"><span class="non-editable">{{pd.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{pd.1.u_actual_score|default_if_none:''}}"/></td>
-				<td class="us-dpt"><span class="non-editable">{{pd.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{pd.1.u_actual_dpt|safe}}"></textarea></td>
+				<td class="us-dpt"><span class="non-editable">{{pd.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none">{{pd.1.u_actual_dpt|safe}}</textarea></td>
 			</tr>
 			{% endfor %}
 			<tr>
@@ -42,7 +42,7 @@
 			<tr class="uscore">
 				<td class="uname" value="{{dev.0.id}}"><b>{{dev.0.realname}}</b></td> 
 				<td class="us"><span class="non-editable">{{dev.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{dev.1.u_actual_score|default_if_none:''}}"/></td>
-				<td class="us-dpt"><span class="non-editable">{{dev.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{dev.1.u_actual_dpt|safe}}"></textarea></td>
+				<td class="us-dpt"><span class="non-editable">{{dev.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none">{{dev.1.u_actual_dpt|safe}}</textarea></td>
 			</tr>
 			{% endfor %}
 			<tr>
@@ -52,7 +52,7 @@
 			<tr class="uscore">
 				<td class="uname" value="{{qa.0.id}}"><b>{{qa.0.realname}}</b></td> 
 				<td class="us"><span class="non-editable">{{qa.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{qa.1.u_actual_score|default_if_none:''}}"/></td>
-				<td class="us-dpt"><span class="non-editable">{{qa.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{qa.1.u_actual_dpt|safe}}"></textarea></td>
+				<td class="us-dpt"><span class="non-editable">{{qa.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none">{{qa.1.u_actual_dpt|safe}}</textarea></td>
 			</tr>
 			{% endfor %}
 			<tr>
