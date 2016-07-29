@@ -418,8 +418,7 @@ def new_project(request, pid='', nid=''):
                     User.objects.get(username=mname).groups.add(m[1])
       
             #发消息
-            sendmessage(request,status,pid)
-                           
+            sendmessage(request,status,pid)                           
             return redirect('/projectlist/')
         else:
             dateloop = ['psdate', 'pedate', 'dsdate', 'dedate', 'tsdate', 'tedate', 'startdate', 'plandate']
@@ -1334,6 +1333,7 @@ def personal_homepage(request):
     projectids = []
     #用于存储相应项目成员
     relateduser={}
+    ifscore = {}
     for p in project_user_list:
         projectids.append(p.project.id)
         user = models.project_user.objects.filter(project = p.project.id)
@@ -1344,6 +1344,15 @@ def personal_homepage(request):
             if not match:
                 uname = uname + ' ' + u.username.realname
         relateduser[p.project.id] = uname
+        # 标致项目是否需要打分，结合前端判断当前用户是否显示“打分”操作
+        ifscore[p.project.id] = 0
+        try:
+            s = models.pro_score.objects.get(project = p.project.id).pm_done
+            print s
+            if s:
+                ifscore[p.project.id] = 1
+        except:
+            pass 
     projectlist = projectlist.filter(pk__in = projectids)
     result = projectlist.exclude(Q(status_p = u'已上线') | Q(status_p = u'已暂停') | Q(status_p = u'运营推广')).order_by("-id")   
     result1 = projectlist.exclude(~Q(status_p = u'已上线')& ~Q(status_p = u'运营推广')).order_by("-id")
@@ -1353,7 +1362,7 @@ def personal_homepage(request):
         l = []
         if org.status_p !=u'已暂停' and org.status_p != u'已上线':
             time = datetime.datetime.now()
-            nowtime=time.strftime("%Y-%m-%d ") 
+            nowtime=time.strftime("%Y-%m-%d") 
             if org.expect_launch_date:
                 expect_date = org.expect_launch_date
                 if  expect_date.strftime("%Y-%m-%d ") < nowtime:
@@ -1416,8 +1425,9 @@ def personal_homepage(request):
     count = messagess.count()
     messages = messagess[:4]   
     return render_to_response('personal_homepage.html', \
-        {'projectobj':projectobj, 'result':result, 'result1':result1, 'relateduser': relateduser,'rendering': rendering, 'messages': messages, \
-         'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, 'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
+        {'projectobj':projectobj, 'result':result, 'result1':result1, 'relateduser': relateduser, 'ifscore':ifscore, 'rendering': rendering, 'messages': messages, \
+         'count':count, 'dealdelay':dealdelay, 'changetag':changetag, 'edittag':edittag, 'delaytag':delaytag, 'pausetag':pausetag, \
+         'deletetag':deletetag, 'pm':pm, 'userid1':userid1,'countdelay':countdelay})
 def deleteproject(request,pid,url):
     delpro=get_object_or_404(project,pk=int(pid))
     delpro.delete()
@@ -2011,6 +2021,7 @@ def score(request, pid):
     except:
         return HttpResponseRedirect('/login')
     pro = models.project.objects.get(id=int(pid))
+    pro_actual_score = models.pro_score.objects.get(project_id=int(pid)).p_actual_score
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
     p_role = []
     dep_id = [[1,2], [3,0]]
@@ -2037,13 +2048,13 @@ def score(request, pid):
                 user_info[section].append([user,''])
      
     result = {'pro': pro,
+              'pro_s': pro_actual_score,
               'dev': user_info['dev'],
               'pd': user_info['pd'],
               'qa': user_info['qa'],
               'scorebool': scoreboolean,
               'done_flag': ispm_done,
               }
-    print result
     return render_to_response('score.html',{'res': result})
 
 def scoreuser(request, pid, flag):

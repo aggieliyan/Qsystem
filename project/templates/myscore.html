@@ -12,16 +12,20 @@
 		<p><a href="/personal_homepage/">个人主页</a>&nbsp>>{{res.owner.realname}}的积分</p>
 	</div>
 	<table id="myscorelist">
-		<h3 style="width:100%; margin-top:20px; margin-bottom:-20px">
+		<h3 style="width:100%; margin-top:20px; ">
 			<span style="color:#555; font-size:15px">总分：</span>
 			<span style="color:#1e90ff; font-size:40px">{{res.total.total|default_if_none:'0'}}</span>
 		</h3>
+		<form method="post" action="/projectlist/">
+			<input type="hidden" name="needyou" value=""/>
+		</form>
+		<a id="needyou" target="_blank"><span style="color: red; font-size: 10px">Hot~&nbsp</span>正在招募小伙伴的项目>></a>
 		<tr>
 			<th style="width:30%">项目名称</th>
-			<th style="width:7%">分数（分）</th>
-			<th style="width:50%">打分说明</th>
-			<th style="width:8%">评分时间</th>
-			<th style="width:5%">状态</th>
+			<th style="width:8%">分数（分）</th>
+			<th style="width:47%">打分说明</th>
+			<th style="width:9%">评分时间</th>
+			<th style="width:6%">状态</th>
 		</tr>
 		{% for s,st in res.uscore.items %}
 			<tr>
@@ -39,3 +43,12 @@
 	</table>
   </div>
   {% endblock %}
+  {% block js %}
+  	<script>
+		$("#needyou").click(function(){
+			para = {"leader_p": "招募"};
+			$.post("/projectlist/", para, function(data){				
+			})
+		})
+	</script>
+  {% endblock %}	

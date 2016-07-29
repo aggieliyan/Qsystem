@@ -1,4 +1,4 @@
-﻿  {% extends "base.html" %}
+  {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
   <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -190,7 +190,7 @@
                     <td>{{pres.leader_p.realname}}</td>
                     <td>{{pres.tester_p.realname}}</td>
                     <td>{{pres.operator_p.realname}}</td>
-                    <td>{{pres.customer_service.realname}}</td>
+                    <td>{{pres.customer_service.realname}}</td> 
                     <td> 
                                                                                    
                     {% for i,j in relateduser.items %} 
@@ -207,12 +207,17 @@
                   <td>
                     {% if pres.status_p == '已上线' %}
                       {% if edittag == 1 %}
-                      {% if userid1 == pres.leader_p_id or userid1 == pres.designer_p.id or userid1 == pres.tester_p.id or userid1 == pres.business_man.id or userid1 == pres.operator_p.id or userid1 == pres.customer_service.id or pm == 1 %}
-                      <a class="icon-edit" href="{% url 'editproject' pres.id %}" title='编辑'></a>&nbsp;
-                      {%endif%}
-                      {% else %}                      
-                      {% endif %}
-                    {% else %} 
+                        {% if userid1 == pres.leader_p_id or userid1 == pres.designer_p.id or userid1 == pres.tester_p.id or userid1 == pres.business_man.id or userid1 == pres.operator_p.id or userid1 == pres.customer_service.id or pm == 1 %}
+                        <a class="icon-edit" href="{% url 'editproject' pres.id %}" title='编辑'></a>&nbsp;
+                        {% for p,s in ifscore.items %} 
+                          {% if p == pres.id %}                    
+                            {% if s %}
+                            <a target="_blank" href="/score/{{pres.id}}/" title='打分'>打分</a>&nbsp;
+                            {% endif %}
+                          {% endif %}                    
+                        {% endfor %}
+                        {% endif %}                                           
+                      {% endif %}                    
                     {% endif %}
                     <a href="{% url 'feedback' pres.id %}">去反馈</a>
                   </td>
