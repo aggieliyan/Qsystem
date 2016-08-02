@@ -30,8 +30,8 @@
 		{% for s,st in res.uscore.items %}
 			<tr>
 				<td><a href="/detail/{{s.project_id}}/" target="_blank">{{s.project.project}}</a></td>
-				<td>{{s.u_actual_score}}</td>
-				<td>{{s.u_actual_dpt}}</td>
+				<td>{{s.u_actual_score|default_if_none:''}}</td>
+				<td>{{s.u_actual_dpt|safe}}</td>
 				<td>{{s.upd_time|date:"Y-m-d"}}</td>
 				{% if st %}
 				<td>未提交</td>
