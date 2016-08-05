@@ -19,6 +19,10 @@
 				 {% endif %}
 			</div>					
 		</div>
+		<h3 style="width:100%; margin-top:20px;">
+			<span style="color:#555; font-size:15px">项目得分：</span>
+			<span id="pro_s" style="color:#1e90ff; font-size:40px">{{res.pro_s}}</span>
+		</h3>
 		<table id="s_sheet">
 			<tr>
 				<td class="uname"></td>
@@ -32,7 +36,7 @@
 			<tr class="uscore">
 				<td class="uname" value="{{pd.0.id}}"><b>{{pd.0.realname}}</b></td> 
 				<td class="us"><span class="non-editable">{{pd.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{pd.1.u_actual_score|default_if_none:''}}"/></td>
-				<td class="us-dpt"><span class="non-editable">{{pd.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{pd.1.u_actual_dpt|safe}}"></textarea></td>
+				<td class="us-dpt"><span class="non-editable">{{pd.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none">{{pd.1.u_actual_dpt|safe}}</textarea></td>
 			</tr>
 			{% endfor %}
 			<tr>
@@ -42,7 +46,7 @@
 			<tr class="uscore">
 				<td class="uname" value="{{dev.0.id}}"><b>{{dev.0.realname}}</b></td> 
 				<td class="us"><span class="non-editable">{{dev.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{dev.1.u_actual_score|default_if_none:''}}"/></td>
-				<td class="us-dpt"><span class="non-editable">{{dev.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{dev.1.u_actual_dpt|safe}}"></textarea></td>
+				<td class="us-dpt"><span class="non-editable">{{dev.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none">{{dev.1.u_actual_dpt|safe}}</textarea></td>
 			</tr>
 			{% endfor %}
 			<tr>
@@ -52,7 +56,7 @@
 			<tr class="uscore">
 				<td class="uname" value="{{qa.0.id}}"><b>{{qa.0.realname}}</b></td> 
 				<td class="us"><span class="non-editable">{{qa.1.u_actual_score|default_if_none:''}}</span><input class="es editable" style="display:none" value="{{qa.1.u_actual_score|default_if_none:''}}"/></td>
-				<td class="us-dpt"><span class="non-editable">{{qa.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none" value="{{qa.1.u_actual_dpt|safe}}"></textarea></td>
+				<td class="us-dpt"><span class="non-editable">{{qa.1.u_actual_dpt|safe}}</span><textarea class="esd editable" style="display:none">{{qa.1.u_actual_dpt|safe}}</textarea></td>
 			</tr>
 			{% endfor %}
 			<tr>
@@ -64,10 +68,10 @@
 				{% endif %}
 				</td>
 				<td class="save-line editable" style="display:none">
-					<button class="btn btn-success" value="{{res.pro.id}}" onclick="save(this.value,1)">保存</button>
+					<button class="btn btn-success" value="{{res.pro.id}}" onclick="save(this.value,1,$('#pro_s').text())">保存</button>
 				</td>
 				<td class="editable" style="display:none">
-					<button class="btn btn-primary" value="{{res.pro.id}}" onclick="save(this.value,0)">保存并提交</button>
+					<button class="btn btn-primary" value="{{res.pro.id}}" onclick="save(this.value,0,$('#pro_s').text())">保存并提交</button>
 				</td>
 			</tr>
 		</table>
@@ -81,17 +85,29 @@
 		$(".non-editable").attr("style", "display: none");
 		$("#score").attr("style","display: none");
 	}
-	function save(pid, flag){
+	function save(pid, flag, pro_s){
 		/* flag: 0  表示pm已提交评分，不可再次打分
 		 *       1  表示pm尚未提交，可以修改评分
 		 */
-		if(flag==0){
-			alert("提交后就不能再编辑分数了哟~");
-			};
 		uscore_dic={};
+		s_sum = 0
 		for(var i=0; i<$('.uscore').length; i++){
 			uscore_dic[$(".uscore")[i].children[0].getAttribute("value")]=[$(".uscore")[i].children[1].children[1].value, $(".uscore")[i].children[2].children[1].value]
+			s = parseInt($(".uscore")[i].children[1].children[1].value)
+			if(s){
+				s_sum += s;
+			};			
 		}
+		if(pro_s=="未评"){
+			alert("请先找架构组给项目评估分~");
+			return(false);
+		}
+		if(s_sum!=pro_s){
+			alert("项目组成员得分总和应该等于项目得分，请检查后重新提交");
+			return(false);}					
+		if(flag==0){
+			alert("提交后就不能再编辑分数了哟~");
+		};		
 		uscore_dic=JSON.stringify(uscore_dic);
 		usdic = {"datas":uscore_dic};
 		$.post("/scoreuser/"+pid+"/"+flag+"/", usdic, function(data){
@@ -99,11 +115,10 @@
 			for(var key in data){
 				if(key==0){
 					alert(data[key]);
+				} 
 				}
-			}
 			location.reload();
-		})
-		
+		})	
 	}
   </script>
   {% endblock %}

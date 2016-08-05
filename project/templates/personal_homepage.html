@@ -1,4 +1,4 @@
-﻿  {% extends "base.html" %}
+  {% extends "base.html" %}
   {% block title %}Q系统{% endblock %}
   {% block head %}
   <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -37,7 +37,7 @@
    {% endif %}
    {% if dealdelay = 1 %}
    <div style="padding:30px 0 5px">
-    <a href="/delay/" style="color:#339666" >查看您要处理的延期申请({{countdelay}})>></a>
+    <a href="/delay/" style="color:#339666">查看您要处理的延期申请({{countdelay}})>></a>
   </div>
   {% endif %}
   <div style="padding:20px 0 5px">
@@ -48,7 +48,8 @@
       <b>我参与的项目:</b>
       <input type="radio" class="btn btn-default" id="smalltable" name="changet">小鸟依人版
       <input type="radio" class="btn btn-default" id="bigtable" name="changet" checked="checked">大气版 
-      <span style="margin-left:8px">(注：项目所处状态的负责人为绿色加粗字体)</span>
+      <span style="margin-left:8px">(注：项目所处状态的负责人为绿色加粗字体)</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+      <a id="needyou" target="_blank" href="/projectlist?leader_p=招募"><span style="color: red; font-size: 10px">Hot~&nbsp</span>正在招募小伙伴的项目>></a>
       {% if perms.project.can_change_project%}
       <p>我有<p>
       {% endif %}
@@ -190,7 +191,7 @@
                     <td>{{pres.leader_p.realname}}</td>
                     <td>{{pres.tester_p.realname}}</td>
                     <td>{{pres.operator_p.realname}}</td>
-                    <td>{{pres.customer_service.realname}}</td>
+                    <td>{{pres.customer_service.realname}}</td> 
                     <td> 
                                                                                    
                     {% for i,j in relateduser.items %} 
@@ -207,12 +208,17 @@
                   <td>
                     {% if pres.status_p == '已上线' %}
                       {% if edittag == 1 %}
-                      {% if userid1 == pres.leader_p_id or userid1 == pres.designer_p.id or userid1 == pres.tester_p.id or userid1 == pres.business_man.id or userid1 == pres.operator_p.id or userid1 == pres.customer_service.id or pm == 1 %}
-                      <a class="icon-edit" href="{% url 'editproject' pres.id %}" title='编辑'></a>&nbsp;
-                      {%endif%}
-                      {% else %}                      
-                      {% endif %}
-                    {% else %} 
+                        {% if userid1 == pres.leader_p_id or userid1 == pres.designer_p.id or userid1 == pres.tester_p.id or userid1 == pres.business_man.id or userid1 == pres.operator_p.id or userid1 == pres.customer_service.id or pm == 1 %}
+                        <a class="icon-edit" href="{% url 'editproject' pres.id %}" title='编辑'></a>&nbsp;
+                        {% for p,s in ifscore.items %} 
+                          {% if p == pres.id %}                    
+                            {% if s %}
+                            <a target="_blank" href="/score/{{pres.id}}/" title='打分'>打分</a>&nbsp;
+                            {% endif %}
+                          {% endif %}                    
+                        {% endfor %}
+                        {% endif %}                                           
+                      {% endif %}                    
                     {% endif %}
                     <a href="{% url 'feedback' pres.id %}">去反馈</a>
                   </td>

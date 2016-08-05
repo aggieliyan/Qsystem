@@ -9,6 +9,10 @@ body {
     font-size: 14px;
     margin-top: 0px;
 }
+h3 {
+	text-align: center;
+	display: inline-block;
+}
 a {
 	text-decoration: none;
 	color: #09f;

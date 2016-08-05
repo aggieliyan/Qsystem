@@ -64,11 +64,10 @@ h3 {
 	text-align: center;
 	display: inline-block;
 }
-#viewdpt {
+#viewdpt, #needyou{
 	float: right;
 	margin: -10px 10px;
-	display: inline-block;
-	
+	display: inline-block;	
 }
 #myscorelist a, #scorelist a{
 	text-decoration: none;
