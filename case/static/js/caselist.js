@@ -261,7 +261,7 @@ $(document).ready(function(){
         var crs = tdnode.parent().children().eq(5).find("span");
 
         if(tdnode.hasClass("save") && crs.length == 0 ){
-
+			alert("要先执行用例,才能够添加WI和备注哟~")
         }
         else{
             if(tdnode.find(".edittx").length == 0){
@@ -282,9 +282,9 @@ $(document).ready(function(){
 
         //如果还没有执行结果，那点BUG和备注没反应
         var crs = tdnode.parent().children().eq(5).find("span");
-
+	
         if(tdnode.hasClass("save") && crs.length == 0 ){
-
+			alert("要先执行用例,才能够添加WI和备注哟~")
         }
         else{
             if(tdnode.find(".edittx").length == 0){
@@ -311,7 +311,8 @@ $(document).ready(function(){
             var tid = tp.parent().attr("value");
             var tname = tp.attr("name");
             var crs = tp.parent().children().eq(5).find("span");//看有没有执行结果，有执行结果的才可以保存BUG和备注
-            if(tp.hasClass('save') && tid && crs.length){
+
+			if(tp.hasClass('save') && tid && crs.length){
                 var url = "/case/updateresult/";
                 var para = {"tname": tname, "tid":tid, "tcnt":etext};
                 $.post(url, para, function(data){

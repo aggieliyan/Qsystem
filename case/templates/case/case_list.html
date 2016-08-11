@@ -185,69 +185,68 @@
                   	    						</tr>
                            {% endif %}
                            {% endfor %} 
-          	                {% for c in dic %}
-                  	    						<tr class="mtr" rank="{{c.0.rank}}" value="{{c.0.id}}">
-                                      {% if canope%}
-                  						    		  <td>
+          	                {% for c in dic %}          	    			  
+								<tr class="mtr" rank="{{c.0.rank}}" value="{{c.0.id}}">
+                                {% if canope%}
+                  					  <td>
+                                {% else %}
+                                      <td class="nodrag">
+                                {% endif %}
+									  <input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.0.id}}
+                                      </td>
+                  					  <td class="editable nodrag">{{c.0.precondition|default_if_none:""}}</td>
+                  					  <td class="editable nodrag">{{c.0.action}}</td>
+                  					  <td class="editable nodrag">{{c.0.output}}</td>
+                  					  <td class="nodrag"><span class="level">{{c.0.priority}}</span></td>
+                                      {% if c.1 %}         						
+										  	<td class="nodrag"><a class="icon-play-circle"></a><span class="{{c.1.result}}">&nbsp;{{c.1.result}}</span></td>
+	                  						<td class="editable1 nodrag save wi" name="wi">
+	                  						{% ifnotequal c.1.wi None %}
+	                  							<a href=http://gj.ablesky.com/issues/{{c.1.wi}} class={{c.1.wi}} target="_blank">{{c.1.wi}}</a>
+	                  						{% endifnotequal %}         
+	                  						</td>
+	                                        {% if canope%}
+	                  							<td>{{c.1.exec_date|date:"Y/m/d H:i:s"}}</td>
+	                  						    <td>{{c.1.executor}}</td>
+	                                        {% else %}
+	                                          	<td class="nodrag">{{c.1.exec_date|date:"Y/m/d H:i:s"}}</td>
+	                                          	<td class="nodrag">{{c.1.executor}}</td>                       
+	                                        {% endif %}
+	                  						<td class="editable nodrag save" name="remark">{{c.1.r_remark|default_if_none:""}}</td>
+                  					  {% elif c.0.id  not in listid and forloop.counter == 1 %}	
+	                  					  	<td class="nodrag"><a class="icon-play-circle"></a></td>
+	                  						<td class="editable nodrag save" name="wi"></td>
+	                                        {% if canope%}
+	                                        	<td></td>
+			                                	<td></td>
+			                                {% else %}
+			                                	<td class="nodrag"></td>
+			                                	<td class="nodrag"></td>                       
+			                                {% endif %}
+                  						    <td class="editable nodrag save" name="remark"></td>                  						      
                                       {% else %}
-                                        <td class="nodrag">
-                                      {% endif %}<input class="casecheck nodrag" type="checkbox" name="checklist">&nbsp;{{c.0.id}}
-                                        </td>
-                  						      		<td class="editable nodrag">{{c.0.precondition|default_if_none:""}}</td>
-                  						      		<td class="editable nodrag">{{c.0.action}}</td>
-                  						    		<td class="editable nodrag">{{c.0.output}}</td>
-                  						      		<td class="nodrag"><span class="level">{{c.0.priority}}</span></td>
-                                        {% if c.1 %}
-                  						      		
-                  						      		<td class="nodrag"><a class="icon-play-circle"></a><span class="{{c.1.result}}">&nbsp;{{c.1.result}}</span></td>
-                  						    		<td class="editable1 nodrag save wi" name="wi">
-                  						    			{% ifnotequal c.1.wi None %}
-                  						    			<a href=http://gj.ablesky.com/issues/{{c.1.wi}} class={{c.1.wi}} target="_blank">{{c.1.wi}}</a>
-                  						    			{% endifnotequal %}         
-                  						    		</td>
-                                          {% if canope%}
-                  						      		<td>{{c.1.exec_date|date:"Y/m/d H:i:s"}}</td>
-                  						      		<td>{{c.1.executor}}</td>
-                                          {% else %}
-                                          <td class="nodrag">{{c.1.exec_date|date:"Y/m/d H:i:s"}}</td>
-                                          <td class="nodrag">{{c.1.executor}}</td>                       
-                                          {% endif %}
-                  						      		<td class="editable nodrag save" name="remark">{{c.1.r_remark|default_if_none:""}}</td>
-                  						      		{% elif c.0.id  not in listid and forloop.counter == 1 %}	
-                  						      		<td class="nodrag"><a class="icon-play-circle"></a></td>
-                  						    		  <td class="editable nodrag save" name="wi"></td>
-                                          {% if canope%}
-                                          <td></td>
-                                          <td></td>
-                                          {% else %}
-                                          <td class="nodrag"></td>
-                                          <td class="nodrag"></td>                       
-                                          {% endif %}
-                  						      		<td class="editable nodrag save" name="remark"></td>
-
-                  						      
-                                        {% else %}
-                                        <td class="nodrag"><a class="icon-play-circle"></a><span></span></td>
-                                        <td class="editable nodrag"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="editable nodrag"></td>
-                                        {% endif %}
-                                        
+                                        	<td class="nodrag"><a class="icon-play-circle"></a></td>
+                                        	<!--<td class="editable nodrag"></td>-->
+											<td class="editable nodrag save" name="wi"></td>
+                                        	<td></td>
+                                        	<td></td>
+                                        	<!--<td class="editable nodrag"></td>   不知道为何要对每个module下第一行的case区别对待,所以暂保留elif部门,把else改成和elif内容一样,解决刚执行完用例添加备注和wi无法保存的问题-->
+											<td class="editable nodrag save" name="remark"></td>  
+                                      {% endif %}                                        
                   						      		<td class="nodrag">
-                                          {% if canope %}
-                  						      			<a class="icon-plus" title="添加用例"></a>
-                  						      			<a class="icon-download-alt" title="引入用例" href="#casePullModal" data-toggle="modal" id="pullbutton" onclick="pullPop(this)"></a>
-                  						      			<a class="icon-eye-open" title="查看结果"></a>
-                                          <input  value="{{c.0.id}}" class="checkresult" type="hidden">
-                  						      			<a class="icon-trash"></a>                        
-                                          {% else %}
-                                          <a class="icon-eye-open" style="margin-left:10px;" title="查看结果"></a>
-                                          <input  value="{{c.0.id}}" class="checkresult" type="hidden">
-                                          {% endif %}
+                                          			{% if canope %}
+                  						      		<a class="icon-plus" title="添加用例"></a>
+                  						      		<a class="icon-download-alt" title="引入用例" href="#casePullModal" data-toggle="modal" id="pullbutton" onclick="pullPop(this)"></a>
+                  						      		<a class="icon-eye-open" title="查看结果"></a>
+                                          			<input  value="{{c.0.id}}" class="checkresult" type="hidden">
+                  						      		<a class="icon-trash"></a>                        
+		                                          	{% else %}
+		                                          	<a class="icon-eye-open" style="margin-left:10px;" title="查看结果"></a>
+		                                          	<input  value="{{c.0.id}}" class="checkresult" type="hidden">
+		                                          	{% endif %}
                   						      		</td>
                                       </tr>
-          	    						{% endfor %}						
+          	    				{% endfor %}						
           	    					</tbody>
           	    				</table>
           	    			</div>
