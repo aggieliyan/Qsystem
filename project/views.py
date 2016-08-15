@@ -2021,7 +2021,7 @@ def score(request, pid):
     pro = models.project.objects.get(id=int(pid))
     try:
         ps = models.pro_score.objects.get(project_id=int(pid))
-        pro_actual_score = ps.p_actual_score
+        pro_actual_score = "未评" if isNone(ps.p_actual_score) else ps.p_actual_score
         ispm_done = ps.pm_done
     except:
         pro_actual_score = "未评"
