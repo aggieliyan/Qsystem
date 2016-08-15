@@ -2019,20 +2019,18 @@ def score(request, pid):
     except:
         return HttpResponseRedirect('/login')
     pro = models.project.objects.get(id=int(pid))
-    ps = models.pro_score.objects.get(project_id=int(pid))
     try:
+        ps = models.pro_score.objects.get(project_id=int(pid))
         pro_actual_score = ps.p_actual_score
+        ispm_done = ps.pm_done
     except:
         pro_actual_score = "未评"
+        ispm_done = 1
     devs = models.user.objects.filter(Q(project_user__project_id=pid), Q(project_user__roles=1), Q(department_id=2) | Q(department_id=4) | Q(department_id=5) | Q(department_id=13))
     p_role = []
     dep_id = [[1,2], [3,0]]
     for item_id in dep_id:
         p_role.append(models.user.objects.filter(project_user__project_id=pid, department_id=item_id[0], project_user__roles=item_id[1]))
-    try:
-        ispm_done = ps.pm_done
-    except:
-        ispm_done = 1  
     scoreboolean = 0
     if ((request.user.has_perm('auth.change_permission') or request.session['id']==pro.leader_p_id) and ispm_done): #and比or优先
                     scoreboolean = 1 #判断是否有打分权限,项目经理或PM并且尚未提交打分
