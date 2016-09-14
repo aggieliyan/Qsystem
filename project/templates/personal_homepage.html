@@ -212,7 +212,7 @@
                         <a class="icon-edit" href="{% url 'editproject' pres.id %}" title='编辑'></a>&nbsp;
                         {% for p,s in ifscore.items %} 
                           {% if p == pres.id %}                    
-                            {% if s %}
+                            {% if s and userid1 == pres.leader_p_id %}
                             <a target="_blank" href="/score/{{pres.id}}/" title='打分'>打分</a>&nbsp;
                             {% endif %}
                           {% endif %}                    
