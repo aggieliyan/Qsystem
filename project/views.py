@@ -236,7 +236,7 @@ def new_project(request, pid='', nid=''):
             description = form.cleaned_data['description']
             #新增以下四项支持项目打分
             pplan_score = form.cleaned_data['p_plan_score']
-            print pplan_score, description
+#            print pplan_score, description
             pps_dpt = form.cleaned_data['plan_score_description']
             pactual_score = form.cleaned_data['p_actual_score']
             pas_dpt = form.cleaned_data['actual_score_description']
