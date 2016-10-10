@@ -1092,7 +1092,7 @@ def detail(request, pid='', nid=''):
                 if not request.user.has_perm('auth.change_permission'):
                     editdate = 0
             print ps_info['pps']
-            print pro.description
+#            print pro.description
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 
                    'request': edittag, 'editid':nid, 'sql': pro_sql, 'ps': ps_info}
             # editdate用来判断是否PMO
