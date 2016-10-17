@@ -374,7 +374,7 @@ def new_project(request, pid='', nid=''):
 
             #存完人员,存统计查询语句
             psql = countsql.split(";")
-            print psql
+#            print psql
             for sql in psql:
                 if ":" in sql:
                     sqlstr = sql.split(":")

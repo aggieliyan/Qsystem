@@ -113,7 +113,7 @@ def getwi(request, wid):
 def uploadify_script(request):  
     ret="0"  
     file = request.FILES.get("Filedata",None)  
-    print file.name
+#    print file.name
     if file:
         result,new_name=profile_upload(file)  
         if result:  
