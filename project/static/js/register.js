@@ -31,7 +31,7 @@ function checkRegIsNull() {
 		document.getElementById("nameIdErrorMsg").innerHTML = errorMessage;
 		flag = false
 	} else {
-		if (getByteLen(nameId) < 3 || getByteLen(nameId) > 20) {
+		if (getByteLen(nameId) < 6 || getByteLen(nameId) > 40) {
 			errorMessage = "帐号长度为3-20位字符";
 			document.getElementById("nameIdErrorMsg").innerHTML = errorMessage;
 			flag = false
@@ -48,7 +48,7 @@ function checkRegIsNull() {
 		document.getElementById("nameErrorMsg").innerHTML = errorMessage;
 		flag = false
 	} else {
-		if (getByteLen(name) < 3 || getByteLen(name) > 20) {
+		if (getByteLen(name) < 6 || getByteLen(name) > 40) {
 			errorMessage = "姓名长度为3-20位字符";
 			document.getElementById("nameErrorMsg").innerHTML = errorMessage;
 			flag = false
@@ -65,7 +65,7 @@ function checkRegIsNull() {
 		document.getElementById("pwdErrorMsg").innerHTML = errorMessage;
 		flag = false
 	} else {
-		if (getByteLen(pwd) < 4 || getByteLen(pwd) > 32) {
+		if (getByteLen(pwd) < 4 || getByteLen(pwd) > 64) {
 			errorMessage = "密码长度为4-32位字符";
 			document.getElementById("pwdErrorMsg").innerHTML = errorMessage;
 			flag = false
