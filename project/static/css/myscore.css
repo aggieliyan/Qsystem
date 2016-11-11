@@ -27,13 +27,13 @@ body {
 #bread a:hover {
 	color: #333333;
 }
-#myscorelist, #scorelist{
+#myscorelist, #scorelist, #dtables{
       width:100%;
       margin:20px auto;
       padding-bottom: 30px;
       border-collapse:collapse;
       table-layout:fixed;}
-#myscorelist td, #myscorelist th, #scorelist td, #scorelist th{
+#myscorelist td, #myscorelist th, #scorelist td, #scorelist th, #dtables td, #dtables th{
 	font-size:14px;
 	border:1px solid #ddd;
 	padding:3px 7px 2px 7px;
@@ -43,15 +43,15 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;   
 }
-#myscorelist td, #scorelist td{
+#myscorelist td, #scorelist td, #dtables td{
 	line-height: 30px;
 }
-#myscorelist th, #scorelist th{
+#myscorelist th, #scorelist th, #dtables th{
 	background-image: url("/static/img/list.png");
     height: 30px;
     text-align:center;
 }
-#myscorelist th tr, #scorelist th tr{
+#myscorelist th tr, #scorelist th tr, #dtables th tr{
 	font-size:1.1em;
 	text-align:center;
 	padding-top:5px;
@@ -74,13 +74,13 @@ h3 {
 	cursor:pointer;
 }
 
-#myscorelist a:link, #scorelist a:link{
+#myscorelist a:link, #scorelist a:link, #dtables a:link{
 	text-decoration: none;
 }
-#myscorelist a:visited, #scorelist a:visited{
+#myscorelist a:visited, #scorelist a:visited, #dtables a:visited{
 	text-decoration: none;
 
 }
-#myscorelist a:hover, #scorelist a:hover{
+#myscorelist a:hover, #scorelist a:hover, #dtables a:hover{
 	color: #0099ff;
 }

@@ -2111,6 +2111,8 @@ def scorelist(request):
     except:
         return HttpResponseRedirect('/login')  
     slist = {}
+    dslist = {'1':[],'2':[], '3':[], '4':[], '5':[]} #1:测试;2.WEB;3.产品;4.客户端;5.IT
+    dep_id = [1,2,3,4,5]
     users = models.user_score.objects.values('user').distinct()
     for user in users:
         try:
@@ -2119,8 +2121,30 @@ def scorelist(request):
         except:
             pass   #如果离职人员isactived=0就不必显示在分数列表了
     slist = sorted(slist.iteritems(), key=lambda d:d[1], reverse = True)
-    result = {'slist': slist}
+    for item in slist:
+        if item[0].department_id in dep_id:
+            dslist[str(item[0].department_id)].append(item)
+        else:
+            pass
+    for i in dep_id:
+        num = len(dslist[str(i)])#部门人数小于4都是只有加油区,没有光荣区
+        good = num*85*30/10000
+        if num*5%100>0:
+            weak = num*5/100+1
+        else:
+            weak = num*5/100
+        dslist[str(i)].append({'flower':good, 'rocket':weak})
+    
+    print dslist
+    result = {'slist': slist, 'dslist': dslist}
     return render_to_response('scorelist.html',{'res':result})
+
+def dscorelist(request):
+    try:         #没登录的去登录页面
+        uid = request.session['id']
+    except:
+        return HttpResponseRedirect('/login')  
+    slist = {}
 
 def initdata(request):
     #auth_group

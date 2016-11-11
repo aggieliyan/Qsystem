@@ -9,6 +9,7 @@
   <div id="container">
   	<h3 style="width:100%">Q&nbsp榜</h3>
   	<a id="viewdpt" href="http://www.ablesky.com/org/post/detail_61179" target="_blank">查看打分说明>></a>
+	<span><a id="ascore" style="color: black" onclick="display('a');">总排名&nbsp</a></span><span>|</span><span><a id="dscore" onclick="display('d');">&nbsp部门排名</a></span>
   	<table id="scorelist">
 		<tr>
 			<th style="width:30%">排名</th>
@@ -23,5 +24,197 @@
 			</tr>
 		{% endfor %}
 	</table>
+	<div id="dtables" style="display:none">
+		<table id="product" style="width:100%">
+			<tr>
+				<th style="width:20%">产品</th>
+				<th style="width:20%">排名</th>
+				<th style="width:20%">姓名</th>
+				<th style="width:20%">总分</th>
+				<th style="width:20%">入职时间</th>
+			</tr>
+			{% for item in res.dslist.3 %}
+			<tr id="3_{{forloop.counter}}">
+				{% if not forloop.last %}
+					<td style="width:20%"></td>
+					<td style="width:20%">{{forloop.counter}}</td>
+					<td style="width:20%"><a href="/viewscore/{{item.0.id}}/" target="_blank">{{item.0.realname}}</a></td>
+					<td style="width:20%">{{item.1.total|default_if_none:''}}</td>
+					{% if item.0.create_time|date:"Y-m-d" > '2016-01-01' %}
+						<td style="width:20%">{{item.0.create_time|date:"Y-m-d"}}</td>
+					{% else %}
+						<td style="width:20%"></td>
+					{% endif %}
+				{% else %}
+					{% if forloop.counter > 1 %}
+						<input id="flower_1" style="display:none" value={{item.flower}} />
+						<input id="rocket_1" style="display:none" value={{item.rocket}} />
+						<input id="sum_1" style="display:none" value={{forloop.counter}} />
+					{% endif %}
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
+		<table id="web" style="width:100%">
+			<tr>
+				<th style="width:20%">网站</th>
+				<th style="width:20%">排名</th>
+				<th style="width:20%">姓名</th>
+				<th style="width:20%">总分</th>
+				<th style="width:20%">入职时间</th>
+			</tr>
+			{% for item in res.dslist.2 %}
+			<tr id="2_{{forloop.counter}}">
+				{% if not forloop.last %}
+					<td style="width:20%"></td>
+					<td style="width:20%">{{forloop.counter}}</td>
+					<td style="width:20%"><a href="/viewscore/{{item.0.id}}/" target="_blank">{{item.0.realname}}</a></td>
+					<td style="width:20%">{{item.1.total|default_if_none:''}}</td>
+					{% if item.0.create_time|date:"Y-m-d" > '2016-01-01' %}
+						<td style="width:20%">{{item.0.create_time|date:"Y-m-d"}}</td>
+					{% else %}
+						<td style="width:20%"></td>
+					{% endif %}
+				{% else %}
+					{% if forloop.counter > 1 %}
+						<input id="flower_2" style="display:none" value={{item.flower}} />
+						<input id="rocket_2" style="display:none" value={{item.rocket}} />
+						<input id="sum_2" style="display:none" value={{forloop.counter}} />
+					{% endif %}
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
+		<table id="client" style="width:100%">
+			<tr>
+				<th style="width:20%">客户端</th>
+				<th style="width:20%">排名</th>
+				<th style="width:20%">姓名</th>
+				<th style="width:20%">总分</th>
+				<th style="width:20%">入职时间</th>
+			</tr>
+			{% for item in res.dslist.4 %}
+			<tr>
+				{% if not forloop.last %}
+					<td></td>
+					<td>{{forloop.counter}}</td>
+					<td><a href="/viewscore/{{item.0.id}}/" target="_blank">{{item.0.realname}}</a></td>
+					<td>{{item.1.total|default_if_none:''}}</td>
+					{% if item.0.create_time|date:"Y-m-d" > '2016-01-01' %}
+						<td style="width:20%">{{item.0.create_time|date:"Y-m-d"}}</td>
+					{% else %}
+						<td style="width:20%"></td>
+					{% endif %}
+				{% else %}
+					{% if forloop.counter > 1 %}
+						<input id="flower_4" style="display:none" value={{item.flower}} />
+						<input id="rocket_4" style="display:none" value={{item.rocket}} />
+						<input id="sum_4" style="display:none" value={{forloop.counter}} />
+					{% endif %}
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
+		<table id="QA" style="width:100%">
+			<tr>
+				<th style="width:20%">测试</th>
+				<th style="width:20%">排名</th>
+				<th style="width:20%">姓名</th>
+				<th style="width:20%">总分</th>
+				<th style="width:20%">入职时间</th>
+			</tr>
+			{% for item in res.dslist.1 %}
+			<tr>
+				{% if not forloop.last %}
+					<td style="width:20%"></td>
+					<td style="width:20%">{{forloop.counter}}</td>
+					<td style="width:20%"><a href="/viewscore/{{item.0.id}}/" target="_blank">{{item.0.realname}}</a></td>
+					<td style="width:20%">{{item.1.total|default_if_none:''}}</td>
+					{% if item.0.create_time|date:"Y-m-d" > '2016-01-01' %}
+						<td style="width:20%">{{item.0.create_time|date:"Y-m-d"}}</td>
+					{% else %}
+						<td style="width:20%"></td>
+					{% endif %}
+				{% else %}
+					{% if forloop.counter > 1 %}
+						<input id="flower_1" style="display:none" value={{item.flower}} />
+						<input id="rocket_1" style="display:none" value={{item.rocket}} />
+						<input id="sum_1" style="display:none" value={{forloop.counter}} />
+					{% endif %}
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
+		<table id="IT" style="width:100%">
+			<tr>
+				<th style="width:20%">IT</th>
+				<th style="width:20%">排名</th>
+				<th style="width:20%">姓名</th>
+				<th style="width:20%">总分</th>
+				<th style="width:20%">入职时间</th>
+			</tr>
+			{% for item in res.dslist.5 %}
+			<tr>
+				{% if not forloop.last %}
+					<td style="width:20%"></td>
+					<td style="width:20%">{{forloop.counter}}</td>
+					<td style="width:20%"><a href="/viewscore/{{item.0.id}}/" target="_blank">{{item.0.realname}}</a></td>
+					<td style="width:20%">{{item.1.total|default_if_none:''}}</td>
+					{% if item.0.create_time|date:"Y-m-d" > '2016-01-01' %}
+						<td style="width:20%">{{item.0.create_time|date:"Y-m-d"}}</td>
+					{% else %}
+						<td style="width:20%"></td>
+					{% endif %}
+				{% else %}
+					{% if forloop.counter > 1 %}
+						<input id="flower_5" style="display:none" value={{item.flower}} />
+						<input id="rocket_5" style="display:none" value={{item.rocket}} />
+						<input id="sum_5" style="display:none" value={{forloop.counter}} />
+					{% endif %}
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
+		
+	</div>
   </div>
+  {% endblock %}
+  {% block js %}
+  	<script type="text/javascript">
+		function display(list){
+			if(list=="d"){
+				$("#scorelist").attr("style","display:none;");
+				$("#dtables").attr("style","display:'';");
+				$("#ascore").attr("style","color:#8c");
+				$("#dscore").attr("style","color:black");
+				}else{
+				$("#dtables").attr("style","display:none;");
+				$("#scorelist").attr("style","display:'';");
+				$("#ascore").attr("style","color:black");
+				$("#dscore").attr("style","color:#8c");
+			}
+			
+		}
+		for(var dep=1; dep<=5; dep++){
+			green = $("#flower_"+dep).val();
+			red = $("#rocket_"+dep).val();
+			sum = $("#sum_"+dep).val();
+			for (var i=0; i<=green; i++){					
+				if(($("#"+dep+"_"+i).length)>0){
+					$("#"+dep+"_"+i).attr("style","background: #B4EEB4");
+					$("#"+dep+"_"+i).find("td:first-child").html("<img src='/static/img/flower.png'/>");
+				}				
+			}
+			for (var j=1; j<=red; j++){
+				num = sum-j;
+				element = "#"+dep+"_"+num;
+				if($(element).length>0){
+					$(element).attr("style","background:#FFC1C1");
+					$(element).find("td:first-child").html("<img src='/static/img/rocket.png'/>");
+				}
+			}
+		}
+		
+								
+  	</script>
   {% endblock %}
