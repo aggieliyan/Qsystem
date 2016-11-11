@@ -94,12 +94,12 @@
 				<th style="width:20%">入职时间</th>
 			</tr>
 			{% for item in res.dslist.4 %}
-			<tr>
+			<tr id="4_{{forloop.counter}}">
 				{% if not forloop.last %}
-					<td></td>
-					<td>{{forloop.counter}}</td>
-					<td><a href="/viewscore/{{item.0.id}}/" target="_blank">{{item.0.realname}}</a></td>
-					<td>{{item.1.total|default_if_none:''}}</td>
+					<td style="width:20%"></td>
+					<td style="width:20%">{{forloop.counter}}</td>
+					<td style="width:20%"><a href="/viewscore/{{item.0.id}}/" target="_blank">{{item.0.realname}}</a></td>
+					<td style="width:20%">{{item.1.total|default_if_none:''}}</td>
 					{% if item.0.create_time|date:"Y-m-d" > '2016-01-01' %}
 						<td style="width:20%">{{item.0.create_time|date:"Y-m-d"}}</td>
 					{% else %}
@@ -124,7 +124,7 @@
 				<th style="width:20%">入职时间</th>
 			</tr>
 			{% for item in res.dslist.1 %}
-			<tr>
+			<tr id="1_{{forloop.counter}}">
 				{% if not forloop.last %}
 					<td style="width:20%"></td>
 					<td style="width:20%">{{forloop.counter}}</td>
@@ -154,7 +154,7 @@
 				<th style="width:20%">入职时间</th>
 			</tr>
 			{% for item in res.dslist.5 %}
-			<tr>
+			<tr id="5_{{forloop.counter}}">
 				{% if not forloop.last %}
 					<td style="width:20%"></td>
 					<td style="width:20%">{{forloop.counter}}</td>
@@ -198,10 +198,11 @@
 		for(var dep=1; dep<=5; dep++){
 			green = $("#flower_"+dep).val();
 			red = $("#rocket_"+dep).val();
-			sum = $("#sum_"+dep).val();
-			for (var i=0; i<=green; i++){					
+			sum = $("#sum_"+dep).val();			
+			for (var i=1; i<=green; i++){					
 				if(($("#"+dep+"_"+i).length)>0){
 					$("#"+dep+"_"+i).attr("style","background: #B4EEB4");
+					console.log($("#"+dep+"_"+i))
 					$("#"+dep+"_"+i).find("td:first-child").html("<img src='/static/img/flower.png'/>");
 				}				
 			}
