@@ -179,12 +179,12 @@
 	                       			{{name}} &nbsp;							
 	                       		{% endfor %}</span>									
 							{% else %}
-								{% if res.pd_info.1  %}
+								{% if res.signed_info.pd_info.1  %}
 									<button id="iwant_PD" value="PD" class="btn btn-primary" disabled="">已报名</button>&nbsp;&nbsp;&nbsp;
 									<span style="font-size: 14px; color: green;">正在尽快确定人选，请保持关注</span></td>				
 								{% else %}
 									<button id="iwant_PD" value="PD" class="btn btn-primary" onclick="iwant(this.value)">我要报名</button>&nbsp;&nbsp;&nbsp;
-									<span id="PM_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span></td>
+									<span id="PD_success" style="font-size:14px; color: green; display:none;"><i class="icon-ok"></i>&nbsp;恭喜，报名成功！</span></td>
 								{% endif %}
 							{% endif %}	                       	
 						{% endif %}	
