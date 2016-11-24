@@ -49,7 +49,7 @@ SECRET_KEY = '3oc$^^dt!@ir9)-l27(c3qk10w1=knk$1o7z(w48j30!d)(m0('
 # SECURITY WARNING: don't run with debug turned on in production!
 import socket
 
-if socket.gethostname() == 'test':
+if socket.gethostname() == 'qsystem.of1.ablesky.com':
     DEBUG = TEMPLATE_DEBUG = False
     ALLOWED_HOSTS = ['*']
     STATIC_ROOT = '/Django/Qsystem/allstatic'
@@ -119,7 +119,7 @@ WSGI_APPLICATION = 'Qsystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 DATABASE_ROUTERS = ['Qsystem.dbsettings.dbrouter']
-if socket.gethostname() == 'test':
+if socket.gethostname() == 'qsystem.of1.ablesky.com':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',

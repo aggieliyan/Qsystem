@@ -54,6 +54,7 @@ a:hover {
 }
 .uscore td{
 	font-size: 16px;
+	vertical-align:top;
 }
 .uname {
 	text-align: right;
