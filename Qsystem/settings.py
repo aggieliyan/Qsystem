@@ -134,7 +134,7 @@ if socket.gethostname() == 'test':
                 'NAME': 'ajaxableskydb',
                 'USER':'public',  #qa
                 'PASSWORD':'public',  #as-qa
-                'HOST':'192.168.3.91',
+                'HOST':'192.168.202.104',
                 'PORT':'3306',
              }, #网站
         'ablesky_examsystem': {
@@ -142,7 +142,7 @@ if socket.gethostname() == 'test':
                 'NAME': 'ablesky_examsystem',
                 'USER':'public',
                 'PASSWORD':'public',
-                'HOST':'192.168.3.90',
+                'HOST':'192.168.202.105',
                 'PORT':'3306',                      
                  }, #考试系统
         'eduadministration': {
@@ -150,23 +150,23 @@ if socket.gethostname() == 'test':
                 'NAME': 'eduadministration',
                 'USER':'public',
                 'PASSWORD':'public',
-                'HOST':'192.168.3.90',
+                'HOST':'192.168.202.105',
                 'PORT':'3306',                      
                  }, #教务培训系统
-        'ablesky_industrytrain': {  
-                'ENGINE': 'django.db.backends.mysql',
-                'NAME': 'ablesky_industrytrain',
-                'USER':'qa',
-                'PASSWORD':'as-qa',
-                'HOST':'103.17.42.149',
-                'PORT':'3306',  
-                },  #行业培训
+#        'ablesky_industrytrain': {  
+#                'ENGINE': 'django.db.backends.mysql',
+#                'NAME': 'ablesky_industrytrain',
+#                'USER':'qa',
+#                'PASSWORD':'as-qa',
+#                'HOST':'103.17.42.149',
+#                'PORT':'3306',  
+#                },  #行业培训
         'ablesky_log': {
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': 'ablesky_log',
                 'USER':'public',
                 'PASSWORD':'public',
-                'HOST':'192.168.3.90',
+                'HOST':'192.168.202.105',
                 'PORT':'3306',                         
                 },  #统计客户端登录的库
         'case': {
