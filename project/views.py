@@ -2117,7 +2117,10 @@ def scorelist(request):
     for user in users:
         try:
             uobj = models.user.objects.get(id=user['user'], isactived=1)
-            slist[uobj] = models.user_score.objects.filter(user_id=user['user'], upd_time__gte='2017-01-01').aggregate(total=Sum('u_actual_score'))
+            try:
+                slist[uobj] = models.user_score.objects.filter(user_id=user['user'], upd_time__gte='2017-01-01').aggregate(total=Sum('u_actual_score'))
+            except:
+                slist[uobj] = 0
         except:
             pass   #如果离职人员isactived=0就不必显示在分数列表了
     slist = sorted(slist.iteritems(), key=lambda d:d[1], reverse = True)
