@@ -215,7 +215,6 @@ def case_list(request,pid):
     #字典进行排序，暂不使用
 	# case = sorted(case.iteritems(), key=lambda d:d[1], reverse=False)
 	
-	print case
 
 	return render_to_response("case/case_list.html", {"case":case, "testmodule":testmodule, "allmodule":allmodule, "count":count,"listid":listid,"categoryid":categoryid, "cauthor":cauthor, 
 		                      "cpriority":cpriority, "statue":cstatue, "mold":cmold, "ckeyword":ckeyword, "ctestmodule":ctestmodule, "cexecutor":cexecutor, "cstart_date":cstart_date, 
@@ -608,7 +607,6 @@ def upload_file(request):
 				#获取表单信息
 				xlsfile = form.cleaned_data['Filedata']
 				filename = xlsfile.name
-				print filename
 				#写入数据库
 				uf = Upload(Filedata = xlsfile, uptime = datetime.datetime.now()) 
 				uf.save()
@@ -629,7 +627,6 @@ def upload_file(request):
 	# 	# resp['fnum'] = count[1]
 	# 	print resp
 	resp = json.dumps(resp)
-	print resp
 	return HttpResponse(resp)
 
 def excel_table_byindex(request, file= '',pid = ''):
