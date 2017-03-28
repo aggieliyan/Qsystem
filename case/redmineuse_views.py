@@ -10,7 +10,7 @@ from Qsystem import settings
 authKey = 'c3dbd70f0c3fe1a7c90432fab56dd9d298e48c8d' #具有管理员权限，可以访问redmine的API数据
 
 def filebug(request):
-    redmine = Redmine('http://redmine.of1.ablesky.com', key=authKey)
+    redmine = Redmine('http://git.ablesky.com', key=authKey)
     web_dev = redmine.Group.get(41)
     client_dev = redmine.Group.get(67)
     dev_users = [web_dev.users, client_dev.users]
@@ -51,7 +51,7 @@ def newbug(request, wid=''):
                 rs['failed'] = True
                 rs['message'] = "请先到产品管理页添加该项目所关联的Redmine项目id~~"
                 return HttpResponse(json.dumps(rs))     
-            redmine = Redmine('http://redmine.of1.ablesky.com', key=rkey)
+            redmine = Redmine('http://git.ablesky.com', key=rkey)
             if '/newbug/' in request.path:
                 issue = redmine.issue.get(wid) if wid else redmine.issue.new()
                 issue.project_id = ipid
@@ -64,7 +64,7 @@ def newbug(request, wid=''):
                 issue.uploads = uploads
                 issue.save() 
         if '/closewi/' in request.path:
-            redmine = Redmine('http://redmine.of1.ablesky.com', key=rkey)
+            redmine = Redmine('http://git.ablesky.com', key=rkey)
             try:
                 issue = redmine.issue.get(wid)                
             except ResourceNotFoundError:
@@ -75,7 +75,7 @@ def newbug(request, wid=''):
 def updatewi(request):
     buglist = request.GET
     updatewi = {}
-    redmine = Redmine('http://redmine.of1.ablesky.com', key=authKey)
+    redmine = Redmine('http://git.ablesky.com', key=authKey)
     results = []
     for tid, wid in buglist.items():
         try:
@@ -93,7 +93,7 @@ def updatewi(request):
     case.models.result.objects.bulk_create(results)
     return HttpResponse(json.dumps(updatewi))
 def getwi(request, wid):
-    redmine = Redmine('http://redmine.of1.ablesky.com', key=authKey)
+    redmine = Redmine('http://git.ablesky.com', key=authKey)
     try:
         issue = redmine.issue.get(wid)
     except ResourceNotFoundError:
