@@ -2083,27 +2083,32 @@ def scoreuser(request, pid, flag):
             return HttpResponse(json.dumps({0:"请先找架构组给项目评分后才可以提交最终评分！"}))
     return HttpResponse(json.dumps({1:"success"}))
 
-def myscore(request, userid=''):
+def myscore(request, userid='', year='c'):
     try:         #没登录的去登录页面
         uid = request.session['id']
     except:
         return HttpResponseRedirect('/login')
     if userid:
         uid = userid
-    sobj = models.user_score.objects.filter(user_id=uid)
+    print year
+    if year == 'a':  #全部积分
+        sobj = models.user_score.objects.filter(user_id=uid)
+        total_score = models.user_score.objects.filter(user_id=uid).aggregate(total=Sum('u_actual_score'))
+    else:  #当年积分
+        sobj = models.user_score.objects.filter(user_id=uid, upd_time__gte='2017-01-01')
+        total_score = models.user_score.objects.filter(user_id=uid, upd_time__gte='2017-01-01').aggregate(total=Sum('u_actual_score'))
     uscore = {} #通过user_score表的外链就可以访问到对应的project对象
     for obj in sobj:
         try:
             uscore[obj] = models.pro_score.objects.get(project_id=obj.project_id).pm_done
         except:
             uscore[obj] = 1
-    print uscore
     whose = models.user.objects.get(id=uid)
-    total_score = models.user_score.objects.filter(user_id=uid).aggregate(total=Sum('u_actual_score'))
     result = {'uscore': uscore,
               'owner': whose,
               'total': total_score}    
     return render_to_response('myscore.html',{'res': result})
+  
 
 def scorelist(request):
     try:         #没登录的去登录页面
