@@ -54,7 +54,14 @@
 					</tr>
 					<tr>
 						<td class="line-name">项目说明：</td>
-						<td class="line-text">{{res.pro.description|safe}}</td>
+                        <td class="line-text">
+                            {% for des in res.pro.description %}
+                                {{ des }}
+                                {% if not forloop.last %}
+                                 </br>
+                                {% endif %}
+                            {% endfor %}
+						</td>
 					</tr>
 					<tr>	
 						<td class="line-name">项目状态：</td>
