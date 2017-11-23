@@ -419,7 +419,7 @@ def new_project(request, pid='', nid=''):
       
             #发消息
             sendmessage(request,status,pid)                           
-            return redirect('/projectlist/')
+            return redirect('/detail/%s/'%pid)
         else:
             dateloop = ['psdate', 'pedate', 'dsdate', 'dedate', 'tsdate', 'tedate', 'startdate', 'plandate']
             prodate = []
