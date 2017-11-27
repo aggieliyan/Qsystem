@@ -29,7 +29,14 @@
 						</tr>
 						<tr>
 							<td class="line-name">具体说明：</td>
-							<td class="line-text">{{res.ps.pps_dpt|safe}}</td>
+							<td class="line-text">
+                            {% for pps_dpt in res.ps.pps_dpt %}
+                                {{ pps_dpt }}
+                                {% if not forloop.last %}
+                                 </br>
+                                {% endif %}
+                            {% endfor %}
+                            </td>
 						</tr>
 					</table>
 					<table class="pas_right" cellspacing="100">
@@ -39,7 +46,14 @@
 						</tr>
 						<tr>
 							<td class="line-name">打分说明：</td>
-							<td class="line-text">{{res.ps.pas_dpt|safe}}</td>
+							<td class="line-text">
+                            {% for pas_dpt in res.ps.pas_dpt %}
+                                {{ pas_dpt }}
+                                {% if not forloop.last %}
+                                 </br>
+                                {% endif %}
+                            {% endfor %}
+                            </td>
 						</tr>
 					</table>
 				</div>
@@ -272,7 +286,14 @@
 					</tr>
 					<tr>
 						<td class="line-name">备注：</td>
-						<td class="line-text">{{res.pro.remark_p|safe}}</td>
+						<td class="line-text">
+                            {% for remark_p in res.pro.remark_p %}
+                                {{ remark_p }}
+                                {% if not forloop.last %}
+                                 </br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
 					</tr>
 				</table>				
 				<div id="feedback" name="feedback" class="feedback-area">
