@@ -1065,12 +1065,7 @@ def detail(request, pid='', nid=''):
                     if us.realname in [u"招募产品", u"招募UI"]:
                         pd_info = signed_pro(pid, "PD", editboolean, current_uid)
                         signed_info['pd_info'] = [1, pd_info]
-            # 把项目描述字符串拆成列表
-            pro.description = pro.description.split('\n')
-            # 把备注、具体说明、打分说明字符串拆成列表
-            pro.remark_p = pro.remark_p.split('\n')
-            ps_info['pps_dpt'] = ps_info['pps_dpt'].split('\n')
-            ps_info['pas_dpt'] = ps_info['pas_dpt'].split('\n')
+
             res = {'pro':pro, 'user':user, 'dt': dt, 'reuser': related_user, 'editbool': editboolean, 
                    'sql': sql_status, 'confirmation': confirmation, 'curuid': current_uid, 
                    'feedback': [len(pro_feedback), fc], 'signed_info': signed_info, 'ps': ps_info}
