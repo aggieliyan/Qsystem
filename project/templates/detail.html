@@ -338,7 +338,7 @@
         $(function(){
             var i=$("td.auto-enter ");
             i.each(function(){
-                $(this).html($(this).text().replace(/(<)/g,"&lt;").replace(/(>)/g,"&gt;").replace(/\n/g,"<br>"));
+                $(this).html($(this).text().replace(/\n/g,"<br>"));
             });
         });
 		$(".reply-btn").bind("click",function(){
